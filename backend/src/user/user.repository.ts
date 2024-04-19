@@ -42,7 +42,9 @@ export class UserRepository {
       .select('user.id', 'id')
       .addSelect('user.id')
       .addSelect('user.password')
+      .addSelect('user.username')
       .addSelect('user.email')
+      .addSelect('user.role')
       .where('user.email = :email', { email })
       .getOne();
   }
