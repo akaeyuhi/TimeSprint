@@ -6,7 +6,7 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-import { Team } from './team.entity';
+import { Team } from 'src/team/entities/team.entity';
 import { Task } from './task.entity';
 import { IsDate, Length } from 'class-validator';
 
@@ -35,6 +35,6 @@ export class Project {
   @JoinColumn({ name: 'team_id' })
   team: Team;
 
-  @OneToMany(() => Task, (task) => task.project)
+  @OneToMany(() => Task, task => task.project)
   tasks: Task[];
 }
