@@ -12,6 +12,6 @@ export class Team {
   @Column()
   description: string;
 
-  @OneToMany(() => User, user => user.team)
+  @OneToMany(() => User, (user) => user.team)
   users: User[];
 }
