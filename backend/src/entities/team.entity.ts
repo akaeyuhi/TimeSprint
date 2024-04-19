@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { User } from './user.entity';
-import { IsDate, Length } from 'class-validator';
+import { Length } from 'class-validator';
 
 @Entity()
 export class Team {
