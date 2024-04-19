@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Project } from './project.entity';
 import { IsDate, Length } from 'class-validator';
+import { User } from 'src/user/entities/user.entity';
 
 @Entity()
 export class Task {
@@ -38,4 +39,8 @@ export class Task {
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'project_id' })
   project: Project;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

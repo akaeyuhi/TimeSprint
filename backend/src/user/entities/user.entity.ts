@@ -3,13 +3,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  ManyToMany,
   JoinColumn,
-  JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { Team } from 'src/entities/team.entity';
 import { Task } from 'src/entities/task.entity';
 import { IsEmail, IsString, Length, Matches, Min } from 'class-validator';
+import { LeisureActivity } from 'src/entities/leisure-activity.entity';
 
 const passwordRegex = new RegExp('^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$');
 
@@ -44,11 +44,13 @@ export class User {
   })
   role: UserRole;
 
+  @OneToMany(() => LeisureActivity, (activity) => activity.user)
+  activities: LeisureActivity[];
+
+  @OneToMany(() => Task, (task) => task.user)
+  tasks: Task[];
+
   @ManyToOne(() => Team)
   @JoinColumn({ name: 'team_id' })
   team: Team;
-
-  @ManyToMany(() => Task)
-  @JoinTable()
-  tasks: Task[];
 }

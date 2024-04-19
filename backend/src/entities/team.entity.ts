@@ -2,12 +2,13 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Length } from 'class-validator';
+import { Project } from 'src/entities/project.entity';
 
 @Entity()
 export class Team {
@@ -22,10 +23,14 @@ export class Team {
   @Length(20)
   description: string;
 
-  @OneToMany(() => User, (user) => user.team)
-  users: User[];
+  @ManyToMany(() => User)
+  @JoinTable()
+  members: User[];
 
   @ManyToMany(() => User)
   @JoinTable()
   admins: User[];
+
+  @OneToMany(() => Project, (project) => project.team)
+  projects: Project[];
 }
