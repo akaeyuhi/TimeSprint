@@ -153,7 +153,7 @@ module.exports = {
         'functions': false,
       },
     ],
-    'arrow-parens': ['error', 'as-needed'],
+    //'arrow-parens': ['error', 'as-needed'],
     'arrow-body-style': ['error', 'as-needed'],
     'arrow-spacing': ['error'],
     'no-confusing-arrow': [
