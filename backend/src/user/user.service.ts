@@ -20,6 +20,14 @@ export class UserService {
     return user;
   }
 
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     return this.userRepository.createUser(createUserDto);
   }
@@ -33,5 +41,9 @@ export class UserService {
   async deleteUser(id: number): Promise<void> {
     const existingUser = await this.findById(id);
     await this.userRepository.deleteUser(existingUser.id);
+  }
+
+  async findUserWithPassword(email: string) {
+    return this.userRepository.getUserWithPassword(email);
   }
 }
