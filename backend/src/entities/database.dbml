@@ -8,41 +8,41 @@ Table user {
   username varchar
   email varchar
   password varchar
-  role enum
-  teams in [ref: <> team.id]
-  activities in [ref: > leisure_activities.id]
-  tasks in [ref: > task.id]
+  role role
+  teams team [ref: <> team.id]
+  activities leisure_activity [ref: > leisure_activity.id]
+  tasks task [ref: > task.id]
 }
 
 Table site_admins {
   id int [pk]
-  users in [ref: > user.id]
+  users user [ref: > user.id]
 }
 
 Table team {
   id int [pk]
   name varchar
   description varchar
-  members in [ref: <> user.id]
-  admins in [ref: <> user.id]
-  projects in [ref: > project.id]
+  members user [ref: <> user.id]
+  admins user [ref: <> user.id]
+  projects project [ref: > project.id]
 }
 
-Table leisure_activities {
+Table leisure_activity {
   id int [pk]
   name varchar
   description varchar
-  start_date datetime
-  end_date datetime
+  start_date timestamp
+  end_date timestamp
 }
 
 Table project {
   id int [pk]
   name varchar
   description varchar
-  start_date datetime
-  end_date datetime
-  tasks in [ref: > task.id]
+  start_date timestamp
+  end_date timestamp
+  tasks task [ref: > task.id]
 }
 
 Table task {
@@ -51,6 +51,11 @@ Table task {
   description varchar
   urgency boolean
   importance boolean
-  start_date datetime
-  end_date datetime
+  start_date timestamp
+  end_date timestamp
+}
+
+enum role {
+  "collaborator"
+  "admin"
 }
