@@ -1,6 +1,6 @@
 Project TimeSprinter {
   database_type: 'PostgreSQL'
-  Note: 'Web app for orginizing free time and tasks'
+  Note: 'Web app for organizing free time and tasks'
 }
 
 Table user {
@@ -8,33 +8,41 @@ Table user {
   username varchar
   email varchar
   password varchar
-  team_id int [ref: > team.id]
-  tasks int [ref: <> task.id]
+  role role
+  teams team [ref: <> team.id]
+  activities leisure_activity [ref: > leisure_activity.id]
+  tasks task [ref: > task.id]
+}
+
+Table site_admins {
+  id int [pk]
+  users user [ref: > user.id]
 }
 
 Table team {
   id int [pk]
   name varchar
   description varchar
-  users in [ref: > user.id]
+  members user [ref: <> user.id]
+  admins user [ref: <> user.id]
+  projects project [ref: > project.id]
 }
 
-Table leisure_activities {
+Table leisure_activity {
   id int [pk]
   name varchar
   description varchar
-  start_date datetime
-  end_date datetime
-  user_id int [ref: < user.id]
+  start_date timestamp
+  end_date timestamp
 }
 
 Table project {
   id int [pk]
   name varchar
   description varchar
-  start_date datetime
-  end_date datetime
-  team_id int [ref: > team.id]
+  start_date timestamp
+  end_date timestamp
+  tasks task [ref: > task.id]
 }
 
 Table task {
@@ -43,7 +51,11 @@ Table task {
   description varchar
   urgency boolean
   importance boolean
-  start_date datetime
-  end_date datetime
-  project_id int [ref: < project.id]
+  start_date timestamp
+  end_date timestamp
+}
+
+enum role {
+  "collaborator"
+  "admin"
 }
