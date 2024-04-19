@@ -8,15 +8,22 @@ Table user {
   username varchar
   email varchar
   password varchar
-  team_id int [ref: > team.id]
+  role enum
+  teams in [ref: <> team.id]
   activities in [ref: > leisure_activities.id]
+  tasks in [ref: > task.id]
+}
+
+Table site_admins {
+  id int [pk]
+  users in [ref: > user.id]
 }
 
 Table team {
   id int [pk]
   name varchar
   description varchar
-  users in [ref: > user.id]
+  members in [ref: <> user.id]
   admins in [ref: <> user.id]
   projects in [ref: > project.id]
 }
