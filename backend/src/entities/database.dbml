@@ -1,0 +1,49 @@
+Project TimeSprinter {
+  database_type: 'PostgreSQL'
+  Note: 'Web app for orginizing free time and tasks'
+}
+
+Table user {
+  id int [pk]
+  username varchar
+  email varchar
+  password varchar
+  team_id int [ref: > team.id]
+  tasks int [ref: <> task.id]
+}
+
+Table team {
+  id int [pk]
+  name varchar
+  description varchar
+  users in [ref: > user.id]
+}
+
+Table leisure_activities {
+  id int [pk]
+  name varchar
+  description varchar
+  start_date datetime
+  end_date datetime
+  user_id int [ref: < user.id]
+}
+
+Table project {
+  id int [pk]
+  name varchar
+  description varchar
+  start_date datetime
+  end_date datetime
+  team_id int [ref: > team.id]
+}
+
+Table task {
+  id int [pk]
+  name varchar
+  description varchar
+  urgency boolean
+  importance boolean
+  start_date datetime
+  end_date datetime
+  project_id int [ref: < project.id]
+}
