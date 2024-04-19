@@ -35,4 +35,15 @@ export class UserRepository {
   async deleteUser(id: number): Promise<void> {
     await this.userRepository.delete(id);
   }
+
+  async getUserWithPassword(email: string): Promise<User> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .select('user.id', 'id')
+      .addSelect('user.id')
+      .addSelect('user.password')
+      .addSelect('user.email')
+      .where('user.email = :email', { email })
+      .getOne();
+  }
 }
