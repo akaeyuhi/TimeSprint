@@ -7,8 +7,8 @@ import {
   JoinColumn,
   JoinTable,
 } from 'typeorm';
-import { Team } from './team.entity';
-import { Task } from './task.entity';
+import { Team } from 'src/entities/team.entity';
+import { Task } from 'src/entities/task.entity';
 import { IsEmail, IsString, Length, Matches, Min } from 'class-validator';
 
 const passwordRegex = new RegExp('^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$');
