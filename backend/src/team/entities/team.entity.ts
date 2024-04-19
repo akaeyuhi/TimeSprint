@@ -31,6 +31,6 @@ export class Team {
   @JoinTable()
   admins: User[];
 
-  @OneToMany(() => Project, (project) => project.team)
+  @OneToMany(() => Project, project => project.team)
   projects: Project[];
 }
