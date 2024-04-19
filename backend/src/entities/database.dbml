@@ -1,6 +1,6 @@
 Project TimeSprinter {
   database_type: 'PostgreSQL'
-  Note: 'Web app for organizing free time and tasks'
+  Note: 'Web app for orginizing free time and tasks'
 }
 
 Table user {
@@ -23,6 +23,8 @@ Table leisure_activities {
   id int [pk]
   name varchar
   description varchar
+  start_date datetime
+  end_date datetime
   user_id int [ref: < user.id]
 }
 
