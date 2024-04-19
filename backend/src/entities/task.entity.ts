@@ -18,11 +18,11 @@ export class Task {
   @Column()
   importance: boolean;
 
-  @Column({ type: 'datetime' })
-  start_date: Date;
+  @Column({ type: 'timestamp' })
+  startDate: Date;
 
-  @Column({ type: 'datetime' })
-  end_date: Date;
+  @Column({ type: 'timestamp' })
+  endDate: Date;
 
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'project_id' })

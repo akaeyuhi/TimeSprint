@@ -12,6 +12,12 @@ export class LeisureActivity {
   @Column()
   description: string;
 
+  @Column({ type: 'timestamp' })
+  startDate: Date;
+
+  @Column({ type: 'timestamp' })
+  endDate: Date;
+
   @ManyToOne(() => User)
   user: User;
 }
