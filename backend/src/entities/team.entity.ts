@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Length } from 'class-validator';
 
@@ -17,4 +24,8 @@ export class Team {
 
   @OneToMany(() => User, (user) => user.team)
   users: User[];
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  admins: User[];
 }

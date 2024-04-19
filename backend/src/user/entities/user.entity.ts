@@ -13,6 +13,11 @@ import { IsEmail, IsString, Length, Matches, Min } from 'class-validator';
 
 const passwordRegex = new RegExp('^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$');
 
+export enum UserRole {
+  COLLABORATOR = 'collaborator',
+  ADMIN = 'admin',
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -31,6 +36,13 @@ export class User {
   @Min(8)
   @Matches(passwordRegex)
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.COLLABORATOR,
+  })
+  role: UserRole;
 
   @ManyToOne(() => Team)
   @JoinColumn({ name: 'team_id' })
