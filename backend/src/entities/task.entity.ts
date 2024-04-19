@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Project } from './project.entity';
+import { IsDate, Length } from 'class-validator';
 
 @Entity()
 export class Task {
@@ -13,9 +14,11 @@ export class Task {
   id: number;
 
   @Column()
+  @Length(8, 20)
   name: string;
 
   @Column()
+  @Length(20)
   description: string;
 
   @Column()
@@ -25,9 +28,11 @@ export class Task {
   importance: boolean;
 
   @Column({ type: 'timestamp' })
+  @IsDate()
   startDate: Date;
 
   @Column({ type: 'timestamp' })
+  @IsDate()
   endDate: Date;
 
   @ManyToOne(() => Project)

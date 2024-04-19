@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Team } from './team.entity';
 import { Task } from './task.entity';
+import {IsDate, Length} from "class-validator";
 
 @Entity()
 export class Project {
@@ -15,15 +16,19 @@ export class Project {
   id: number;
 
   @Column()
+  @Length(8, 20)
   name: string;
 
   @Column()
+  @Length(20)
   description: string;
 
   @Column({ type: 'timestamp' })
+  @IsDate()
   startDate: Date;
 
   @Column({ type: 'timestamp' })
+  @IsDate()
   endDate: Date;
 
   @ManyToOne(() => Team)
