@@ -7,37 +7,37 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class UserRepository {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly repository: Repository<User>,
   ) {}
 
   async findAll(): Promise<User[]> {
-    return this.userRepository.find();
+    return this.repository.find();
   }
 
   async findById(id: number): Promise<User> {
-    return this.userRepository.findOneBy({ id });
+    return this.repository.findOneBy({ id });
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.userRepository.findOneBy({ email });
+    return this.repository.findOneBy({ email });
   }
 
   async createUser(userData: Partial<User>): Promise<User> {
-    const newUser = this.userRepository.create(userData);
-    return this.userRepository.save(newUser);
+    const newUser = this.repository.create(userData);
+    return this.repository.save(newUser);
   }
 
   async updateUser(id: number, userData: Partial<User>): Promise<User> {
-    await this.userRepository.update(id, userData);
+    await this.repository.update(id, userData);
     return this.findById(id);
   }
 
   async deleteUser(id: number): Promise<void> {
-    await this.userRepository.delete(id);
+    await this.repository.delete(id);
   }
 
   async getUserWithPassword(email: string): Promise<User> {
-    return this.userRepository
+    return this.repository
       .createQueryBuilder('user')
       .select('user.id', 'id')
       .addSelect('user.id')

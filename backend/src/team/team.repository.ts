@@ -8,14 +8,14 @@ import { Repository } from 'typeorm';
 export class TeamRepository {
   constructor(
     @InjectRepository(Team)
-    private readonly teamRepository: Repository<Team>,
+    private readonly repository: Repository<Team>,
   ) {}
   async findAll(): Promise<Team[]> {
-    return this.teamRepository.find({ relations: ['members', 'admins'] });
+    return this.repository.find({ relations: ['members', 'admins'] });
   }
 
   async findById(id: number): Promise<Team> {
-    return this.teamRepository.findOneBy({ id });
+    return this.repository.findOneBy({ id });
   }
 
   async createTeam(
@@ -23,8 +23,8 @@ export class TeamRepository {
     description: string,
     admins: User[],
   ): Promise<Team> {
-    const team = this.teamRepository.create({ name, description, admins });
-    return this.teamRepository.save(team);
+    const team = this.repository.create({ name, description, admins });
+    return this.repository.save(team);
   }
 
   async updateTeam(
@@ -38,7 +38,7 @@ export class TeamRepository {
     }
     team.name = name;
     team.description = description;
-    return this.teamRepository.save(team);
+    return this.repository.save(team);
   }
 
   async deleteTeam(id: number): Promise<void> {
@@ -46,11 +46,11 @@ export class TeamRepository {
     if (!team) {
       throw new NotFoundException('Team not found');
     }
-    await this.teamRepository.remove(team);
+    await this.repository.remove(team);
   }
 
   async findByAdmin(adminId: number): Promise<Team[]> {
-    return this.teamRepository
+    return this.repository
       .createQueryBuilder('team')
       .leftJoinAndSelect('team.admins', 'admin')
       .where('admin.id = :adminId', { adminId })
@@ -58,7 +58,7 @@ export class TeamRepository {
   }
 
   async findByMember(memberId: number): Promise<Team[]> {
-    return this.teamRepository
+    return this.repository
       .createQueryBuilder('team')
       .leftJoinAndSelect('team.members', 'member')
       .where('member.id = :memberId', { memberId })
@@ -66,6 +66,6 @@ export class TeamRepository {
   }
 
   save(entity: Team) {
-    return this.teamRepository.save(entity);
+    return this.repository.save(entity);
   }
 }
