@@ -5,7 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Project } from './project.entity';
+import { Project } from 'src/project/entities/project.entity';
 import { IsDate, Length } from 'class-validator';
 import { User } from 'src/user/entities/user.entity';
 

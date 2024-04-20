@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Length } from 'class-validator';
-import { Project } from 'src/entities/project.entity';
+import { Project } from 'src/project/entities/project.entity';
 
 @Entity()
 export class Team {
