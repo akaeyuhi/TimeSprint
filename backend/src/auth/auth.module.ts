@@ -8,8 +8,8 @@ import { User } from 'src/user/entities/user.entity';
 import { UserModule } from 'src/user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
-import { AuthStrategy } from 'src/auth/auth.strategy';
-import { RefreshStrategy } from 'src/auth/auth-refresh.strategy';
+import { AuthStrategy } from 'src/auth/strategies/auth.strategy';
+import { RefreshStrategy } from 'src/auth/strategies/auth-refresh.strategy';
 import { UserRepository } from 'src/user/user.repository';
 
 @Module({

@@ -13,7 +13,7 @@ import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { JwtPayload } from 'src/auth/auth.strategy';
+import { JwtPayload } from 'src/auth/strategies/auth.strategy';
 
 @Controller('auth')
 export class AuthController {
