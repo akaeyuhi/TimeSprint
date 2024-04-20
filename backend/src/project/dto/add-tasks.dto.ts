@@ -1,3 +1,3 @@
-export default class AddTasksDto {
+export class AddTasksDto {
   ids: number[];
 }
