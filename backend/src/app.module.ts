@@ -6,6 +6,7 @@ import { DatabaseConnectionConfiguration } from 'ormconfig';
 import { UserModule } from './user/user.module';
 import { TeamModule } from './team/team.module';
 import { AuthModule } from './auth/auth.module';
+import { ProjectModule } from './project/project.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     TeamModule,
     AuthModule,
+    ProjectModule,
   ],
   controllers: [AppController],
   providers: [AppService],
