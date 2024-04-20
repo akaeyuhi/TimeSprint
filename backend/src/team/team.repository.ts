@@ -68,4 +68,38 @@ export class TeamRepository {
   save(entity: Team) {
     return this.repository.save(entity);
   }
+
+  async getTeamIdByProject(projectId: number): Promise<number> {
+    const team = await this.repository.createQueryBuilder('team')
+      .innerJoin('team.projects', 'project')
+      .where('project.id = :projectId', { projectId })
+      .getOne();
+
+    if (!team) {
+      throw new NotFoundException(
+        `Team associated with project ID ${projectId} not found`,
+      );
+    }
+
+    return team.id;
+  }
+
+  async getUserRoleInTeam(userId: number, teamId: number): Promise<string> {
+    const team = await this.repository.findOne({
+      where: { id: userId },
+      relations: ['users'],
+    });
+
+    if (!team) {
+      throw new NotFoundException(`Team with ID ${teamId} not found`);
+    }
+
+    const user = team.members.find(user => user.id === userId);
+
+    if (!user) {
+      return null; // User is not a member of the team
+    }
+
+    return user.role;
+  }
 }

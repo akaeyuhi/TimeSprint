@@ -88,4 +88,12 @@ export class TeamService {
     team.admins.push(admin);
     return this.teamRepository.save(team);
   }
+
+  async getTeamIdByProject(projectId: number): Promise<number> {
+    return await this.teamRepository.getTeamIdByProject(projectId);
+  }
+
+  async getUserRoleInTeam(userId: number, teamId: number): Promise<string> {
+    return await this.teamRepository.getUserRoleInTeam(userId, teamId);
+  }
 }
