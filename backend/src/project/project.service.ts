@@ -57,7 +57,7 @@ export class ProjectService {
   ): Promise<Task[]> {
     const tasksToAdd = [];
     for (const taskId of addTasksDto.ids) {
-      const task = await this.taskRepository.findTaskById(taskId);
+      const task = await this.taskRepository.findById(taskId);
       if (!task) {
         throw new NotFoundException(`Task with ID ${taskId} not found`);
       }

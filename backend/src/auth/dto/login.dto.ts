@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsString,
-  Length,
-  Matches,
-  Min,
-} from 'class-validator';
+import { IsEmail, IsString, Length, Matches, Min } from 'class-validator';
 import { passwordRegex } from 'src/user/utils';
 
 export class LoginDto {

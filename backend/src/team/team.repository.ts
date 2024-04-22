@@ -70,7 +70,8 @@ export class TeamRepository {
   }
 
   async getTeamIdByProject(projectId: number): Promise<number> {
-    const team = await this.repository.createQueryBuilder('team')
+    const team = await this.repository
+      .createQueryBuilder('team')
       .innerJoin('team.projects', 'project')
       .where('project.id = :projectId', { projectId })
       .getOne();
