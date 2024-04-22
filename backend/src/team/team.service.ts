@@ -7,6 +7,7 @@ import { TeamRepository } from './team.repository';
 import { UserRepository } from '../user/user.repository';
 import { Team } from './entities/team.entity';
 import { CreateTeamDto } from 'src/team/dto/create-team.dto';
+import { UpdateTeamDto } from 'src/team/dto/update-team.dto';
 
 @Injectable()
 export class TeamService {
@@ -25,6 +26,10 @@ export class TeamService {
       createTeamDto.description,
       [admin],
     );
+  }
+
+  async findById(id: number): Promise<Team> {
+    return this.teamRepository.findById(id);
   }
 
   async joinTeam(userId: number, teamId: number): Promise<Team> {
@@ -95,5 +100,32 @@ export class TeamService {
 
   async getUserRoleInTeam(userId: number, teamId: number): Promise<string> {
     return await this.teamRepository.getUserRoleInTeam(userId, teamId);
+  }
+
+  async deleteTeam(teamId: number): Promise<Team> {
+    return await this.teamRepository.deleteTeam(teamId);
+  }
+
+  async getAllTeams(): Promise<Team[]> {
+    return await this.teamRepository.findAll();
+  }
+
+  async updateTeam(
+    teamId: number,
+    updateTeamDto: UpdateTeamDto,
+  ): Promise<Team> {
+    const team = await this.teamRepository.findById(teamId);
+    if (!team) {
+      throw new NotFoundException(`Team with ID ${teamId} not found`);
+    }
+    return await this.teamRepository.updateTeam(teamId, updateTeamDto);
+  }
+
+  async findTeamsByAdminId(adminId: number): Promise<Team[]> {
+    return await this.teamRepository.findByAdmin(adminId);
+  }
+
+  async findTeamsByMemberId(memberId: number): Promise<Team[]> {
+    return await this.teamRepository.findByMember(memberId);
   }
 }

@@ -27,26 +27,21 @@ export class TeamRepository {
     return this.repository.save(team);
   }
 
-  async updateTeam(
-    id: number,
-    name: string,
-    description: string,
-  ): Promise<Team> {
+  async updateTeam(id: number, updateTeamDto: Partial<Team>): Promise<Team> {
     const team = await this.findById(id);
     if (!team) {
       throw new NotFoundException('Team not found');
     }
-    team.name = name;
-    team.description = description;
+    Object.assign(team, updateTeamDto);
     return this.repository.save(team);
   }
 
-  async deleteTeam(id: number): Promise<void> {
+  async deleteTeam(id: number): Promise<Team> {
     const team = await this.findById(id);
     if (!team) {
       throw new NotFoundException('Team not found');
     }
-    await this.repository.remove(team);
+    return await this.repository.remove(team);
   }
 
   async findByAdmin(adminId: number): Promise<Team[]> {
