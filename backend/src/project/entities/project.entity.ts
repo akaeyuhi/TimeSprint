@@ -7,7 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Team } from 'src/team/entities/team.entity';
-import { Task } from 'src/entities/task.entity';
+import { Task } from 'src/task/entities/task.entity';
 import { IsDate, Length } from 'class-validator';
 
 @Entity()

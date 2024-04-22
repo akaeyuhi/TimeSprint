@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Team } from 'src/team/entities/team.entity';
-import { Task } from 'src/entities/task.entity';
+import { Task } from 'src/task/entities/task.entity';
 
 @Injectable()
 export class ProjectRepository {

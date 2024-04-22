@@ -8,7 +8,7 @@ import {
   BeforeInsert,
 } from 'typeorm';
 import { Team } from 'src/team/entities/team.entity';
-import { Task } from 'src/entities/task.entity';
+import { Task } from 'src/task/entities/task.entity';
 import { IsEmail, IsString, Length, Matches, Min } from 'class-validator';
 import { LeisureActivity } from 'src/entities/leisure-activity.entity';
 import { passwordRegex, UserRole } from 'src/user/utils';
