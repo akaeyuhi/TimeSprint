@@ -1,19 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProjectRepository } from './project.repository';
-import { TaskRepository } from '../task/task.repository';
 import { Project } from './entities/project.entity';
 import { Task } from 'src/task/entities/task.entity';
 import { UpdateProjectDto } from 'src/project/dto/update-project.dto';
-import { TeamRepository } from 'src/team/team.repository';
 import { CreateProjectDto } from 'src/project/dto/create-project.dto';
 import { AddTasksDto } from 'src/project/dto/add-tasks.dto';
+import { CreateTaskDto } from 'src/task/dto/create-task.dto';
+import { TaskService } from 'src/task/task.service';
+import { TeamService } from 'src/team/team.service';
 
 @Injectable()
 export class ProjectService {
   constructor(
     private readonly projectRepository: ProjectRepository,
-    private readonly taskRepository: TaskRepository,
-    private readonly teamRepository: TeamRepository,
+    private readonly taskService: TaskService,
+    private readonly teamService: TeamService,
   ) {}
 
   async createProject(projectData: CreateProjectDto): Promise<Project> {
@@ -40,7 +41,7 @@ export class ProjectService {
   }
 
   async assignProjectToTeam(id: number, teamId: number): Promise<Project> {
-    const team = await this.teamRepository.findById(teamId);
+    const team = await this.teamService.findById(teamId);
     if (!team) {
       throw new NotFoundException(`Team with ID ${teamId} not found`);
     }
@@ -57,7 +58,7 @@ export class ProjectService {
   ): Promise<Task[]> {
     const tasksToAdd = [];
     for (const taskId of addTasksDto.ids) {
-      const task = await this.taskRepository.findById(taskId);
+      const task = await this.taskService.findById(taskId);
       if (!task) {
         throw new NotFoundException(`Task with ID ${taskId} not found`);
       }
@@ -67,14 +68,19 @@ export class ProjectService {
     return tasksToAdd;
   }
 
+  async createTaskInProject(
+    projectId: number,
+    createTaskDto: CreateTaskDto,
+  ): Promise<Task> {
+    return await this.taskService.createTask(createTaskDto, projectId);
+  }
+
   async removeTaskFromProject(
     projectId: number,
     taskId: number,
   ): Promise<void> {
-    return await this.projectRepository.removeTaskFromProject(
-      projectId,
-      taskId,
-    );
+    await this.projectRepository.removeTaskFromProject(projectId, taskId);
+    await this.taskService.deleteTask(taskId);
   }
 
   async findTasksByProject(projectId: number): Promise<Task[]> {

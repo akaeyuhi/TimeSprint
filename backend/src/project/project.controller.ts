@@ -19,6 +19,7 @@ import { Task } from 'src/task/entities/task.entity';
 import { UserRole } from 'src/user/utils';
 import { TeamRolesGuard } from 'src/team/guards/team.guard';
 import { TeamRoles } from 'src/team/decorators/team.decorator';
+import { CreateTaskDto } from 'src/task/dto/create-task.dto';
 
 @Controller('projects')
 @UseGuards(JwtAuthGuard, TeamRolesGuard)
@@ -80,5 +81,40 @@ export class ProjectController {
     @Param('taskId', ParseIntPipe) taskId: number,
   ): Promise<void> {
     await this.projectService.removeTaskFromProject(projectId, taskId);
+  }
+
+  @Post(':projectId/assign-to-team/:teamId')
+  @UseGuards(TeamRolesGuard)
+  @TeamRoles(UserRole.ADMIN)
+  async assignProjectToTeam(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('teamId', ParseIntPipe) teamId: number,
+  ): Promise<void> {
+    await this.projectService.assignProjectToTeam(projectId, teamId);
+  }
+
+  @Get('by-team/:teamId')
+  async findProjectsByTeam(
+    @Param('teamId', ParseIntPipe) teamId: number,
+  ): Promise<Project[]> {
+    return await this.projectService.findProjectsByTeam(teamId);
+  }
+
+  @Post(':projectId/create-task')
+  async createTaskInProject(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Body() createTaskDto: CreateTaskDto,
+  ): Promise<Task> {
+    return await this.projectService.createTaskInProject(
+      projectId,
+      createTaskDto,
+    );
+  }
+
+  @Get(':projectId/tasks')
+  async findTasksInProject(
+    @Param('projectId', ParseIntPipe) projectId: number,
+  ): Promise<Task[]> {
+    return await this.projectService.findTasksByProject(projectId);
   }
 }
