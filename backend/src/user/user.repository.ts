@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Task } from 'src/task/entities/task.entity';
 
 @Injectable()
 export class UserRepository {
@@ -47,5 +48,17 @@ export class UserRepository {
       .addSelect('user.role')
       .where('user.email = :email', { email })
       .getOne();
+  }
+
+  async assignTaskToUser(user: User, task: Task): Promise<Task> {
+    user.tasks.push(task);
+    await this.repository.save(user);
+    return task;
+  }
+
+  async deleteTaskFromUser(user: User, task: Task): Promise<Task> {
+    user.tasks = user.tasks.filter(userTask => userTask.id !== task.id);
+    await this.repository.save(user);
+    return task;
   }
 }
