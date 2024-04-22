@@ -16,8 +16,8 @@ export class TaskRepository {
   }
 
   async createTask(
-    project: Project,
     createTaskDto: Partial<Task>,
+    project?: Project,
   ): Promise<Task> {
     const { name, description, urgency, importance, startDate, endDate } =
       createTaskDto;
@@ -28,7 +28,7 @@ export class TaskRepository {
     task.importance = importance;
     task.startDate = startDate;
     task.endDate = endDate;
-    task.project = project;
+    task.project = project ?? null;
 
     return await this.repository.save(task);
   }
