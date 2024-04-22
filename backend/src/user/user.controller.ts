@@ -7,11 +7,14 @@ import {
   Body,
   Param,
   NotFoundException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateTaskDto } from 'src/task/dto/create-task.dto';
+import { Task } from 'src/task/entities/task.entity';
 
 @Controller('users')
 export class UserController {
@@ -47,5 +50,21 @@ export class UserController {
   @Delete(':id')
   async delete(@Param('id') id: number): Promise<void> {
     await this.userService.deleteUser(id);
+  }
+
+  @Post(':userId/tasks')
+  async createUserTask(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() createTaskDto: CreateTaskDto,
+  ): Promise<Task> {
+    return await this.userService.createUserTask(createTaskDto, userId);
+  }
+
+  @Delete(':userId/tasks/:taskId')
+  async deleteUserTask(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('taskId', ParseIntPipe) taskId: number,
+  ): Promise<Task> {
+    return await this.userService.deleteUserTask(userId, taskId);
   }
 }
