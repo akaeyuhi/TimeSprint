@@ -9,10 +9,7 @@ import { UserService } from 'src/user/user.service';
 import { UserRepository } from 'src/user/user.repository';
 
 @Module({
-  imports: [
-    UserModule,
-    TypeOrmModule.forFeature([Team]),
-  ],
+  imports: [UserModule, TypeOrmModule.forFeature([Team])],
   controllers: [TeamController],
   providers: [TeamService, TeamRepository, UserService, UserRepository],
 })
