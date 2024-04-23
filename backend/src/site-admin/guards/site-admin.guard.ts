@@ -5,12 +5,15 @@ import { SiteAdminService } from '../site-admin.service';
 @Injectable()
 export class SiteAdminGuard implements CanActivate {
   constructor(
-      private readonly siteAdminService: SiteAdminService,
-      private readonly reflector: Reflector,
+    private readonly siteAdminService: SiteAdminService,
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isSiteAdmin = this.reflector.get<boolean>('isSiteAdmin', context.getHandler());
+    const isSiteAdmin = this.reflector.get<boolean>(
+      'isSiteAdmin',
+      context.getHandler(),
+    );
     if (!isSiteAdmin) {
       return true; // Allow access if the route is not restricted to site admins
     }

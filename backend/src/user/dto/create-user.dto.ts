@@ -6,7 +6,7 @@ import {
   Matches,
   Min,
 } from 'class-validator';
-import {AdminRole, passwordRegex} from 'src/user/utils';
+import { AdminRole, passwordRegex } from 'src/user/utils';
 
 export class CreateUserDto {
   @Length(8, 20)

@@ -6,9 +6,7 @@ import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class SiteAdminService {
-  constructor(
-    private readonly siteAdminRepository: SiteAdminRepository,
-  ) {}
+  constructor(private readonly siteAdminRepository: SiteAdminRepository) {}
 
   async addSiteAdmin(user: User): Promise<SiteAdmin> {
     return await this.siteAdminRepository.create(user);
