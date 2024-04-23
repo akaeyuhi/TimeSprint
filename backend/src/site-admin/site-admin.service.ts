@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { SiteAdminRepository } from './site-admin.repository';
 import { User } from '../user/entities/user.entity';
 import { SiteAdmin } from 'src/site-admin/entities/site-admin.entity';
-import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class SiteAdminService {
