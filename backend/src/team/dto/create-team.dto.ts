@@ -7,5 +7,5 @@ export class CreateTeamDto {
   @IsString()
   @Min(20)
   description: string;
-  adminId: number;
+  admins: number[];
 }
