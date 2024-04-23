@@ -17,17 +17,8 @@ export class TaskRepository implements IRepository<Task> {
   }
 
   async create(createTaskDto: Partial<Task>, project?: Project): Promise<Task> {
-    const { name, description, urgency, importance, startDate, endDate } =
-      createTaskDto;
-    const task = new Task();
-    task.name = name;
-    task.description = description;
-    task.urgency = urgency;
-    task.importance = importance;
-    task.startDate = startDate;
-    task.endDate = endDate;
-    task.project = project ?? null;
-
+    createTaskDto.project = project ?? null;
+    const task = this.repository.create(createTaskDto);
     return await this.repository.save(task);
   }
 
