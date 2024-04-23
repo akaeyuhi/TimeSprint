@@ -2,14 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { TaskRepository } from './task.repository';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from './entities/task.entity';
-import { ProjectService } from 'src/project/project.service';
+import { Project } from 'src/project/entities/project.entity';
 
 @Injectable()
 export class TaskService {
-  constructor(
-    private readonly taskRepository: TaskRepository,
-    private readonly projectService: ProjectService,
-  ) {}
+  constructor(private readonly taskRepository: TaskRepository) {}
 
   async findTasksByProject(projectId: number): Promise<Task[]> {
     return await this.taskRepository.findTasksByProject(projectId);
@@ -17,10 +14,9 @@ export class TaskService {
 
   async createTask(
     createTaskDto: CreateTaskDto,
-    projectId?: number,
+    project?: Project,
   ): Promise<Task> {
-    if (projectId) {
-      const project = await this.projectService.findProjectById(projectId);
+    if (project) {
       return await this.taskRepository.create(createTaskDto, project);
     }
     return await this.taskRepository.create(createTaskDto);

@@ -72,7 +72,11 @@ export class ProjectService {
     projectId: number,
     createTaskDto: CreateTaskDto,
   ): Promise<Task> {
-    return await this.taskService.createTask(createTaskDto, projectId);
+    const project = await this.findProjectById(projectId);
+    if (!project) {
+      throw new NotFoundException(`Project with ID ${projectId} not found`);
+    }
+    return await this.taskService.createTask(createTaskDto, project);
   }
 
   async removeTaskFromProject(
