@@ -23,12 +23,12 @@ export class TaskRepository implements IRepository<Task> {
   }
 
   async update(id: number, updateTaskDto: Partial<Task>): Promise<Task> {
-    const task = await this.repository.findOneBy({ id });
+    const task = await this.findById(id);
     if (!task) {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
-    Object.assign(task, updateTaskDto);
-    return await this.repository.save(task);
+    await this.repository.update(id, updateTaskDto);
+    return task;
   }
 
   async findById(id: number): Promise<Task> {

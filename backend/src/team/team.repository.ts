@@ -28,8 +28,8 @@ export class TeamRepository implements IRepository<Team> {
     if (!team) {
       throw new NotFoundException('Team not found');
     }
-    Object.assign(team, updateTeamDto);
-    return this.repository.save(team);
+    await this.repository.update(id, updateTeamDto);
+    return team;
   }
 
   async delete(id: number): Promise<void> {

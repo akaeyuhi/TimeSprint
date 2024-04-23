@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LeisureActivity } from './entities/leisure-activity.entity';
@@ -20,8 +20,12 @@ export class LeisureActivityRepository implements IRepository<LeisureActivity> {
     id: number,
     data: Partial<LeisureActivity>,
   ): Promise<LeisureActivity> {
+    const activity = await this.findById(id);
+    if (!activity) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
     await this.repository.update(id, data);
-    return this.findById(id);
+    return activity;
   }
 
   async delete(id: number): Promise<void> {

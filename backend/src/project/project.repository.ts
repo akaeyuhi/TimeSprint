@@ -1,5 +1,5 @@
 import { Project } from 'src/project/entities/project.entity';
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Team } from 'src/team/entities/team.entity';
@@ -19,8 +19,12 @@ export class ProjectRepository implements IRepository<Project> {
   }
 
   async update(id: number, projectData: Partial<Project>): Promise<Project> {
+    const project = await this.findById(id);
+    if (!project) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
     await this.repository.update(id, projectData);
-    return await this.repository.findOneBy({ id });
+    return project;
   }
 
   async delete(id: number): Promise<void> {
