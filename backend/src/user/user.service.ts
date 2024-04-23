@@ -9,6 +9,7 @@ import { Task } from 'src/task/entities/task.entity';
 import { LeisureActivity } from 'src/leisure-activity/entities/leisure-activity.entity';
 import { LeisureActivityService } from 'src/leisure-activity/leisure-activity.service';
 import { CreateLeisureActivityDto } from 'src/leisure-activity/dto/create-leisure-activity.dto';
+import { AdminRole } from 'src/user/utils';
 
 @Injectable()
 export class UserService {
@@ -95,5 +96,14 @@ export class UserService {
       throw new Error(`User with ID ${userId} not found`);
     }
     return user.activities;
+  }
+
+  async changeUserRole(userId: number, role: AdminRole): Promise<User> {
+    const user = await this.findById(userId);
+    if (!user) {
+      throw new Error(`User with ID ${userId} not found`);
+    }
+    await this.updateUser(userId, { role });
+    return user;
   }
 }

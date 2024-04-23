@@ -1,13 +1,14 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
   Post,
   Put,
-  Delete,
-  Body,
-  Param,
-  NotFoundException,
-  ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
@@ -17,10 +18,17 @@ import { CreateTaskDto } from 'src/task/dto/create-task.dto';
 import { Task } from 'src/task/entities/task.entity';
 import { LeisureActivity } from 'src/leisure-activity/entities/leisure-activity.entity';
 import { CreateLeisureActivityDto } from 'src/leisure-activity/dto/create-leisure-activity.dto';
+import { SiteAdminService } from 'src/site-admin/site-admin.service';
+import { SiteAdminGuard } from 'src/site-admin/guards/site-admin.guard';
+import { IsSiteAdmin } from 'src/site-admin/decorators/site-admin.decorator';
+import { AdminRole } from 'src/user/utils';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly adminService: SiteAdminService,
+  ) {}
 
   @Get()
   async findAll(): Promise<User[]> {
@@ -50,6 +58,8 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(SiteAdminGuard)
+  @IsSiteAdmin()
   async delete(@Param('id') id: number): Promise<void> {
     await this.userService.deleteUser(id);
   }
@@ -83,5 +93,30 @@ export class UserController {
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<LeisureActivity[]> {
     return await this.userService.getLeisureActivitiesForUser(userId);
+  }
+
+  @Post(':userId/grant-admin')
+  @UseGuards(SiteAdminGuard)
+  @IsSiteAdmin()
+  async grantAdminPrivilege(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<User> {
+    const user = await this.userService.findById(userId);
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+    await this.userService.changeUserRole(userId, AdminRole.ADMIN);
+    await this.adminService.addSiteAdmin(user);
+    return user;
+  }
+
+  @Post(':userId/revoke-admin')
+  @UseGuards(SiteAdminGuard)
+  @IsSiteAdmin()
+  async revokeAdminPrivilege(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<void> {
+    await this.userService.changeUserRole(userId, AdminRole.USER);
+    await this.adminService.removeSiteAdmin(userId);
   }
 }
