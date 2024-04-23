@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProjectModule } from './project/project.module';
 import { TaskModule } from './task/task.module';
 import { LeisureActivityModule } from './leisure-activity/leisure-activity.module';
+import { SiteAdminModule } from './site-admin/site-admin.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { LeisureActivityModule } from './leisure-activity/leisure-activity.modul
     ProjectModule,
     TaskModule,
     LeisureActivityModule,
+    SiteAdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
