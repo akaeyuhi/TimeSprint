@@ -1,4 +1,5 @@
-import {IsDate, Length} from "class-validator";
+import { IsDate, Length } from 'class-validator';
+import {User} from "src/user/entities/user.entity";
 
 export class CreateLeisureActivityDto {
   @Length(8, 20)
@@ -12,4 +13,6 @@ export class CreateLeisureActivityDto {
 
   @IsDate()
   endDate: Date;
+
+  user?: User = null;
 }
