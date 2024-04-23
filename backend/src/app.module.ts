@@ -8,6 +8,7 @@ import { TeamModule } from './team/team.module';
 import { AuthModule } from './auth/auth.module';
 import { ProjectModule } from './project/project.module';
 import { TaskModule } from './task/task.module';
+import { LeisureActivityModule } from './leisure-activity/leisure-activity.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TaskModule } from './task/task.module';
     AuthModule,
     ProjectModule,
     TaskModule,
+    LeisureActivityModule,
   ],
   controllers: [AppController],
   providers: [AppService],
