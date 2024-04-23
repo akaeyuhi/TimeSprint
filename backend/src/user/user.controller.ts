@@ -15,6 +15,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateTaskDto } from 'src/task/dto/create-task.dto';
 import { Task } from 'src/task/entities/task.entity';
+import { LeisureActivity } from 'src/leisure-activity/entities/leisure-activity.entity';
+import { CreateLeisureActivityDto } from 'src/leisure-activity/dto/create-leisure-activity.dto';
 
 @Controller('users')
 export class UserController {
@@ -66,5 +68,20 @@ export class UserController {
     @Param('taskId', ParseIntPipe) taskId: number,
   ): Promise<Task> {
     return await this.userService.deleteUserTask(userId, taskId);
+  }
+
+  @Post(':userId/activities/:activityId')
+  async addLeisureActivityToUser(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() activityDto: CreateLeisureActivityDto,
+  ): Promise<User> {
+    return await this.userService.addLeisureActivityToUser(userId, activityDto);
+  }
+
+  @Get(':userId/activities')
+  async getLeisureActivitiesForUser(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<LeisureActivity[]> {
+    return await this.userService.getLeisureActivitiesForUser(userId);
   }
 }
