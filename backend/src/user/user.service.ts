@@ -6,12 +6,16 @@ import { User } from 'src/user/entities/user.entity';
 import { CreateTaskDto } from 'src/task/dto/create-task.dto';
 import { TaskService } from 'src/task/task.service';
 import { Task } from 'src/task/entities/task.entity';
+import { LeisureActivity } from 'src/leisure-activity/entities/leisure-activity.entity';
+import { LeisureActivityService } from 'src/leisure-activity/leisure-activity.service';
+import { CreateLeisureActivityDto } from 'src/leisure-activity/dto/create-leisure-activity.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly taskService: TaskService,
+    private readonly leisureActivityService: LeisureActivityService,
   ) {}
 
   async findAll(): Promise<User[]> {
@@ -35,18 +39,18 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    return this.userRepository.createUser(createUserDto);
+    return this.userRepository.create(createUserDto);
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const existingUser = await this.findById(id);
     const updatedUser = { ...existingUser, ...updateUserDto };
-    return this.userRepository.updateUser(id, updatedUser);
+    return this.userRepository.update(id, updatedUser);
   }
 
   async deleteUser(id: number): Promise<void> {
     const existingUser = await this.findById(id);
-    await this.userRepository.deleteUser(existingUser.id);
+    await this.userRepository.delete(existingUser.id);
   }
 
   async findUserWithPassword(email: string) {
@@ -66,5 +70,30 @@ export class UserService {
     const user = await this.userRepository.findById(userId);
     const task = await this.taskService.findById(taskId);
     return await this.userRepository.deleteTaskFromUser(user, task);
+  }
+
+  async addLeisureActivityToUser(
+    userId: number,
+    activityDto: CreateLeisureActivityDto,
+  ): Promise<User> {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new Error(`User with ID ${userId} not found`);
+    }
+    await this.leisureActivityService.createLeisureActivity({
+      ...activityDto,
+      user,
+    });
+    return user;
+  }
+
+  async getLeisureActivitiesForUser(
+    userId: number,
+  ): Promise<LeisureActivity[]> {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new Error(`User with ID ${userId} not found`);
+    }
+    return user.activities;
   }
 }
