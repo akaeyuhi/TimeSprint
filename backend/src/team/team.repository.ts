@@ -1,11 +1,11 @@
 import { Team } from './entities/team.entity';
-import { User } from '../user/entities/user.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { IRepository } from 'src/interfaces/repository.interface';
 
 @Injectable()
-export class TeamRepository {
+export class TeamRepository implements IRepository<Team> {
   constructor(
     @InjectRepository(Team)
     private readonly repository: Repository<Team>,
@@ -18,16 +18,12 @@ export class TeamRepository {
     return this.repository.findOneBy({ id });
   }
 
-  async createTeam(
-    name: string,
-    description: string,
-    admins: User[],
-  ): Promise<Team> {
-    const team = this.repository.create({ name, description, admins });
+  async create(createTeamDto: Partial<Team>): Promise<Team> {
+    const team = this.repository.create(createTeamDto);
     return this.repository.save(team);
   }
 
-  async updateTeam(id: number, updateTeamDto: Partial<Team>): Promise<Team> {
+  async update(id: number, updateTeamDto: Partial<Team>): Promise<Team> {
     const team = await this.findById(id);
     if (!team) {
       throw new NotFoundException('Team not found');
@@ -36,12 +32,12 @@ export class TeamRepository {
     return this.repository.save(team);
   }
 
-  async deleteTeam(id: number): Promise<Team> {
+  async delete(id: number): Promise<void> {
     const team = await this.findById(id);
     if (!team) {
       throw new NotFoundException('Team not found');
     }
-    return await this.repository.remove(team);
+    await this.repository.remove(team);
   }
 
   async findByAdmin(adminId: number): Promise<Team[]> {

@@ -3,9 +3,10 @@ import { Task } from './entities/task.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Project } from 'src/project/entities/project.entity';
+import { IRepository } from 'src/interfaces/repository.interface';
 
 @Injectable()
-export class TaskRepository {
+export class TaskRepository implements IRepository<Task> {
   constructor(
     @InjectRepository(Task)
     private readonly repository: Repository<Task>,
@@ -15,10 +16,7 @@ export class TaskRepository {
     return await this.repository.findBy({ id });
   }
 
-  async createTask(
-    createTaskDto: Partial<Task>,
-    project?: Project,
-  ): Promise<Task> {
+  async create(createTaskDto: Partial<Task>, project?: Project): Promise<Task> {
     const { name, description, urgency, importance, startDate, endDate } =
       createTaskDto;
     const task = new Task();
@@ -33,7 +31,7 @@ export class TaskRepository {
     return await this.repository.save(task);
   }
 
-  async updateTask(id: number, updateTaskDto: Partial<Task>): Promise<Task> {
+  async update(id: number, updateTaskDto: Partial<Task>): Promise<Task> {
     const task = await this.repository.findOneBy({ id });
     if (!task) {
       throw new NotFoundException(`Task with ID ${id} not found`);
@@ -50,11 +48,15 @@ export class TaskRepository {
     return task;
   }
 
-  async deleteTask(taskId: number): Promise<void> {
+  async delete(taskId: number): Promise<void> {
     const result = await this.repository.delete(taskId);
 
     if (result.affected === 0) {
       throw new NotFoundException(`Task with ID ${taskId} not found`);
     }
+  }
+
+  findAll(): Promise<Task[]> {
+    return this.repository.find();
   }
 }
