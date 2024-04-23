@@ -1,6 +1,4 @@
 import { IsString, Length, Min } from 'class-validator';
-import { User } from 'src/user/entities/user.entity';
-
 export class CreateTeamDto {
   @IsString()
   @Length(8, 20)
