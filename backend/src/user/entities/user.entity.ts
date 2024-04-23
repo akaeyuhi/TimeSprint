@@ -11,7 +11,7 @@ import { Team } from 'src/team/entities/team.entity';
 import { Task } from 'src/task/entities/task.entity';
 import { IsEmail, IsString, Length, Matches, Min } from 'class-validator';
 import { LeisureActivity } from 'src/leisure-activity/entities/leisure-activity.entity';
-import { passwordRegex, UserRole } from 'src/user/utils';
+import { AdminRole, passwordRegex } from 'src/user/utils';
 import { hash } from 'bcrypt';
 
 @Entity()
@@ -35,10 +35,10 @@ export class User {
 
   @Column({
     type: 'enum',
-    enum: UserRole,
-    default: UserRole.COLLABORATOR,
+    enum: AdminRole,
+    default: AdminRole.USER,
   })
-  role: UserRole;
+  role: AdminRole;
 
   @OneToMany(() => LeisureActivity, activity => activity.user)
   activities: LeisureActivity[];
