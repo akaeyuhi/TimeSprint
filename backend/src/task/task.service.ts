@@ -21,9 +21,9 @@ export class TaskService {
   ): Promise<Task> {
     if (projectId) {
       const project = await this.projectService.findProjectById(projectId);
-      return await this.taskRepository.createTask(createTaskDto, project);
+      return await this.taskRepository.create(createTaskDto, project);
     }
-    return await this.taskRepository.createTask(createTaskDto);
+    return await this.taskRepository.create(createTaskDto);
   }
 
   async findById(taskId: number): Promise<Task> {
@@ -34,10 +34,10 @@ export class TaskService {
     taskId: number,
     updateTaskDto: Partial<CreateTaskDto>,
   ): Promise<Task> {
-    return await this.taskRepository.updateTask(taskId, updateTaskDto);
+    return await this.taskRepository.update(taskId, updateTaskDto);
   }
 
   async deleteTask(taskId: number): Promise<void> {
-    return await this.taskRepository.deleteTask(taskId);
+    return await this.taskRepository.delete(taskId);
   }
 }

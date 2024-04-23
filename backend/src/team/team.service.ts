@@ -17,15 +17,15 @@ export class TeamService {
   ) {}
 
   async createTeam(createTeamDto: CreateTeamDto): Promise<Team> {
-    const admin = await this.userRepository.findById(createTeamDto.adminId);
-    if (!admin) {
+    const admins = [];
+    for (const id of createTeamDto.adminIds) {
+      const admin = await this.userRepository.findById(id);
+      admins.push(admin);
+    }
+    if (!admins.length || !createTeamDto.adminIds) {
       throw new NotFoundException('Admin not found');
     }
-    return await this.teamRepository.createTeam(
-      createTeamDto.name,
-      createTeamDto.description,
-      [admin],
-    );
+    return await this.teamRepository.create({ ...createTeamDto, admins });
   }
 
   async findById(id: number): Promise<Team> {
@@ -102,8 +102,8 @@ export class TeamService {
     return await this.teamRepository.getUserRoleInTeam(userId, teamId);
   }
 
-  async deleteTeam(teamId: number): Promise<Team> {
-    return await this.teamRepository.deleteTeam(teamId);
+  async deleteTeam(teamId: number): Promise<void> {
+    await this.teamRepository.delete(teamId);
   }
 
   async getAllTeams(): Promise<Team[]> {
@@ -118,7 +118,7 @@ export class TeamService {
     if (!team) {
       throw new NotFoundException(`Team with ID ${teamId} not found`);
     }
-    return await this.teamRepository.updateTeam(teamId, updateTeamDto);
+    return await this.teamRepository.update(teamId, updateTeamDto);
   }
 
   async findTeamsByAdminId(adminId: number): Promise<Team[]> {

@@ -18,26 +18,26 @@ export class ProjectService {
   ) {}
 
   async createProject(projectData: CreateProjectDto): Promise<Project> {
-    return await this.projectRepository.createProject(projectData);
+    return await this.projectRepository.create(projectData);
   }
 
   async updateProject(
     id: number,
     projectDto: UpdateProjectDto,
   ): Promise<Project> {
-    return await this.projectRepository.updateProject(id, projectDto);
+    return await this.projectRepository.update(id, projectDto);
   }
 
   async deleteProject(id: number): Promise<void> {
-    await this.projectRepository.deleteProject(id);
+    await this.projectRepository.delete(id);
   }
 
   async findProjectById(id: number): Promise<Project> {
-    return await this.projectRepository.findProjectById(id);
+    return await this.projectRepository.findById(id);
   }
 
   async findAllProjects(): Promise<Project[]> {
-    return await this.projectRepository.findAllProjects();
+    return await this.projectRepository.findAll();
   }
 
   async assignProjectToTeam(id: number, teamId: number): Promise<Project> {

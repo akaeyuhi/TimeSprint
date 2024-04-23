@@ -1,4 +1,5 @@
 import { IsString, Length, Min } from 'class-validator';
+import { User } from 'src/user/entities/user.entity';
 
 export class CreateTeamDto {
   @IsString()
@@ -7,5 +8,5 @@ export class CreateTeamDto {
   @IsString()
   @Min(20)
   description: string;
-  admins: number[];
+  adminIds?: number[];
 }
