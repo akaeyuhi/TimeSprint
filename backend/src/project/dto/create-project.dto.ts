@@ -1,4 +1,5 @@
-import { IsDate, Length } from 'class-validator';
+import {IsBoolean, IsDate, Length} from 'class-validator';
+import {Column} from "typeorm";
 
 export class CreateProjectDto {
   @Length(8, 20)
@@ -12,6 +13,9 @@ export class CreateProjectDto {
 
   @IsDate()
   endDate: Date;
+
+  @IsBoolean()
+  isCompleted = false;
 
   teamId: number;
 }

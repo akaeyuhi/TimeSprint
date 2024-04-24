@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Team } from 'src/team/entities/team.entity';
 import { Task } from 'src/task/entities/task.entity';
-import { IsDate, Length } from 'class-validator';
+import {IsBoolean, IsDate, Length} from 'class-validator';
 
 @Entity()
 export class Project {
@@ -30,6 +30,10 @@ export class Project {
   @Column({ type: 'timestamp' })
   @IsDate()
   endDate: Date;
+
+  @Column()
+  @IsBoolean()
+  isCompleted: boolean;
 
   @ManyToOne(() => Team)
   @JoinColumn({ name: 'team_id' })
