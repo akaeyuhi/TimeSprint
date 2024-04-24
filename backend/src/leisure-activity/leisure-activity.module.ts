@@ -9,6 +9,6 @@ import { LeisureActivity } from 'src/leisure-activity/entities/leisure-activity.
   imports: [TypeOrmModule.forFeature([LeisureActivity])],
   controllers: [LeisureActivityController],
   providers: [LeisureActivityService, LeisureActivityRepository],
-  exports: [LeisureActivityService]
+  exports: [LeisureActivityService],
 })
 export class LeisureActivityModule {}
