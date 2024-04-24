@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Team } from 'src/team/entities/team.entity';
 import { Task } from 'src/task/entities/task.entity';
-import {IsBoolean, IsDate, Length} from 'class-validator';
+import { IsBoolean, IsDate, Length } from 'class-validator';
 
 @Entity()
 export class Project {

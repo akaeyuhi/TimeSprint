@@ -3,10 +3,12 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  JoinColumn, ManyToMany, JoinTable,
+  JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Project } from 'src/project/entities/project.entity';
-import {IsBoolean, IsDate, Length} from 'class-validator';
+import { IsBoolean, IsDate, Length } from 'class-validator';
 import { User } from 'src/user/entities/user.entity';
 
 @Entity()
