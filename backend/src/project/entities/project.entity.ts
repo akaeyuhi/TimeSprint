@@ -3,14 +3,15 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
-import { Project } from './project.entity';
+import { Team } from 'src/team/entities/team.entity';
+import { Task } from 'src/task/entities/task.entity';
 import { IsDate, Length } from 'class-validator';
-import { User } from 'src/user/entities/user.entity';
 
 @Entity()
-export class Task {
+export class Project {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,12 +23,6 @@ export class Task {
   @Length(20)
   description: string;
 
-  @Column()
-  urgency: boolean;
-
-  @Column()
-  importance: boolean;
-
   @Column({ type: 'timestamp' })
   @IsDate()
   startDate: Date;
@@ -36,11 +31,10 @@ export class Task {
   @IsDate()
   endDate: Date;
 
-  @ManyToOne(() => Project)
-  @JoinColumn({ name: 'project_id' })
-  project: Project;
+  @ManyToOne(() => Team)
+  @JoinColumn({ name: 'team_id' })
+  team: Team;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  @OneToMany(() => Task, task => task.project)
+  tasks: Task[];
 }

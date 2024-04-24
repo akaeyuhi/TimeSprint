@@ -6,7 +6,7 @@ import {
   Matches,
   Min,
 } from 'class-validator';
-import { passwordRegex, UserRole } from 'src/user/utils';
+import { AdminRole, passwordRegex } from 'src/user/utils';
 
 export class CreateUserDto {
   @Length(8, 20)
@@ -21,6 +21,6 @@ export class CreateUserDto {
   password: string;
   @Matches('password')
   confirmPassword: string;
-  @IsEnum(UserRole)
-  role: UserRole = UserRole.COLLABORATOR;
+  @IsEnum(AdminRole)
+  role: AdminRole = AdminRole.USER;
 }
