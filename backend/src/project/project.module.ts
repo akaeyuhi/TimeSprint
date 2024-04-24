@@ -13,6 +13,6 @@ import { Project } from 'src/project/entities/project.entity';
   imports: [TypeOrmModule.forFeature([Project]), TeamModule, TaskModule],
   controllers: [ProjectController],
   providers: [ProjectService, ProjectRepository],
-  exports: [ProjectService]
+  exports: [ProjectService],
 })
 export class ProjectModule {}
