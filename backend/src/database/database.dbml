@@ -1,5 +1,5 @@
 Project TimeSprinter {
-  database_type: 'PostgreSQL'
+  database_type: 'Postgresql'
   Note: 'Web app for organizing free time and tasks'
 }
 

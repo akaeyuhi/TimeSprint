@@ -1,5 +1,4 @@
 import { IsBoolean, IsDate, Length } from 'class-validator';
-import { Column } from 'typeorm';
 
 export class CreateProjectDto {
   @Length(8, 20)

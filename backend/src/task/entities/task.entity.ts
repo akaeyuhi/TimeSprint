@@ -50,7 +50,7 @@ export class Task {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToMany(() => Task)
+  @ManyToMany(() => Task, (task) => task.dependencies)
   @JoinTable()
   dependencies: Task[];
 }
