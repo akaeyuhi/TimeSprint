@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthStrategy } from 'src/auth/strategies/auth.strategy';
 import { RefreshStrategy } from 'src/auth/strategies/auth-refresh.strategy';
 import { UserRepository } from 'src/user/user.repository';
+import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 
 @Module({
   imports: [
@@ -20,10 +21,10 @@ import { UserRepository } from 'src/user/user.repository';
   controllers: [AuthController],
   providers: [
     AuthService,
-    UserService,
     AuthStrategy,
     RefreshStrategy,
-    UserRepository,
+    JwtAuthGuard,
   ],
+  exports: [AuthService, AuthStrategy, RefreshStrategy, JwtAuthGuard],
 })
 export class AuthModule {}

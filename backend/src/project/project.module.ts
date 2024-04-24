@@ -12,6 +12,7 @@ import { Project } from 'src/project/entities/project.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Project]), TeamModule, TaskModule],
   controllers: [ProjectController],
-  providers: [ProjectService, ProjectRepository, TeamService, TaskService],
+  providers: [ProjectService, ProjectRepository],
+  exports: [ProjectService]
 })
 export class ProjectModule {}
