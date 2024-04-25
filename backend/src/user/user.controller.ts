@@ -20,7 +20,7 @@ import { LeisureActivity } from 'src/leisure-activity/entities/leisure-activity.
 import { CreateLeisureActivityDto } from 'src/leisure-activity/dto/create-leisure-activity.dto';
 import { SiteAdminService } from 'src/site-admin/site-admin.service';
 import { SiteAdminGuard } from 'src/site-admin/guards/site-admin.guard';
-import { IsSiteAdmin } from 'src/site-admin/decorators/site-admin.decorator';
+import { IsUserRole } from 'src/site-admin/decorators/site-admin.decorator';
 import { AdminRole } from 'src/user/utils';
 
 @Controller('users')
@@ -59,7 +59,7 @@ export class UserController {
 
   @Delete(':id')
   @UseGuards(SiteAdminGuard)
-  @IsSiteAdmin()
+  @IsUserRole(AdminRole.ADMIN)
   async delete(@Param('id') id: number): Promise<void> {
     await this.userService.deleteUser(id);
   }
@@ -97,7 +97,7 @@ export class UserController {
 
   @Post(':userId/grant-admin')
   @UseGuards(SiteAdminGuard)
-  @IsSiteAdmin()
+  @IsUserRole(AdminRole.ADMIN)
   async grantAdminPrivilege(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<User> {
@@ -112,7 +112,7 @@ export class UserController {
 
   @Post(':userId/revoke-admin')
   @UseGuards(SiteAdminGuard)
-  @IsSiteAdmin()
+  @IsUserRole(AdminRole.ADMIN)
   async revokeAdminPrivilege(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<void> {

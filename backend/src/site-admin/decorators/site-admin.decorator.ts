@@ -1,5 +1,6 @@
-// is-site-admin.decorator.ts
-
 import { SetMetadata } from '@nestjs/common';
+import { AdminRole } from 'src/user/utils';
 
-export const IsSiteAdmin = () => SetMetadata('isSiteAdmin', true);
+export const ROLES_KEY = 'role';
+export const IsUserRole = (...roles: AdminRole[]) =>
+  SetMetadata(ROLES_KEY, roles);
