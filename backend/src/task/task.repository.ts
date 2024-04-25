@@ -12,10 +12,6 @@ export class TaskRepository implements IRepository<Task> {
     private readonly repository: Repository<Task>,
   ) {}
 
-  async findTasksByProject(id: number): Promise<Task[]> {
-    return await this.repository.findBy({ id });
-  }
-
   async create(createTaskDto: Partial<Task>, project?: Project): Promise<Task> {
     createTaskDto.project = project ?? null;
     const task = this.repository.create(createTaskDto);

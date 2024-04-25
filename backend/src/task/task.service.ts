@@ -8,10 +8,6 @@ import { Project } from 'src/project/entities/project.entity';
 export class TaskService {
   constructor(private readonly taskRepository: TaskRepository) {}
 
-  async findTasksByProject(projectId: number): Promise<Task[]> {
-    return await this.taskRepository.findTasksByProject(projectId);
-  }
-
   async createTask(
     createTaskDto: CreateTaskDto,
     project?: Project,
