@@ -11,26 +11,20 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { User } from './entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateTaskDto } from 'src/task/dto/create-task.dto';
-import { Task } from 'src/task/entities/task.entity';
-import { LeisureActivity } from 'src/leisure-activity/entities/leisure-activity.entity';
-import { CreateLeisureActivityDto } from 'src/leisure-activity/dto/create-leisure-activity.dto';
-import { SiteAdminService } from 'src/site-admin/site-admin.service';
-import { SiteAdminGuard } from 'src/site-admin/guards/site-admin.guard';
-import { IsUserRole } from 'src/site-admin/decorators/site-admin.decorator';
-import { AdminRole } from 'src/user/utils';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
+import {UserService} from './user.service';
+import {User} from './entities/user.entity';
+import {CreateUserDto} from './dto/create-user.dto';
+import {UpdateUserDto} from './dto/update-user.dto';
+import {CreateTaskDto} from 'src/task/dto/create-task.dto';
+import {Task} from 'src/task/entities/task.entity';
+import {LeisureActivity} from 'src/leisure-activity/entities/leisure-activity.entity';
+import {CreateLeisureActivityDto} from 'src/leisure-activity/dto/create-leisure-activity.dto';
+import {SiteAdminService} from 'src/site-admin/site-admin.service';
+import {SiteAdminGuard} from 'src/site-admin/guards/site-admin.guard';
+import {IsUserRole} from 'src/site-admin/decorators/site-admin.decorator';
+import {AdminRole} from 'src/user/utils';
+import {ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags,} from '@nestjs/swagger';
+import {JwtAuthGuard} from 'src/auth/guards/auth.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth('JWT')
@@ -57,17 +51,21 @@ export class UserController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findById(@Param('id') id: number): Promise<User> {
-    const user = await this.userService.findById(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    return user;
+    return await this.userService.findById(id);
   }
 
   @Post()
   @IsUserRole(AdminRole.ADMIN)
   @ApiOperation({ summary: 'Creates new user. Admin rights required' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Success',
+    type: User,
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Such user already exists',
+  })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.createUser(createUserDto);
@@ -190,9 +188,6 @@ export class UserController {
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<User> {
     const user = await this.userService.findById(userId);
-    if (!user) {
-      throw new NotFoundException(`User with ID ${userId} not found`);
-    }
     await this.userService.changeUserRole(userId, AdminRole.ADMIN);
     await this.adminService.addSiteAdmin(user);
     return user;
