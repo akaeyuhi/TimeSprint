@@ -95,6 +95,13 @@ export class UserController {
     return await this.userService.getLeisureActivitiesForUser(userId);
   }
 
+  @Get(':userId/prioritized')
+  async getPrioritizedTasksByUser(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<LeisureActivity[]> {
+    return await this.userService.getSortedUserTasks(userId);
+  }
+
   @Post(':userId/grant-admin')
   @UseGuards(SiteAdminGuard)
   @IsUserRole(AdminRole.ADMIN)

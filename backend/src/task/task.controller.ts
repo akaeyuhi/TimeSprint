@@ -46,7 +46,9 @@ export class TaskController {
   }
 
   @Get(':id')
-  async getTaskDependencies(@Param('id', ParseIntPipe) id: number): Promise<Task[]> {
+  async getTaskDependencies(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Task[]> {
     return await this.taskService.findTaskDependencies(id);
   }
 }
