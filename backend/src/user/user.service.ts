@@ -76,16 +76,15 @@ export class UserService {
   async addLeisureActivityToUser(
     userId: number,
     activityDto: CreateLeisureActivityDto,
-  ): Promise<User> {
+  ): Promise<LeisureActivity> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new Error(`User with ID ${userId} not found`);
     }
-    await this.leisureActivityService.createLeisureActivity({
+    return await this.leisureActivityService.createLeisureActivity({
       ...activityDto,
       user,
     });
-    return user;
   }
 
   async getLeisureActivitiesForUser(

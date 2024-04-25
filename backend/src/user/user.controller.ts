@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -22,8 +23,19 @@ import { SiteAdminService } from 'src/site-admin/site-admin.service';
 import { SiteAdminGuard } from 'src/site-admin/guards/site-admin.guard';
 import { IsUserRole } from 'src/site-admin/decorators/site-admin.decorator';
 import { AdminRole } from 'src/user/utils';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 
+@ApiTags('Users')
+@ApiBearerAuth('JWT')
 @Controller('users')
+@UseGuards(JwtAuthGuard, SiteAdminGuard)
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -31,11 +43,19 @@ export class UserController {
   ) {}
 
   @Get()
+  @ApiOperation({ summary: 'Gets all users' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findAll(): Promise<User[]> {
     return this.userService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Gets users by userId' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findById(@Param('id') id: number): Promise<User> {
     const user = await this.userService.findById(id);
     if (!user) {
@@ -45,11 +65,20 @@ export class UserController {
   }
 
   @Post()
+  @IsUserRole(AdminRole.ADMIN)
+  @ApiOperation({ summary: 'Creates new user. Admin rights required' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.createUser(createUserDto);
   }
 
   @Put(':id')
+  @ApiOperation({ summary: 'Updates user data by id' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async update(
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
@@ -58,13 +87,22 @@ export class UserController {
   }
 
   @Delete(':id')
-  @UseGuards(SiteAdminGuard)
   @IsUserRole(AdminRole.ADMIN)
+  @ApiOperation({ summary: 'Deletes user by id. Admin rights required' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: null })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async delete(@Param('id') id: number): Promise<void> {
     await this.userService.deleteUser(id);
   }
 
   @Post(':userId/tasks')
+  @ApiOperation({ summary: 'Creates new task for user.' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async createUserTask(
     @Param('userId', ParseIntPipe) userId: number,
     @Body() createTaskDto: CreateTaskDto,
@@ -73,6 +111,13 @@ export class UserController {
   }
 
   @Delete(':userId/tasks/:taskId')
+  @ApiOperation({ summary: 'Deletes task from user account.' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiParam({ name: 'taskId', required: true, description: 'Task identifier' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Task not found' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async deleteUserTask(
     @Param('userId', ParseIntPipe) userId: number,
     @Param('taskId', ParseIntPipe) taskId: number,
@@ -80,15 +125,33 @@ export class UserController {
     return await this.userService.deleteUserTask(userId, taskId);
   }
 
-  @Post(':userId/activities/:activityId')
+  @Post(':userId/activities/')
+  @ApiOperation({ summary: 'Creates new activity for user' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: LeisureActivity,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async addLeisureActivityToUser(
     @Param('userId', ParseIntPipe) userId: number,
     @Body() activityDto: CreateLeisureActivityDto,
-  ): Promise<User> {
+  ): Promise<LeisureActivity> {
     return await this.userService.addLeisureActivityToUser(userId, activityDto);
   }
 
   @Get(':userId/activities')
+  @ApiOperation({ summary: 'Gets all user activities' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: LeisureActivity,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async getLeisureActivitiesForUser(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<LeisureActivity[]> {
@@ -96,15 +159,33 @@ export class UserController {
   }
 
   @Get(':userId/prioritized')
+  @ApiOperation({ summary: 'Gets sorted by priority user tasks' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: Task,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async getPrioritizedTasksByUser(
     @Param('userId', ParseIntPipe) userId: number,
-  ): Promise<LeisureActivity[]> {
+  ): Promise<Task[]> {
     return await this.userService.getSortedUserTasks(userId);
   }
 
   @Post(':userId/grant-admin')
-  @UseGuards(SiteAdminGuard)
   @IsUserRole(AdminRole.ADMIN)
+  @ApiOperation({ summary: 'Grants user admin status. Admin rights required' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: User,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async grantAdminPrivilege(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<User> {
@@ -118,8 +199,16 @@ export class UserController {
   }
 
   @Post(':userId/revoke-admin')
-  @UseGuards(SiteAdminGuard)
   @IsUserRole(AdminRole.ADMIN)
+  @ApiOperation({ summary: 'Revokes user admin status. Admin rights required' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async revokeAdminPrivilege(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<void> {
