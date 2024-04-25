@@ -7,13 +7,26 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  UseGuards,
+  HttpStatus,
 } from '@nestjs/common';
 import { LeisureActivityService } from './leisure-activity.service';
 import { LeisureActivity } from './entities/leisure-activity.entity';
 import { CreateLeisureActivityDto } from 'src/leisure-activity/dto/create-leisure-activity.dto';
 import { UpdateLeisureActivityDto } from 'src/leisure-activity/dto/update-leisure-activity.dto';
-import { User } from 'src/user/entities/user.entity';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
+import { Task } from 'src/task/entities/task.entity';
 
+@ApiTags('LeisureActivities')
+@ApiBearerAuth('JWT')
+@UseGuards(JwtAuthGuard)
 @Controller('leisure-activities')
 export class LeisureActivityController {
   constructor(
@@ -21,6 +34,13 @@ export class LeisureActivityController {
   ) {}
 
   @Post()
+  @ApiOperation({ summary: 'Creates new activity.' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: LeisureActivity,
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async createLeisureActivity(
     @Body() createLeisureActivityDto: CreateLeisureActivityDto,
   ): Promise<LeisureActivity> {
@@ -30,6 +50,22 @@ export class LeisureActivityController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Updates activity by id' })
+  @ApiParam({
+    name: 'activityId',
+    required: true,
+    description: 'Activity identifier',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: LeisureActivity,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Activity not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async updateLeisureActivity(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateLeisureActivityDto: UpdateLeisureActivityDto,
@@ -41,6 +77,22 @@ export class LeisureActivityController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Deletes activity by id' })
+  @ApiParam({
+    name: 'activityId',
+    required: true,
+    description: 'Activity identifier',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: LeisureActivity,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Activity not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async deleteLeisureActivity(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<void> {
@@ -48,6 +100,18 @@ export class LeisureActivityController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Gets activity by id' })
+  @ApiParam({
+    name: 'activityId',
+    required: true,
+    description: 'Activity identifier',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Activity not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findLeisureActivityById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<LeisureActivity> {
@@ -55,14 +119,10 @@ export class LeisureActivityController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Gets all activities' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findAllLeisureActivities(): Promise<LeisureActivity[]> {
     return await this.leisureActivityService.findAllLeisureActivities();
-  }
-
-  @Get(':id/user')
-  async getUsersByActivity(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<User> {
-    return await this.leisureActivityService.getUsersByActivity(id);
   }
 }

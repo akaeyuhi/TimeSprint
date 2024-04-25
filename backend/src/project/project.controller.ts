@@ -8,6 +8,7 @@ import {
   Body,
   ParseIntPipe,
   UseGuards,
+  HttpStatus,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { Project } from './entities/project.entity';
@@ -20,18 +21,46 @@ import { UserRole } from 'src/user/utils';
 import { TeamRolesGuard } from 'src/team/guards/team.guard';
 import { TeamRoles } from 'src/team/decorators/team.decorator';
 import { CreateTaskDto } from 'src/task/dto/create-task.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('Projects')
+@ApiBearerAuth('JWT')
 @Controller('projects')
 @UseGuards(JwtAuthGuard, TeamRolesGuard)
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Gets all projects.',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Project })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async getAllProjects(): Promise<Project[]> {
     return await this.projectService.findAllProjects();
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Gets project by id.',
+  })
+  @ApiParam({
+    name: 'projectId',
+    required: true,
+    description: 'Project identifier',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Project })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Project not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async getProjectById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Project> {
@@ -39,7 +68,12 @@ export class ProjectController {
   }
 
   @Post()
-  @UseGuards(TeamRolesGuard)
+  @ApiOperation({
+    summary: 'Creates new project. Team admin rights required.',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Project })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(UserRole.ADMIN)
   async createProject(
     @Body() createProjectDto: CreateProjectDto,
@@ -48,7 +82,21 @@ export class ProjectController {
   }
 
   @Put(':id')
-  @UseGuards(TeamRolesGuard)
+  @ApiOperation({
+    summary: 'Updates project by id. Team admin rights required.',
+  })
+  @ApiParam({
+    name: 'projectId',
+    required: true,
+    description: 'Project identifier',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Project })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Project not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(UserRole.ADMIN)
   async updateProject(
     @Param('id', ParseIntPipe) id: number,
@@ -58,13 +106,41 @@ export class ProjectController {
   }
 
   @Delete(':id')
-  @UseGuards(TeamRolesGuard)
+  @ApiOperation({
+    summary: 'Deletes project by id. Team admin rights required.',
+  })
+  @ApiParam({
+    name: 'projectId',
+    required: true,
+    description: 'Project identifier',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Project not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(UserRole.ADMIN)
   async deleteProject(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.projectService.deleteProject(id);
   }
   @Post(':projectId/tasks')
-  @UseGuards(TeamRolesGuard)
+  @ApiOperation({
+    summary: 'Creates new task in project. Team admin rights required.',
+  })
+  @ApiParam({
+    name: 'projectId',
+    required: true,
+    description: 'Project identifier',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Project not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(UserRole.ADMIN)
   async addTaskToProject(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -74,7 +150,30 @@ export class ProjectController {
   }
 
   @Delete(':projectId/tasks/:taskId')
-  @UseGuards(TeamRolesGuard)
+  @ApiOperation({
+    summary: 'Deletes task in project. Team admin rights required.',
+  })
+  @ApiParam({
+    name: 'projectId',
+    required: true,
+    description: 'Project identifier',
+  })
+  @ApiParam({
+    name: 'taskId',
+    required: true,
+    description: 'Task identifier',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Project not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Task not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(UserRole.ADMIN)
   async removeTaskFromProject(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -84,7 +183,30 @@ export class ProjectController {
   }
 
   @Post(':projectId/assign-to-team/:teamId')
-  @UseGuards(TeamRolesGuard)
+  @ApiOperation({
+    summary: 'Assigns project to the team. Team admin rights required.',
+  })
+  @ApiParam({
+    name: 'projectId',
+    required: true,
+    description: 'Project identifier',
+  })
+  @ApiParam({
+    name: 'teamId',
+    required: true,
+    description: 'Team identifier',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Project not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Team not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(UserRole.ADMIN)
   async assignProjectToTeam(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -94,6 +216,20 @@ export class ProjectController {
   }
 
   @Get('by-team/:teamId')
+  @ApiOperation({
+    summary: 'Gets projects by team',
+  })
+  @ApiParam({
+    name: 'teamId',
+    required: true,
+    description: 'Team identifier',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Project })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Team not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findProjectsByTeam(
     @Param('teamId', ParseIntPipe) teamId: number,
   ): Promise<Project[]> {
@@ -112,6 +248,20 @@ export class ProjectController {
   }
 
   @Get(':projectId/tasks')
+  @ApiOperation({
+    summary: 'Gets tasks of the project',
+  })
+  @ApiParam({
+    name: 'projectId',
+    required: true,
+    description: 'Project identifier',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Project not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findTasksInProject(
     @Param('projectId', ParseIntPipe) projectId: number,
   ): Promise<Task[]> {

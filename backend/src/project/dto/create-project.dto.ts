@@ -1,4 +1,4 @@
-import { IsDate, Length } from 'class-validator';
+import { IsBoolean, IsDate, Length } from 'class-validator';
 
 export class CreateProjectDto {
   @Length(8, 20)
@@ -12,6 +12,9 @@ export class CreateProjectDto {
 
   @IsDate()
   endDate: Date;
+
+  @IsBoolean()
+  isCompleted = false;
 
   teamId: number;
 }

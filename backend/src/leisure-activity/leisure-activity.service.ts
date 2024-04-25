@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LeisureActivityRepository } from './leisure-activity.repository';
 import { LeisureActivity } from './entities/leisure-activity.entity';
-import { User } from '../user/entities/user.entity';
 import { CreateLeisureActivityDto } from 'src/leisure-activity/dto/create-leisure-activity.dto';
 import { UpdateLeisureActivityDto } from 'src/leisure-activity/dto/update-leisure-activity.dto';
 
@@ -34,13 +33,5 @@ export class LeisureActivityService {
 
   async findAllLeisureActivities(): Promise<LeisureActivity[]> {
     return await this.leisureActivityRepository.findAll();
-  }
-
-  async getUsersByActivity(activityId: number): Promise<User> {
-    const activity = await this.leisureActivityRepository.findById(activityId);
-    if (!activity) {
-      throw new Error(`Activity with ID ${activityId} not found`);
-    }
-    return activity.user;
   }
 }

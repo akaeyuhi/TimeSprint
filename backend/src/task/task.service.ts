@@ -8,10 +8,6 @@ import { Project } from 'src/project/entities/project.entity';
 export class TaskService {
   constructor(private readonly taskRepository: TaskRepository) {}
 
-  async findTasksByProject(projectId: number): Promise<Task[]> {
-    return await this.taskRepository.findTasksByProject(projectId);
-  }
-
   async createTask(
     createTaskDto: CreateTaskDto,
     project?: Project,
@@ -35,5 +31,42 @@ export class TaskService {
 
   async deleteTask(taskId: number): Promise<void> {
     return await this.taskRepository.delete(taskId);
+  }
+
+  async findAllTaskWithDependencies(): Promise<Task[]> {
+    return await this.taskRepository.findAllTaskWithDependencies();
+  }
+
+  async findTaskDependencies(taskId: number): Promise<Task[]> {
+    return await this.taskRepository.findTaskDependencies(taskId);
+  }
+
+  calculateTaskPriority(task: Task): number {
+    let priority = 0;
+
+    // Work-related tasks have higher priority than leisure tasks
+    if (task.project) {
+      priority += 2; // Adjust priority as needed
+    }
+
+    // Tasks with approaching deadlines have higher priority
+    const currentDate = new Date();
+    if (task.endDate && task.endDate.getTime() < currentDate.getTime()) {
+      const timeDifference = task.endDate.getTime() - currentDate.getTime();
+      const daysUntilDeadline = Math.ceil(timeDifference / (1000 * 3600 * 24));
+      // Adjust priority based on days until deadline
+      priority += daysUntilDeadline;
+    }
+
+    // Urgent and important tasks have higher priority
+    if (task.urgency && task.importance) {
+      priority += 3; // Quadrant 1: Urgent and Important
+    } else if (task.urgency && !task.importance) {
+      priority += 2; // Quadrant 3: Urgent, but Not Important
+    } else if (!task.urgency && task.importance) {
+      priority += 1; // Quadrant 2: Important, but Not Urgent
+    }
+
+    return priority;
   }
 }

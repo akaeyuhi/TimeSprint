@@ -76,16 +76,15 @@ export class UserService {
   async addLeisureActivityToUser(
     userId: number,
     activityDto: CreateLeisureActivityDto,
-  ): Promise<User> {
+  ): Promise<LeisureActivity> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new Error(`User with ID ${userId} not found`);
     }
-    await this.leisureActivityService.createLeisureActivity({
+    return await this.leisureActivityService.createLeisureActivity({
       ...activityDto,
       user,
     });
-    return user;
   }
 
   async getLeisureActivitiesForUser(
@@ -105,5 +104,15 @@ export class UserService {
     }
     await this.updateUser(userId, { role });
     return user;
+  }
+
+  async getSortedUserTasks(userId: number): Promise<Task[]> {
+    const user = await this.findById(userId);
+    // Sort tasks by calculated priority in descending order
+    return user.tasks.sort(
+      (a, b) =>
+        this.taskService.calculateTaskPriority(a) -
+        this.taskService.calculateTaskPriority(b),
+    );
   }
 }

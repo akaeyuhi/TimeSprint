@@ -4,9 +4,11 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Project } from 'src/project/entities/project.entity';
-import { IsDate, Length } from 'class-validator';
+import { IsBoolean, IsDate, Length } from 'class-validator';
 import { User } from 'src/user/entities/user.entity';
 
 @Entity()
@@ -36,6 +38,10 @@ export class Task {
   @IsDate()
   endDate: Date;
 
+  @Column()
+  @IsBoolean()
+  isCompleted: boolean;
+
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'project_id' })
   project: Project;
@@ -43,4 +49,8 @@ export class Task {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToMany(() => Task, task => task.dependencies)
+  @JoinTable()
+  dependencies: Task[];
 }
