@@ -46,4 +46,12 @@ export class TaskRepository implements IRepository<Task> {
   findAll(): Promise<Task[]> {
     return this.repository.find();
   }
+
+  async findAllTaskWithDependencies(): Promise<Task[]> {
+    return await this.repository.find({ relations: ['dependencies'] });
+  }
+
+  async findTaskDependencies(taskId: number): Promise<Task[]> {
+    return (await this.findById(taskId)).dependencies;
+  }
 }

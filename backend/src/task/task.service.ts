@@ -32,4 +32,12 @@ export class TaskService {
   async deleteTask(taskId: number): Promise<void> {
     return await this.taskRepository.delete(taskId);
   }
+
+  async findAllTaskWithDependencies(): Promise<Task[]> {
+    return await this.taskRepository.findAllTaskWithDependencies();
+  }
+
+  async findTaskDependencies(taskId: number): Promise<Task[]> {
+    return await this.taskRepository.findTaskDependencies(taskId);
+  }
 }

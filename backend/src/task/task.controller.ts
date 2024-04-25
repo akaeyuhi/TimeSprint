@@ -39,4 +39,14 @@ export class TaskController {
   async deleteTask(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.taskService.deleteTask(id);
   }
+
+  @Get()
+  async findAllTasksWithDependencies(): Promise<Task[]> {
+    return await this.taskService.findAllTaskWithDependencies();
+  }
+
+  @Get(':id')
+  async getTaskDependencies(@Param('id', ParseIntPipe) id: number): Promise<Task[]> {
+    return await this.taskService.findTaskDependencies(id);
+  }
 }
