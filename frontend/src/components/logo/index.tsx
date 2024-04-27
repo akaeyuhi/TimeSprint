@@ -1,4 +1,4 @@
-import logoImg from '@src/assets/logo-100.svg';
+import logoImg from 'src/assets/logo-100.svg';
 import { Stack } from '@mui/material';
 
 const Logo = () => (

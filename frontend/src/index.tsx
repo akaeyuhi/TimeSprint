@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import 'typeface-jost';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AppConfig } from 'src/utils/components/AppConfig';
