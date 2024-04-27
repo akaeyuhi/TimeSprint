@@ -24,7 +24,7 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/object-curly-spacing': 'off',
-    "react/react-in-jsx-scope": "off",
+    'react/react-in-jsx-scope': 'off',
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
     'import/no-extraneous-dependencies': 'off',

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
-import { IsDate, Length } from 'class-validator';
+import { IsBoolean, IsDate, Length } from 'class-validator';
 
 @Entity()
 export class LeisureActivity {
@@ -22,6 +22,10 @@ export class LeisureActivity {
   @Column({ type: 'timestamp' })
   @IsDate()
   endDate: Date;
+
+  @Column()
+  @IsBoolean()
+  isCompleted: boolean;
 
   @ManyToOne(() => User)
   user: User;

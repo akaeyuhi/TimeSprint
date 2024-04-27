@@ -11,9 +11,9 @@ export const overrides: ThemeOptions['components'] = {
         borderRadius: '100px',
         ...(ownerState.color === 'primary' &&
           ownerState.variant === 'contained' && {
-            '&:hover': {
+          '&:hover': {
             backgroundColor: theme.palette[ownerState.color].light,
-            },
+          },
           boxShadow: `0 2px 10px ${alpha(theme.palette.primary.main, 0.5)}`,
         }),
       }),

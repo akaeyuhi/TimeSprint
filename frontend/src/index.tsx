@@ -3,15 +3,21 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { AppConfig } from 'src/utils/components/AppConfig';
+import {AppConfig} from 'src/utils/components/AppConfig';
+import {DevSupport} from "@react-buddy/ide-toolbox";
+import {ComponentPreviews, useInitial} from "src/dev";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
+    document.getElementById('root') as HTMLElement,
 );
 root.render(
-  <AppConfig>
-    <App />
-  </AppConfig>,
+    <AppConfig>
+      <DevSupport ComponentPreviews={ComponentPreviews}
+                  useInitialHook={useInitial}
+      >
+        <App/>
+      </DevSupport>
+    </AppConfig>,
 );
 
 // If you want to start measuring performance in your app, pass a function
