@@ -9,15 +9,13 @@ type SidebarItemProps = {
   label: string;
 };
 
-const SidebarItem = ({ path, icon, label }: SidebarItemProps) => {
-  return (
-      <ListItem sx={styles.listItem} disablePadding>
-        <NavLink to={path}>
-          <ListItemIcon>{icon}</ListItemIcon>
-          <ListItemText primary={label} />
-        </NavLink>
-      </ListItem>
-  );
-};
+const SidebarItem = ({ path, icon, label }: SidebarItemProps) => (
+  <ListItem sx={styles.listItem} disablePadding>
+    <NavLink to={path}>
+      <ListItemIcon>{icon}</ListItemIcon>
+      <ListItemText primary={label} />
+    </NavLink>
+  </ListItem>
+);
 
 export default SidebarItem;

@@ -16,26 +16,22 @@ export class HttpRequest {
   }
 
   post<T>(
-      url: string,
-      data?: HttpClientRequestConfig['data'],
-      isAuth?: boolean
+    url: string,
+    data?: HttpClientRequestConfig['data'],
+    isAuth?: boolean,
   ) {
     return this.httpClient.request<T>({ url, method: 'POST', data, isAuth });
   }
 
   patch<T>(
-      url: string,
-      data: HttpClientRequestConfig['data'],
-      isAuth?: boolean
+    url: string,
+    data: HttpClientRequestConfig['data'],
+    isAuth?: boolean,
   ) {
     return this.httpClient.request<T>({ url, method: 'PATCH', data, isAuth });
   }
 
-  put<T>(
-      url: string,
-      data: HttpClientRequestConfig['data'],
-      isAuth?: boolean
-  ) {
+  put<T>(url: string, data: HttpClientRequestConfig['data'], isAuth?: boolean) {
     return this.httpClient.request<T>({ url, method: 'PUT', data, isAuth });
   }
 

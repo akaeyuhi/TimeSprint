@@ -1,4 +1,4 @@
-import {AuthStore} from "src/stores/auth.store";
+import { AuthStore } from 'src/stores/auth.store';
 
 export class RootStore {
   authStore = new AuthStore();

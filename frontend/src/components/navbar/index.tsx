@@ -24,30 +24,30 @@ const Navbar = () => {
   const handleLogout = () => alert('Logout!');
 
   return (
-      <AppBar
-          color="inherit"
-          position="sticky"
-          sx={{ mb: '1rem', boxShadow: 'none' }}
-      >
-        <Container maxWidth="xl">
-          <Toolbar disableGutters sx={styles.toolbar}>
-            <Chip
-                avatar={<Avatar alt={username} src="../avatar/foo/bar" />}
-                label={username}
-                sx={styles.chip}
-                onClick={handleClick}
-            />
-            <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                sx={styles.menu}
-            >
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
-          </Toolbar>
-        </Container>
-      </AppBar>
+    <AppBar
+      color="inherit"
+      position="sticky"
+      sx={{ mb: '1rem', boxShadow: 'none' }}
+    >
+      <Container maxWidth="xl">
+        <Toolbar disableGutters sx={styles.toolbar}>
+          <Chip
+            avatar={<Avatar alt={username} src="../avatar/foo/bar" />}
+            label={username}
+            sx={styles.chip}
+            onClick={handleClick}
+          />
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            sx={styles.menu}
+          >
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 

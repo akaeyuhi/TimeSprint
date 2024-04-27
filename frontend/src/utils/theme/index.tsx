@@ -16,22 +16,22 @@ type ThemeConfigProps = {
 
 const ThemeConfig = ({ children }: ThemeConfigProps) => {
   const themeOptions: ThemeOptions = useMemo(
-      () => ({
-        typography,
-        palette,
-        components: overrides,
-      }),
-      []
+    () => ({
+      typography,
+      palette,
+      components: overrides,
+    }),
+    [],
   );
 
   const theme = createTheme(themeOptions);
 
   return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <GlobalStyles />
-        {children}
-      </ThemeProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <GlobalStyles />
+      {children}
+    </ThemeProvider>
   );
 };
 

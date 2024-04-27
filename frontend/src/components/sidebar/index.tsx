@@ -17,18 +17,16 @@ const Sidebar = () => {
   ];
 
   return (
-      <Stack sx={styles.sidebarWrapper}>
-        <Link to="/">
-          <Logo />
-        </Link>
-        <List sx={styles.list}>
-          {menuItems.map(({ path, title, icon: Icon }) => {
-            return (
-                <SidebarItem key={path} path={path} label={title} icon={<Icon />} />
-            );
-          })}
-        </List>
-      </Stack>
+    <Stack sx={styles.sidebarWrapper}>
+      <Link to="/">
+        <Logo />
+      </Link>
+      <List sx={styles.list}>
+        {menuItems.map(({ path, title, icon: Icon }) => (
+          <SidebarItem key={path} path={path} label={title} icon={<Icon />} />
+        ))}
+      </List>
+    </Stack>
   );
 };
 

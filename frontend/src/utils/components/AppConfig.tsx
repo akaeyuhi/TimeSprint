@@ -9,17 +9,15 @@ type Props = {
   children: ReactNode;
 };
 
-export const AppConfig: FC<Props> = ({ children }) => {
-  return (
-      <StrictMode>
-        <BrowserRouter>
-          <ThemeConfig>
-            <RootStoreProvider store={store}>
-              {children}
-              <ToastContainer position="top-right" />
-            </RootStoreProvider>
-          </ThemeConfig>
-        </BrowserRouter>
-      </StrictMode>
-  );
-};
+export const AppConfig: FC<Props> = ({ children }) => (
+  <StrictMode>
+    <BrowserRouter>
+      <ThemeConfig>
+        <RootStoreProvider store={store}>
+          {children}
+          <ToastContainer position="top-right" />
+        </RootStoreProvider>
+      </ThemeConfig>
+    </BrowserRouter>
+  </StrictMode>
+);

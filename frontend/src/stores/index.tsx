@@ -8,12 +8,10 @@ type RootStoreProviderProps = {
   store: RootStore;
 };
 
-const RootStoreProvider = ({ children, store }: RootStoreProviderProps) => {
-  return (
-      <RootStoreContext.Provider value={store}>
-        {children}
-      </RootStoreContext.Provider>
-  );
-};
+const RootStoreProvider = ({ children, store }: RootStoreProviderProps) => (
+  <RootStoreContext.Provider value={store}>
+    {children}
+  </RootStoreContext.Provider>
+);
 
 export default RootStoreProvider;

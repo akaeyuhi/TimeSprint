@@ -4,7 +4,7 @@ import { ErrorHandler } from './errorHandler';
 
 export type HttpClientRequestConfig = {
   url: string;
-  method: AxiosRequestConfig["method"];
+  method: AxiosRequestConfig['method'];
   data?: any;
   isAuth?: boolean;
 };
