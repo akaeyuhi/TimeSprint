@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormControl, Input, InputLabel, Stack } from '@mui/material';
-import { styles } from 'src/components/signInForm/styles';
+import { styles } from 'src/pages/SignIn/components/signInForm/styles';
 
 const SignInForm = () => (
   <Stack component="form" sx={styles.container}>

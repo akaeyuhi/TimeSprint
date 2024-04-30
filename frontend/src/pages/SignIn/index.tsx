@@ -1,6 +1,6 @@
 import { Button, Container, Stack, Typography } from '@mui/material';
 import React from 'react';
-import SignInForm from 'src/components/signInForm';
+import SignInForm from 'src/pages/SignIn/components/signInForm';
 import { Link } from 'react-router-dom';
 import { styles } from './styles';
 import Logo from 'src/components/logo';

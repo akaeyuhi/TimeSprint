@@ -3,17 +3,22 @@ import Logo from '../logo';
 import { Link } from 'react-router-dom';
 import {
   GridView,
-  ShoppingBasketRounded,
-  FormatListBulletedRounded,
+  Groups2Rounded,
+  AssignmentRounded,
+  DirectionsRunRounded,
+  PersonRounded,
+  LockPersonRounded,
 } from '@mui/icons-material';
 import SidebarItem from './components/sidebar-item';
 import { styles } from './styles';
-
 const Sidebar = () => {
   const menuItems = [
-    { path: '/', title: 'Home', icon: GridView },
-    { path: '/products', title: 'Products', icon: ShoppingBasketRounded },
-    { path: '/recipes', title: 'Recipes', icon: FormatListBulletedRounded },
+    { path: '/home', title: 'Home', icon: GridView },
+    { path: '/teams', title: 'Teams', icon: Groups2Rounded },
+    { path: '/tasks', title: 'Tasks', icon: AssignmentRounded },
+    { path: '/activities', title: 'Activities', icon: DirectionsRunRounded },
+    { path: '/user', title: 'User', icon: PersonRounded },
+    { path: '/admin', title: 'Admin panel', icon: LockPersonRounded },
   ];
 
   return (

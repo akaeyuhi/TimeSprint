@@ -15,7 +15,6 @@ const Layout = () => (
         <Navbar />
       </Box>
       <Box sx={styles.mainWrapper}>
-        Main
         <Outlet />
       </Box>
     </Stack>

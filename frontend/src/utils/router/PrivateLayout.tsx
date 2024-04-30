@@ -1,13 +1,17 @@
 import { useStore } from 'src/hooks';
 import { observer } from 'mobx-react-lite';
-import { useLocation, Navigate, Outlet } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
+import Layout from 'src/components/layout';
 
-const PublicLayout = () => {
+const PrivateLayout = () => {
   const { isAuthenticated } = useStore('authStore');
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
 
-  return isAuthenticated ? <Navigate to={from} replace /> : <Outlet />;
+  return isAuthenticated ? (
+      <Layout />
+  ) : (
+      <Navigate to="/auth/sign-in" state={{ from: location }} replace />
+  );
 };
 
-export default observer(PublicLayout);
+export default observer(PrivateLayout);

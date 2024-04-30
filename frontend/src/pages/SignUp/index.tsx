@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { styles } from './styles';
 import Logo from 'src/components/logo';
-import SignUpForm from 'src/components/signUpForm';
+import SignUpForm from 'src/pages/SignUp/components/signUpForm';
 
 const SignUpPage = () => (
   <Container sx={styles.mainContainer}>
