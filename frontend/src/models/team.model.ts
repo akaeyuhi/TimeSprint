@@ -1,0 +1,8 @@
+export interface Team {
+  id: number;
+  name: string;
+  description: string;
+  projects: any[],
+  members: any[],
+  admins: any[],
+}
