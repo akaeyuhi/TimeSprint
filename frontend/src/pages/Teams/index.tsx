@@ -11,13 +11,9 @@ const TeamsPage: React.FC = () => {
   const { teamStore } = useStores();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleCreateTeam = () => {
-    setIsModalOpen(true);
-  };
+  const handleCreateTeam = () => setIsModalOpen(true);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const handleCreateTeamSubmit = (teamDto: CreateTeamDto) => {
     // Perform submission logic here
@@ -52,7 +48,7 @@ const TeamsPage: React.FC = () => {
           ))}
         </Grid>
       )}
-      <ModalForm open={isModalOpen} onClose={handleCloseModal}>
+      <ModalForm open={isModalOpen} handleClose={handleCloseModal}>
         <CreateTeamForm onSubmit={handleCreateTeamSubmit} onCancel={handleCloseModal} />
       </ModalForm>
     </Container>
