@@ -4,11 +4,13 @@ import SignInPage from 'src/pages/SignIn';
 import SignUpPage from 'src/pages/SignUp';
 import HomePage from 'src/pages/Home';
 import Layout from 'src/components/layout';
+import TeamsPage from 'src/pages/Teams';
 
 const Router = () => (
   <Routes>
     <Route path="/" element={<Layout />}>
       <Route path="home" element={<HomePage />} />
+      <Route path="teams" element={<TeamsPage />} />
     </Route>
     <Route path="/welcome" element={<WelcomePage />} />
     <Route path="/auth/">
