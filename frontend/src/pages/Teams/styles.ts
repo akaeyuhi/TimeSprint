@@ -3,9 +3,9 @@ import { createStyleSheet } from 'src/utils/theme/createStyleSheet';
 export const styles = createStyleSheet({
   container: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   createButton: {
-    height: '50%'
+    height: '50%',
   }
 });

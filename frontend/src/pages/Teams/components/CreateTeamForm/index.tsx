@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Box } from '@mui/material';
+import { Typography, Button, Box, FormControl, InputLabel, Input, Stack } from '@mui/material';
 import { CreateTeamDto } from 'src/pages/Teams/dto/create-team.dto';
 import { styles } from './styles';
 
@@ -12,40 +12,45 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     onSubmit({ name, description });
+    setName('');
+    setDescription('');
   };
 
   return (
-    <>
+    <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
       <Typography variant="h6" gutterBottom>
           Create New Team
       </Typography>
-      <TextField
-        label="Team Name"
-        value={name}
-        onChange={e => setName(e.target.value)}
-        fullWidth
-        margin="normal"
-        variant="outlined"
-      />
-      <TextField
-        label="Description"
-        value={description}
-        onChange={e => setDescription(e.target.value)}
-        fullWidth
-        margin="normal"
-        variant="outlined"
-      />
+      <FormControl sx={styles.form}>
+        <InputLabel htmlFor="name">Team Name</InputLabel>
+        <Input
+          id="name"
+          type="text"
+          onChange={(e) => setName(e.target.value)}
+          required
+          value={name}/>
+      </FormControl>
+      <FormControl sx={styles.form}>
+        <InputLabel htmlFor="description">Team description</InputLabel>
+        <Input
+          id="description"
+          type="text"
+          onChange={(e) => setDescription(e.target.value)}
+          required
+          value={description}/>
+      </FormControl>
       <Box sx={styles.buttonContainer}>
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
+        <Button variant="contained" color="primary" type="submit">
           Create
         </Button>
         <Button variant="outlined" color="secondary" onClick={onCancel} sx={{ ml: 2 }}>
           Cancel
         </Button>
       </Box>
-    </>
+    </Stack>
   );
 };
 

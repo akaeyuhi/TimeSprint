@@ -1,6 +1,7 @@
 import { Button, Card, CardContent, Typography } from '@mui/material';
 import { styles } from 'src/pages/Teams/components/TeamItem/styles';
 import { Team } from 'src/models/team.model';
+import { Link } from 'react-router-dom';
 
 interface TeamItemProps {
   team: Team;
@@ -15,9 +16,11 @@ const TeamItem: React.FC<TeamItemProps> = ({ team }) => (
       <Typography variant="body2">Admins: {team.admins.length}</Typography>
       <Typography variant="body2">Projects: {team.projects.length}</Typography>
     </CardContent>
-    <Button variant="contained" color="primary" sx={{ mt: 1 }}>
-          Go to Team Page
-    </Button>
+    <Link to={`./${team.id}`} relative="path">
+      <Button variant="contained" color="primary" sx={{ mt: 1 }}>
+        Go to Team Page
+      </Button>
+    </Link>
   </Card>
 );
 
