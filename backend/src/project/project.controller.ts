@@ -17,7 +17,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 import { AddTasksDto } from 'src/project/dto/add-tasks.dto';
 import { Task } from 'src/task/entities/task.entity';
-import { UserRole } from 'src/user/utils';
+import { TeamRole } from 'src/user/utils';
 import { TeamRolesGuard } from 'src/team/guards/team.guard';
 import { TeamRoles } from 'src/team/decorators/team.decorator';
 import { CreateTaskDto } from 'src/task/dto/create-task.dto';
@@ -74,7 +74,7 @@ export class ProjectController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Project })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(UserRole.ADMIN)
+  @TeamRoles(TeamRole.ADMIN)
   async createProject(
     @Body() createProjectDto: CreateProjectDto,
   ): Promise<Project> {
@@ -97,7 +97,7 @@ export class ProjectController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(UserRole.ADMIN)
+  @TeamRoles(TeamRole.ADMIN)
   async updateProject(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProjectDto: UpdateProjectDto,
@@ -121,7 +121,7 @@ export class ProjectController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(UserRole.ADMIN)
+  @TeamRoles(TeamRole.ADMIN)
   async deleteProject(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.projectService.deleteProject(id);
   }
@@ -141,7 +141,7 @@ export class ProjectController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(UserRole.ADMIN)
+  @TeamRoles(TeamRole.ADMIN)
   async addTaskToProject(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Body() taskIds: AddTasksDto,
@@ -174,7 +174,7 @@ export class ProjectController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(UserRole.ADMIN)
+  @TeamRoles(TeamRole.ADMIN)
   async removeTaskFromProject(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('taskId', ParseIntPipe) taskId: number,
@@ -207,7 +207,7 @@ export class ProjectController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(UserRole.ADMIN)
+  @TeamRoles(TeamRole.ADMIN)
   async assignProjectToTeam(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('teamId', ParseIntPipe) teamId: number,

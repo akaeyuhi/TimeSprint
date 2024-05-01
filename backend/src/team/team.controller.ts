@@ -18,7 +18,7 @@ import { User } from 'src/user/entities/user.entity';
 import { UpdateTeamDto } from 'src/team/dto/update-team.dto';
 import { TeamRolesGuard } from 'src/team/guards/team.guard';
 import { TeamRoles } from 'src/team/decorators/team.decorator';
-import { UserRole } from 'src/user/utils';
+import { TeamRole } from 'src/user/utils';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -80,7 +80,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(UserRole.ADMIN)
+  @TeamRoles(TeamRole.ADMIN)
   async addMember(
     @Param('id') teamId: number,
     @Param('memberId') memberId: number,
@@ -99,7 +99,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(UserRole.ADMIN)
+  @TeamRoles(TeamRole.ADMIN)
   async addAdmin(
     @Param('id') teamId: number,
     @Param('adminId') adminId: number,
@@ -116,7 +116,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(UserRole.ADMIN)
+  @TeamRoles(TeamRole.ADMIN)
   async deleteTeam(
     @Param('teamId', ParseIntPipe) teamId: number,
   ): Promise<void> {
@@ -148,7 +148,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(UserRole.ADMIN)
+  @TeamRoles(TeamRole.ADMIN)
   async updateTeam(
     @Param('teamId', ParseIntPipe) teamId: number,
     @Body() updateTeamDto: UpdateTeamDto,
