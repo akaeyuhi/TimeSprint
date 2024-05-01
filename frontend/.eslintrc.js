@@ -25,6 +25,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/object-curly-spacing': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off',
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
     'import/no-extraneous-dependencies': 'off',
