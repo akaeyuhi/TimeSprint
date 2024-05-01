@@ -4,6 +4,8 @@ import RootStoreProvider from 'src/stores';
 import { store } from 'src/stores/root.store';
 import { ToastContainer } from 'react-toastify';
 import { BrowserRouter } from 'react-router-dom';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 type Props = {
   children: ReactNode;
@@ -14,7 +16,9 @@ export const AppConfig: FC<Props> = ({ children }) => (
     <BrowserRouter>
       <ThemeConfig>
         <RootStoreProvider store={store}>
-          {children}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {children}
+          </LocalizationProvider>
           <ToastContainer position="top-right" />
         </RootStoreProvider>
       </ThemeConfig>
