@@ -5,7 +5,7 @@ import DeleteProjectForm from 'src/pages/Team/components/forms/DeleteProjectForm
 import AddUserForm from 'src/pages/Team/components/forms/AddUserForm';
 import AddAdminForm from 'src/pages/Team/components/forms/AddAdminForm';
 import LeaveTeamForm from 'src/pages/Team/components/forms/LeaveTeamForm';
-import { ModalHandler } from 'src/utils/common/getModalHandlers';
+import { ModalHandler } from 'src/hooks/use-modals';
 import { Project } from 'src/models/project.model';
 import { Team } from 'src/models/team.model';
 import { TeamModals } from 'src/pages/Team/index';

@@ -7,6 +7,6 @@ export interface Project {
   startDate: Date;
   endDate: Date;
   isCompleted: boolean;
-  team: Team;
+  team: Team | null;
   tasks: any[]; // Assuming Task model is not defined yet
 }

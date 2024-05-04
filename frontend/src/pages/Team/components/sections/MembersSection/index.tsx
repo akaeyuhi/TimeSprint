@@ -1,5 +1,5 @@
 import React from 'react';
-import { ModalHandler } from 'src/utils/common/getModalHandlers';
+import { ModalHandler } from 'src/hooks/use-modals';
 import { Team } from 'src/models/team.model';
 import { TeamModals } from 'src/pages/Team/index';
 import { Avatar, AvatarGroup, Box, Button, Stack, Typography } from '@mui/material';
