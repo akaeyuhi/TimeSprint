@@ -1,5 +1,5 @@
 export interface CreateProjectDto {
-  username: string;
+  name: string;
   description: string;
   startDate: Date;
   endDate: Date;
