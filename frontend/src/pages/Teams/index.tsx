@@ -4,7 +4,7 @@ import TeamItem from './components/TeamItem';
 import { useStores } from 'src/hooks/use-stores';
 import ModalForm from 'src/components/modalForm';
 import CreateTeamForm from 'src/pages/Teams/components/CreateTeamForm';
-import { CreateTeamDto } from 'src/pages/Teams/dto/create-team.dto';
+import { CreateTeamDto } from 'src/dto/team/create-team.dto';
 import { styles } from 'src/pages/Teams/styles';
 
 const TeamsPage: React.FC = () => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
 import { User } from 'src/models/user.model';
-import { styles } from 'src/pages/Team/components/forms/CreateProjectForm/styles';
+import { styles } from 'src/components/modalForm/styles';
 
 interface AddAdminFormProps {
   candidates: User[];

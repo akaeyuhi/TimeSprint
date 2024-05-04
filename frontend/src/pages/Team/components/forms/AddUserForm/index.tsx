@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
-import { Box, Button, FormControl, FormHelperText, Input, InputLabel, Stack, Typography } from '@mui/material';
-import { styles } from 'src/pages/Team/components/forms/CreateProjectForm/styles';
+import
+{ Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  Stack,
+  Typography
+} from '@mui/material';
+import { styles } from 'src/components/modalForm/styles';
 
 interface AddUserFormProps {
   onSubmit: (username: string) => void;

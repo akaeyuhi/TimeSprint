@@ -10,7 +10,7 @@ import { Project } from 'src/models/project.model';
 import { Team } from 'src/models/team.model';
 import { TeamModals } from 'src/pages/Team/index';
 import { User } from 'src/models/user.model';
-import { CreateProjectDto } from 'src/pages/Team/dto/create-project.dto';
+import { CreateProjectDto } from 'src/dto/project/create-project.dto';
 
 interface ModalsProps {
   createProject: ModalHandler,
