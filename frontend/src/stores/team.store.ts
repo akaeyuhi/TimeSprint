@@ -32,7 +32,6 @@ export class TeamStore {
           startDate: new Date(),
           endDate: new Date('2024-05-15'),
           isCompleted: false,
-          team: null,
           tasks: [],
         },
         {
@@ -42,7 +41,6 @@ export class TeamStore {
           startDate: new Date(),
           endDate: new Date('2024-06-30'),
           isCompleted: true,
-          team: null,
           tasks: [],
         },
       ]
@@ -66,7 +64,6 @@ export class TeamStore {
         startDate: new Date(),
         endDate: new Date('2024-05-15'),
         isCompleted: false,
-        team: null,
         tasks: [],
       },
       {
@@ -76,7 +73,6 @@ export class TeamStore {
         startDate: new Date(),
         endDate: new Date('2024-06-30'),
         isCompleted: true,
-        team: null,
         tasks: [],
       },]
     },

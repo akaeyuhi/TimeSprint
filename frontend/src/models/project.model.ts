@@ -1,4 +1,5 @@
 import { Team } from './team.model';
+import { Task } from 'src/models/task.model';
 
 export interface Project {
   id: number;
@@ -7,6 +8,6 @@ export interface Project {
   startDate: Date;
   endDate: Date;
   isCompleted: boolean;
-  team: Team | null;
-  tasks: any[]; // Assuming Task model is not defined yet
+  team?: Team;
+  tasks: Task[];
 }
