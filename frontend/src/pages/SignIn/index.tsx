@@ -9,12 +9,12 @@ const SignInPage = () => (
   <Container sx={styles.mainContainer}>
     <Stack sx={styles.formContainer}>
       <Stack sx={styles.logoBox}>
-        <Logo />
+        <Logo/>
         <Typography variant="h4" sx={{ fontWeight: 700 }}>
-              Sign in
+            Sign in
         </Typography>
       </Stack>
-      <SignInForm />
+      <SignInForm/>
       <Stack sx={styles.buttonBox}>
         <Button>Sign In</Button>
         <Link to="/auth/sign-up" style={{ textDecoration: 'none' }}>

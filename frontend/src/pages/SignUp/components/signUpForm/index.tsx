@@ -6,15 +6,15 @@ const SignUpForm = () => (
   <Stack component="form" sx={styles.container}>
     <FormControl sx={styles.form}>
       <InputLabel htmlFor="email">Email</InputLabel>
-      <Input id="email" type="email" />
+      <Input id="email" type="email"/>
     </FormControl>
     <FormControl sx={styles.form}>
       <InputLabel htmlFor="password">Password</InputLabel>
-      <Input id="password" type="password" />
+      <Input id="password" type="password"/>
     </FormControl>
     <FormControl sx={styles.form}>
       <InputLabel htmlFor="confirm">Confirm password</InputLabel>
-      <Input id="confirm" type="confirm" />
+      <Input id="confirm" type="confirm"/>
     </FormControl>
   </Stack>
 );

@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack, Typography
-} from '@mui/material';
+import { Box, Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
 import { User } from 'src/models/user.model';
 import { styles } from 'src/pages/Team/components/forms/CreateProjectForm/styles';
 
@@ -37,7 +28,7 @@ const AddAdminForm: React.FC<AddAdminFormProps> = ({ candidates, onSubmit, onClo
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
       <Typography variant="h6" mb={1}>
-        Add new admin
+          Add new admin
       </Typography>
       <FormControl sx={styles.form}>
         <InputLabel id="user-select-label">Member</InputLabel>
@@ -60,10 +51,10 @@ const AddAdminForm: React.FC<AddAdminFormProps> = ({ candidates, onSubmit, onClo
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button type="submit" variant="contained" color="primary">
-          Promote to admin
+            Promote to admin
         </Button>
         <Button variant="outlined" color="secondary" onClick={onClose} sx={{ ml: 2 }}>
-          Cancel
+            Cancel
         </Button>
       </Box>
     </Stack>

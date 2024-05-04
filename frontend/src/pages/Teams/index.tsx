@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Typography, Box, Grid, Button } from '@mui/material';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import TeamItem from './components/TeamItem';
 import { useStores } from 'src/hooks/use-stores';
 import ModalForm from 'src/components/modalForm';
@@ -26,7 +26,7 @@ const TeamsPage: React.FC = () => {
       <Box sx={styles.container}>
         <Box sx={{ height: '2rem' }}>
           <Typography variant="h4" gutterBottom>
-            Your Teams
+              Your Teams
           </Typography>
         </Box>
         <Button
@@ -34,7 +34,7 @@ const TeamsPage: React.FC = () => {
           color="primary"
           onClick={handleCreateTeam}
           sx={styles.createButton}>
-          Create Team
+            Create Team
         </Button>
       </Box>
       {teamStore.teams.length === 0 ? (
@@ -43,13 +43,13 @@ const TeamsPage: React.FC = () => {
         <Grid container spacing={2} sx={{ mt: '0.5rem' }}>
           {teamStore.teams.map(team => (
             <Grid item xs={12} key={team.id}>
-              <TeamItem team={team} />
+              <TeamItem team={team}/>
             </Grid>
           ))}
         </Grid>
       )}
       <ModalForm open={isModalOpen} handleClose={handleCloseModal}>
-        <CreateTeamForm onSubmit={handleCreateTeamSubmit} onCancel={handleCloseModal} />
+        <CreateTeamForm onSubmit={handleCreateTeamSubmit} onCancel={handleCloseModal}/>
       </ModalForm>
     </Container>
   );

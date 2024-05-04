@@ -2,7 +2,7 @@ import Router from 'src/utils/router';
 
 const App = () => (
   <div className="App">
-    <Router />
+    <Router/>
   </div>
 );
 

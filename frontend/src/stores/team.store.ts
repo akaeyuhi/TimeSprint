@@ -4,7 +4,8 @@ import { User } from 'src/models/user.model';
 
 export class TeamStore {
   teams: Team[] = [
-    { id: 1,
+    {
+      id: 1,
       name: 'Team 1',
       description: 'Description for Team 1',
       admins: [
@@ -46,7 +47,8 @@ export class TeamStore {
         },
       ]
     },
-    { id: 2,
+    {
+      id: 2,
       name: 'Team 2',
       description: 'Description for Team 2',
       admins: [
@@ -76,7 +78,8 @@ export class TeamStore {
         isCompleted: true,
         team: null,
         tasks: [],
-      },] },
+      },]
+    },
   ];
 
   constructor() {

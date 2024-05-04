@@ -8,14 +8,14 @@ import { styles } from 'src/components/layout/styles';
 const Layout = () => (
   <Stack height="100vh" flexDirection="row" gap="50px">
     <Stack sx={styles.siderWrapper} flex="0 0 250px">
-      <Sidebar />
+      <Sidebar/>
     </Stack>
     <Stack flex="1">
       <Box sx={styles.navbarWrapper}>
-        <Navbar />
+        <Navbar/>
       </Box>
       <Box sx={styles.mainWrapper}>
-        <Outlet />
+        <Outlet/>
       </Box>
     </Stack>
   </Stack>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Typography, Box, Button } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import { useStores } from 'src/hooks';
 import { styles } from 'src/pages/Team/styles';
 import { CreateProjectDto } from 'src/pages/Team/dto/create-project.dto';
@@ -10,6 +10,7 @@ import Modals from 'src/pages/Team/components/sections/Modals';
 import MembersSection from 'src/pages/Team/components/sections/MembersSection';
 import ProjectsSection from 'src/pages/Team/components/sections/ProjectsSection';
 import { useModals } from 'src/hooks/use-modals';
+
 export interface TeamModals {
   members: boolean,
   admins: boolean,
@@ -84,7 +85,7 @@ const TeamPage: React.FC = () => {
           {team?.name}
         </Typography>
         <Button variant="contained" color="error" onClick={modalHandlers.deleteProject.open}>
-          Leave
+            Leave
         </Button>
       </Box>
       <ProjectsSection

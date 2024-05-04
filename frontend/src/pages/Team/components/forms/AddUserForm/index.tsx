@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  Input,
-  InputLabel,
-  Stack,
-  Typography
-} from '@mui/material';
+import { Box, Button, FormControl, FormHelperText, Input, InputLabel, Stack, Typography } from '@mui/material';
 import { styles } from 'src/pages/Team/components/forms/CreateProjectForm/styles';
 
 interface AddUserFormProps {
@@ -36,7 +27,7 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
       <Typography variant="h6" mb={1}>
-        Add new member
+          Add new member
       </Typography>
       <FormControl sx={styles.form}>
         <InputLabel htmlFor="name">Username</InputLabel>
@@ -50,10 +41,10 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button type="submit" variant="contained" color="primary">
-          Add user
+            Add user
         </Button>
         <Button variant="outlined" color="secondary" onClick={onClose} sx={{ ml: 2 }}>
-          Cancel
+            Cancel
         </Button>
       </Box>
     </Stack>

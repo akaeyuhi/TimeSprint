@@ -19,7 +19,7 @@ const TeamItem: React.FC<TeamItemProps> = ({ team }) => (
     <CardActions>
       <Link to={`./${team.id}`} relative="path">
         <Button variant="contained" color="primary" sx={{ mt: 1 }}>
-          Go to Team Page
+            Go to Team Page
         </Button>
       </Link>
     </CardActions>

@@ -87,7 +87,7 @@ const MembersSection: React.FC<MembersSectionProps> = ({
       open={teamModals.admins}
       handleClose={admins.close}
       title="Team Admins">
-      <MemberList  members={team.admins}/>
+      <MemberList members={team.admins}/>
     </ModalInfo>
   </>
 );

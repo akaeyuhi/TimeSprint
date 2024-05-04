@@ -68,10 +68,10 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button type="submit" variant="contained" color="primary">
-          Create Project
+            Create Project
         </Button>
         <Button variant="outlined" color="secondary" onClick={onClose} sx={{ ml: 2 }}>
-          Cancel
+            Cancel
         </Button>
       </Box>
     </Stack>

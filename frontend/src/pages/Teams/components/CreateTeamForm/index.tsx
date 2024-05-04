@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Button, Box, FormControl, InputLabel, Input, Stack } from '@mui/material';
+import { Box, Button, FormControl, Input, InputLabel, Stack, Typography } from '@mui/material';
 import { CreateTeamDto } from 'src/pages/Teams/dto/create-team.dto';
 import { styles } from './styles';
 
@@ -44,10 +44,10 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button variant="contained" color="primary" type="submit">
-          Create
+            Create
         </Button>
         <Button variant="outlined" color="secondary" onClick={onCancel} sx={{ ml: 2 }}>
-          Cancel
+            Cancel
         </Button>
       </Box>
     </Stack>

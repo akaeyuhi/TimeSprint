@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Box, Fade, Backdrop } from '@mui/material';
+import { Backdrop, Box, Fade, Modal } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
 
 interface ModalFormProps {

@@ -1,13 +1,5 @@
-import {
-  AppBar,
-  Avatar,
-  Chip,
-  Container,
-  Menu,
-  MenuItem,
-  Toolbar,
-} from '@mui/material';
-import { useState, MouseEvent } from 'react';
+import { AppBar, Avatar, Chip, Container, Menu, MenuItem, Toolbar, } from '@mui/material';
+import { MouseEvent, useState } from 'react';
 import { styles } from './styles';
 
 const Navbar = () => {
@@ -32,7 +24,7 @@ const Navbar = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={styles.toolbar}>
           <Chip
-            avatar={<Avatar alt={username} src="../avatar/foo/bar" />}
+            avatar={<Avatar alt={username} src="../avatar/foo/bar"/>}
             label={username}
             sx={styles.chip}
             onClick={handleClick}

@@ -13,7 +13,7 @@ const SidebarItem = ({ path, icon, label }: SidebarItemProps) => (
   <ListItem sx={styles.listItem} disablePadding>
     <NavLink to={path}>
       <ListItemIcon>{icon}</ListItemIcon>
-      <ListItemText primary={label} />
+      <ListItemText primary={label}/>
     </NavLink>
   </ListItem>
 );

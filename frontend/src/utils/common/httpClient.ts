@@ -11,6 +11,7 @@ export type HttpClientRequestConfig = {
 
 export interface IHttpClient {
   baseUrl: string;
+ESLI
   request<T>(config: HttpClientRequestConfig): Promise<T | null>;
 }
 
@@ -20,10 +21,9 @@ type CustomHttpClientArgs = {
 };
 
 class CustomHttpClient implements IHttpClient {
+  baseUrl: string;
   private axios: AxiosInstance = axios.create();
   private errorHandler: ErrorHandler = new ErrorHandler();
-
-  baseUrl: string;
 
   constructor({ baseUrl }: CustomHttpClientArgs) {
     this.baseUrl = baseUrl;

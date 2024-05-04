@@ -11,7 +11,7 @@ export const MemberList: React.FC<MemberListProps> = ({ members }) => (
   <Grid container spacing={2}>
     {members.map(member => (
       <Grid item key={member.id} xs={8} md={4}>
-        <Avatar alt={member.username} src="#" sx={styles.modalAvatar} />
+        <Avatar alt={member.username} src="#" sx={styles.modalAvatar}/>
         <Typography align="center">{member.username}</Typography>
       </Grid>
     ))}

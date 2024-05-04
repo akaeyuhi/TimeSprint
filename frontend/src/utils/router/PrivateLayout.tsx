@@ -8,9 +8,9 @@ const PrivateLayout = () => {
   const location = useLocation();
 
   return isAuthenticated ? (
-    <Layout />
+    <Layout/>
   ) : (
-    <Navigate to="/auth/sign-in" state={{ from: location }} replace />
+    <Navigate to="/auth/sign-in" state={{ from: location }} replace/>
   );
 };
 

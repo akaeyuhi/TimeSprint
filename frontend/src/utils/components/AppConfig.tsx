@@ -19,7 +19,7 @@ export const AppConfig: FC<Props> = ({ children }) => (
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             {children}
           </LocalizationProvider>
-          <ToastContainer position="top-right" />
+          <ToastContainer position="top-right"/>
         </RootStoreProvider>
       </ThemeConfig>
     </BrowserRouter>

@@ -16,7 +16,7 @@ const ActivityItem: React.FC<Props> = ({ activity }) => (
     </CardContent>
     <CardActions>
       <Button variant="contained" color="primary">
-        To Activity
+          To Activity
       </Button>
     </CardActions>
   </Card>

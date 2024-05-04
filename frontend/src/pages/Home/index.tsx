@@ -64,16 +64,16 @@ const HomePage: React.FC = () => {
     <Container maxWidth="lg" sx={styles.container}>
       <Box>
         <Typography variant="h4" sx={styles.greeting}>
-              Hello, {username}!
+            Hello, {username}!
         </Typography>
         <Typography variant="h6" sx={styles.date}>
-              Today is {formattedDate}.
+            Today is {formattedDate}.
         </Typography>
         <Box>
-          <TaskList tasks={tasks} />
+          <TaskList tasks={tasks}/>
         </Box>
         <Box>
-          <LeisureActivityList leisureActivities={leisureActivities} />
+          <LeisureActivityList leisureActivities={leisureActivities}/>
         </Box>
       </Box>
     </Container>
