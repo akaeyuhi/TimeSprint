@@ -6,10 +6,10 @@ import { CreateProjectDto } from 'src/pages/Team/dto/create-project.dto';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User } from 'src/models/user.model';
 import { Project } from 'src/models/project.model';
-import { getModalHandlers } from 'src/utils/common/getModalHandlers';
 import Modals from 'src/pages/Team/components/sections/Modals';
 import MembersSection from 'src/pages/Team/components/sections/MembersSection';
 import ProjectsSection from 'src/pages/Team/components/sections/ProjectsSection';
+import { useModals } from 'src/hooks/use-modals';
 export interface TeamModals {
   members: boolean,
   admins: boolean,
@@ -23,12 +23,6 @@ export interface TeamModals {
 
 
 const TeamPage: React.FC = () => {
-  const { teamStore } = useStores();
-  const { id } = useParams();
-  if (!id) return <></>;
-  const team = teamStore.teams.find(team => team.id === parseInt(id))!;
-  const [deleteProject, setDeleteProject] = useState<Project | null>(null);
-
   const [teamModals, setTeamModals] = useState<TeamModals>({
     members: false,
     admins: false,
@@ -39,7 +33,12 @@ const TeamPage: React.FC = () => {
     addAdmin: false,
     leaveTeam: false
   });
-  const modalHandlers = getModalHandlers<TeamModals>(teamModals, setTeamModals);
+  const { teamStore } = useStores();
+  const modalHandlers = useModals<TeamModals>(teamModals, setTeamModals);
+  const { id } = useParams();
+  if (!id) return <></>;
+  const team = teamStore.teams.find(team => team.id === parseInt(id))!;
+  const [deleteProject, setDeleteProject] = useState<Project | null>(null);
 
   const handleCreateSubmit = (projectDto: CreateProjectDto) => {
     // Perform submission logic here

@@ -6,7 +6,7 @@ export interface ModalHandler {
   close: () => void;
 }
 
-export const getModalHandlers = <T extends object>(
+export const useModals = <T extends object>(
   modals: T,
   set:  React.Dispatch<React.SetStateAction<T>>
 ) => {
