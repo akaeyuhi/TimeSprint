@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, FormControl, Input, InputLabel, Stack, Typography } from '@mui/material';
 import { CreateProjectDto } from 'src/pages/Team/dto/create-project.dto';
 import { DatePicker } from '@mui/x-date-pickers';
-import { styles } from 'src/pages/Team/components/CreateProjectForm/styles';
+import { styles } from 'src/pages/Team/components/forms/CreateProjectForm/styles';
 import dayjs, { Dayjs } from 'dayjs';
 
 interface CreateProjectFormProps {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { Project } from 'src/models/project.model';
-import { styles } from 'src/pages/Team/components/CreateProjectForm/styles';
+import { styles } from 'src/pages/Team/components/forms/CreateProjectForm/styles';
 
 interface DeleteProjectFormProps {
   project: Project | null;

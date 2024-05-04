@@ -9,7 +9,7 @@ import {
   Stack,
   Typography
 } from '@mui/material';
-import { styles } from 'src/pages/Team/components/CreateProjectForm/styles';
+import { styles } from 'src/pages/Team/components/forms/CreateProjectForm/styles';
 
 interface AddUserFormProps {
   onSubmit: (username: string) => void;

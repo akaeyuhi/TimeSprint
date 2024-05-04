@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { styles } from 'src/pages/Team/components/CreateProjectForm/styles';
+import { styles } from 'src/pages/Team/components/forms/CreateProjectForm/styles';
 import { Team } from 'src/models/team.model';
 
 interface LeaveTeamFormProps {

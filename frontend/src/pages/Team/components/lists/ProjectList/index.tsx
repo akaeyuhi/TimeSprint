@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import { Project } from 'src/models/project.model';
-import ProjectItem from '../ProjectItem';
+import ProjectItem from 'src/pages/Team/components/lists/ProjectItem';
 
 interface ProjectListProps {
   projects: Project[];

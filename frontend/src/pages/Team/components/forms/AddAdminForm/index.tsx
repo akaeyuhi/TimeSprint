@@ -10,7 +10,7 @@ import {
   Stack, Typography
 } from '@mui/material';
 import { User } from 'src/models/user.model';
-import { styles } from 'src/pages/Team/components/CreateProjectForm/styles';
+import { styles } from 'src/pages/Team/components/forms/CreateProjectForm/styles';
 
 interface AddAdminFormProps {
   candidates: User[];
