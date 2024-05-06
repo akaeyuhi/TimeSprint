@@ -11,6 +11,7 @@ export type HttpClientRequestConfig = {
 
 export interface IHttpClient {
   baseUrl: string;
+
   request<T>(config: HttpClientRequestConfig): Promise<T | null>;
 }
 

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import {
-  Button,
-  Typography,
-  FormControl,
-  InputLabel,
-  Input,
   Box,
-  Stack,
+  Button,
   Checkbox,
-  FormControlLabel
+  FormControl,
+  FormControlLabel,
+  Input,
+  InputLabel,
+  Stack,
+  Typography
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
 import { DatePicker } from '@mui/x-date-pickers';

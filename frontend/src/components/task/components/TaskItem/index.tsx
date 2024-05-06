@@ -15,11 +15,13 @@ interface TaskItemProps {
   onSubmit: (updateTaskDto: UpdateTaskDto) => void,
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({ task,
+const TaskItem: React.FC<TaskItemProps> = ({
+  task,
   editTask,
   editTaskModalOpen,
   onToggle,
-  onSubmit }) => (
+  onSubmit
+}) => (
   <>
     <Card sx={{ ...styles.card, ...(task.isCompleted && { textDecoration: 'line-through' }) }}>
       <CardContent>
@@ -34,12 +36,12 @@ const TaskItem: React.FC<TaskItemProps> = ({ task,
             height: 60,
             mx: 'auto',
             cursor: 'pointer'
-          }} />
+          }}/>
         )}
       </CardContent>
       <CardActions>
         <Button variant="contained" color="primary" onClick={editTask.open}>
-              Edit
+            Edit
         </Button>
         <Button
           variant="contained"
@@ -51,7 +53,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task,
       </CardActions>
     </Card>
     <ModalForm open={editTaskModalOpen} handleClose={editTask.close}>
-      <EditTaskForm task={task} onCancel={editTask.close}  onSubmit={onSubmit}/>
+      <EditTaskForm task={task} onCancel={editTask.close} onSubmit={onSubmit}/>
     </ModalForm>
   </>
 );

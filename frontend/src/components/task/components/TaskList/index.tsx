@@ -12,10 +12,12 @@ interface TaskListProps {
   onSubmit: () => void,
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks,
+const TaskList: React.FC<TaskListProps> = ({
+  tasks,
   editTaskModalOpen,
   editTask,
-  onToggle, onSubmit }) => (
+  onToggle, onSubmit
+}) => (
   <Box>
     <Typography variant="h5" gutterBottom>
         Tasks
