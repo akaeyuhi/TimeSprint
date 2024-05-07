@@ -10,6 +10,7 @@ export interface Task {
   startDate: Date;
   endDate: Date;
   isCompleted: boolean;
+  dependencies: Task[]
   user?: User;
   project?: Project;
 }
