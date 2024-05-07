@@ -12,9 +12,15 @@ const TaskItem: React.FC<Props> = ({ task }) => (
     <CardContent>
       <Typography variant="h6">{task.name}</Typography>
       <Typography variant="body2">{task.description}</Typography>
-      <Typography variant="body2">Due: {task.endDate.toDateString()}</Typography>
-      <Typography variant="body2">Urgency: {task.urgency ? 'High' : 'Low'}</Typography>
-      <Typography variant="body2">Importance: {task.importance ? 'High' : 'Low'}</Typography>
+      <Typography variant="body2" sx={{ color: 'red' }}>
+        Due: {task.endDate.toDateString()}
+      </Typography>
+      <Typography variant="body2" sx={{ color: task.urgency ? 'red' : 'green' }}>
+        Urgency: {task.urgency ? 'High' : 'Low'}
+      </Typography>
+      <Typography variant="body2" sx={{ color: task.importance ? 'red' : 'green' }}>
+        Importance: {task.importance ? 'High' : 'Low'}
+      </Typography>
     </CardContent>
     <CardActions>
       <Button variant="contained" color="primary">

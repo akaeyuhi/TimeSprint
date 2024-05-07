@@ -6,39 +6,66 @@ import {
   FormControl,
   FormControlLabel,
   Input,
-  InputLabel,
+  InputLabel, MenuItem, Select, SelectChangeEvent,
   Stack,
   Typography
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { Task } from 'src/models/task.model';
 import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
+import { User } from 'src/models/user.model';
 
 interface EditTaskFormProps {
-  task: Task,
-  onSubmit: (updatedTask: UpdateTaskDto) => void,
-  onCancel: () => void
+  task?: Task,
+  members?: User[],
+  onSubmit: (taskId: number, updatedTask: UpdateTaskDto) => void,
+  onCancel: () => void,
+  tasks: Task[]
 }
 
-const EditTaskForm: React.FC<EditTaskFormProps> = ({ task, onSubmit, onCancel }) => {
-  const [startDate, setStartDate] = useState<Dayjs>(dayjs(task.startDate));
-  const [endDate, setEndDate] = useState<Dayjs>(dayjs(task.endDate));
-  const [editedName, setEditedName] = useState(task.name);
-  const [editedDescription, setEditedDescription] = useState(task.description);
-  const [urgency, setUrgency] = useState(task.urgency);
-  const [importance, setImportance] = useState(task.importance);
+const EditTaskForm: React.FC<EditTaskFormProps> = ({
+  task,
+  members,
+  onSubmit,
+  onCancel,
+  tasks
+}) => {
+  if (!task) {
+    return <>{'Error'}</>;
+  }
+  const [formData, setFormData] = useState<UpdateTaskDto>({
+    name: task.name,
+    description: task.description,
+    urgency: task.urgency,
+    importance: task.importance,
+    startDate: task.startDate,
+    endDate: task.endDate,
+    dependencies: task.dependencies,
+    user: task.user,
+  });
+
+  const selectStyle = {
+    maxHeight: 224,
+    width: 250,
+  };
+
+  const handleDependencyChange = (event: SelectChangeEvent<Task[]>) => {
+    const dependencies = [...task.dependencies, ...event.target.value as Task[]];
+    //const taskDeps = taskStore.getTaskArrayByIds(dependencies);
+    setFormData({ ...formData, dependencies });
+  };
+
+  const handleUserChange = (event: SelectChangeEvent<User>) => {
+    //const user = userStore.getUserById(event.target.value);
+    setFormData({ ...formData, user: event.target.value as User });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({
-      name: editedName,
-      description: editedDescription,
-      urgency,
-      importance,
-      startDate: startDate.toDate(),
-      endDate: endDate?.toDate(),
+    onSubmit(task.id, {
+      ...formData
     });
   };
 
@@ -52,9 +79,9 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({ task, onSubmit, onCancel })
         <Input
           id="name"
           type="text"
-          onChange={(e) => setEditedName(e.target.value)}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          value={editedName}
+          value={formData.name}
         />
       </FormControl>
       <FormControl sx={styles.form}>
@@ -62,42 +89,89 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({ task, onSubmit, onCancel })
         <Input
           id="description"
           type="text"
-          onChange={(e) => setEditedDescription(e.target.value)}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
-          value={editedDescription}
+          value={formData.description}
         />
       </FormControl>
       <FormControl sx={styles.form}>
         <FormControlLabel control={<Checkbox
           id="urgency"
-          defaultChecked
-          onChange={(e) => setUrgency(e.target.checked)}
-          checked={urgency}
+          onChange={(e) => setFormData({ ...formData, urgency: e.target.checked })}
+          checked={formData.urgency}
         />} label="Urgency"/>
 
       </FormControl>
       <FormControl sx={styles.form}>
         <FormControlLabel control={<Checkbox
           id="importance"
-          defaultChecked
-          onChange={(e) => setImportance(e.target.checked)}
-          checked={importance}
+          onChange={(e) => setFormData({ ...formData, importance: e.target.checked })}
+          checked={formData.importance}
         />} label="Importance"/>
       </FormControl>
       <FormControl sx={styles.form}>
         <DatePicker
           label="Start date"
-          onChange={(newValue) => setStartDate(newValue ?? startDate)}
-          value={startDate}
+          onChange={(newValue) =>
+            setFormData({ ...formData, startDate: newValue?.toDate() ?? formData.startDate })
+          }
+          value={dayjs(formData.startDate)}
         />
       </FormControl>
       <FormControl sx={styles.form}>
         <DatePicker
           label="End date"
-          onChange={(newValue) => setEndDate(newValue ?? endDate)}
-          value={endDate}
+          onChange={(newValue) =>
+            setFormData({ ...formData, endDate: newValue?.toDate() ?? formData.endDate })
+          }
+          value={dayjs(formData.endDate)}
         />
       </FormControl>
+      <FormControl sx={styles.form}>
+        <InputLabel id="dependencies-label">Dependencies</InputLabel>
+        <Select
+          labelId="dependencies-label"
+          id="dependencies"
+          label="Dependencies"
+          multiple
+          value={formData.dependencies}
+          onChange={handleDependencyChange}
+          input={<Input/>}
+          MenuProps={{
+            PaperProps: {
+              style: selectStyle,
+            },
+          }}
+        >
+          {tasks.map((task) => (
+            <MenuItem key={task.id} value={task.id}>
+              {task.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      {members ? <FormControl sx={styles.form}>
+        <InputLabel id="user-label">Assigned User</InputLabel>
+        <Select
+          labelId="user-label"
+          id="assigned-user"
+          label="Assigned User"
+          value={formData.user}
+          onChange={handleUserChange}
+          input={<Input/>}
+          MenuProps={{
+            PaperProps: {
+              style: selectStyle,
+            },
+          }}
+        >
+          {members.map((user) => (
+            <MenuItem key={user.id} value={user.id}>
+              {user.username}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl> : <></>}
       <Box sx={styles.buttonContainer}>
         <Button variant="contained" color="primary" type="submit">
             Edit

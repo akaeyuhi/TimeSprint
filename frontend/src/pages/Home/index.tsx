@@ -36,6 +36,7 @@ const tasks: Task[] = [
     startDate: new Date('2024-04-19T13:00:00'),
     endDate: new Date('2024-04-19T15:00:00'),
     isCompleted: false,
+    dependencies: [],
   },
   {
     id: 2,
@@ -46,6 +47,7 @@ const tasks: Task[] = [
     startDate: new Date('2024-04-19T15:30:00'),
     endDate: new Date('2024-04-19T16:30:00'),
     isCompleted: false,
+    dependencies: [],
   },
 ];
 
