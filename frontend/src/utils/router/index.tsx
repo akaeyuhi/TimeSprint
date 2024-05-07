@@ -6,6 +6,7 @@ import HomePage from 'src/pages/Home';
 import Layout from 'src/components/layout';
 import TeamsPage from 'src/pages/Teams';
 import TeamPage from 'src/pages/Team';
+import ProjectPage from 'src/pages/Project';
 
 const Router = () => (
   <Routes>
@@ -13,6 +14,7 @@ const Router = () => (
       <Route path="home" element={<HomePage/>}/>
       <Route path="teams" element={<TeamsPage/>}/>
       <Route path="teams/:id" element={<TeamPage/>}/>
+      <Route path="teams/:id/projects/:id" element={<ProjectPage/>}/>
     </Route>
     <Route path="/welcome" element={<WelcomePage/>}/>
     <Route path="/auth/">
