@@ -84,7 +84,7 @@ const TeamPage: React.FC = () => {
         <Typography variant="h4" gutterBottom>
           {team?.name}
         </Typography>
-        <Button variant="contained" color="error" onClick={modalHandlers.deleteProject.open}>
+        <Button variant="contained" color="error" onClick={modalHandlers.leaveTeam.open}>
             Leave
         </Button>
       </Box>
