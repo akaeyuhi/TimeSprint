@@ -13,4 +13,9 @@ export const styles = createStyleSheet({
       outlineColor: palette.primary.main
     },
   },
+  descriptionContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  }
 });

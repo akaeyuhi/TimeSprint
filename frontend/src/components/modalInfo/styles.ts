@@ -10,7 +10,8 @@ export const styles = createStyleSheet({
     backgroundColor: palette.background.paper,
     boxShadow: 24,
     p: 4,
-    width: '50vw',
+    width: '70vw',
+    maxHeight: '70vh',
     borderRadius: 2,
     overflow: 'scroll'
   }
