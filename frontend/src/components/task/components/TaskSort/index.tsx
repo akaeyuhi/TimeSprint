@@ -1,0 +1,64 @@
+import React, { memo, useEffect, useMemo, useState } from 'react';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
+import { Task } from 'src/models/task.model';
+import { SortBy, useSorting } from 'src/hooks/use-sorting';
+
+interface TaskSorterProps {
+  tasks: Task[];
+  onSort: (tasks: Task[]) => void;
+  isUserPage: boolean;
+  handleGetImportantTasks?: () => void;
+}
+
+const TaskSorter: React.FC<TaskSorterProps> = ({
+  tasks,
+  onSort,
+  isUserPage,
+  handleGetImportantTasks,  }) => {
+  const [sortBy, setSorting, sorted] = useSorting(tasks);
+
+  const onChange = (e: SelectChangeEvent) => {
+    setSorting(e.target.value as SortBy);
+  };
+
+  useEffect(() => onSort(sorted), [onSort, sorted]);
+
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <FormControl>
+        <InputLabel id="sort-by-label">Sort By</InputLabel>
+        <Select
+          labelId="sort-by-label"
+          label="Sort By"
+          id="sort-by"
+          value={sortBy}
+          onChange={onChange}
+          sx={{ width: 150 }}
+        >
+
+          <MenuItem value={SortBy.NAME}>Name</MenuItem>
+          <MenuItem value={SortBy.URGENCY}>Urgency</MenuItem>
+          <MenuItem value={SortBy.IMPORTANCE}>Importance</MenuItem>
+          <MenuItem value={SortBy.DEADLINE}>Deadline</MenuItem>
+        </Select>
+      </FormControl>
+      <Box>
+        {isUserPage && (
+          <Button variant="contained" onClick={handleGetImportantTasks}>
+              Get Important Tasks
+          </Button>
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+export default memo(TaskSorter);
