@@ -66,7 +66,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
       <Typography variant="h6" gutterBottom>
           Create Task
       </Typography>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel htmlFor="name">Task name</InputLabel>
         <Input
           id="name"
@@ -76,7 +76,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
           value={formData.name}
         />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel htmlFor="description">Task description</InputLabel>
         <Input
           id="description"
@@ -86,7 +86,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
           value={formData.description}
         />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <FormControlLabel control={<Checkbox
           id="urgency"
           onChange={(e) => setFormData({ ...formData, urgency: e.target.checked })}
@@ -94,14 +94,14 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
         />} label="Urgency"/>
 
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <FormControlLabel control={<Checkbox
           id="importance"
           onChange={(e) => setFormData({ ...formData, importance: e.target.checked })}
           checked={formData.importance}
         />} label="Importance"/>
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <DatePicker
           label="Start date"
           onChange={(newValue) =>
@@ -110,7 +110,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
           value={dayjs(formData.startDate)}
         />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <DatePicker
           label="End date"
           onChange={(newValue) =>
@@ -119,7 +119,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
           value={dayjs(formData.endDate)}
         />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel id="dependencies-label">Dependencies</InputLabel>
         <Select
           labelId="dependencies-label"
@@ -141,7 +141,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
           ))}
         </Select>
       </FormControl>
-      {members ? <FormControl sx={styles.form}>
+      {members ? <FormControl>
         <InputLabel id="users-label">Assigned Users</InputLabel>
         <Select
           labelId="users-label"

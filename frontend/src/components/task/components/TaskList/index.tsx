@@ -13,26 +13,26 @@ import { useStores } from 'src/hooks';
 import { styles } from 'src/components/task/components/TaskList/styles';
 import { User } from 'src/models/user.model';
 import TaskSort from 'src/components/task/components/TaskSort';
+import DeleteTaskForm from 'src/components/task/components/DeleteTaskForm';
 
 interface TaskListProps {
   tasks: Task[];
   members?: User[];
-  editTaskModalOpen: boolean,
-  createTaskModalOpen: boolean,
   createTask: ModalHandler
   editTask: ModalHandler,
+  deleteTask: ModalHandler,
 }
 
 const TaskList: React.FC<TaskListProps> = ({
   tasks,
   members,
-  editTaskModalOpen,
-  createTaskModalOpen,
   createTask,
   editTask,
+  deleteTask
 }) => {
   const { taskStore } = useStores();
   const [editedTask, setEditedTask] = useState<Task>();
+  const [deletedTask, setDeletedTask] = useState<Task | null>(null);
   const [listTasks, setListTasks] = useState<Task[]>(tasks);
 
   const createTaskHandler = (createTaskDto: CreateTaskDto) => {
@@ -55,6 +55,18 @@ const TaskList: React.FC<TaskListProps> = ({
     setEditedTask(task);
   };
 
+  const onDeleteClick = (task: Task) => {
+    setDeletedTask(task);
+  };
+
+  const onTaskDelete = () => {
+    if (deletedTask) {
+      taskStore.tasks = taskStore.tasks.filter((task) => task.id !== deletedTask.id);
+    }
+    deleteTask.close();
+    setDeletedTask(null);
+  };
+
   const onSort = (newTasks: Task[]) => {
     setListTasks(newTasks);
   };
@@ -74,12 +86,14 @@ const TaskList: React.FC<TaskListProps> = ({
                 task={task}
                 editTask={editTask}
                 onEditClick={onEditClick}
+                deleteTask={deleteTask}
+                onDeleteClick={onDeleteClick}
               />
             </Grid>
           ))}
         </Grid>
       )}
-      <ModalForm open={createTaskModalOpen} handleClose={createTask.close}>
+      <ModalForm open={createTask.isOpen} handleClose={createTask.close}>
         <CreateTaskForm
           onCancel={createTask.close}
           members={members}
@@ -87,7 +101,7 @@ const TaskList: React.FC<TaskListProps> = ({
           tasks={listTasks}
         />
       </ModalForm>
-      <ModalForm open={editTaskModalOpen} handleClose={editTask.close}>
+      <ModalForm open={editTask.isOpen} handleClose={editTask.close}>
         <EditTaskForm
           task={editedTask}
           members={members}
@@ -95,6 +109,12 @@ const TaskList: React.FC<TaskListProps> = ({
           onCancel={editTask.close}
           onSubmit={submitEditHandler}
         />
+      </ModalForm>
+      <ModalForm open={deleteTask.isOpen} handleClose={deleteTask.close}>
+        <DeleteTaskForm
+          task={deletedTask}
+          onDelete={onTaskDelete}
+          onClose={deleteTask.close}/>
       </ModalForm>
     </Box>
   );

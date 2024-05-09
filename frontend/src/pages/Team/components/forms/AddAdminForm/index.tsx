@@ -40,7 +40,7 @@ const AddAdminForm: React.FC<AddAdminFormProps> = ({ candidates, onSubmit, onClo
       <Typography variant="h6" mb={1}>
           Add new admin
       </Typography>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel id="user-select-label">Member</InputLabel>
         <Select
           id="user-select"

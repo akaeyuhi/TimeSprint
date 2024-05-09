@@ -8,13 +8,17 @@ import { toast } from 'react-toastify';
 interface TaskItemProps {
   task: Task;
   editTask: ModalHandler,
+  deleteTask: ModalHandler,
   onEditClick: (task: Task) => void,
+  onDeleteClick: (task: Task) => void,
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
   task,
   editTask,
-  onEditClick
+  deleteTask,
+  onEditClick,
+  onDeleteClick,
 }) => {
 
 
@@ -26,6 +30,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
   const handleEdit = () => {
     editTask.open();
     onEditClick(task);
+  };
+
+  const handleDelete = () => {
+    deleteTask.open();
+    onDeleteClick(task);
   };
 
   return (
@@ -71,7 +80,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           >
             {task.isCompleted ? 'Uncompleted' : 'Completed'}
           </Button>
-          <Button variant="contained" color="error" onClick={handleEdit}>
+          <Button variant="contained" color="error" onClick={handleDelete}>
             Delete
           </Button>
         </CardActions>

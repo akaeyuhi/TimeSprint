@@ -13,21 +13,24 @@ interface ProjectModals {
   tasks: boolean,
   createTask: boolean,
   editTask: boolean,
+  deleteTask: boolean,
 }
 
 
 const ProjectPage = () => {
   const { projectStore } = useStores(); // Assuming you have a MobX store for projects
   const { id } = useParams();
-  if (!id) return <></>;
-  const project = projectStore.projects.find(project => project.id === parseInt(id))!;
   const [projectModals, setProjectModals] = useState<ProjectModals>({
     edit: false,
     tasks: false,
     createTask: false,
     editTask: false,
+    deleteTask: false,
   });
   const modalHandlers = useModals<ProjectModals>(projectModals, setProjectModals);
+
+  if (!id) return <></>;
+  const project = projectStore.projects.find(project => project.id === parseInt(id))!;
 
   const handleEditSubmit = (updateProjectDto: UpdateProjectDto) => {
     Object.assign(project, updateProjectDto);
@@ -57,15 +60,13 @@ const ProjectPage = () => {
         </ModalForm>
       </Stack>
       <TaskSection
-        allTasksModal={projectModals.tasks}
-        createModal={projectModals.createTask}
-        editModal={projectModals.editTask}
         createTask={modalHandlers.createTask}
+        deleteTask={modalHandlers.deleteTask}
         editTask={modalHandlers.editTask}
         tasks={modalHandlers.tasks}
         members={project.team?.members}
-        tasksArray={project.tasks}/>
-      {/* Filter and sort options for tasks */}
+        tasksArray={project.tasks}
+      />
     </Container>
   );
 };

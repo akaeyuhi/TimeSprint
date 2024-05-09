@@ -1,7 +1,6 @@
 import React from 'react';
 import { ModalHandler } from 'src/hooks/use-modals';
 import { Team } from 'src/models/team.model';
-import { TeamModals } from 'src/pages/Team/index';
 import { Avatar, AvatarGroup, Box, Button, Stack, Typography } from '@mui/material';
 import { styles } from 'src/pages/Team/styles';
 import { stringAvatar } from 'src/utils/common/stringAvatar';
@@ -14,7 +13,6 @@ interface MembersSectionProps {
   addUser: ModalHandler,
   addAdmin: ModalHandler
   team: Team,
-  teamModals: TeamModals,
 }
 
 
@@ -24,7 +22,6 @@ const MembersSection: React.FC<MembersSectionProps> = ({
   addUser,
   addAdmin,
   team,
-  teamModals,
 }) => (
   <>
     <Stack>
@@ -78,13 +75,13 @@ const MembersSection: React.FC<MembersSectionProps> = ({
       </Box>
     </Stack>
     <ModalInfo
-      open={teamModals.members}
+      open={members.isOpen}
       handleClose={members.close}
       title="Team Members">
       <MemberList members={team.members}/>
     </ModalInfo>
     <ModalInfo
-      open={teamModals.admins}
+      open={admins.isOpen}
       handleClose={admins.close}
       title="Team Admins">
       <MemberList members={team.admins}/>

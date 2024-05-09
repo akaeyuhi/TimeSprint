@@ -38,7 +38,7 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
       <Typography variant="h6" mb={1}>
           Add new member
       </Typography>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel htmlFor="name">Username</InputLabel>
         <Input
           id="name"

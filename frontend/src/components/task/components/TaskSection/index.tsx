@@ -10,11 +10,9 @@ import { User } from 'src/models/user.model';
 interface TaskSectionProps {
   createTask: ModalHandler,
   editTask: ModalHandler,
+  deleteTask: ModalHandler,
   tasks: ModalHandler,
   tasksArray: Task[],
-  editModal: boolean,
-  createModal: boolean,
-  allTasksModal: boolean,
   members?: User[],
 }
 
@@ -22,10 +20,8 @@ const TaskSection: React.FC<TaskSectionProps> = ({
   tasksArray,
   createTask,
   editTask,
+  deleteTask,
   tasks,
-  editModal,
-  createModal,
-  allTasksModal,
   members
 }) => (
   <Stack mt={2}>
@@ -47,19 +43,21 @@ const TaskSection: React.FC<TaskSectionProps> = ({
         tasks={tasksArray.slice(0, 6)}
         editTask={editTask}
         members={members}
-        editTaskModalOpen={editModal}
-        createTask={createTask} createTaskModalOpen={createModal}/>
+        createTask={createTask}
+        deleteTask={deleteTask}
+      />
     </Stack>
     <ModalInfo
-      open={allTasksModal}
+      open={tasks.isOpen}
       handleClose={tasks.close}
       title="All tasks">
       <TaskList
         tasks={tasksArray}
         members={members}
         editTask={editTask}
-        editTaskModalOpen={editModal}
-        createTask={createTask} createTaskModalOpen={createModal}/>
+        createTask={createTask}
+        deleteTask={deleteTask}
+      />
     </ModalInfo>
   </Stack>
 );

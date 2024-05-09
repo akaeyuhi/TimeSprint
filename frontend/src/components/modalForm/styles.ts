@@ -24,13 +24,10 @@ export const styles = createStyleSheet({
   container: {
     width: '100%',
     '& > *': {
-      mb: '2rem',
+      mb: '1rem',
       '& > div': {
         padding: '0 0.5rem ',
       },
     },
-  },
-  form: {
-    mt: '1rem'
   }
 });

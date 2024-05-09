@@ -37,7 +37,7 @@ const EditForm: React.FC<EditFormProps> = ({
       <Typography variant="h6" gutterBottom>
           Edit project
       </Typography>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel htmlFor="title">Project title</InputLabel>
         <Input
           id="title"
@@ -46,7 +46,7 @@ const EditForm: React.FC<EditFormProps> = ({
           required
           value={editedTitle}/>
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel htmlFor="description">Team description</InputLabel>
         <Input
           id="description"
@@ -55,13 +55,13 @@ const EditForm: React.FC<EditFormProps> = ({
           required
           value={editedDescription}/>
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <DatePicker
           label="Start date"
           onChange={(newValue) => setStartDate(newValue ?? startDate)}
           value={startDate}/>
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <DatePicker
           label="End date"
           onChange={(newValue) => setEndDate(newValue ?? endDate)}

@@ -32,19 +32,20 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
   onCancel,
   tasks
 }) => {
+  const [formData, setFormData] = useState<UpdateTaskDto>({
+    name: task?.name,
+    description: task?.description,
+    urgency: task?.urgency,
+    importance: task?.importance,
+    startDate: task?.startDate,
+    endDate: task?.endDate,
+    dependencies: task?.dependencies,
+    user: task?.user,
+  });
+
   if (!task) {
     return <>{'Error'}</>;
   }
-  const [formData, setFormData] = useState<UpdateTaskDto>({
-    name: task.name,
-    description: task.description,
-    urgency: task.urgency,
-    importance: task.importance,
-    startDate: task.startDate,
-    endDate: task.endDate,
-    dependencies: task.dependencies,
-    user: task.user,
-  });
 
   const selectStyle = {
     maxHeight: 224,
@@ -74,7 +75,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
       <Typography variant="h6" gutterBottom>
           Edit Task
       </Typography>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel htmlFor="name">Task name</InputLabel>
         <Input
           id="name"
@@ -84,7 +85,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
           value={formData.name}
         />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel htmlFor="description">Task description</InputLabel>
         <Input
           id="description"
@@ -94,7 +95,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
           value={formData.description}
         />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <FormControlLabel control={<Checkbox
           id="urgency"
           onChange={(e) => setFormData({ ...formData, urgency: e.target.checked })}
@@ -102,14 +103,14 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
         />} label="Urgency"/>
 
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <FormControlLabel control={<Checkbox
           id="importance"
           onChange={(e) => setFormData({ ...formData, importance: e.target.checked })}
           checked={formData.importance}
         />} label="Importance"/>
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <DatePicker
           label="Start date"
           onChange={(newValue) =>
@@ -118,7 +119,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
           value={dayjs(formData.startDate)}
         />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <DatePicker
           label="End date"
           onChange={(newValue) =>
@@ -127,7 +128,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
           value={dayjs(formData.endDate)}
         />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel id="dependencies-label">Dependencies</InputLabel>
         <Select
           labelId="dependencies-label"
@@ -150,7 +151,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
           ))}
         </Select>
       </FormControl>
-      {members ? <FormControl sx={styles.form}>
+      {members ? <FormControl>
         <InputLabel id="user-label">Assigned User</InputLabel>
         <Select
           labelId="user-label"

@@ -8,7 +8,6 @@ import LeaveTeamForm from 'src/pages/Team/components/forms/LeaveTeamForm';
 import { ModalHandler } from 'src/hooks/use-modals';
 import { Project } from 'src/models/project.model';
 import { Team } from 'src/models/team.model';
-import { TeamModals } from 'src/pages/Team/index';
 import { User } from 'src/models/user.model';
 import { CreateProjectDto } from 'src/dto/project/create-project.dto';
 
@@ -25,7 +24,6 @@ interface ModalsProps {
   handleAddAdminSubmit: (user: User) => void,
   handleDeleteProject: () => void,
   handleLeaveTeam: () => void,
-  teamModals: TeamModals,
 }
 
 
@@ -42,28 +40,27 @@ const Modals: React.FC<ModalsProps> = ({
   handleAddAdminSubmit,
   handleDeleteProject,
   handleLeaveTeam,
-  teamModals
 }) => (
   <>
-    <ModalForm open={teamModals.createProject} handleClose={createProject.close}>
+    <ModalForm open={createProject.isOpen} handleClose={createProject.close}>
       <CreateProjectForm onSubmit={handleCreateSubmit} onClose={createProject.close}/>
     </ModalForm>
-    <ModalForm handleClose={deleteProject.close} open={teamModals.deleteProject}>
+    <ModalForm handleClose={deleteProject.close} open={deleteProject.isOpen}>
       <DeleteProjectForm
         project={deletedProject}
         onClose={deleteProject.close}
         onDelete={handleDeleteProject}/>
     </ModalForm>
-    <ModalForm handleClose={addUser.close} open={teamModals.addUser}>
+    <ModalForm handleClose={addUser.close} open={addUser.isOpen}>
       <AddUserForm onClose={addUser.close} onSubmit={handleAddUserSubmit}/>
     </ModalForm>
-    <ModalForm handleClose={addAdmin.close} open={teamModals.addAdmin}>
+    <ModalForm handleClose={addAdmin.close} open={addAdmin.isOpen}>
       <AddAdminForm
         onClose={addAdmin.close}
         onSubmit={handleAddAdminSubmit}
         candidates={team.members}/>
     </ModalForm>
-    <ModalForm handleClose={leaveTeam.close} open={teamModals.leaveTeam}>
+    <ModalForm handleClose={leaveTeam.close} open={leaveTeam.isOpen}>
       <LeaveTeamForm onClose={leaveTeam.close} team={team} onLeave={handleLeaveTeam}/>
     </ModalForm>
   </>

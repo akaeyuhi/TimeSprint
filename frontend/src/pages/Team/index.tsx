@@ -11,7 +11,7 @@ import MembersSection from 'src/pages/Team/components/sections/MembersSection';
 import ProjectsSection from 'src/pages/Team/components/sections/ProjectsSection';
 import { useModals } from 'src/hooks/use-modals';
 
-export interface TeamModals {
+interface TeamModals {
   members: boolean,
   admins: boolean,
   projects: boolean,
@@ -37,10 +37,11 @@ const TeamPage: React.FC = () => {
   const { teamStore } = useStores();
   const modalHandlers = useModals<TeamModals>(teamModals, setTeamModals);
   const { id } = useParams();
-  if (!id) return <></>;
-  const team = teamStore.teams.find(team => team.id === parseInt(id))!;
+  const navigate = useNavigate();
   const [deleteProject, setDeleteProject] = useState<Project | null>(null);
 
+  if (!id) return <></>;
+  const team = teamStore.teams.find(team => team.id === parseInt(id))!;
   const handleCreateSubmit = (projectDto: CreateProjectDto) => {
     // Perform submission logic here
     console.log('Creating project:', projectDto);
@@ -50,32 +51,32 @@ const TeamPage: React.FC = () => {
   const handleAddUserSubmit = (username: string) => {
     // Perform submission logic here
     console.log('Adding user:', username);
-    modalHandlers.addUser?.close();
+    modalHandlers.addUser.close();
   };
 
   const handleAddAdminSubmit = (user: User) => {
     // Perform submission logic here
     console.log('Adding user:', user);
-    modalHandlers.addAdmin?.close();
+    modalHandlers.addAdmin.close();
   };
 
   const handleDeleteProject = () => {
     if (deleteProject) {
       team.projects = team.projects.filter(project => project.id !== deleteProject.id);
     }
-    modalHandlers.deleteProject?.close();
+    modalHandlers.deleteProject.close();
     setDeleteProject(null);
   };
 
   const handleDeleteClick = (project: Project) => {
     setDeleteProject(project);
-    modalHandlers.deleteProject?.open();
+    modalHandlers.deleteProject.open();
   };
 
   const handleLeaveTeam = () => {
     // some logic to actually leave;
     console.log('Leaving team', team);
-    useNavigate()('/teams');
+    navigate('/teams');
   };
 
   return (
@@ -90,17 +91,15 @@ const TeamPage: React.FC = () => {
       </Box>
       <ProjectsSection
         team={team}
-        teamModals={teamModals}
         handleDeleteClick={handleDeleteClick}
         {...modalHandlers}/>
-      <MembersSection team={team} teamModals={teamModals} {...modalHandlers}/>
+      <MembersSection team={team} {...modalHandlers}/>
       <Modals
         handleCreateSubmit={handleCreateSubmit}
         handleAddUserSubmit={handleAddUserSubmit}
         handleAddAdminSubmit={handleAddAdminSubmit}
         handleDeleteProject={handleDeleteProject}
         handleLeaveTeam={handleLeaveTeam}
-        teamModals={teamModals}
         team={team}
         deletedProject={deleteProject}
         {...modalHandlers}/>

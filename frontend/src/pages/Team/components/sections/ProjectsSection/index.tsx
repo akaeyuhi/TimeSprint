@@ -1,7 +1,6 @@
 import React from 'react';
 import { ModalHandler } from 'src/hooks/use-modals';
 import { Team } from 'src/models/team.model';
-import { TeamModals } from 'src/pages/Team/index';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { styles } from 'src/pages/Team/styles';
 import ModalInfo from 'src/components/modalInfo';
@@ -12,7 +11,6 @@ interface ProjectsSectionProps {
   createProject: ModalHandler,
   projects: ModalHandler,
   team: Team,
-  teamModals: TeamModals,
   handleDeleteClick: (project: Project) => void,
 }
 
@@ -20,7 +18,6 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   createProject,
   projects,
   team,
-  teamModals,
   handleDeleteClick
 }) => (
   <>
@@ -42,7 +39,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         <ProjectList projects={team.projects.slice(0, 5)} onDelete={handleDeleteClick}/>
       </Stack>
       <ModalInfo
-        open={teamModals.projects}
+        open={projects.isOpen}
         handleClose={projects.close}
         title="Team projects">
         <ProjectList projects={team.projects} onDelete={handleDeleteClick}/>
