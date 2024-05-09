@@ -28,6 +28,6 @@ export const styles = createStyleSheet({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    mt: '1rem',
+    mt: '0.5rem',
   }
 });

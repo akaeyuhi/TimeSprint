@@ -3,6 +3,7 @@
     "experimentalDecorators": true,
     "target": "es5",
     "lib": [
+      "ESNext.Array",
       "dom",
       "dom.iterable",
       "esnext"
