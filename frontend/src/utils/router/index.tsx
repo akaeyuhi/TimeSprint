@@ -7,6 +7,7 @@ import Layout from 'src/components/layout';
 import TeamsPage from 'src/pages/Teams';
 import TeamPage from 'src/pages/Team';
 import ProjectPage from 'src/pages/Project';
+import TaskPage from 'src/pages/Tasks';
 
 const Router = () => (
   <Routes>
@@ -15,6 +16,7 @@ const Router = () => (
       <Route path="teams" element={<TeamsPage/>}/>
       <Route path="teams/:id" element={<TeamPage/>}/>
       <Route path="teams/:id/projects/:id" element={<ProjectPage/>}/>
+      <Route path="tasks" element={<TaskPage/>}/>
     </Route>
     <Route path="/welcome" element={<WelcomePage/>}/>
     <Route path="/auth/">

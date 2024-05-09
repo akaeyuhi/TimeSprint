@@ -59,6 +59,9 @@ const ProjectPage = () => {
           />
         </ModalForm>
       </Stack>
+      <Typography variant="h5" gutterBottom>
+        Tasks
+      </Typography>
       <TaskSection
         createTask={modalHandlers.createTask}
         deleteTask={modalHandlers.deleteTask}

@@ -25,9 +25,6 @@ const TaskSection: React.FC<TaskSectionProps> = ({
   members
 }) => (
   <Stack mt={2}>
-    <Typography variant="h5" gutterBottom>
-          Tasks
-    </Typography>
     <Box sx={styles.controlsBox}>
       <Button variant="contained" color="primary" onClick={createTask.open}>
             Create new task
