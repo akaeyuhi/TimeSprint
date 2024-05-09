@@ -6,7 +6,7 @@ import ModalForm from 'src/components/modalForm';
 import { useParams } from 'react-router-dom';
 import { useModals } from 'src/hooks/use-modals';
 import { UpdateProjectDto } from 'src/dto/project/update-project.dto';
-import TaskSection from 'src/pages/Project/components/TaskSection';
+import TaskSection from 'src/components/task/components/TaskSection';
 
 interface ProjectModals {
   edit: boolean,
@@ -63,7 +63,8 @@ const ProjectPage = () => {
         createTask={modalHandlers.createTask}
         editTask={modalHandlers.editTask}
         tasks={modalHandlers.tasks}
-        project={project}/>
+        members={project.team?.members}
+        tasksArray={project.tasks}/>
       {/* Filter and sort options for tasks */}
     </Container>
   );

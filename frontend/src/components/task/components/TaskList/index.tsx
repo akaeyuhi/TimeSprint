@@ -12,6 +12,7 @@ import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
 import { useStores } from 'src/hooks';
 import { styles } from 'src/components/task/components/TaskList/styles';
 import { User } from 'src/models/user.model';
+import TaskSort from 'src/components/task/components/TaskSort';
 
 interface TaskListProps {
   tasks: Task[];
@@ -32,6 +33,7 @@ const TaskList: React.FC<TaskListProps> = ({
 }) => {
   const { taskStore } = useStores();
   const [editedTask, setEditedTask] = useState<Task>();
+  const [listTasks, setListTasks] = useState<Task[]>(tasks);
 
   const createTaskHandler = (createTaskDto: CreateTaskDto) => {
     console.log('created task', createTaskDto);
@@ -52,13 +54,21 @@ const TaskList: React.FC<TaskListProps> = ({
   const onEditClick = (task: Task) => {
     setEditedTask(task);
   };
+
+  const onSort = (newTasks: Task[]) => {
+    setListTasks(newTasks);
+  };
+
   return (
     <Box sx={styles.container}>
       {tasks.length === 0 ? (
         <Typography variant="body1">No tasks available</Typography>
       ) : (
         <Grid container spacing={2} mt={1} >
-          {tasks.map(task => (
+          <Grid item xs={12}>
+            <TaskSort  isUserPage={!!members} onSort={onSort} tasks={listTasks}/>
+          </Grid>
+          {listTasks.map(task => (
             <Grid item key={task.id} xs={6} md={4}>
               <TaskItem
                 task={task}
@@ -74,14 +84,14 @@ const TaskList: React.FC<TaskListProps> = ({
           onCancel={createTask.close}
           members={members}
           onSubmit={createTaskHandler}
-          tasks={tasks}
+          tasks={listTasks}
         />
       </ModalForm>
       <ModalForm open={editTaskModalOpen} handleClose={editTask.close}>
         <EditTaskForm
           task={editedTask}
           members={members}
-          tasks={tasks}
+          tasks={listTasks}
           onCancel={editTask.close}
           onSubmit={submitEditHandler}
         />

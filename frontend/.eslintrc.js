@@ -24,6 +24,8 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/object-curly-spacing': 'off',
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     'import/prefer-default-export': 'off',
