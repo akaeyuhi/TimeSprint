@@ -52,14 +52,14 @@ export class UserStore extends TaskStore {
   @get
   async fetch(userId = this.currentUser.id): Promise<void> {
     this.isLoading = true;
-    this.currentUser = { ...this.currentUser};
+    this.currentUser = { ...this.currentUser };
     this.tasks = this.currentUser.tasks;
     this.isLoading = false;
   };
 
   async fetchByUsername(username: string): Promise<void> {
     this.isLoading = true;
-    this.currentUser = { ...this.currentUser};
+    this.currentUser = { ...this.currentUser };
     this.tasks = this.currentUser.tasks;
     this.isLoading = false;
   }
