@@ -1,5 +1,5 @@
-CREATE TYPE "role" AS ENUM (
-  'collaborator',
+CREATE TYPE "AdminRole" AS ENUM (
+  'user',
   'admin'
 );
 
@@ -8,7 +8,7 @@ CREATE TABLE "user" (
   "username" varchar,
   "email" varchar,
   "password" varchar,
-  "role" role,
+  "role" "AdminRole",
   "teams" team,
   "activities" leisure_activity,
   "tasks" task
@@ -42,6 +42,7 @@ CREATE TABLE "project" (
   "description" varchar,
   "start_date" timestamp,
   "end_date" timestamp,
+  "is_completed" bool,
   "tasks" task
 );
 
@@ -51,8 +52,10 @@ CREATE TABLE "task" (
   "description" varchar,
   "urgency" boolean,
   "importance" boolean,
+  "is_completed" bool,
   "start_date" timestamp,
-  "end_date" timestamp
+  "end_date" timestamp,
+  "dependencies" task
 );
 
 CREATE TABLE "team_user" (
@@ -97,3 +100,14 @@ ALTER TABLE "user_team(1)" ADD FOREIGN KEY ("team_admins") REFERENCES "team" ("a
 ALTER TABLE "team" ADD FOREIGN KEY ("projects") REFERENCES "project" ("id");
 
 ALTER TABLE "project" ADD FOREIGN KEY ("tasks") REFERENCES "task" ("id");
+
+CREATE TABLE "task_task" (
+  "task_id" int,
+  "task_dependencies" task,
+  PRIMARY KEY ("task_id", "task_dependencies")
+);
+
+ALTER TABLE "task_task" ADD FOREIGN KEY ("task_id") REFERENCES "task" ("id");
+
+ALTER TABLE "task_task" ADD FOREIGN KEY ("task_dependencies") REFERENCES "task" ("dependencies");
+

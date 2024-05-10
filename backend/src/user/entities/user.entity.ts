@@ -2,10 +2,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
-  JoinColumn,
   OneToMany,
   BeforeInsert,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Team } from 'src/team/entities/team.entity';
 import { Task } from 'src/task/entities/task.entity';
@@ -46,9 +46,9 @@ export class User {
   @OneToMany(() => Task, task => task.user)
   tasks: Task[];
 
-  @ManyToOne(() => Team)
-  @JoinColumn({ name: 'team_id' })
-  team: Team;
+  @ManyToMany(() => Team)
+  @JoinTable()
+  teams: Team[];
 
   @BeforeInsert() async hashPassword() {
     this.password = await hash(this.password, 10);
