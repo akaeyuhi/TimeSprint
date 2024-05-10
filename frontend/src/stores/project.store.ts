@@ -1,17 +1,15 @@
-import { action, computed, get, makeAutoObservable, observable } from 'mobx';
+import { action, get, makeAutoObservable, observable } from 'mobx';
 import { Project } from 'src/models/project.model';
 import { User } from 'src/models/user.model';
 import { AdminRole } from 'src/models/roles.enum';
-import { Team } from 'src/models/team.model';
-import { CreateTeamDto } from 'src/dto/team/create-team.dto';
-import { CreateProjectDto } from 'src/dto/project/create-project.dto';
 import { UpdateProjectDto } from 'src/dto/project/update-project.dto';
 import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
 import { Task } from 'src/models/task.model';
 import { CreateTaskDto } from 'src/dto/task/create-task.dto';
+import TaskStore from 'src/stores/base.store';
 
-export class ProjectStore {
-  @observable error: Error | null = null;
+export class ProjectStore extends TaskStore {
+  @observable error = null;
   @observable isLoading = false;
   @observable currentProject: Project = {
     id: 1,
@@ -108,18 +106,20 @@ export class ProjectStore {
       },
     ],
   };
+  @observable tasks = [] as Task[];
   @get
-  getProjectTasks() {
+  getTasks() {
     return this.currentProject.tasks;
   }
 
   @get
-  fetchProject(projectId: number) {
-    return this.currentProject.tasks;
+  async fetch(projectId: number) {
+    this.currentProject = { ...this.currentProject };
+    this.tasks = this.currentProject.tasks;
   }
 
   @get
-  getProjectTaskById(taskId: number): Task | null {
+  getTaskById(taskId: number): Task | null {
     return this.currentProject.tasks.find(task => task.id === taskId) ?? null;
   }
 
@@ -135,7 +135,7 @@ export class ProjectStore {
   @action
   async updateTask(taskId: number, taskDto: UpdateTaskDto) {
     this.isLoading = true;
-    const taskToUpdate = this.getProjectTaskById(taskId);
+    const taskToUpdate = this.getTaskById(taskId);
     Object.assign(taskToUpdate!, taskDto);
     this.isLoading = false;
     return taskToUpdate;
@@ -159,6 +159,7 @@ export class ProjectStore {
   }
 
   constructor() {
+    super();
     makeAutoObservable(this);
   }
 }

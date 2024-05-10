@@ -61,7 +61,7 @@ export class TeamStore {
   }
 
   @get
-  async fetchTeam(teamId: number) {
+  async fetch(teamId: number) {
     return this.currentTeam;
   }
 
