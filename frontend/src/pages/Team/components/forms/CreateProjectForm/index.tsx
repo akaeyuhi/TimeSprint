@@ -3,7 +3,7 @@ import { Box, Button, FormControl, Input, InputLabel, Stack, Typography } from '
 import { CreateProjectDto } from 'src/dto/project/create-project.dto';
 import { DatePicker } from '@mui/x-date-pickers';
 import { styles } from 'src/components/modalForm/styles';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 interface CreateProjectFormProps {
   onSubmit: (data: CreateProjectDto) => void;
@@ -11,18 +11,17 @@ interface CreateProjectFormProps {
 }
 
 const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose }) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [formData, setFormData] = useState<CreateProjectDto>({
+    name: '',
+    description: '',
+    startDate: new Date(),
+    endDate: new Date(),
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
-      name,
-      description,
-      startDate: startDate?.toDate() ?? new Date(),
-      endDate: endDate?.toDate() ?? new Date(),
+      ...formData,
     });
   };
 
@@ -36,31 +35,34 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose
         <Input
           id="name"
           type="text"
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          value={name}/>
+          value={formData.name}/>
       </FormControl>
       <FormControl>
         <InputLabel htmlFor="description">Project description</InputLabel>
         <Input
           id="description"
           type="text"
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })}
           rows={4}
           required
-          value={description}/>
+          value={formData.description}/>
       </FormControl>
       <FormControl>
         <DatePicker
           label="Start date"
-          onChange={(newValue) => setStartDate(newValue ?? dayjs())}
-          value={startDate}/>
+          onChange={(newValue) =>
+            setFormData({ ...formData, startDate: newValue?.toDate() ?? new Date() })}
+          value={dayjs(formData.startDate)}/>
       </FormControl>
       <FormControl>
         <DatePicker
           label="End date"
-          onChange={(newValue) => setEndDate(newValue ?? dayjs())}
-          value={endDate}/>
+          onChange={(newValue) =>
+            setFormData({ ...formData, endDate: newValue?.toDate() ?? new Date() })}
+          value={dayjs(formData.endDate)}/>
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button type="submit" variant="contained" color="primary">

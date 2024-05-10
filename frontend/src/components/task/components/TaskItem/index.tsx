@@ -45,6 +45,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
             <Box>
               <Typography variant="h6">{task.name}</Typography>
               <Typography variant="body2">{task.description}</Typography>
+              <Typography variant="body2" sx={{ color: 'green' }}>
+                Started: {task.startDate.toDateString()}
+              </Typography>
               <Typography variant="body2" sx={{ color: 'red' }}>
                 Due: {task.endDate.toDateString()}
               </Typography>

@@ -2,74 +2,73 @@ import React, { useState } from 'react';
 import { Box, Button, FormControl, Input, InputLabel, Stack, Typography } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { Project } from 'src/models/project.model';
 import { UpdateProjectDto } from 'src/dto/project/update-project.dto';
 
-interface EditFormProps {
+interface EditProjectFormProps {
   project: Project,
   onSubmit: (updateProjectDto: UpdateProjectDto) => void;
   onCancel: () => void;
 }
 
-const EditForm: React.FC<EditFormProps> = ({
-  project,
-  onSubmit,
-  onCancel
-}) => {
-  const [startDate, setStartDate] = useState<Dayjs>(dayjs(project.startDate));
-  const [endDate, setEndDate] = useState<Dayjs>(dayjs(project.endDate));
-  const [editedTitle, setEditedTitle] = useState(project.name);
-  const [editedDescription, setEditedDescription] = useState(project.description);
+const EditProjectForm: React.FC<EditProjectFormProps> = ({ project, onSubmit, onCancel }) => {
+  const [formData, setFormData] = useState<UpdateProjectDto>({
+    name: project.name,
+    description: project.description,
+    startDate: project.startDate,
+    endDate: project.endDate,
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
-      name: editedTitle,
-      description: editedDescription,
-      startDate: startDate.toDate(),
-      endDate: endDate?.toDate(),
+      ...formData,
     });
   };
 
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
-      <Typography variant="h6" gutterBottom>
-          Edit project
+      <Typography variant="h6" mb={1}>
+          Edit Project
       </Typography>
       <FormControl>
-        <InputLabel htmlFor="title">Project title</InputLabel>
+        <InputLabel htmlFor="name">Project Name</InputLabel>
         <Input
-          id="title"
+          id="name"
           type="text"
-          onChange={(e) => setEditedTitle(e.target.value)}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          value={editedTitle}/>
+          value={formData.name}/>
       </FormControl>
       <FormControl>
-        <InputLabel htmlFor="description">Team description</InputLabel>
+        <InputLabel htmlFor="description">Project description</InputLabel>
         <Input
           id="description"
           type="text"
-          onChange={(e) => setEditedDescription(e.target.value)}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })}
+          rows={4}
           required
-          value={editedDescription}/>
+          value={formData.description}/>
       </FormControl>
       <FormControl>
         <DatePicker
           label="Start date"
-          onChange={(newValue) => setStartDate(newValue ?? startDate)}
-          value={startDate}/>
+          onChange={(newValue) =>
+            setFormData({ ...formData, startDate: newValue?.toDate() ?? new Date() })}
+          value={dayjs(formData.startDate)}/>
       </FormControl>
       <FormControl>
         <DatePicker
           label="End date"
-          onChange={(newValue) => setEndDate(newValue ?? endDate)}
-          value={endDate}/>
+          onChange={(newValue) =>
+            setFormData({ ...formData, endDate: newValue?.toDate() ?? new Date() })}
+          value={dayjs(formData.endDate)}/>
       </FormControl>
       <Box sx={styles.buttonContainer}>
-        <Button variant="contained" color="primary" type="submit">
-            Edit
+        <Button type="submit" variant="contained" color="primary">
+            Edit Project
         </Button>
         <Button variant="outlined" color="secondary" onClick={onCancel} sx={{ ml: 2 }}>
             Cancel
@@ -79,4 +78,4 @@ const EditForm: React.FC<EditFormProps> = ({
   );
 };
 
-export default EditForm;
+export default EditProjectForm;

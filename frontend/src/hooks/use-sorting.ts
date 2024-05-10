@@ -6,7 +6,9 @@ export enum SortBy {
   NAME = 'name',
   URGENCY = 'urgency',
   IMPORTANCE = 'importance',
-  DEADLINE = 'deadline'
+  DEADLINE = 'deadline',
+  COMPLETED = 'completed',
+  UNCOMPLETED = 'uncompleted'
 }
 
 type ReturnType = [SortBy, React.Dispatch<React.SetStateAction<SortBy>>, Task[]]
