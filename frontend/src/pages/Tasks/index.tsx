@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Container, Stack, Typography } from '@mui/material';
 import { useStores } from 'src/hooks';
 import TaskSection from 'src/components/task/components/TaskSection';
+import { observer } from 'mobx-react';
+import Loader from 'src/components/loader';
 
 
 const TaskPage = () => {
-  const { taskStore } = useStores(); // Assuming you have a MobX store for projects
-  const tasks = taskStore.tasks;
+  const { userStore } = useStores();
+
+  useEffect(() => {
+    userStore.fetch(1);
+  }, []);
+
+  if (userStore.isLoading) return <Loader />;
+
   return (
     <Container>
       <Stack>
@@ -15,10 +23,10 @@ const TaskPage = () => {
         </Box>
       </Stack>
       <TaskSection
-        tasksArray={tasks}
+        tasksArray={userStore.currentUser.tasks}
       />
     </Container>
   );
 };
 
-export default TaskPage;
+export default observer(TaskPage);
