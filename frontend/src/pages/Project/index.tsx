@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Container, Stack, Typography } from '@mui/material';
 import { useStores } from 'src/hooks';
 import ModalForm from 'src/components/modalForm';
@@ -9,6 +9,8 @@ import TaskSection from 'src/components/task/components/TaskSection';
 import { toast } from 'react-toastify';
 import ProjectProgressBar from 'src/pages/Project/components/ProjectProgressBar';
 import EditProjectForm from 'src/pages/Project/components/EditForm';
+import Loader from 'src/components/loader';
+import { observer } from 'mobx-react';
 
 interface ProjectModals {
   edit: boolean,
@@ -23,27 +25,38 @@ const ProjectPage = () => {
   });
   const modalHandlers = useModals<ProjectModals>(projectModals, setProjectModals);
 
-  if (!id) return <></>;
-  const project = projectStore.projects.find(project => project.id === parseInt(id))!;
+  useEffect(() => {
+    projectStore.fetch(Number(id));
+  }, []);
 
-  const handleEditSubmit = (updateProjectDto: UpdateProjectDto) => {
-    Object.assign(project, updateProjectDto);
-    modalHandlers.edit.close();
-    toast.success('Edited project!');
-  };
+  const handleEditSubmit = useCallback(async (updateProjectDto: UpdateProjectDto) => {
+    try {
+      await projectStore.editProject(updateProjectDto);
+      modalHandlers.edit.close();
+      toast.success('Edited project!');
+    } catch (e) {
+      toast.error(`Error occurred: ${projectStore.error}`);
+    } finally {
+      modalHandlers.edit.close();
+    }
+  }, []);
+
+  if (projectStore.isLoading) return <Loader />;
 
   return (
     <Container>
       <Stack>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box>
-            <Typography variant="h4">{project.name}</Typography>
-            <Typography variant="body1" mt={1}>{project.description}</Typography>
+            <Typography variant="h4">{projectStore.currentProject.name}</Typography>
+            <Typography variant="body1" mt={1}>
+              {projectStore.currentProject.description}
+            </Typography>
             <Typography variant="body2" sx={{ color: 'green' }}>
-              Started: {project.startDate.toDateString()}
+              Started: {projectStore.currentProject.startDate.toDateString()}
             </Typography>
             <Typography variant="body2" sx={{ color: 'red' }}>
-              Due: {project.endDate.toDateString()}
+              Due: {projectStore.currentProject.endDate.toDateString()}
             </Typography>
           </Box>
           <Box>
@@ -52,22 +65,22 @@ const ProjectPage = () => {
         </Box>
         <ModalForm open={projectModals.edit} handleClose={modalHandlers.edit.close}>
           <EditProjectForm
-            project={project}
+            project={projectStore.currentProject}
             onSubmit={handleEditSubmit}
             onCancel={modalHandlers.edit.close}
           />
         </ModalForm>
       </Stack>
-      <ProjectProgressBar tasks={project.tasks} />
+      <ProjectProgressBar tasks={projectStore.currentProject.tasks} />
       <Typography variant="h5" gutterBottom mt={1}>
         Tasks
       </Typography>
       <TaskSection
-        members={project.team?.members}
-        tasksArray={project.tasks}
+        members={projectStore.currentProject.team?.members}
+        tasksArray={projectStore.currentProject.tasks}
       />
     </Container>
   );
 };
 
-export default ProjectPage;
+export default observer(ProjectPage);
