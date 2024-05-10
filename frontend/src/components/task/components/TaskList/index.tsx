@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import TaskItem from '../TaskItem';
 import { Task } from 'src/models/task.model';
@@ -14,6 +14,9 @@ import { styles } from 'src/components/task/components/TaskList/styles';
 import { User } from 'src/models/user.model';
 import TaskSort from 'src/components/task/components/TaskSort';
 import DeleteTaskForm from 'src/components/task/components/DeleteTaskForm';
+import TaskStore from 'src/stores/base.store';
+import Loader from 'src/components/loader';
+import { observer } from 'mobx-react';
 
 interface TaskListProps {
   tasks: Task[];
@@ -30,25 +33,52 @@ const TaskList: React.FC<TaskListProps> = ({
   editTask,
   deleteTask,
 }) => {
-  const { taskStore } = useStores();
+  const { userStore, projectStore } = useStores();
+  const [store, setStore] = useState<TaskStore>(userStore);
   const [editedTask, setEditedTask] = useState<Task>();
   const [deletedTask, setDeletedTask] = useState<Task | null>(null);
   const [listTasks, setListTasks] = useState<Task[]>(tasks);
 
-  const createTaskHandler = (createTaskDto: CreateTaskDto) => {
-    console.log('created task', createTaskDto);
-    toast.success(`Created task! ${createTaskDto.name}`);
-    createTask.close();
-  };
-  const submitEditHandler = (taskId: number, updatedTask: UpdateTaskDto) => {
-    const task = taskStore.tasks.find(task => task.id === taskId);
-    if (task) {
-      Object.assign(task, updatedTask);
-      toast.success(`Updated task! ${updatedTask.name}`);
-      console.log(task);
+  if (members) setStore(projectStore);
+
+  const createTaskHandler = useCallback(async (createTaskDto: CreateTaskDto) => {
+    try {
+      await store.createTask(createTaskDto);
+      toast.success(`Created task! ${createTaskDto.name}`);
+    } catch (e) {
+      toast.error(`Error occured! ${store.error}`);
+    } finally {
+      editTask.close();
+      setEditedTask(undefined);
     }
-    editTask.close();
-    setEditedTask(undefined);
+  }, []);
+
+  const submitEditHandler = useCallback(async (taskId: number, updatedTask: UpdateTaskDto) => {
+    try {
+      await store.updateTask(taskId, updatedTask);
+      toast.success(`Edited task! ${updatedTask.name}`);
+    } catch (e) {
+      toast.error(`Error occured! ${store.error}`);
+    } finally {
+      editTask.close();
+      setEditedTask(undefined);
+    }
+  }, []);
+
+  const deleteTaskHandler = useCallback(async (taskId: number) => {
+    try {
+      await store.deleteTask(taskId);
+      toast.success(`Deleted task! ${deletedTask?.name}`);
+    } catch (e) {
+      toast.error(`Error occured! ${store.error}`);
+    } finally {
+      deleteTask.close();
+      setDeletedTask(null);
+    }
+  }, []);
+
+  const onSort = (newTasks: Task[]) => {
+    setListTasks(newTasks);
   };
 
   const onEditClick = (task: Task) => {
@@ -59,17 +89,7 @@ const TaskList: React.FC<TaskListProps> = ({
     setDeletedTask(task);
   };
 
-  const onTaskDelete = () => {
-    if (deletedTask) {
-      taskStore.tasks = taskStore.tasks.filter((task) => task.id !== deletedTask.id);
-    }
-    deleteTask.close();
-    setDeletedTask(null);
-  };
-
-  const onSort = (newTasks: Task[]) => {
-    setListTasks(newTasks);
-  };
+  if (store.isLoading) return <Loader />;
 
   return (
     <Box sx={styles.container}>
@@ -113,11 +133,11 @@ const TaskList: React.FC<TaskListProps> = ({
       <ModalForm open={deleteTask.isOpen} handleClose={deleteTask.close}>
         <DeleteTaskForm
           task={deletedTask}
-          onDelete={onTaskDelete}
+          onDelete={deleteTaskHandler}
           onClose={deleteTask.close} />
       </ModalForm>
     </Box>
   );
 };
 
-export default TaskList;
+export default observer(TaskList);
