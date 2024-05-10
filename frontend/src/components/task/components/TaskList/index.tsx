@@ -48,10 +48,10 @@ const TaskList: React.FC<TaskListProps> = ({
     } catch (e) {
       toast.error(`Error occured! ${store.error}`);
     } finally {
-      editTask.close();
+      createTask.close();
       setEditedTask(undefined);
     }
-  }, []);
+  }, [createTask, store]);
 
   const submitEditHandler = useCallback(async (taskId: number, updatedTask: UpdateTaskDto) => {
     try {
@@ -63,7 +63,7 @@ const TaskList: React.FC<TaskListProps> = ({
       editTask.close();
       setEditedTask(undefined);
     }
-  }, []);
+  }, [editTask, store]);
 
   const deleteTaskHandler = useCallback(async (taskId: number) => {
     try {
@@ -75,7 +75,7 @@ const TaskList: React.FC<TaskListProps> = ({
       deleteTask.close();
       setDeletedTask(null);
     }
-  }, []);
+  }, [deleteTask, deletedTask?.name, store]);
 
   const onSort = (newTasks: Task[]) => {
     setListTasks(newTasks);

@@ -56,7 +56,7 @@ const TeamPage: React.FC = () => {
     } finally {
       modalHandlers.createProject.close();
     }
-  }, [teamStore]);
+  }, [modalHandlers.createProject, teamStore]);
 
   const handleAddUserSubmit = useCallback(async (username: string) => {
     try {
@@ -68,7 +68,7 @@ const TeamPage: React.FC = () => {
     } finally {
       modalHandlers.addUser.close();
     }
-  }, [teamStore, userStore]);
+  }, [modalHandlers.addUser, teamStore, userStore]);
 
   const handleAddAdminSubmit = useCallback(async (user: User) => {
     try {
@@ -79,7 +79,7 @@ const TeamPage: React.FC = () => {
     } finally {
       modalHandlers.addAdmin.close();
     }
-  }, [teamStore]);
+  }, [modalHandlers.addAdmin, teamStore]);
 
   const handleDeleteProject = useCallback(async (projectId: number) => {
     try {
@@ -104,7 +104,7 @@ const TeamPage: React.FC = () => {
     } finally {
       modalHandlers.leaveTeam.close();
     }
-  }, [userStore]);
+  }, [modalHandlers.leaveTeam, navigate, userStore]);
 
   const handleDeleteClick = (project: Project) => {
     setDeleteProject(project);

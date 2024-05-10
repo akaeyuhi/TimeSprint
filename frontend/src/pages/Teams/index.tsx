@@ -7,7 +7,6 @@ import { CreateTeamDto } from 'src/dto/team/create-team.dto';
 import { styles } from 'src/pages/Teams/styles';
 import TeamList from 'src/components/team/TeamList';
 import { useModals } from 'src/hooks/use-modals';
-import { Team } from 'src/models/team.model';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
 import { catchWrapper } from 'src/utils/common/catchWrapper';
@@ -18,14 +17,13 @@ interface TeamModals {
 
 const TeamsPage: React.FC = () => {
   const { userStore } = useStores();
-  const [teams, setTeams] = useState<Team[]>([]);
   const [modal, setModal] = useState({
     createTeam: false,
   });
 
   useEffect(() => {
-    userStore.fetch(1).then(() => setTeams(userStore.currentUser.teams));
-  }, []);
+    userStore.fetch(1);
+  }, [userStore]);
 
   const modalHandlers = useModals<TeamModals>(modal, setModal);
 
@@ -55,7 +53,7 @@ const TeamsPage: React.FC = () => {
           Create Team
         </Button>
       </Box>
-      <TeamList teams={teams} />
+      <TeamList teams={userStore.currentUser.teams} />
       <ModalForm
         open={modalHandlers.createTeam.isOpen}
         handleClose={modalHandlers.createTeam.close}
