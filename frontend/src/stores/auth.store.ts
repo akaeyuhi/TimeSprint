@@ -5,7 +5,7 @@ import { User } from 'src/models/user.model';
 type Auth = {
   refreshToken: string;
   accessToken: string;
-  authenticatedUser: User;
+  user: User;
 };
 
 export class AuthStore {
