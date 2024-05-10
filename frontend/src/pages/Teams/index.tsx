@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
-import TeamItem from './components/TeamItem';
 import { useStores } from 'src/hooks/use-stores';
 import ModalForm from 'src/components/modalForm';
 import CreateTeamForm from 'src/pages/Teams/components/CreateTeamForm';
 import { CreateTeamDto } from 'src/dto/team/create-team.dto';
 import { styles } from 'src/pages/Teams/styles';
+import TeamList from 'src/components/team/TeamList';
+import { useModals } from 'src/hooks/use-modals';
+
+interface TeamModals {
+  createTeam: boolean
+}
 
 const TeamsPage: React.FC = () => {
   const { teamStore } = useStores();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modal, setModal] = useState({
+    createTeam: false
+  });
 
-  const handleCreateTeam = () => setIsModalOpen(true);
-
-  const handleCloseModal = () => setIsModalOpen(false);
+  const modalHandlers = useModals<TeamModals>(modal, setModal);
 
   const handleCreateTeamSubmit = (teamDto: CreateTeamDto) => {
     // Perform submission logic here
     console.log('Creating team:', teamDto);
-    handleCloseModal();
+    modalHandlers.createTeam.close();
   };
 
   return (
@@ -32,24 +37,20 @@ const TeamsPage: React.FC = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={handleCreateTeam}
+          onClick={modalHandlers.createTeam.open}
           sx={styles.createButton}>
             Create Team
         </Button>
       </Box>
-      {teamStore.teams.length === 0 ? (
-        <Typography variant="body1">No teams available</Typography>
-      ) : (
-        <Grid container spacing={2} sx={{ mt: '0.5rem' }}>
-          {teamStore.teams.map(team => (
-            <Grid item xs={12} key={team.id}>
-              <TeamItem team={team}/>
-            </Grid>
-          ))}
-        </Grid>
-      )}
-      <ModalForm open={isModalOpen} handleClose={handleCloseModal}>
-        <CreateTeamForm onSubmit={handleCreateTeamSubmit} onCancel={handleCloseModal}/>
+      <TeamList teams={teamStore.teams}/>
+      <ModalForm
+        open={modalHandlers.createTeam.isOpen}
+        handleClose={modalHandlers.createTeam.close}
+      >
+        <CreateTeamForm
+          onSubmit={handleCreateTeamSubmit}
+          onCancel={modalHandlers.createTeam.close}
+        />
       </ModalForm>
     </Container>
   );

@@ -12,10 +12,6 @@ import EditProjectForm from 'src/pages/Project/components/EditForm';
 
 interface ProjectModals {
   edit: boolean,
-  tasks: boolean,
-  createTask: boolean,
-  editTask: boolean,
-  deleteTask: boolean,
 }
 
 
@@ -24,10 +20,6 @@ const ProjectPage = () => {
   const { id } = useParams();
   const [projectModals, setProjectModals] = useState<ProjectModals>({
     edit: false,
-    tasks: false,
-    createTask: false,
-    editTask: false,
-    deleteTask: false,
   });
   const modalHandlers = useModals<ProjectModals>(projectModals, setProjectModals);
 
@@ -71,10 +63,6 @@ const ProjectPage = () => {
         Tasks
       </Typography>
       <TaskSection
-        createTask={modalHandlers.createTask}
-        deleteTask={modalHandlers.deleteTask}
-        editTask={modalHandlers.editTask}
-        tasks={modalHandlers.tasks}
         members={project.team?.members}
         tasksArray={project.tasks}
       />
