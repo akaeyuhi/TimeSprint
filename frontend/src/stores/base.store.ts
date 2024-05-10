@@ -6,10 +6,16 @@ export default abstract class TaskStore {
   abstract error: Error | null;
   abstract isLoading: boolean;
   abstract tasks: Task[];
+
   abstract fetch(id: number): Promise<void>;
+
   abstract getTasks(): Task[];
+
   abstract getTaskById(taskId: number): Task | null;
+
   abstract createTask(task: CreateTaskDto): Promise<Task>;
+
   abstract updateTask(taskId: number, taskDto: UpdateTaskDto): Promise<Task | null>;
+
   abstract deleteTask(taskId: number): Promise<number>;
 }

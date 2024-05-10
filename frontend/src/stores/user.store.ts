@@ -11,9 +11,10 @@ import TaskStore from 'src/stores/base.store';
 export class UserStore extends TaskStore {
   @observable error: Error | null = null;
   @observable isLoading = false;
-  @observable currentUser: User = { id: 8,
+  @observable currentUser: User = {
+    id: 8,
     username: 'bob_jones',
-    email: 'bob@example.com'
+    email: 'bob@example.com',
   } as User;
   @observable tasks = [{
     id: 1,
@@ -36,7 +37,7 @@ export class UserStore extends TaskStore {
     endDate: new Date('2024-04-19T16:30:00'),
     isCompleted: false,
     dependencies: [] as Task[],
-  },];
+  }];
 
 
   constructor() {
@@ -135,6 +136,7 @@ export class UserStore extends TaskStore {
     this.isLoading = false;
     return newTeam;
   }
+
   // @action
   // async updateTeam(teamId: number, teamDto: UpdateTeamDto) {
   //   this.isLoading = true;

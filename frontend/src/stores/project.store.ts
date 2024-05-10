@@ -107,6 +107,12 @@ export class ProjectStore extends TaskStore {
     ],
   };
   @observable tasks = [] as Task[];
+
+  constructor() {
+    super();
+    makeAutoObservable(this);
+  }
+
   @get
   getTasks() {
     return this.currentProject.tasks;
@@ -156,10 +162,5 @@ export class ProjectStore extends TaskStore {
     Object.assign(this.currentProject, projectDto);
     this.isLoading = false;
     return this.currentProject;
-  }
-
-  constructor() {
-    super();
-    makeAutoObservable(this);
   }
 }

@@ -32,6 +32,7 @@ export class AuthStore {
     //TODO
     return this.auth;
   }
+
   @action register() {
     return this.auth;
   }

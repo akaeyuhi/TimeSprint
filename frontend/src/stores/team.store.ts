@@ -50,6 +50,10 @@ export class TeamStore {
     ],
   } as Team;
 
+  constructor() {
+    makeAutoObservable(this);
+  }
+
   @computed
   isAdmin(user: User) {
     return this.currentTeam.admins.includes(user);
@@ -119,10 +123,6 @@ export class TeamStore {
       this.error = new Error('User already is admin');
       this.isLoading = false;
     }
-  }
-
-  constructor() {
-    makeAutoObservable(this);
   }
 
 

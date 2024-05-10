@@ -11,6 +11,7 @@ import { Team } from 'src/models/team.model';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
 import { catchWrapper } from 'src/utils/common/catchWrapper';
+
 interface TeamModals {
   createTeam: boolean;
 }
@@ -33,8 +34,8 @@ const TeamsPage: React.FC = () => {
       async () => await userStore.createTeam(teamDto),
       `Created team: ${teamDto.name}`,
       `Error!: ${userStore.error}`,
-      modalHandlers.createTeam
-    )(), [userStore]);
+      modalHandlers.createTeam,
+    )(), [modalHandlers.createTeam, userStore]);
 
   if (userStore.isLoading) return <Loader />;
 
