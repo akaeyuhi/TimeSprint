@@ -4,7 +4,7 @@ import React from 'react';
 import { Team } from 'src/models/team.model';
 
 interface TeamListProps {
-  teams: Team[]
+  teams: Team[];
 }
 
 const TeamList: React.FC<TeamListProps> = ({ teams }) => (
@@ -15,7 +15,7 @@ const TeamList: React.FC<TeamListProps> = ({ teams }) => (
       <Grid container spacing={2} sx={{ mt: '0.5rem' }}>
         {teams.map(team => (
           <Grid item xs={12} key={team.id}>
-            <TeamItem team={team}/>
+            <TeamItem team={team} />
           </Grid>
         ))}
       </Grid>

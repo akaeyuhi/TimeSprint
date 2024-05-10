@@ -24,7 +24,7 @@ const TaskItem: React.FC<Props> = ({ task }) => (
     </CardContent>
     <CardActions>
       <Button variant="contained" color="primary">
-          To Tasks
+        To Tasks
       </Button>
     </CardActions>
   </Card>

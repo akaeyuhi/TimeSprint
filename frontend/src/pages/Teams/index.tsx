@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Container, Grid, Typography } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import { useStores } from 'src/hooks/use-stores';
 import ModalForm from 'src/components/modalForm';
 import CreateTeamForm from 'src/pages/Teams/components/CreateTeamForm';
@@ -9,13 +9,13 @@ import TeamList from 'src/components/team/TeamList';
 import { useModals } from 'src/hooks/use-modals';
 
 interface TeamModals {
-  createTeam: boolean
+  createTeam: boolean;
 }
 
 const TeamsPage: React.FC = () => {
   const { teamStore } = useStores();
   const [modal, setModal] = useState({
-    createTeam: false
+    createTeam: false,
   });
 
   const modalHandlers = useModals<TeamModals>(modal, setModal);
@@ -31,7 +31,7 @@ const TeamsPage: React.FC = () => {
       <Box sx={styles.container}>
         <Box sx={{ height: '2rem' }}>
           <Typography variant="h4" gutterBottom>
-              Your Teams
+            Your Teams
           </Typography>
         </Box>
         <Button
@@ -39,10 +39,10 @@ const TeamsPage: React.FC = () => {
           color="primary"
           onClick={modalHandlers.createTeam.open}
           sx={styles.createButton}>
-            Create Team
+          Create Team
         </Button>
       </Box>
-      <TeamList teams={teamStore.teams}/>
+      <TeamList teams={teamStore.teams} />
       <ModalForm
         open={modalHandlers.createTeam.isOpen}
         handleClose={modalHandlers.createTeam.close}

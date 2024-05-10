@@ -1,14 +1,7 @@
 import { List, Stack } from '@mui/material';
 import Logo from '../logo';
 import { Link } from 'react-router-dom';
-import {
-  AssignmentRounded,
-  DirectionsRunRounded,
-  GridView,
-  Groups2Rounded,
-  LockPersonRounded,
-  PersonRounded,
-} from '@mui/icons-material';
+import { AssignmentRounded, GridView, Groups2Rounded, PersonRounded } from '@mui/icons-material';
 import SidebarItem from './components/sidebar-item';
 import { styles } from './styles';
 
@@ -25,11 +18,11 @@ const Sidebar = () => {
   return (
     <Stack sx={styles.sidebarWrapper}>
       <Link to="/welcome">
-        <Logo/>
+        <Logo />
       </Link>
       <List sx={styles.list}>
         {menuItems.map(({ path, title, icon: Icon }) => (
-          <SidebarItem key={path} path={path} label={title} icon={<Icon/>}/>
+          <SidebarItem key={path} path={path} label={title} icon={<Icon />} />
         ))}
       </List>
     </Stack>

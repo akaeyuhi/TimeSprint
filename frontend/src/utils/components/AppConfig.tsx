@@ -27,7 +27,7 @@ export const AppConfig: FC<Props> = ({ children }) => (
             closeOnClick
             pauseOnFocusLoss
             pauseOnHover
-            draggable/>
+            draggable />
         </RootStoreProvider>
       </ThemeConfig>
     </BrowserRouter>

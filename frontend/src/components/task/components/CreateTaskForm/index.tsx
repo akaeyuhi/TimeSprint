@@ -11,7 +11,7 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
-  Typography
+  Typography,
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -57,14 +57,14 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
-      ...formData
+      ...formData,
     });
   };
 
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
       <Typography variant="h6" gutterBottom>
-          Create Task
+        Create Task
       </Typography>
       <FormControl>
         <InputLabel htmlFor="name">Task name</InputLabel>
@@ -91,7 +91,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
           id="urgency"
           onChange={(e) => setFormData({ ...formData, urgency: e.target.checked })}
           checked={formData.urgency}
-        />} label="Urgency"/>
+        />} label="Urgency" />
 
       </FormControl>
       <FormControl>
@@ -99,7 +99,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
           id="importance"
           onChange={(e) => setFormData({ ...formData, importance: e.target.checked })}
           checked={formData.importance}
-        />} label="Importance"/>
+        />} label="Importance" />
       </FormControl>
       <FormControl>
         <DatePicker
@@ -149,7 +149,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
           id="assigned-users"
           value={formData.user}
           onChange={handleUserChange}
-          input={<Input/>}
+          input={<Input />}
           MenuProps={{
             PaperProps: {
               style: selectStyle,
@@ -165,10 +165,10 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
       </FormControl> : <></>}
       <Box sx={styles.buttonContainer}>
         <Button variant="contained" color="primary" type="submit">
-            Create
+          Create
         </Button>
         <Button variant="outlined" color="secondary" onClick={onCancel} sx={{ ml: 2 }}>
-            Cancel
+          Cancel
         </Button>
       </Box>
     </Stack>

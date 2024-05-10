@@ -27,10 +27,10 @@ const MembersSection: React.FC<MembersSectionProps> = ({
     <Stack>
       <Box mt={3} sx={styles.textBox}>
         <Typography variant="h5" sx={{ flexGrow: 1 }}>
-            Members
+          Members
         </Typography>
         <Button variant="outlined" color="primary" onClick={members.open}>
-            View All
+          View All
         </Button>
         <Button
           variant="outlined"
@@ -38,7 +38,7 @@ const MembersSection: React.FC<MembersSectionProps> = ({
           onClick={addUser?.open}
           sx={{ ml: '0.5rem' }}
         >
-            Add new member
+          Add new member
         </Button>
       </Box>
       <Box sx={styles.avatarBox}>
@@ -52,10 +52,10 @@ const MembersSection: React.FC<MembersSectionProps> = ({
     <Stack>
       <Box mt={3} sx={styles.textBox}>
         <Typography variant="h5" sx={{ flexGrow: 1 }}>
-            Admins
+          Admins
         </Typography>
         <Button variant="outlined" color="primary" onClick={admins?.open}>
-            View All
+          View All
         </Button>
         <Button
           variant="outlined"
@@ -63,7 +63,7 @@ const MembersSection: React.FC<MembersSectionProps> = ({
           onClick={addAdmin?.open}
           sx={{ ml: '0.5rem' }}
         >
-            Add new admin
+          Add new admin
         </Button>
       </Box>
       <Box sx={styles.avatarBox}>
@@ -78,13 +78,13 @@ const MembersSection: React.FC<MembersSectionProps> = ({
       open={members.isOpen}
       handleClose={members.close}
       title="Team Members">
-      <MemberList members={team.members}/>
+      <MemberList members={team.members} />
     </ModalInfo>
     <ModalInfo
       open={admins.isOpen}
       handleClose={admins.close}
       title="Team Admins">
-      <MemberList members={team.admins}/>
+      <MemberList members={team.admins} />
     </ModalInfo>
   </>
 );

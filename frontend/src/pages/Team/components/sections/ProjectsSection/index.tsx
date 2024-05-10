@@ -18,31 +18,31 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   createProject,
   projects,
   team,
-  handleDeleteClick
+  handleDeleteClick,
 }) => (
   <>
     <Stack>
       <Typography variant="h5" gutterBottom>
-          Projects
+        Projects
       </Typography>
       <Box sx={styles.controlsBox}>
         <Button variant="outlined" color="primary" onClick={createProject.open}>
-            Create new Project
+          Create new Project
         </Button>
         {team.projects.length ? <Button variant="outlined"
           color="primary"
           onClick={projects.open}>
-            View All Projects
+          View All Projects
         </Button> : <></>}
       </Box>
       <Stack>
-        <ProjectList projects={team.projects.slice(0, 5)} onDelete={handleDeleteClick}/>
+        <ProjectList projects={team.projects.slice(0, 5)} onDelete={handleDeleteClick} />
       </Stack>
       <ModalInfo
         open={projects.isOpen}
         handleClose={projects.close}
         title="Team projects">
-        <ProjectList projects={team.projects} onDelete={handleDeleteClick}/>
+        <ProjectList projects={team.projects} onDelete={handleDeleteClick} />
       </ModalInfo>
     </Stack>
   </>

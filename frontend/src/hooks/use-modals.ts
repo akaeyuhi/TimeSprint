@@ -8,7 +8,7 @@ export interface ModalHandler {
 
 export const useModals = <T extends object>(
   modals: T,
-  set: React.Dispatch<React.SetStateAction<T>>
+  set: React.Dispatch<React.SetStateAction<T>>,
 ) => {
   type ModalArray = [keyof T, boolean];
   const entries = Object.entries(modals) as ModalArray[];

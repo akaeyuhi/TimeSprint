@@ -12,7 +12,7 @@ export const styles = createStyleSheet({
   slogan: {
     marginBottom: '4rem',
     textAlign: 'center',
-    fontSize: 24
+    fontSize: 24,
   },
   headingBox: {
     display: 'flex',

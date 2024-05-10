@@ -43,25 +43,25 @@ const Modals: React.FC<ModalsProps> = ({
 }) => (
   <>
     <ModalForm open={createProject.isOpen} handleClose={createProject.close}>
-      <CreateProjectForm onSubmit={handleCreateSubmit} onClose={createProject.close}/>
+      <CreateProjectForm onSubmit={handleCreateSubmit} onClose={createProject.close} />
     </ModalForm>
     <ModalForm handleClose={deleteProject.close} open={deleteProject.isOpen}>
       <DeleteProjectForm
         project={deletedProject}
         onClose={deleteProject.close}
-        onDelete={handleDeleteProject}/>
+        onDelete={handleDeleteProject} />
     </ModalForm>
     <ModalForm handleClose={addUser.close} open={addUser.isOpen}>
-      <AddUserForm onClose={addUser.close} onSubmit={handleAddUserSubmit}/>
+      <AddUserForm onClose={addUser.close} onSubmit={handleAddUserSubmit} />
     </ModalForm>
     <ModalForm handleClose={addAdmin.close} open={addAdmin.isOpen}>
       <AddAdminForm
         onClose={addAdmin.close}
         onSubmit={handleAddAdminSubmit}
-        candidates={team.members}/>
+        candidates={team.members} />
     </ModalForm>
     <ModalForm handleClose={leaveTeam.close} open={leaveTeam.isOpen}>
-      <LeaveTeamForm onClose={leaveTeam.close} team={team} onLeave={handleLeaveTeam}/>
+      <LeaveTeamForm onClose={leaveTeam.close} team={team} onLeave={handleLeaveTeam} />
     </ModalForm>
   </>
 );

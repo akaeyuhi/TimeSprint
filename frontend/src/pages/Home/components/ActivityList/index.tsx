@@ -10,12 +10,12 @@ interface Props {
 const LeisureActivityList: React.FC<Props> = ({ leisureActivities }) => (
   <Box>
     <Typography variant="h5" gutterBottom>
-        Leisure Activities to do today
+      Leisure Activities to do today
     </Typography>
     <List sx={{ display: 'flex' }}>
       {leisureActivities.map(activity => (
         <ListItem key={activity.id}>
-          <ActivityItem activity={activity}/>
+          <ActivityItem activity={activity} />
         </ListItem>
       ))}
     </List>

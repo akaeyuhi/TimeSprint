@@ -12,6 +12,6 @@ export const styles = createStyleSheet({
     },
   },
   form: {
-    mt: '1rem'
-  }
+    mt: '1rem',
+  },
 });

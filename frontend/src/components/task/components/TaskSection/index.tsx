@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useModals } from 'src/hooks/use-modals';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import { styles } from 'src/pages/Team/styles';
 import ModalInfo from 'src/components/modalInfo';
 import TaskList from 'src/components/task/components/TaskList';
@@ -21,7 +21,7 @@ interface TaskModals {
 
 const TaskSection: React.FC<TaskSectionProps> = ({
   tasksArray,
-  members
+  members,
 }) => {
   const [taskModals, setTaskModals] = useState({
     tasks: false,
@@ -36,12 +36,12 @@ const TaskSection: React.FC<TaskSectionProps> = ({
     <Stack mt={2}>
       <Box sx={styles.controlsBox}>
         <Button variant="contained" color="primary" onClick={modalHandlers.createTask.open}>
-            Create new task
+          Create new task
         </Button>
         {tasksArray.length ? <Button variant="outlined"
           color="primary"
           onClick={modalHandlers.tasks.open}>
-            View All Tasks
+          View All Tasks
         </Button> : <></>}
       </Box>
       <Stack>

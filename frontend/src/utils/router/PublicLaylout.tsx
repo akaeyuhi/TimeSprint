@@ -7,7 +7,7 @@ const PublicLayout = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
 
-  return isAuthenticated ? <Navigate to={from} replace/> : <Outlet/>;
+  return isAuthenticated ? <Navigate to={from} replace /> : <Outlet />;
 };
 
 export default observer(PublicLayout);

@@ -9,5 +9,5 @@ export interface CreateTaskDto {
   startDate: Date;
   endDate: Date;
   dependencies: Task[];
-  user?: User
+  user?: User;
 }

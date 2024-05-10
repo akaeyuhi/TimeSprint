@@ -32,7 +32,7 @@ const TeamPage: React.FC = () => {
     deleteProject: false,
     addUser: false,
     addAdmin: false,
-    leaveTeam: false
+    leaveTeam: false,
   });
   const { teamStore } = useStores();
   const modalHandlers = useModals<TeamModals>(teamModals, setTeamModals);
@@ -86,14 +86,14 @@ const TeamPage: React.FC = () => {
           {team?.name}
         </Typography>
         <Button variant="contained" color="error" onClick={modalHandlers.leaveTeam.open}>
-            Leave
+          Leave
         </Button>
       </Box>
       <ProjectsSection
         team={team}
         handleDeleteClick={handleDeleteClick}
-        {...modalHandlers}/>
-      <MembersSection team={team} {...modalHandlers}/>
+        {...modalHandlers} />
+      <MembersSection team={team} {...modalHandlers} />
       <Modals
         handleCreateSubmit={handleCreateSubmit}
         handleAddUserSubmit={handleAddUserSubmit}
@@ -102,7 +102,7 @@ const TeamPage: React.FC = () => {
         handleLeaveTeam={handleLeaveTeam}
         team={team}
         deletedProject={deleteProject}
-        {...modalHandlers}/>
+        {...modalHandlers} />
     </Container>
   );
 };

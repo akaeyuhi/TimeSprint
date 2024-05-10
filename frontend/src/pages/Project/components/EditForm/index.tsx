@@ -30,7 +30,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ project, onSubmit, on
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
       <Typography variant="h6" mb={1}>
-          Edit Project
+        Edit Project
       </Typography>
       <FormControl>
         <InputLabel htmlFor="name">Project Name</InputLabel>
@@ -39,7 +39,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ project, onSubmit, on
           type="text"
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          value={formData.name}/>
+          value={formData.name} />
       </FormControl>
       <FormControl>
         <InputLabel htmlFor="description">Project description</InputLabel>
@@ -50,28 +50,28 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ project, onSubmit, on
             setFormData({ ...formData, description: e.target.value })}
           rows={4}
           required
-          value={formData.description}/>
+          value={formData.description} />
       </FormControl>
       <FormControl>
         <DatePicker
           label="Start date"
           onChange={(newValue) =>
             setFormData({ ...formData, startDate: newValue?.toDate() ?? new Date() })}
-          value={dayjs(formData.startDate)}/>
+          value={dayjs(formData.startDate)} />
       </FormControl>
       <FormControl>
         <DatePicker
           label="End date"
           onChange={(newValue) =>
             setFormData({ ...formData, endDate: newValue?.toDate() ?? new Date() })}
-          value={dayjs(formData.endDate)}/>
+          value={dayjs(formData.endDate)} />
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button type="submit" variant="contained" color="primary">
-            Edit Project
+          Edit Project
         </Button>
         <Button variant="outlined" color="secondary" onClick={onCancel} sx={{ ml: 2 }}>
-            Cancel
+          Cancel
         </Button>
       </Box>
     </Stack>

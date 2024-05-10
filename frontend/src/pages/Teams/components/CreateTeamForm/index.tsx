@@ -22,7 +22,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
       <Typography variant="h6" gutterBottom>
-          Create New Team
+        Create New Team
       </Typography>
       <FormControl>
         <InputLabel htmlFor="name">Team Name</InputLabel>
@@ -31,7 +31,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
           type="text"
           onChange={(e) => setName(e.target.value)}
           required
-          value={name}/>
+          value={name} />
       </FormControl>
       <FormControl>
         <InputLabel htmlFor="description">Team description</InputLabel>
@@ -40,14 +40,14 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
           type="text"
           onChange={(e) => setDescription(e.target.value)}
           required
-          value={description}/>
+          value={description} />
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button variant="contained" color="primary" type="submit">
-            Create
+          Create
         </Button>
         <Button variant="outlined" color="secondary" onClick={onCancel} sx={{ ml: 2 }}>
-            Cancel
+          Cancel
         </Button>
       </Box>
     </Stack>

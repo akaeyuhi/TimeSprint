@@ -3,7 +3,7 @@ import { Stack } from '@mui/material';
 
 const Logo = () => (
   <Stack justifyContent="center" alignItems="center" padding="5px">
-    <img src={logoImg} alt={'app logo'}/>
+    <img src={logoImg} alt={'app logo'} />
   </Stack>
 );
 

@@ -7,5 +7,5 @@ export const styles = createStyleSheet({
   },
   createButton: {
     height: '50%',
-  }
+  },
 });

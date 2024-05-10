@@ -28,7 +28,7 @@ const TaskList: React.FC<TaskListProps> = ({
   members,
   createTask,
   editTask,
-  deleteTask
+  deleteTask,
 }) => {
   const { taskStore } = useStores();
   const [editedTask, setEditedTask] = useState<Task>();
@@ -76,9 +76,9 @@ const TaskList: React.FC<TaskListProps> = ({
       {tasks.length === 0 ? (
         <Typography variant="body1">No tasks available</Typography>
       ) : (
-        <Grid container spacing={2} mt={1} >
+        <Grid container spacing={2} mt={1}>
           <Grid item xs={12}>
-            <TaskSort  isUserPage={!!members} onSort={onSort} tasks={listTasks}/>
+            <TaskSort isUserPage={!!members} onSort={onSort} tasks={listTasks} />
           </Grid>
           {listTasks.map(task => (
             <Grid item key={task.id} xs={6} md={4}>
@@ -114,7 +114,7 @@ const TaskList: React.FC<TaskListProps> = ({
         <DeleteTaskForm
           task={deletedTask}
           onDelete={onTaskDelete}
-          onClose={deleteTask.close}/>
+          onClose={deleteTask.close} />
       </ModalForm>
     </Box>
   );

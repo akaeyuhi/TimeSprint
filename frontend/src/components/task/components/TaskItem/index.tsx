@@ -64,8 +64,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
                   width: 40,
                   height: 40,
                   mx: 'auto',
-                  cursor: 'pointer'
-                }}/>
+                  cursor: 'pointer',
+                }} />
               )}
             </Box>
           </Box>
@@ -74,7 +74,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
         </CardContent>
         <CardActions>
           <Button variant="contained" color="primary" onClick={handleEdit}>
-              Edit
+            Edit
           </Button>
           <Button
             variant={task.isCompleted ? 'outlined' : 'contained'}

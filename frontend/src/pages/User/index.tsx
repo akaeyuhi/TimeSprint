@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Typography, Container, Stack } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Stack, Typography } from '@mui/material';
 import TaskSection from 'src/components/task/components/TaskSection';
 import { Task } from 'src/models/task.model';
 import { Team } from 'src/models/team.model';
@@ -13,7 +13,7 @@ const UserPage: React.FC = () => {
   const [user, setUser] = useState<User>({
     id: 3,
     username: 'alice_smith',
-    email: 'alice@example.com'
+    email: 'alice@example.com',
   } as User);
   const [tasks, setTasks] = useState<Task[]>(taskStore.tasks);
   const [teams, setTeams] = useState<Team[]>(teamStore.teams);

@@ -11,6 +11,6 @@ export const styles = createStyleSheet({
   mainWrapper: {
     flex: 1,
     background: '#f1f1f1',
-    overflow: 'scroll'
+    overflow: 'scroll',
   },
 });

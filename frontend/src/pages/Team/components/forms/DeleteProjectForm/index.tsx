@@ -21,17 +21,17 @@ const DeleteProjectForm: React.FC<DeleteProjectFormProps> = ({ project, onDelete
       <Typography variant="h6" mb={1}>Confirm Project Deletion</Typography>
       <Box>
         <Typography variant="body1">
-            Are you sure you want to delete project &quot;{project?.name}&quot;?
-            This action is irreversible.
+          Are you sure you want to delete project &quot;{project?.name}&quot;?
+          This action is irreversible.
         </Typography>
       </Box>
 
       <Box sx={styles.buttonContainer}>
         <Button onClick={handleDelete} variant="contained" color="error">
-            Delete
+          Delete
         </Button>
         <Button onClick={onClose} variant="outlined" color="primary">
-            Cancel
+          Cancel
         </Button>
       </Box>
     </Stack>

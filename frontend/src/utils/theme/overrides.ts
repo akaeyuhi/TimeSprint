@@ -10,7 +10,7 @@ export const overrides: ThemeOptions['components'] = {
       root: ({ ownerState, theme }) => ({
         borderRadius: '100px',
         ...(ownerState.color === 'primary' &&
-            ownerState.variant === 'contained' && {
+          ownerState.variant === 'contained' && {
           '&:hover': {
             backgroundColor: theme.palette[ownerState.color].light,
           },

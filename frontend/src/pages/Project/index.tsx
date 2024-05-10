@@ -58,7 +58,7 @@ const ProjectPage = () => {
           />
         </ModalForm>
       </Stack>
-      <ProjectProgressBar tasks={project.tasks}/>
+      <ProjectProgressBar tasks={project.tasks} />
       <Typography variant="h5" gutterBottom mt={1}>
         Tasks
       </Typography>

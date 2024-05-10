@@ -1,13 +1,5 @@
-import React, { memo, useEffect, useMemo, useState } from 'react';
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from '@mui/material';
+import React, { memo, useEffect } from 'react';
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { SortBy, useSorting } from 'src/hooks/use-sorting';
 
@@ -22,7 +14,8 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
   tasks,
   onSort,
   isUserPage,
-  handleGetImportantTasks,  }) => {
+  handleGetImportantTasks,
+}) => {
   const [sortBy, setSorting, sorted] = useSorting(tasks);
 
   const onChange = (e: SelectChangeEvent) => {
@@ -53,7 +46,7 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
       <Box>
         {isUserPage && (
           <Button variant="contained" onClick={handleGetImportantTasks}>
-              Get Important Tasks
+            Get Important Tasks
           </Button>
         )}
       </Box>

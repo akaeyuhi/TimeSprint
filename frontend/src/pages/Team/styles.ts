@@ -3,13 +3,13 @@ import { createStyleSheet } from 'src/utils/theme/createStyleSheet';
 export const styles = createStyleSheet({
   container: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   modalAvatar: {
     width: 60,
     height: 60,
     mx: 'auto',
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   avatarBox: {
     display: 'flex',
@@ -18,16 +18,16 @@ export const styles = createStyleSheet({
   },
   textBox: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   projectBox: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   controlsBox: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     mt: '0.5rem',
-  }
+  },
 });

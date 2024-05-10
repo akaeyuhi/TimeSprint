@@ -13,6 +13,6 @@ export const styles = createStyleSheet({
     width: '70vw',
     maxHeight: '70vh',
     borderRadius: 2,
-    overflow: 'scroll'
-  }
+    overflow: 'scroll',
+  },
 });

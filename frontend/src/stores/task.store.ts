@@ -19,7 +19,7 @@ export class TaskStore {
         id: 1,
         username: 'user1',
         email: 'user1@example.com',
-        role: 'USER'
+        role: 'USER',
       } as unknown as User,
     },
     {
@@ -36,7 +36,7 @@ export class TaskStore {
         id: 2,
         username: 'user2',
         email: 'user2@example.com',
-        role: 'USER'
+        role: 'USER',
       } as unknown as User,
     },
     {
@@ -53,7 +53,7 @@ export class TaskStore {
         id: 3,
         username: 'user3',
         email: 'user3@example.com',
-        role: 'USER'
+        role: 'USER',
       } as unknown as User,
     },
     {
@@ -70,7 +70,7 @@ export class TaskStore {
         id: 4,
         username: 'user4',
         email: 'user4@example.com',
-        role: AdminRole.USER
+        role: AdminRole.USER,
       } as User,
     },
     {
@@ -87,7 +87,7 @@ export class TaskStore {
         id: 5,
         username: 'user5',
         email: 'user5@example.com',
-        role: AdminRole.USER
+        role: AdminRole.USER,
       } as User,
     },
   ];

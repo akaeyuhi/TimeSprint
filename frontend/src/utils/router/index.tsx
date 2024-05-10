@@ -12,19 +12,19 @@ import UserPage from 'src/pages/User';
 
 const Router = () => (
   <Routes>
-    <Route path="/" element={<Layout/>}>
-      <Route path="home" element={<HomePage/>}/>
-      <Route path="teams" element={<TeamsPage/>}/>
-      <Route path="teams/:id" element={<TeamPage/>}/>
-      <Route path="teams/:id/projects/:id" element={<ProjectPage/>}/>
-      <Route path="tasks" element={<TaskPage/>}/>
-      <Route path="user" element={<UserPage/>}/>
-      <Route path="user/:id" element={<UserPage/>}/>
+    <Route path="/" element={<Layout />}>
+      <Route path="home" element={<HomePage />} />
+      <Route path="teams" element={<TeamsPage />} />
+      <Route path="teams/:id" element={<TeamPage />} />
+      <Route path="teams/:id/projects/:id" element={<ProjectPage />} />
+      <Route path="tasks" element={<TaskPage />} />
+      <Route path="user" element={<UserPage />} />
+      <Route path="user/:id" element={<UserPage />} />
     </Route>
-    <Route path="/welcome" element={<WelcomePage/>}/>
+    <Route path="/welcome" element={<WelcomePage />} />
     <Route path="/auth/">
-      <Route path="sign-in" element={<SignInPage/>}/>
-      <Route path="sign-up" element={<SignUpPage/>}/>
+      <Route path="sign-in" element={<SignInPage />} />
+      <Route path="sign-up" element={<SignUpPage />} />
     </Route>
   </Routes>
 );

@@ -43,7 +43,7 @@ export class TeamStore {
           isCompleted: true,
           tasks: [],
         },
-      ]
+      ],
     },
     {
       id: 2,
@@ -74,7 +74,7 @@ export class TeamStore {
         endDate: new Date('2024-06-30'),
         isCompleted: true,
         tasks: [],
-      },]
+      }],
     },
   ];
 

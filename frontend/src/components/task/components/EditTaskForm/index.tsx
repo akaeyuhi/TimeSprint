@@ -6,9 +6,12 @@ import {
   FormControl,
   FormControlLabel,
   Input,
-  InputLabel, MenuItem, Select, SelectChangeEvent,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Stack,
-  Typography
+  Typography,
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -30,7 +33,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
   members,
   onSubmit,
   onCancel,
-  tasks
+  tasks,
 }) => {
   const [formData, setFormData] = useState<UpdateTaskDto>({
     name: task?.name,
@@ -66,14 +69,14 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(task.id, {
-      ...formData
+      ...formData,
     });
   };
 
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
       <Typography variant="h6" gutterBottom>
-          Edit Task
+        Edit Task
       </Typography>
       <FormControl>
         <InputLabel htmlFor="name">Task name</InputLabel>
@@ -100,7 +103,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
           id="urgency"
           onChange={(e) => setFormData({ ...formData, urgency: e.target.checked })}
           checked={formData.urgency}
-        />} label="Urgency"/>
+        />} label="Urgency" />
 
       </FormControl>
       <FormControl>
@@ -108,7 +111,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
           id="importance"
           onChange={(e) => setFormData({ ...formData, importance: e.target.checked })}
           checked={formData.importance}
-        />} label="Importance"/>
+        />} label="Importance" />
       </FormControl>
       <FormControl>
         <DatePicker
@@ -137,7 +140,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
           multiple
           value={formData.dependencies}
           onChange={handleDependencyChange}
-          input={<Input/>}
+          input={<Input />}
           MenuProps={{
             PaperProps: {
               style: selectStyle,
@@ -159,7 +162,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
           label="Assigned User"
           value={formData.user}
           onChange={handleUserChange}
-          input={<Input/>}
+          input={<Input />}
           MenuProps={{
             PaperProps: {
               style: selectStyle,
@@ -175,10 +178,10 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
       </FormControl> : <></>}
       <Box sx={styles.buttonContainer}>
         <Button variant="contained" color="primary" type="submit">
-            Edit
+          Edit
         </Button>
         <Button variant="outlined" color="secondary" onClick={onCancel} sx={{ ml: 2 }}>
-            Cancel
+          Cancel
         </Button>
       </Box>
     </Stack>

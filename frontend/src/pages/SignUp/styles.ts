@@ -29,5 +29,5 @@ export const styles = createStyleSheet({
     width: '50%',
     //padding: '0 1.5rem',
     mt: '1.5rem',
-  }
+  },
 });

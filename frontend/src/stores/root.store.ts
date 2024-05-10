@@ -7,7 +7,7 @@ export class RootStore {
   authStore = new AuthStore();
   teamStore = new TeamStore();
   projectStore = new ProjectStore();
-  taskStore =  new TaskStore();
+  taskStore = new TaskStore();
 }
 
 export const store = new RootStore();

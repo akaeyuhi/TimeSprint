@@ -19,11 +19,11 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ project, onDelete }) => (
     <CardActions>
       <Link to={`./projects/${project.id}`} relative="path">
         <Button variant="contained" color="primary" sx={{ mt: 1 }}>
-            Go to Project Page
+          Go to Project Page
         </Button>
       </Link>
       <Button variant="contained" color="error" sx={{ mt: 1 }} onClick={() => onDelete(project)}>
-          Delete project
+        Delete project
       </Button>
     </CardActions>
 

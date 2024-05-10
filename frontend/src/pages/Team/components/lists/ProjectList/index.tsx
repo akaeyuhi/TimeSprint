@@ -5,7 +5,7 @@ import ProjectItem from 'src/pages/Team/components/lists/ProjectItem';
 
 interface ProjectListProps {
   projects: Project[];
-  onDelete: (project: Project) => void
+  onDelete: (project: Project) => void;
 }
 
 const ProjectList: React.FC<ProjectListProps> = ({ projects, onDelete }) => (
@@ -13,7 +13,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onDelete }) => (
     {(projects.length !== 0) ? <Grid container spacing={2} mt={1}>
       {projects.map(project => (
         <Grid item key={project.id} xs={12}>
-          <ProjectItem project={project} onDelete={onDelete}/>
+          <ProjectItem project={project} onDelete={onDelete} />
         </Grid>
       ))}
     </Grid> :

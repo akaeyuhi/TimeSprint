@@ -10,12 +10,12 @@ export const styles = createStyleSheet({
     '&:hover': {
       transform: 'translate(0, -0.3rem)',
       outline: '0.05rem solid',
-      outlineColor: palette.primary.main
+      outlineColor: palette.primary.main,
     },
   },
   descriptionContainer: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 });

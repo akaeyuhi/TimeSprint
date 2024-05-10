@@ -3,7 +3,6 @@ import { Box, Container, Typography } from '@mui/material';
 import { styles } from 'src/pages/Home/styles';
 import { LeisureActivity } from 'src/models/activity.model';
 import { Task } from 'src/models/task.model';
-import LeisureActivityList from 'src/pages/Home/components/ActivityList';
 import TaskList from 'src/pages/Home/components/TaskList';
 
 // Mock data for tasks
@@ -66,13 +65,13 @@ const HomePage: React.FC = () => {
     <Container maxWidth="lg" sx={styles.container}>
       <Box>
         <Typography variant="h4" sx={styles.greeting}>
-            Hello, {username}!
+          Hello, {username}!
         </Typography>
         <Typography variant="h6" sx={styles.date}>
-            Today is {formattedDate}.
+          Today is {formattedDate}.
         </Typography>
         <Box>
-          <TaskList tasks={tasks}/>
+          <TaskList tasks={tasks} />
         </Box>
         {/*<Box>*/}
         {/*  <LeisureActivityList leisureActivities={leisureActivities}/>*/}

@@ -1,4 +1,4 @@
-import { createTheme, CssBaseline, ThemeOptions, ThemeProvider, } from '@mui/material';
+import { createTheme, CssBaseline, ThemeOptions, ThemeProvider } from '@mui/material';
 import { useMemo } from 'react';
 import { palette } from './palette';
 import { typography } from './typography';
@@ -23,8 +23,8 @@ const ThemeConfig = ({ children }: ThemeConfigProps) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline/>
-      <GlobalStyles/>
+      <CssBaseline />
+      <GlobalStyles />
       {children}
     </ThemeProvider>
   );
