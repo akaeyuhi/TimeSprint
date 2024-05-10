@@ -22,7 +22,7 @@ interface ModalsProps {
   handleCreateSubmit: (createProjectDto: CreateProjectDto) => void,
   handleAddUserSubmit: (username: string) => void,
   handleAddAdminSubmit: (user: User) => void,
-  handleDeleteProject: () => void,
+  handleDeleteProject: (projectId: number) => Promise<void>,
   handleLeaveTeam: () => void,
 }
 
