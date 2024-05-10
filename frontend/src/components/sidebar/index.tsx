@@ -17,14 +17,14 @@ const Sidebar = () => {
     { path: '/home', title: 'Home', icon: GridView },
     { path: '/teams', title: 'Teams', icon: Groups2Rounded },
     { path: '/tasks', title: 'Tasks', icon: AssignmentRounded },
-    { path: '/activities', title: 'Activities', icon: DirectionsRunRounded },
+    // { path: '/activities', title: 'Activities', icon: DirectionsRunRounded },
     { path: '/user', title: 'User', icon: PersonRounded },
-    { path: '/admin', title: 'Admin panel', icon: LockPersonRounded },
+    //{ path: '/admin', title: 'Admin panel', icon: LockPersonRounded },
   ];
 
   return (
     <Stack sx={styles.sidebarWrapper}>
-      <Link to="/">
+      <Link to="/welcome">
         <Logo/>
       </Link>
       <List sx={styles.list}>

@@ -74,9 +74,9 @@ const HomePage: React.FC = () => {
         <Box>
           <TaskList tasks={tasks}/>
         </Box>
-        <Box>
-          <LeisureActivityList leisureActivities={leisureActivities}/>
-        </Box>
+        {/*<Box>*/}
+        {/*  <LeisureActivityList leisureActivities={leisureActivities}/>*/}
+        {/*</Box>*/}
       </Box>
     </Container>
   );
