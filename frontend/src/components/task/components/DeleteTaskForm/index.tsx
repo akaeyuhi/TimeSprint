@@ -2,17 +2,18 @@ import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
 import { Task } from 'src/models/task.model';
+import { observer } from 'mobx-react';
 
 interface DeleteTaskFormProps {
   task: Task | null;
-  onDelete: () => void;
+  onDelete: (taskId: number) => Promise<void>;
   onClose: () => void;
 }
 
 const DeleteTaskForm: React.FC<DeleteTaskFormProps> = ({ task, onDelete, onClose }) => {
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!task) return;
-    onDelete();
+    await onDelete(task.id);
     onClose();
   };
 
@@ -37,4 +38,4 @@ const DeleteTaskForm: React.FC<DeleteTaskFormProps> = ({ task, onDelete, onClose
   );
 };
 
-export default DeleteTaskForm;
+export default observer(DeleteTaskForm);
