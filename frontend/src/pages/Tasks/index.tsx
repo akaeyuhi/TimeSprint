@@ -11,7 +11,7 @@ const TaskPage = () => {
 
   useEffect(() => {
     userStore.fetch(1);
-  }, []);
+  }, [userStore]);
 
   if (userStore.isLoading) return <Loader />;
 

@@ -46,7 +46,7 @@ const TaskList: React.FC<TaskListProps> = ({
       await store.createTask(createTaskDto);
       toast.success(`Created task! ${createTaskDto.name}`);
     } catch (e) {
-      toast.error(`Error occured! ${store.error}`);
+      toast.error(`Error occurred! ${store.error}`);
     } finally {
       createTask.close();
       setEditedTask(undefined);
@@ -58,7 +58,7 @@ const TaskList: React.FC<TaskListProps> = ({
       await store.updateTask(taskId, updatedTask);
       toast.success(`Edited task! ${updatedTask.name}`);
     } catch (e) {
-      toast.error(`Error occured! ${store.error}`);
+      toast.error(`Error occurred! ${store.error}`);
     } finally {
       editTask.close();
       setEditedTask(undefined);
@@ -70,7 +70,7 @@ const TaskList: React.FC<TaskListProps> = ({
       await store.deleteTask(taskId);
       toast.success(`Deleted task! ${deletedTask?.name}`);
     } catch (e) {
-      toast.error(`Error occured! ${store.error}`);
+      toast.error(`Error occurred! ${store.error}`);
     } finally {
       deleteTask.close();
       setDeletedTask(null);

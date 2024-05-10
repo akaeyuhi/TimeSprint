@@ -11,7 +11,7 @@ const UserPage: React.FC = () => {
 
   useEffect(() => {
     userStore.fetch(1);
-  }, []);
+  }, [userStore]);
 
   if (userStore.isLoading) return <Loader />;
 

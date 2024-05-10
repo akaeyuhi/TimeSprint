@@ -27,7 +27,7 @@ const ProjectPage = () => {
 
   useEffect(() => {
     projectStore.fetch(Number(id));
-  }, []);
+  }, [id, projectStore]);
 
   const handleEditSubmit = useCallback(async (updateProjectDto: UpdateProjectDto) => {
     try {
@@ -39,7 +39,7 @@ const ProjectPage = () => {
     } finally {
       modalHandlers.edit.close();
     }
-  }, []);
+  }, [modalHandlers.edit, projectStore]);
 
   if (projectStore.isLoading) return <Loader />;
 

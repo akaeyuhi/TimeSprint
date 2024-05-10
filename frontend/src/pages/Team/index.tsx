@@ -45,7 +45,7 @@ const TeamPage: React.FC = () => {
 
   useEffect(() => {
     teamStore.fetch(Number(id));
-  }, []);
+  }, [id, teamStore]);
 
   const handleCreateSubmit = useCallback(async (projectDto: CreateProjectDto) => {
     try {
@@ -90,7 +90,7 @@ const TeamPage: React.FC = () => {
     } finally {
       modalHandlers.deleteProject.close();
     }
-  }, [teamStore]);
+  }, [modalHandlers.deleteProject, teamStore]);
 
   const handleLeaveTeam = useCallback(async () => {
     try {
