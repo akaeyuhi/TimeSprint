@@ -1,42 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Container, Stack, Typography } from '@mui/material';
 import TaskSection from 'src/components/task/components/TaskSection';
-import { Task } from 'src/models/task.model';
-import { Team } from 'src/models/team.model';
 import TeamList from 'src/components/team/TeamList';
 import { useStores } from 'src/hooks';
-import { User } from 'src/models/user.model';
+import { observer } from 'mobx-react';
+import Loader from 'src/components/loader';
 
 const UserPage: React.FC = () => {
-  const { taskStore, teamStore } = useStores();
+  const { userStore } = useStores();
 
-  const [user, setUser] = useState<User>({
-    id: 3,
-    username: 'alice_smith',
-    email: 'alice@example.com',
-  } as User);
-  const [tasks, setTasks] = useState<Task[]>(taskStore.tasks);
-  const [teams, setTeams] = useState<Team[]>(teamStore.teams);
+  useEffect(() => {
+    userStore.fetch(1);
+  }, []);
 
-  // useEffect(() => {
-  //
-  // }, []);
+  if (userStore.isLoading) return <Loader />;
 
   return (
     <Container>
-      <Typography variant="h4">Welcome, {user && user.username}</Typography>
+      <Typography variant="h4">
+        Welcome, {userStore.currentUser && userStore.currentUser.username}
+      </Typography>
       <Stack mt={4}>
-        <Typography variant="h5">{user.username}&apos;s Tasks</Typography>
+        <Typography variant="h5">{userStore.currentUser.username}&apos;s Tasks</Typography>
       </Stack>
-      <TaskSection tasksArray={tasks} />
+      <TaskSection tasksArray={userStore.currentUser.tasks} />
       <Stack mt={4}>
-        <Typography variant="h5">{user.username}&apos;s Teams</Typography>
+        <Typography variant="h5">{userStore.currentUser.username}&apos;s Teams</Typography>
       </Stack>
       <Stack>
-        <TeamList teams={teams} />
+        <TeamList teams={userStore.currentUser.teams} />
       </Stack>
     </Container>
   );
 };
 
-export default UserPage;
+export default observer(UserPage);
