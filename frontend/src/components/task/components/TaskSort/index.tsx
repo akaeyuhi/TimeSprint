@@ -1,7 +1,8 @@
-import React, { memo, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { SortBy, useSorting } from 'src/hooks/use-sorting';
+import { observer } from 'mobx-react';
 
 interface TaskSorterProps {
   tasks: Task[];
@@ -54,4 +55,4 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
   );
 };
 
-export default memo(TaskSorter);
+export default observer(TaskSorter);

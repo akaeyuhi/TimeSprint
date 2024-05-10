@@ -4,6 +4,7 @@ import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
 import { styles } from 'src/components/task/components/TaskItem/styles';
 import { toast } from 'react-toastify';
+import { observer } from 'mobx-react';
 
 interface TaskItemProps {
   task: Task;
@@ -92,4 +93,4 @@ const TaskItem: React.FC<TaskItemProps> = ({
   );
 };
 
-export default TaskItem;
+export default observer(TaskItem);

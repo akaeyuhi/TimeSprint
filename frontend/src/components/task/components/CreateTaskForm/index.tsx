@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import { CreateTaskDto } from 'src/dto/task/create-task.dto';
 import { Task } from 'src/models/task.model';
 import { User } from 'src/models/user.model';
+import { observer } from 'mobx-react';
 
 interface CreateTaskFormProps {
   onSubmit: (newTask: CreateTaskDto) => void;
@@ -175,4 +176,4 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
   );
 };
 
-export default CreateTaskForm;
+export default observer(CreateTaskForm);

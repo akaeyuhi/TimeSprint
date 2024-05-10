@@ -2,6 +2,7 @@ import { Button, Card, CardActions, CardContent, Typography } from '@mui/materia
 import { styles } from 'src/components/team/TeamItem/styles';
 import { Team } from 'src/models/team.model';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 
 interface TeamItemProps {
   team: Team;
@@ -26,4 +27,4 @@ const TeamItem: React.FC<TeamItemProps> = ({ team }) => (
   </Card>
 );
 
-export default TeamItem;
+export default observer(TeamItem);

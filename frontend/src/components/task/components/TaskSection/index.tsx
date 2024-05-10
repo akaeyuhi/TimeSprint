@@ -6,6 +6,7 @@ import ModalInfo from 'src/components/modalInfo';
 import TaskList from 'src/components/task/components/TaskList';
 import { Task } from 'src/models/task.model';
 import { User } from 'src/models/user.model';
+import { observer } from 'mobx-react';
 
 interface TaskSectionProps {
   tasksArray: Task[],
@@ -69,4 +70,4 @@ const TaskSection: React.FC<TaskSectionProps> = ({
   );
 };
 
-export default TaskSection;
+export default observer(TaskSection);

@@ -5,6 +5,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { Project } from 'src/models/project.model';
 import { UpdateProjectDto } from 'src/dto/project/update-project.dto';
+import { observer } from 'mobx-react';
 
 interface EditProjectFormProps {
   project: Project,
@@ -78,4 +79,4 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ project, onSubmit, on
   );
 };
 
-export default EditProjectForm;
+export default observer(EditProjectForm);

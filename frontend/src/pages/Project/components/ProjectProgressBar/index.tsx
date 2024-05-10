@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Task } from 'src/models/task.model';
 import { Box, Typography } from '@mui/material';
 import LinearProgressWithLabel from 'src/components/progressWithLabel';
+import { observer } from 'mobx-react';
 
 interface ProjectProgressBarProps {
   tasks: Task[];
@@ -25,4 +26,4 @@ const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({ tasks }) => {
   );
 };
 
-export default ProjectProgressBar;
+export default observer(ProjectProgressBar);

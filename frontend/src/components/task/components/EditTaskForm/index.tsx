@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import { Task } from 'src/models/task.model';
 import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
 import { User } from 'src/models/user.model';
+import { observer } from 'mobx-react';
 
 interface EditTaskFormProps {
   task?: Task,
@@ -188,4 +189,4 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
   );
 };
 
-export default EditTaskForm;
+export default observer(EditTaskForm);
