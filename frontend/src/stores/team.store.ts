@@ -4,7 +4,6 @@ import { User } from 'src/models/user.model';
 import { CreateTeamDto } from 'src/dto/team/create-team.dto';
 import { CreateProjectDto } from 'src/dto/project/create-project.dto';
 import { Project } from 'src/models/project.model';
-import { UpdateProjectDto } from 'src/dto/project/update-project.dto';
 
 export class TeamStore {
   @observable error: Error | null = null;
@@ -59,6 +58,11 @@ export class TeamStore {
   @computed
   isMember(user: User) {
     return this.currentTeam.members.includes(user);
+  }
+
+  @get
+  async fetchTeam(teamId: number) {
+    return this.currentTeam;
   }
 
   @get

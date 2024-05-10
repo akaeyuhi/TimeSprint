@@ -114,6 +114,11 @@ export class ProjectStore {
   }
 
   @get
+  fetchProject(projectId: number) {
+    return this.currentProject.tasks;
+  }
+
+  @get
   getProjectTaskById(taskId: number): Task | null {
     return this.currentProject.tasks.find(task => task.id === taskId) ?? null;
   }

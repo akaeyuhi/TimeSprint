@@ -10,6 +10,8 @@ type Auth = {
 
 export class AuthStore {
   @observable auth: Auth = {} as Auth;
+  @observable error: Error | null = null;
+  @observable isLoading = false;
 
   constructor() {
     makeObservable(this);
