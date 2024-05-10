@@ -2,17 +2,18 @@ import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { Project } from 'src/models/project.model';
 import { styles } from 'src/components/modalForm/styles';
+import { observer } from 'mobx-react';
 
 interface DeleteProjectFormProps {
   project: Project | null;
-  onDelete: () => void;
+  onDelete: (projectId: number) => Promise<void>;
   onClose: () => void;
 }
 
 const DeleteProjectForm: React.FC<DeleteProjectFormProps> = ({ project, onDelete, onClose }) => {
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!project) return;
-    onDelete();
+    await onDelete(project.id);
     onClose();
   };
 
@@ -38,4 +39,4 @@ const DeleteProjectForm: React.FC<DeleteProjectFormProps> = ({ project, onDelete
   );
 };
 
-export default DeleteProjectForm;
+export default observer(DeleteProjectForm);
