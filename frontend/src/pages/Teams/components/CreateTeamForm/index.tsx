@@ -4,7 +4,7 @@ import { CreateTeamDto } from 'src/dto/team/create-team.dto';
 import { styles } from 'src/components/modalForm/styles';
 
 interface CreateTeamFormProps {
-  onSubmit: (teamDto: CreateTeamDto) => void;
+  onSubmit: (teamDto: CreateTeamDto) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -12,9 +12,9 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ name, description });
+    await onSubmit({ name, description });
     setName('');
     setDescription('');
   };
