@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import WelcomePage from 'src/pages/Welcome';
 import SignInPage from 'src/pages/SignIn';
 import SignUpPage from 'src/pages/SignUp';
@@ -26,6 +26,7 @@ const Router = () => (
       <Route path="sign-in" element={<SignInPage />} />
       <Route path="sign-up" element={<SignUpPage />} />
     </Route>
+    <Route path="*" element={<Navigate to="/home"/>} />
   </Routes>
 );
 

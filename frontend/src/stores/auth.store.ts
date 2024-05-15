@@ -1,6 +1,6 @@
-import { action, computed, makeObservable, observable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 import { User } from 'src/models/user.model';
+import { makeAutoObservable } from 'mobx';
 
 type Auth = {
   refreshToken: string;
@@ -9,12 +9,12 @@ type Auth = {
 };
 
 export class AuthStore {
-  @observable auth: Auth = {} as Auth;
-  @observable error: Error | null = null;
-  @observable isLoading = false;
+  auth: Auth = {} as Auth;
+  error: Error | null = null;
+  isLoading = false;
 
   constructor() {
-    makeObservable(this);
+    makeAutoObservable(this);
 
     makePersistable(this, {
       name: 'AuthStore',
@@ -23,17 +23,15 @@ export class AuthStore {
     });
   }
 
-  @computed
   get isAuthenticated() {
     return !!this.auth.accessToken;
   }
-
-  @action login() {
+  login() {
     //TODO
     return this.auth;
   }
 
-  @action register() {
+  register() {
     return this.auth;
   }
 }

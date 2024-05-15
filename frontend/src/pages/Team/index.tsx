@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useStores } from 'src/hooks';
 import { styles } from 'src/pages/Team/styles';
-import { CreateProjectDto } from 'src/dto/project/create-project.dto';
+import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User } from 'src/models/user.model';
 import { Project } from 'src/models/project.model';

@@ -58,6 +58,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
               <Typography variant="body2" sx={{ color: task.importance ? 'red' : 'green' }}>
                 Importance: {task.importance ? 'High' : 'Low'}
               </Typography>
+              <Typography variant="body2">
+                Dependencies: {task.dependencies.length}
+              </Typography>
             </Box>
             <Box>
               {task.user && (

@@ -23,7 +23,7 @@ const TaskPage = () => {
         </Box>
       </Stack>
       <TaskSection
-        tasksArray={userStore.currentUser.tasks}
+        tasksArray={userStore.tasks}
       />
     </Container>
   );

@@ -1,20 +1,20 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import TaskItem from '../TaskItem';
 import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
-import { CreateTaskDto } from 'src/dto/task/create-task.dto';
+import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import { toast } from 'react-toastify';
 import EditTaskForm from 'src/components/task/components/EditTaskForm';
 import ModalForm from 'src/components/modalForm';
 import CreateTaskForm from 'src/components/task/components/CreateTaskForm';
-import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
+import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { useStores } from 'src/hooks';
 import { styles } from 'src/components/task/components/TaskList/styles';
 import { User } from 'src/models/user.model';
 import TaskSort from 'src/components/task/components/TaskSort';
 import DeleteTaskForm from 'src/components/task/components/DeleteTaskForm';
-import TaskStore from 'src/stores/base.store';
+import TaskStore from 'src/stores/task.store';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
 
@@ -39,7 +39,9 @@ const TaskList: React.FC<TaskListProps> = ({
   const [deletedTask, setDeletedTask] = useState<Task | null>(null);
   const [listTasks, setListTasks] = useState<Task[]>(tasks);
 
-  if (members) setStore(projectStore);
+  useEffect(() => {
+    if (members) setStore(projectStore);
+  }, [members]);
 
   const createTaskHandler = useCallback(async (createTaskDto: CreateTaskDto) => {
     try {
@@ -68,8 +70,10 @@ const TaskList: React.FC<TaskListProps> = ({
   const deleteTaskHandler = useCallback(async (taskId: number) => {
     try {
       await store.deleteTask(taskId);
+      setListTasks(store.tasks);
       toast.success(`Deleted task! ${deletedTask?.name}`);
     } catch (e) {
+      console.error(e);
       toast.error(`Error occurred! ${store.error}`);
     } finally {
       deleteTask.close();

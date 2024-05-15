@@ -1,6 +1,6 @@
 import { Task } from 'src/models/task.model';
-import { CreateTaskDto } from 'src/dto/task/create-task.dto';
-import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
+import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
+import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 
 export default abstract class TaskStore {
   abstract error: Error | null;

@@ -17,7 +17,7 @@ import { styles } from 'src/components/modalForm/styles';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { Task } from 'src/models/task.model';
-import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
+import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { User } from 'src/models/user.model';
 import { observer } from 'mobx-react';
 

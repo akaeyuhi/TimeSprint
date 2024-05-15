@@ -1,14 +1,14 @@
-import { action, computed, get, makeAutoObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
-import { CreateTeamDto } from 'src/dto/team/create-team.dto';
-import { CreateProjectDto } from 'src/dto/project/create-project.dto';
+import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
+import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
 import { Project } from 'src/models/project.model';
 
 export class TeamStore {
-  @observable error: Error | null = null;
-  @observable isLoading = false;
-  @observable currentTeam: Team = {
+  error: Error | null = null;
+  isLoading = false;
+  currentTeam: Team = {
     id: 1,
     name: 'Team 1',
     description: 'Description for Team 1',
@@ -54,27 +54,22 @@ export class TeamStore {
     makeAutoObservable(this);
   }
 
-  @computed
   isAdmin(user: User) {
     return this.currentTeam.admins.includes(user);
   }
 
-  @computed
   isMember(user: User) {
     return this.currentTeam.members.includes(user);
   }
 
-  @get
   async fetch(teamId: number) {
     return this.currentTeam;
   }
 
-  @get
   getProjects() {
     return this.currentTeam.projects;
   }
 
-  @action
   async createTeam(teamDto: CreateTeamDto) {
     this.isLoading = true;
     this.currentTeam = { ...teamDto } as Team;
@@ -82,7 +77,6 @@ export class TeamStore {
     return this.currentTeam;
   }
 
-  @action
   async createProject(projectDto: CreateProjectDto) {
     this.isLoading = true;
     this.currentTeam.projects.push({ ...projectDto } as Project);
@@ -90,7 +84,6 @@ export class TeamStore {
     return this.currentTeam.projects;
   }
 
-  @action
   async deleteProject(projectId: number) {
     this.isLoading = true;
     const newArray = this.currentTeam.projects.filter(project => project.id !== projectId);
@@ -99,7 +92,6 @@ export class TeamStore {
     return newArray;
   }
 
-  @action
   async addMember(user: User) {
     this.isLoading = true;
     if (!this.isMember(user)) {
@@ -112,7 +104,6 @@ export class TeamStore {
     }
   }
 
-  @action
   async addAdmin(user: User) {
     this.isLoading = true;
     if (!this.isAdmin(user)) {

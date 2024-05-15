@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, FormControl, Input, InputLabel, Stack, Typography } from '@mui/material';
-import { CreateTeamDto } from 'src/dto/team/create-team.dto';
+import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
 import { styles } from 'src/components/modalForm/styles';
 
 interface CreateTeamFormProps {

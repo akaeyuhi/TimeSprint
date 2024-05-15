@@ -1,23 +1,64 @@
-import { action, get, makeAutoObservable, observable } from 'mobx';
+import { makeObservable } from 'mobx';
 import { Project } from 'src/models/project.model';
 import { User } from 'src/models/user.model';
 import { AdminRole } from 'src/models/roles.enum';
-import { UpdateProjectDto } from 'src/dto/project/update-project.dto';
-import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
+import { UpdateProjectDto } from 'src/services/dto/project/update-project.dto';
+import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { Task } from 'src/models/task.model';
-import { CreateTaskDto } from 'src/dto/task/create-task.dto';
-import TaskStore from 'src/stores/base.store';
+import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
+import TaskStore from 'src/stores/task.store';
 
 export class ProjectStore extends TaskStore {
-  @observable error = null;
-  @observable isLoading = false;
-  @observable currentProject: Project = {
+  error = null;
+  isLoading = false;
+  currentProject: Project = {
     id: 1,
     name: 'Project 1',
     description: 'Description for Project 1',
     startDate: new Date(),
     endDate: new Date('2024-05-15'),
     isCompleted: false,
+    team: {
+      id: 1,
+      name: 'Team 1',
+      description: 'Description for Team 1',
+      admins: [
+        { id: 3, username: 'alice_smith', email: 'alice@example.com' } as User,
+        { id: 4, username: 'bob_jones', email: 'bob@example.com' } as User,
+        { id: 5, username: 'alice_smith', email: 'alice@example.com' } as User,
+        { id: 6, username: 'bob_jones', email: 'bob@example.com' } as User,
+        { id: 7, username: 'alice_smith', email: 'alice@example.com' } as User,
+        { id: 8, username: 'bob_jones', email: 'bob@example.com' } as User,
+      ],
+      members: [
+        { id: 3, username: 'alice_smith', email: 'alice@example.com' } as User,
+        { id: 4, username: 'bob_jones', email: 'bob@example.com' } as User,
+        { id: 5, username: 'alice_smith', email: 'alice@example.com' } as User,
+        { id: 6, username: 'bob_jones', email: 'bob@example.com' } as User,
+        { id: 7, username: 'alice_smith', email: 'alice@example.com' } as User,
+        { id: 8, username: 'bob_jones', email: 'bob@example.com' } as User,
+      ],
+      projects: [
+        {
+          id: 1,
+          name: 'Project 1',
+          description: 'Description for Project 1',
+          startDate: new Date(),
+          endDate: new Date('2024-05-15'),
+          isCompleted: false,
+          tasks: [],
+        },
+        {
+          id: 2,
+          name: 'Project 2',
+          description: 'Description for Project 2',
+          startDate: new Date(),
+          endDate: new Date('2024-06-30'),
+          isCompleted: true,
+          tasks: [],
+        },
+      ],
+    },
     tasks: [
       {
         id: 1,
@@ -106,30 +147,26 @@ export class ProjectStore extends TaskStore {
       },
     ],
   };
-  @observable tasks = [] as Task[];
+  tasks = [] as Task[];
 
   constructor() {
     super();
-    makeAutoObservable(this);
+    makeObservable(this);
   }
 
-  @get
   getTasks() {
     return this.currentProject.tasks;
   }
 
-  @get
   async fetch(projectId: number) {
     this.currentProject = { ...this.currentProject };
     this.tasks = this.currentProject.tasks;
   }
 
-  @get
   getTaskById(taskId: number): Task | null {
     return this.currentProject.tasks.find(task => task.id === taskId) ?? null;
   }
 
-  @action
   async createTask(task: CreateTaskDto) {
     this.isLoading = true;
     const newTask = { ...task } as Task;
@@ -138,7 +175,6 @@ export class ProjectStore extends TaskStore {
     return newTask;
   }
 
-  @action
   async updateTask(taskId: number, taskDto: UpdateTaskDto) {
     this.isLoading = true;
     const taskToUpdate = this.getTaskById(taskId);
@@ -147,16 +183,15 @@ export class ProjectStore extends TaskStore {
     return taskToUpdate;
   }
 
-  @action
   async deleteTask(taskId: number) {
     this.isLoading = true;
     const newArray = this.currentProject.tasks.filter(task => task.id !== taskId);
     this.isLoading = false;
     this.currentProject.tasks = newArray;
+    this.tasks = this.currentProject.tasks;
     return taskId;
   }
 
-  @action
   async editProject(projectDto: UpdateProjectDto) {
     this.isLoading = true;
     Object.assign(this.currentProject, projectDto);

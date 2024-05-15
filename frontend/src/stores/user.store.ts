@@ -1,22 +1,65 @@
-import { action, get, makeAutoObservable, observable } from 'mobx';
+import { makeObservable } from 'mobx';
 import { User } from 'src/models/user.model';
-import { CreateTaskDto } from 'src/dto/task/create-task.dto';
+import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import { Task } from 'src/models/task.model';
 import { Team } from 'src/models/team.model';
-import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
-import { CreateTeamDto } from 'src/dto/team/create-team.dto';
-import TaskStore from 'src/stores/base.store';
+import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
+import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
+import TaskStore from 'src/stores/task.store';
 
 
 export class UserStore extends TaskStore {
-  @observable error: Error | null = null;
-  @observable isLoading = false;
-  @observable currentUser: User = {
+ error: Error | null = null;
+  isLoading = false;
+  currentUser: User = {
     id: 8,
     username: 'bob_jones',
     email: 'bob@example.com',
-  } as User;
-  @observable tasks = [{
+    teams: [
+      {
+        id: 1,
+        name: 'Team 1',
+        description: 'Description for Team 1',
+        admins: [
+          { id: 3, username: 'alice_smith', email: 'alice@example.com' } as User,
+          { id: 4, username: 'bob_jones', email: 'bob@example.com' } as User,
+          { id: 5, username: 'alice_smith', email: 'alice@example.com' } as User,
+          { id: 6, username: 'bob_jones', email: 'bob@example.com' } as User,
+          { id: 7, username: 'alice_smith', email: 'alice@example.com' } as User,
+          { id: 8, username: 'bob_jones', email: 'bob@example.com' } as User,
+        ],
+        members: [
+          { id: 3, username: 'alice_smith', email: 'alice@example.com' } as User,
+          { id: 4, username: 'bob_jones', email: 'bob@example.com' } as User,
+          { id: 5, username: 'alice_smith', email: 'alice@example.com' } as User,
+          { id: 6, username: 'bob_jones', email: 'bob@example.com' } as User,
+          { id: 7, username: 'alice_smith', email: 'alice@example.com' } as User,
+          { id: 8, username: 'bob_jones', email: 'bob@example.com' } as User,
+        ],
+        projects: [
+          {
+            id: 1,
+            name: 'Project 1',
+            description: 'Description for Project 1',
+            startDate: new Date(),
+            endDate: new Date('2024-05-15'),
+            isCompleted: false,
+            tasks: [],
+          },
+          {
+            id: 2,
+            name: 'Project 2',
+            description: 'Description for Project 2',
+            startDate: new Date(),
+            endDate: new Date('2024-06-30'),
+            isCompleted: true,
+            tasks: [],
+          },
+        ],
+      },
+    ],
+  } as unknown as User;
+  tasks = [{
     id: 1,
     name: 'Complete project proposal',
     description: 'Prepare and submit the project proposal by the deadline.',
@@ -42,15 +85,13 @@ export class UserStore extends TaskStore {
 
   constructor() {
     super();
-    makeAutoObservable(this);
+    makeObservable(this);
   }
 
-  @get
   async getCurrentUser(): Promise<User> {
     return this.currentUser;
   }
 
-  @get
   async fetch(userId = this.currentUser.id): Promise<void> {
     this.isLoading = true;
     this.currentUser = { ...this.currentUser };
@@ -65,27 +106,22 @@ export class UserStore extends TaskStore {
     this.isLoading = false;
   }
 
-  @get
   getTaskById(taskId: number): Task | null {
     return this.currentUser.tasks.find(task => task.id === taskId) ?? null;
   }
 
-  @get
   getTasks(): Task[] {
     return this.currentUser.tasks;
   }
 
-  @get
   getUserTeamById(teamId: number): Team | null {
     return this.currentUser.teams.find(team => team.id === teamId) ?? null;
   }
 
-  @get
   getUserTeams(): Team[] {
     return this.currentUser.teams;
   }
 
-  @action
   async createTask(task: CreateTaskDto) {
     this.isLoading = true;
     const newTask = { ...task } as Task;
@@ -94,7 +130,6 @@ export class UserStore extends TaskStore {
     return newTask;
   }
 
-  @action
   async updateTask(taskId: number, taskDto: UpdateTaskDto) {
     this.isLoading = true;
     const taskToUpdate = this.getTaskById(taskId);
@@ -103,7 +138,6 @@ export class UserStore extends TaskStore {
     return taskToUpdate;
   }
 
-  @action
   async deleteTask(taskId: number) {
     this.isLoading = true;
     const newArray = this.currentUser.tasks.filter(task => task.id !== taskId);
@@ -112,7 +146,6 @@ export class UserStore extends TaskStore {
     return taskId;
   }
 
-  @action
   async assignTeam(team: Team) {
     this.isLoading = true;
     this.currentUser?.teams.push(team);
@@ -120,7 +153,6 @@ export class UserStore extends TaskStore {
     return team;
   }
 
-  @action
   async leaveTeam(teamId: number) {
     this.isLoading = true;
     this.currentUser.teams = this.currentUser.teams.filter(team => team.id !== teamId);
@@ -128,7 +160,6 @@ export class UserStore extends TaskStore {
     return teamId;
   }
 
-  @action
   async createTeam(teamDto: CreateTeamDto) {
     this.isLoading = true;
     const newTeam = { ...teamDto } as Team;
@@ -137,7 +168,6 @@ export class UserStore extends TaskStore {
     return newTeam;
   }
 
-  // @action
   // async updateTeam(teamId: number, teamDto: UpdateTeamDto) {
   //   this.isLoading = true;
   //   const updated = this.getUserTeamById(teamId)!;
@@ -147,12 +177,10 @@ export class UserStore extends TaskStore {
   // }
 
 
-  @action
   setAuthenticatedUser(user: User) {
     this.currentUser = user;
   }
 
-  @action
   async update(id: number, updateDto: Partial<User>): Promise<User> {
     this.isLoading = true;
     const updatedUser = { ...this.currentUser, ...updateDto };
