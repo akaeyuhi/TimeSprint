@@ -9,17 +9,13 @@ import { observer } from 'mobx-react';
 interface TaskItemProps {
   task: Task;
   editTask: ModalHandler,
-  deleteTask: ModalHandler,
   onEditClick: (task: Task) => void,
-  onDeleteClick: (task: Task) => void,
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
   task,
   editTask,
-  deleteTask,
-  onEditClick,
-  onDeleteClick,
+  onEditClick
 }) => {
 
 
@@ -31,11 +27,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
   const handleEdit = () => {
     editTask.open();
     onEditClick(task);
-  };
-
-  const handleDelete = () => {
-    deleteTask.open();
-    onDeleteClick(task);
   };
 
   return (
@@ -87,7 +78,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           >
             {task.isCompleted ? 'Uncompleted' : 'Completed'}
           </Button>
-          <Button variant="contained" color="error" onClick={handleDelete}>
+          <Button variant="contained" color="error" onClick={handleEdit}>
             Delete
           </Button>
         </CardActions>

@@ -24,7 +24,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
       <Typography variant="h6" gutterBottom>
         Create New Team
       </Typography>
-      <FormControl>
+      <FormControl sx={styles.form}>
         <InputLabel htmlFor="name">Team Name</InputLabel>
         <Input
           id="name"
@@ -33,7 +33,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
           required
           value={name} />
       </FormControl>
-      <FormControl>
+      <FormControl sx={styles.form}>
         <InputLabel htmlFor="description">Team description</InputLabel>
         <Input
           id="description"

@@ -12,7 +12,7 @@ export const styles = createStyleSheet({
     p: 4,
     width: '40vw',
     borderRadius: 2,
-    overflow: 'scroll',
+    overflow: 'scroll'
   },
   buttonContainer: {
     display: 'flex',
@@ -24,10 +24,13 @@ export const styles = createStyleSheet({
   container: {
     width: '100%',
     '& > *': {
-      mb: '1rem',
+      mb: '2rem',
       '& > div': {
         padding: '0 0.5rem ',
       },
     },
   },
+  form: {
+    mt: '1rem'
+  }
 });
