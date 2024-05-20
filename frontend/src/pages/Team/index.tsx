@@ -94,7 +94,7 @@ const TeamPage: React.FC = () => {
 
   const handleLeaveTeam = useCallback(async () => {
     try {
-      const userId = authStore.auth.user.id;
+      const userId = authStore.auth.user.id ?? 1;
       await userStore.fetch(userId);
       await userStore.leaveTeam(teamStore.currentTeam.id);
       navigate('/teams');
@@ -104,7 +104,13 @@ const TeamPage: React.FC = () => {
     } finally {
       modalHandlers.leaveTeam.close();
     }
-  }, [modalHandlers.leaveTeam, navigate, userStore]);
+  }, [
+    modalHandlers.leaveTeam,
+    navigate,
+    teamStore.currentTeam,
+    teamStore.error,
+    userStore
+  ]);
 
   const handleDeleteClick = (project: Project) => {
     setDeleteProject(project);

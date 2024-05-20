@@ -1,3 +1,3 @@
-import { CreateProjectDto } from 'src/dto/project/create-project.dto';
+import { CreateProjectDto } from './create-project.dto';
 
 export type UpdateProjectDto = Partial<CreateProjectDto>

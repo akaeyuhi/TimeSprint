@@ -6,7 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AppConfig } from 'src/utils/components/AppConfig';
 import { DevSupport } from '@react-buddy/ide-toolbox';
-import { ComponentPreviews, useInitial } from 'src/dev';
+import { ComponentPreviews, useInitial } from './dev';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement,
