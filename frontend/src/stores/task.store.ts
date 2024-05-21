@@ -2,6 +2,7 @@ import { Task } from 'src/models/task.model';
 import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { TaskContainer } from 'src/models/task-container.model';
+import { action } from 'mobx';
 
 export default abstract class TaskStore<T extends TaskContainer> {
   abstract error: Error | null;
@@ -21,5 +22,8 @@ export default abstract class TaskStore<T extends TaskContainer> {
 
   abstract deleteTask(taskId: number): Promise<number>;
   abstract toggleTask(taskId: number): Promise<Task | null>;
-  abstract sortTasks(sorted: Task[]): void;
+  @action
+  sortTasks(sorted: Task[]) {
+    this.tasks = sorted;
+  }
 }

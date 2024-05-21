@@ -9,8 +9,8 @@ import TaskStore from 'src/stores/task.store';
 
 
 export class UserStore extends TaskStore<User> {
-  error: Error | null = null;
-  isLoading = false;
+  @observable error: Error | null = null;
+  @observable isLoading = false;
   @observable.deep current: User = {
     id: 8,
     username: 'bob_jones',
@@ -198,10 +198,5 @@ export class UserStore extends TaskStore<User> {
       task.isCompleted = !task.isCompleted;
     }
     return task;
-  }
-
-  @action
-  sortTasks(sorted: Task[]) {
-    this.tasks = [...sorted];
   }
 }

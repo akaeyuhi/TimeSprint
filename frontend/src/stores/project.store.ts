@@ -9,8 +9,8 @@ import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import TaskStore from 'src/stores/task.store';
 
 export class ProjectStore extends TaskStore<Project> {
-  error = null;
-  isLoading = false;
+  @observable error = null;
+  @observable isLoading = false;
   @observable.deep current: Project = {
     id: 1,
     name: 'Project 1',
@@ -221,11 +221,5 @@ export class ProjectStore extends TaskStore<Project> {
       task.isCompleted = !task.isCompleted;
     }
     return task;
-  }
-
-  @action
-  sortTasks(sorted: Task[]) {
-    this.tasks = [...sorted];
-    console.log(this.tasks);
   }
 }
