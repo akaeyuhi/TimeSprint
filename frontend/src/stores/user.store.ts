@@ -1,4 +1,4 @@
-import { makeObservable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { User } from 'src/models/user.model';
 import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import { Task } from 'src/models/task.model';
@@ -8,10 +8,10 @@ import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
 import TaskStore from 'src/stores/task.store';
 
 
-export class UserStore extends TaskStore {
- error: Error | null = null;
+export class UserStore extends TaskStore<User> {
+  error: Error | null = null;
   isLoading = false;
-  currentUser: User = {
+  @observable.deep current: User = {
     id: 8,
     username: 'bob_jones',
     email: 'bob@example.com',
@@ -59,7 +59,7 @@ export class UserStore extends TaskStore {
       },
     ],
   } as unknown as User;
-  tasks = [{
+  @observable.deep tasks = [{
     id: 1,
     name: 'Complete project proposal',
     description: 'Prepare and submit the project proposal by the deadline.',
@@ -89,47 +89,49 @@ export class UserStore extends TaskStore {
   }
 
   async getCurrentUser(): Promise<User> {
-    return this.currentUser;
+    return this.current;
   }
 
-  async fetch(userId = this.currentUser.id): Promise<void> {
+  @action
+  async fetch(userId = this.current.id): Promise<void> {
     this.isLoading = true;
-    this.currentUser = { ...this.currentUser };
-    this.tasks = this.currentUser.tasks;
+    this.current = { ...this.current };
     this.isLoading = false;
   };
 
+  @action
   async fetchByUsername(username: string): Promise<void> {
     this.isLoading = true;
-    this.currentUser = { ...this.currentUser };
-    this.tasks = this.currentUser.tasks;
+    this.current = { ...this.current };
     this.isLoading = false;
   }
 
   getTaskById(taskId: number): Task | null {
-    return this.currentUser.tasks.find(task => task.id === taskId) ?? null;
+    return this.tasks.find(task => task.id === taskId) ?? null;
   }
 
   getTasks(): Task[] {
-    return this.currentUser.tasks;
+    return this.current.tasks;
   }
 
   getUserTeamById(teamId: number): Team | null {
-    return this.currentUser.teams.find(team => team.id === teamId) ?? null;
+    return this.current.teams.find(team => team.id === teamId) ?? null;
   }
 
   getUserTeams(): Team[] {
-    return this.currentUser.teams;
+    return this.current.teams;
   }
 
+  @action
   async createTask(task: CreateTaskDto) {
     this.isLoading = true;
     const newTask = { ...task } as Task;
     this.isLoading = false;
-    this.currentUser?.tasks.push(newTask);
+    this.tasks.push(newTask);
     return newTask;
   }
 
+  @action
   async updateTask(taskId: number, taskDto: UpdateTaskDto) {
     this.isLoading = true;
     const taskToUpdate = this.getTaskById(taskId);
@@ -138,32 +140,36 @@ export class UserStore extends TaskStore {
     return taskToUpdate;
   }
 
+  @action
   async deleteTask(taskId: number) {
     this.isLoading = true;
-    const newArray = this.currentUser.tasks.filter(task => task.id !== taskId);
+    const newArray = this.tasks.filter(task => task.id !== taskId);
     this.isLoading = false;
-    this.currentUser.tasks = newArray;
+    this.tasks = newArray;
     return taskId;
   }
 
+  @action
   async assignTeam(team: Team) {
     this.isLoading = true;
-    this.currentUser?.teams.push(team);
+    this.current?.teams.push(team);
     this.isLoading = false;
     return team;
   }
 
+  @action
   async leaveTeam(teamId: number) {
     this.isLoading = true;
-    this.currentUser.teams = this.currentUser.teams.filter(team => team.id !== teamId);
+    this.current.teams = this.current.teams.filter(team => team.id !== teamId);
     this.isLoading = false;
     return teamId;
   }
 
+  @action
   async createTeam(teamDto: CreateTeamDto) {
     this.isLoading = true;
     const newTeam = { ...teamDto } as Team;
-    this.currentUser.teams.push(newTeam);
+    this.current.teams.push(newTeam);
     this.isLoading = false;
     return newTeam;
   }
@@ -176,16 +182,26 @@ export class UserStore extends TaskStore {
   //   return updated;
   // }
 
-
-  setAuthenticatedUser(user: User) {
-    this.currentUser = user;
-  }
-
+  @action
   async update(id: number, updateDto: Partial<User>): Promise<User> {
     this.isLoading = true;
-    const updatedUser = { ...this.currentUser, ...updateDto };
-    this.currentUser = updatedUser as User;
+    const updatedUser = { ...this.current, ...updateDto };
+    this.current = updatedUser as User;
     this.isLoading = false;
     return Promise.resolve(updatedUser as User);
+  }
+
+  @action
+  async toggleTask(taskId: number): Promise<Task | null> {
+    const task = this.getTaskById(taskId);
+    if (task) {
+      task.isCompleted = !task.isCompleted;
+    }
+    return task;
+  }
+
+  @action
+  sortTasks(sorted: Task[]) {
+    this.tasks = [...sorted];
   }
 }

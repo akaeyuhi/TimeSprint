@@ -1,4 +1,4 @@
-import { makeObservable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import { Project } from 'src/models/project.model';
 import { User } from 'src/models/user.model';
 import { AdminRole } from 'src/models/roles.enum';
@@ -8,10 +8,10 @@ import { Task } from 'src/models/task.model';
 import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import TaskStore from 'src/stores/task.store';
 
-export class ProjectStore extends TaskStore {
+export class ProjectStore extends TaskStore<Project> {
   error = null;
   isLoading = false;
-  currentProject: Project = {
+  @observable.deep current: Project = {
     id: 1,
     name: 'Project 1',
     description: 'Description for Project 1',
@@ -147,7 +147,15 @@ export class ProjectStore extends TaskStore {
       },
     ],
   };
-  tasks = [] as Task[];
+  @observable.deep tasks = [] as Task[];
+
+  @computed
+  get progress(): number {
+    const totalTasks = this.tasks.length;
+    if (totalTasks === 0) return 0; // Avoid division by zero
+    const completedTasks = this.tasks.filter(task => task.isCompleted).length;
+    return (completedTasks / totalTasks) * 100;
+  }
 
   constructor() {
     super();
@@ -155,26 +163,31 @@ export class ProjectStore extends TaskStore {
   }
 
   getTasks() {
-    return this.currentProject.tasks;
+    return this.current.tasks;
   }
 
+  @action
   async fetch(projectId: number) {
-    this.currentProject = { ...this.currentProject };
-    this.tasks = this.currentProject.tasks;
+    this.isLoading = true;
+    this.current = { ...this.current };
+    this.tasks = this.current.tasks;
+    this.isLoading = false;
   }
 
   getTaskById(taskId: number): Task | null {
-    return this.currentProject.tasks.find(task => task.id === taskId) ?? null;
+    return this.current.tasks.find(task => task.id === taskId) ?? null;
   }
 
+  @action
   async createTask(task: CreateTaskDto) {
     this.isLoading = true;
     const newTask = { ...task } as Task;
     this.isLoading = false;
-    this.currentProject.tasks.push(newTask);
+    this.current.tasks.push(newTask);
     return newTask;
   }
 
+  @action
   async updateTask(taskId: number, taskDto: UpdateTaskDto) {
     this.isLoading = true;
     const taskToUpdate = this.getTaskById(taskId);
@@ -183,19 +196,36 @@ export class ProjectStore extends TaskStore {
     return taskToUpdate;
   }
 
+  @action
   async deleteTask(taskId: number) {
     this.isLoading = true;
-    const newArray = this.currentProject.tasks.filter(task => task.id !== taskId);
+    const newArray = this.current.tasks.filter(task => task.id !== taskId);
     this.isLoading = false;
-    this.currentProject.tasks = newArray;
-    this.tasks = this.currentProject.tasks;
+    this.current.tasks = newArray;
+    this.tasks = this.current.tasks;
     return taskId;
   }
 
+  @action
   async editProject(projectDto: UpdateProjectDto) {
     this.isLoading = true;
-    Object.assign(this.currentProject, projectDto);
+    Object.assign(this.current, projectDto);
     this.isLoading = false;
-    return this.currentProject;
+    return this.current;
+  }
+
+  @action
+  async toggleTask(taskId: number): Promise<Task | null> {
+    const task = this.getTaskById(taskId);
+    if (task) {
+      task.isCompleted = !task.isCompleted;
+    }
+    return task;
+  }
+
+  @action
+  sortTasks(sorted: Task[]) {
+    this.tasks = [...sorted];
+    console.log(this.tasks);
   }
 }
