@@ -31,7 +31,7 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
     setSorting(e.target.value as SortBy);
   };
 
-  useEffect(() => onSort(sorted), [onSort, sorted]);
+  useEffect(() => onSort(sorted), [sorted]);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

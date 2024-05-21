@@ -96,7 +96,7 @@ const TaskList: React.FC<TaskListProps> = ({
   }, [store]);
 
   const onSort = (newTasks: Task[]) => {
-    //store.sortTasks(newTasks);
+    store.sortTasks(newTasks);
   };
 
   const onEditClick = (task: Task) => {
