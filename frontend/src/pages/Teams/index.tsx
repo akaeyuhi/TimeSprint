@@ -53,7 +53,7 @@ const TeamsPage: React.FC = () => {
           Create Team
         </Button>
       </Box>
-      <TeamList teams={userStore.currentUser.teams} />
+      <TeamList teams={userStore.current.teams} />
       <ModalForm
         open={modalHandlers.createTeam.isOpen}
         handleClose={modalHandlers.createTeam.close}

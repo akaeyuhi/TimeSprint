@@ -7,13 +7,13 @@ import Loader from 'src/components/loader';
 
 
 const TaskPage = () => {
-  const { userStore } = useStores();
+  const { userStore: store } = useStores();
 
   useEffect(() => {
-    userStore.fetch(1);
-  }, [userStore]);
+    store.fetch(1);
+  }, []);
 
-  if (userStore.isLoading) return <Loader />;
+  if (store.isLoading) return <Loader />;
 
   return (
     <Container>
@@ -22,9 +22,7 @@ const TaskPage = () => {
           <Typography variant="h4">Your tasks:</Typography>
         </Box>
       </Stack>
-      <TaskSection
-        tasksArray={userStore.tasks}
-      />
+      <TaskSection isProjectPage={false} tasksLength={store.tasks.length}/>
     </Container>
   );
 };

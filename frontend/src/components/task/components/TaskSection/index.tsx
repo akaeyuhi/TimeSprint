@@ -1,45 +1,45 @@
 import React, { useState } from 'react';
 import { useModals } from 'src/hooks/use-modals';
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { styles } from 'src/pages/Team/styles';
 import ModalInfo from 'src/components/modalInfo';
 import TaskList from 'src/components/task/components/TaskList';
-import { Task } from 'src/models/task.model';
-import { User } from 'src/models/user.model';
-import { observer } from 'mobx-react';
 
 interface TaskSectionProps {
-  tasksArray: Task[],
-  members?: User[],
+  isProjectPage: boolean,
+  tasksLength: number,
 }
 
 interface TaskModals {
-  tasks: boolean,
   createTask: boolean,
   editTask: boolean,
   deleteTask: boolean,
+  tasks: boolean,
 }
 
 const TaskSection: React.FC<TaskSectionProps> = ({
-  tasksArray,
-  members,
+  isProjectPage,
+  tasksLength,
 }) => {
-  const [taskModals, setTaskModals] = useState({
-    tasks: false,
+  const [taskModals, setTaskModals] = useState<TaskModals>({
     createTask: false,
     editTask: false,
     deleteTask: false,
+    tasks: false,
   });
 
   const modalHandlers = useModals<TaskModals>(taskModals, setTaskModals);
 
   return (
     <Stack mt={2}>
+      <Typography variant="h5" gutterBottom>
+        Tasks
+      </Typography>
       <Box sx={styles.controlsBox}>
         <Button variant="contained" color="primary" onClick={modalHandlers.createTask.open}>
           Create new task
         </Button>
-        {tasksArray.length ? <Button variant="outlined"
+        {tasksLength > 3 ? <Button variant="outlined"
           color="primary"
           onClick={modalHandlers.tasks.open}>
           View All Tasks
@@ -47,11 +47,9 @@ const TaskSection: React.FC<TaskSectionProps> = ({
       </Box>
       <Stack>
         <TaskList
-          tasks={tasksArray.slice(0, 6)}
-          members={members}
-          editTask={modalHandlers.editTask}
-          createTask={modalHandlers.createTask}
-          deleteTask={modalHandlers.deleteTask}
+          isProjectPage={isProjectPage}
+          taskCount={3}
+          {...modalHandlers}
         />
       </Stack>
       <ModalInfo
@@ -59,15 +57,12 @@ const TaskSection: React.FC<TaskSectionProps> = ({
         handleClose={modalHandlers.tasks.close}
         title="All tasks">
         <TaskList
-          tasks={tasksArray}
-          members={members}
-          editTask={modalHandlers.editTask}
-          createTask={modalHandlers.createTask}
-          deleteTask={modalHandlers.deleteTask}
+          isProjectPage={isProjectPage}
+          {...modalHandlers}
         />
       </ModalInfo>
     </Stack>
   );
 };
 
-export default observer(TaskSection);
+export default TaskSection;

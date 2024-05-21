@@ -61,7 +61,7 @@ const TeamPage: React.FC = () => {
   const handleAddUserSubmit = useCallback(async (username: string) => {
     try {
       await userStore.fetchByUsername(username);
-      await teamStore.addMember(userStore.currentUser);
+      await teamStore.addMember(userStore.current);
       toast.success(`Added new member! ${username}!`);
     } catch (e) {
       toast.error(`Error occurred: ${teamStore.error ?? userStore.error}!`);

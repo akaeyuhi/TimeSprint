@@ -30,7 +30,7 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose
       <Typography variant="h6" mb={1}>
         Create New Project
       </Typography>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel htmlFor="name">Project Name</InputLabel>
         <Input
           id="name"
@@ -39,7 +39,7 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose
           required
           value={formData.name} />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <InputLabel htmlFor="description">Project description</InputLabel>
         <Input
           id="description"
@@ -50,14 +50,14 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose
           required
           value={formData.description} />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <DatePicker
           label="Start date"
           onChange={(newValue) =>
             setFormData({ ...formData, startDate: newValue?.toDate() ?? new Date() })}
           value={dayjs(formData.startDate)} />
       </FormControl>
-      <FormControl sx={styles.form}>
+      <FormControl>
         <DatePicker
           label="End date"
           onChange={(newValue) =>

@@ -8,7 +8,7 @@ import { UpdateProjectDto } from 'src/services/dto/project/update-project.dto';
 import TaskSection from 'src/components/task/components/TaskSection';
 import { toast } from 'react-toastify';
 import ProjectProgressBar from 'src/pages/Project/components/ProjectProgressBar';
-import EditProjectForm from 'src/pages/Project/components/EditForm';
+import EditProjectForm from 'src/pages/Project/components/EditProjectForm';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
 
@@ -23,11 +23,13 @@ const ProjectPage = () => {
   const [projectModals, setProjectModals] = useState<ProjectModals>({
     edit: false,
   });
+
   const modalHandlers = useModals<ProjectModals>(projectModals, setProjectModals);
 
   useEffect(() => {
     projectStore.fetch(Number(id));
   }, [id, projectStore]);
+
 
   const handleEditSubmit = useCallback(async (updateProjectDto: UpdateProjectDto) => {
     try {
@@ -48,15 +50,15 @@ const ProjectPage = () => {
       <Stack>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box>
-            <Typography variant="h4">{projectStore.currentProject.name}</Typography>
+            <Typography variant="h4">{projectStore.current.name}</Typography>
             <Typography variant="body1" mt={1}>
-              {projectStore.currentProject.description}
+              {projectStore.current.description}
             </Typography>
             <Typography variant="body2" sx={{ color: 'green' }}>
-              Started: {projectStore.currentProject.startDate.toDateString()}
+              Started: {projectStore.current.startDate.toDateString()}
             </Typography>
             <Typography variant="body2" sx={{ color: 'red' }}>
-              Due: {projectStore.currentProject.endDate.toDateString()}
+              Due: {projectStore.current.endDate.toDateString()}
             </Typography>
           </Box>
           <Box>
@@ -65,20 +67,14 @@ const ProjectPage = () => {
         </Box>
         <ModalForm open={projectModals.edit} handleClose={modalHandlers.edit.close}>
           <EditProjectForm
-            project={projectStore.currentProject}
+            project={projectStore.current}
             onSubmit={handleEditSubmit}
             onCancel={modalHandlers.edit.close}
           />
         </ModalForm>
       </Stack>
-      <ProjectProgressBar tasks={projectStore.currentProject.tasks} />
-      <Typography variant="h5" gutterBottom mt={1}>
-        Tasks
-      </Typography>
-      <TaskSection
-        members={projectStore.currentProject.team?.members}
-        tasksArray={projectStore.currentProject.tasks}
-      />
+      <ProjectProgressBar progress={projectStore.progress} />
+      <TaskSection isProjectPage tasksLength={projectStore.current.tasks.length}/>
     </Container>
   );
 };

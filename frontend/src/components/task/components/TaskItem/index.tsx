@@ -1,27 +1,40 @@
 import React from 'react';
-import { Avatar, Box, Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Typography
+} from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
 import { styles } from 'src/components/task/components/TaskItem/styles';
-import { toast } from 'react-toastify';
 import { observer } from 'mobx-react';
 
 interface TaskItemProps {
-  task: Task;
+  task: Task,
   editTask: ModalHandler,
   onEditClick: (task: Task) => void,
+  onDeleteClick: (task: Task) => void,
+  onToggle: (taskId: number) => void,
+  deleteTask: ModalHandler
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
   task,
   editTask,
-  onEditClick
+  onEditClick,
+  onToggle,
+  deleteTask,
+  onDeleteClick
 }) => {
 
 
   const toggleTask = () => {
-    task.isCompleted = !task.isCompleted;
-    toast.success(task.isCompleted);
+    onToggle(task.id);
   };
 
   const handleEdit = () => {
@@ -29,8 +42,13 @@ const TaskItem: React.FC<TaskItemProps> = ({
     onEditClick(task);
   };
 
+  const handleDelete = () => {
+    deleteTask.open();
+    onDeleteClick(task);
+  };
+
   return (
-    <>
+    <Grid item xs={6} md={4}>
       <Card sx={{ ...styles.card, ...(task.isCompleted && { textDecoration: 'line-through' }) }}>
         <CardContent>
           <Box sx={styles.descriptionContainer}>
@@ -64,8 +82,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
               )}
             </Box>
           </Box>
-
-
         </CardContent>
         <CardActions>
           <Button variant="contained" color="primary" onClick={handleEdit}>
@@ -78,12 +94,12 @@ const TaskItem: React.FC<TaskItemProps> = ({
           >
             {task.isCompleted ? 'Uncompleted' : 'Completed'}
           </Button>
-          <Button variant="contained" color="error" onClick={handleEdit}>
+          <Button variant="contained" color="error" onClick={handleDelete}>
             Delete
           </Button>
         </CardActions>
       </Card>
-    </>
+    </Grid>
   );
 };
 
