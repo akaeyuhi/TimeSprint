@@ -1,13 +1,15 @@
 import { Task } from 'src/models/task.model';
 import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
+import { TaskContainer } from 'src/models/task-container.model';
 
-export default abstract class TaskStore {
+export default abstract class TaskStore<T extends TaskContainer> {
   abstract error: Error | null;
   abstract isLoading: boolean;
+  abstract current: T;
   abstract tasks: Task[];
 
-  abstract fetch(id: number): Promise<void>;
+  abstract fetch(id?: number): Promise<void>;
 
   abstract getTasks(): Task[];
 
@@ -18,4 +20,6 @@ export default abstract class TaskStore {
   abstract updateTask(taskId: number, taskDto: UpdateTaskDto): Promise<Task | null>;
 
   abstract deleteTask(taskId: number): Promise<number>;
+  abstract toggleTask(taskId: number): Promise<Task | null>;
+  abstract sortTasks(sorted: Task[]): void;
 }
