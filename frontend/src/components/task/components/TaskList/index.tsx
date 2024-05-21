@@ -45,7 +45,7 @@ const TaskList: React.FC<TaskListProps> = ({
 
   useEffect(() => {
     store.fetch();
-  }, []);
+  }, [store]);
 
   const members = (store.current as Project).team?.members;
 

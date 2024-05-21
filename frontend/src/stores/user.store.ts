@@ -199,4 +199,9 @@ export class UserStore extends TaskStore<User> {
     }
     return task;
   }
+
+  @action
+  sortTasks(sorted: Task[]) {
+    this.tasks = sorted;
+  }
 }

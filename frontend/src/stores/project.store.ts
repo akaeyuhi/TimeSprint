@@ -222,4 +222,9 @@ export class ProjectStore extends TaskStore<Project> {
     }
     return task;
   }
+
+  @action
+  sortTasks(sorted: Task[]) {
+    this.tasks = sorted;
+  }
 }
