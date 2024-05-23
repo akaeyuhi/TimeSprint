@@ -168,7 +168,12 @@ export class UserStore extends TaskStore<User> {
   @action
   async createTeam(teamDto: CreateTeamDto) {
     this.isLoading = true;
-    const newTeam = { ...teamDto } as Team;
+    const newTeam = { ...teamDto,
+      members: [],
+      admins: [],
+      projects: [],
+      id: 999
+    } as unknown as Team;
     this.current.teams.push(newTeam);
     this.isLoading = false;
     return newTeam;
