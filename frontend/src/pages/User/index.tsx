@@ -7,28 +7,31 @@ import { observer } from 'mobx-react';
 import Loader from 'src/components/loader';
 
 const UserPage: React.FC = () => {
-  const { userStore: store } = useStores();
+  const { userStore: store, authStore } = useStores();
 
   useEffect(() => {
     store.fetch(1);
   }, []);
 
-  if (store.isLoading) return <Loader />;
+  if (store.isLoading || !store.current) return <Loader />;
+
+  const isOwnPage = false && store.current?.id !== authStore.auth?.user?.id;
+  const getWelcomeText = () => (isOwnPage ?
+    (`Welcome, ${store.current && store.current?.username}`) :
+    (`${store.current && store.current?.username}'s page`));
+
 
   return (
     <Container>
       <Typography variant="h4">
-        Welcome, {store.current && store.current.username}
+        {getWelcomeText()}
       </Typography>
+      <TaskSection isEditable={isOwnPage} isProjectPage={false}/>
       <Stack mt={4}>
-        <Typography variant="h5">{store.current.username}&apos;s Tasks</Typography>
-      </Stack>
-      <TaskSection tasksLength={store.tasks.length} isProjectPage={false}/>
-      <Stack mt={4}>
-        <Typography variant="h5">{store.current.username}&apos;s Teams</Typography>
+        <Typography variant="h5">Teams</Typography>
       </Stack>
       <Stack>
-        <TeamList teams={store.current.teams} />
+        <TeamList teams={store.current?.teams} />
       </Stack>
     </Container>
   );
