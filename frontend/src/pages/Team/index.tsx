@@ -22,6 +22,8 @@ interface TeamModals {
   deleteProject: boolean,
   addUser: boolean,
   addAdmin: boolean,
+  deleteUser: false,
+  deleteAdmin: false,
   leaveTeam: boolean,
 }
 
@@ -35,6 +37,8 @@ const TeamPage: React.FC = () => {
     deleteProject: false,
     addUser: false,
     addAdmin: false,
+    deleteUser: false,
+    deleteAdmin: false,
     leaveTeam: false,
   });
   const { authStore, userStore, teamStore } = useStores();
@@ -42,6 +46,7 @@ const TeamPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [deleteProject, setDeleteProject] = useState<Project | null>(null);
+  const [deleteUser, setDeleteUser] = useState(0);
 
   useEffect(() => {
     teamStore.fetch(Number(id));
@@ -117,6 +122,16 @@ const TeamPage: React.FC = () => {
     modalHandlers.deleteProject.open();
   };
 
+  const handleDeleteUser = (id: number) => {
+    setDeleteUser(id);
+    modalHandlers.deleteUser.open();
+  };
+
+  const handleDeleteAdmin = (id: number) => {
+    setDeleteUser(id);
+    modalHandlers.deleteAdmin.open();
+  };
+
   if (teamStore.isLoading) return <Loader />;
 
   return (
@@ -133,7 +148,12 @@ const TeamPage: React.FC = () => {
         team={teamStore.currentTeam}
         handleDeleteClick={handleDeleteClick}
         {...modalHandlers} />
-      <MembersSection team={teamStore.currentTeam} {...modalHandlers} />
+      <MembersSection
+        team={teamStore.currentTeam}
+        onDeleteUser={handleDeleteUser}
+        onDeleteAdmin={handleDeleteUser}
+        {...modalHandlers}
+      />
       <Modals
         handleCreateSubmit={handleCreateSubmit}
         handleAddUserSubmit={handleAddUserSubmit}
