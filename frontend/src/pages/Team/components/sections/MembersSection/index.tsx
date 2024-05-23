@@ -13,6 +13,8 @@ interface MembersSectionProps {
   addUser: ModalHandler,
   addAdmin: ModalHandler
   team: Team,
+  onDeleteUser: (id: number) => void,
+  onDeleteAdmin: (id: number) => void,
 }
 
 
@@ -22,6 +24,8 @@ const MembersSection: React.FC<MembersSectionProps> = ({
   addUser,
   addAdmin,
   team,
+  onDeleteUser,
+  onDeleteAdmin
 }) => (
   <>
     <Stack>
@@ -78,13 +82,13 @@ const MembersSection: React.FC<MembersSectionProps> = ({
       open={members.isOpen}
       handleClose={members.close}
       title="Team Members">
-      <MemberList members={team.members} />
+      <MemberList members={team.members} onDelete={onDeleteUser} />
     </ModalInfo>
     <ModalInfo
       open={admins.isOpen}
       handleClose={admins.close}
       title="Team Admins">
-      <MemberList members={team.admins} />
+      <MemberList members={team.admins} onDelete={onDeleteAdmin} />
     </ModalInfo>
   </>
 );
