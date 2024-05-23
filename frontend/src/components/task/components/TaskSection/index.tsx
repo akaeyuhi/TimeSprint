@@ -32,7 +32,7 @@ const TaskSection: React.FC<TaskSectionProps> = ({
       <Typography variant="h4" gutterBottom>
         Tasks
       </Typography>
-      { isEditable && <Box sx={styles.controlsBox}>
+      {isEditable && <Box sx={styles.controlsBox}>
         <Button variant="contained" color="primary" onClick={modalHandlers.createTask.open}>
           Create new task
         </Button>

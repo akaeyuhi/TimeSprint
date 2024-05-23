@@ -26,7 +26,7 @@ const UserPage: React.FC = () => {
       <Typography variant="h4">
         {getWelcomeText()}
       </Typography>
-      <TaskSection isEditable={isOwnPage} isProjectPage={false}/>
+      <TaskSection isEditable={isOwnPage} isProjectPage={false} />
       <Stack mt={4}>
         <Typography variant="h5">Teams</Typography>
       </Stack>

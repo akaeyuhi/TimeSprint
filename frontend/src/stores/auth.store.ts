@@ -26,6 +26,7 @@ export class AuthStore {
   get isAuthenticated() {
     return !!this.auth.accessToken;
   }
+
   login() {
     //TODO
     return this.auth;

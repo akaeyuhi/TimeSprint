@@ -25,7 +25,7 @@ const MembersSection: React.FC<MembersSectionProps> = ({
   addAdmin,
   team,
   onDeleteUser,
-  onDeleteAdmin
+  onDeleteAdmin,
 }) => (
   <>
     <Stack>

@@ -149,17 +149,17 @@ export class ProjectStore extends TaskStore<Project> {
   };
   @observable.deep tasks = [] as Task[];
 
+  constructor() {
+    super();
+    makeObservable(this);
+  }
+
   @computed
   get progress(): number {
     const totalTasks = this.tasks.length;
     if (totalTasks === 0) return 0; // Avoid division by zero
     const completedTasks = this.tasks.filter(task => task.isCompleted).length;
     return (completedTasks / totalTasks) * 100;
-  }
-
-  constructor() {
-    super();
-    makeObservable(this);
   }
 
   getTasks() {

@@ -114,7 +114,7 @@ const TeamPage: React.FC = () => {
     navigate,
     teamStore.currentTeam,
     teamStore.error,
-    userStore
+    userStore,
   ]);
 
   const handleDeleteClick = (project: Project) => {

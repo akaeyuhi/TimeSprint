@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Grid, Typography, Box, Button } from '@mui/material';
+import { Avatar, Box, Grid, Typography } from '@mui/material';
 import { styles } from 'src/pages/Team/styles';
 import { User } from 'src/models/user.model';
 

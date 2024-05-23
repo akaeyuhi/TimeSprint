@@ -15,7 +15,7 @@ const DeleteModal = <T extends Item, >({
   item,
   onDelete,
   onClose,
-  children
+  children,
 }: DeleteModalProps<T>) => {
   const handleDelete = async () => {
     if (!item) return;

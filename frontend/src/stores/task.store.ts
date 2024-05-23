@@ -20,6 +20,8 @@ export default abstract class TaskStore<T extends TaskContainer> {
   abstract updateTask(taskId: number, taskDto: UpdateTaskDto): Promise<Task | null>;
 
   abstract deleteTask(taskId: number): Promise<number>;
+
   abstract toggleTask(taskId: number): Promise<Task | null>;
+
   abstract sortTasks(tasks: Task[]): void;
 }

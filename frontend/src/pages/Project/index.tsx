@@ -74,7 +74,7 @@ const ProjectPage = () => {
         </ModalForm>
       </Stack>
       <ProjectProgressBar progress={projectStore.progress} />
-      <TaskSection isProjectPage isEditable/>
+      <TaskSection isProjectPage isEditable />
     </Container>
   );
 };

@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  Typography
-} from '@mui/material';
+import { Avatar, Box, Button, Card, CardActions, CardContent, Grid, Typography } from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
 import { styles } from 'src/components/task/components/TaskItem/styles';
@@ -31,7 +22,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
   onToggle,
   deleteTask,
   onDeleteClick,
-  isEditable
+  isEditable,
 }) => {
 
 
