@@ -15,14 +15,16 @@ import { observer } from 'mobx-react';
 interface TaskSorterProps {
   tasks: Task[];
   onSort: (tasks: Task[]) => void;
-  isUserPage: boolean;
+  isEditable: boolean;
+  isProjectPage: boolean;
   handleGetImportantTasks?: () => void;
 }
 
 const TaskSorter: React.FC<TaskSorterProps> = ({
   tasks,
   onSort,
-  isUserPage,
+  isEditable,
+  isProjectPage,
   handleGetImportantTasks,
 }) => {
   const [sortBy, setSorting, sorted] = useSorting(tasks);
@@ -53,7 +55,7 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
         </Select>
       </FormControl>
       <Box>
-        {isUserPage && (
+        {(isEditable && !isProjectPage) && (
           <Button variant="contained" onClick={handleGetImportantTasks}>
             Get Important Tasks
           </Button>

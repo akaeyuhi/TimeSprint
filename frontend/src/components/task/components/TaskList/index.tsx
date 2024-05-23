@@ -12,7 +12,7 @@ import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { useStores } from 'src/hooks';
 import { styles } from 'src/components/task/components/TaskList/styles';
 import TaskSort from 'src/components/task/components/TaskSort';
-import DeleteTaskForm from 'src/components/task/components/DeleteTaskForm';
+import DeleteTaskForm from 'src/components/task/components/DeleteTaskModal';
 import TaskStore from 'src/stores/task.store';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
@@ -21,18 +21,18 @@ import { Project } from 'src/models/project.model';
 
 interface TaskListProps {
   isProjectPage: boolean,
+  isEditable: boolean,
   createTask: ModalHandler,
   editTask: ModalHandler,
   deleteTask: ModalHandler,
-  taskCount?: number,
 }
 
 const TaskList: React.FC<TaskListProps> = ({
-  isProjectPage,
+  isProjectPage = false,
+  isEditable = true,
   createTask,
   editTask,
   deleteTask,
-  taskCount,
 }) => {
   const { userStore, projectStore } = useStores();
   const [store, setStore] = useState<TaskStore<TaskContainer>>(userStore);
@@ -116,9 +116,14 @@ const TaskList: React.FC<TaskListProps> = ({
       ) : (
         <Grid container spacing={2} mt={1} alignItems="stretch">
           <Grid item xs={12}>
-            <TaskSort isUserPage={!isProjectPage} onSort={onSort} tasks={store.tasks} />
+            <TaskSort
+              isEditable={isEditable}
+              isProjectPage={isProjectPage}
+              onSort={onSort}
+              tasks={store.tasks}
+            />
           </Grid>
-          {store.tasks.slice(0, taskCount ?? store.tasks.length).map(task => (
+          {store.tasks.map(task => (
             <TaskItem
               key={task.id}
               task={task}
@@ -127,6 +132,7 @@ const TaskList: React.FC<TaskListProps> = ({
               deleteTask={deleteTask}
               onDeleteClick={onDeleteClick}
               onToggle={toggleTaskHandler}
+              isEditable={isEditable}
             />
           ))}
         </Grid>

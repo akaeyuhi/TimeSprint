@@ -20,7 +20,8 @@ interface TaskItemProps {
   onEditClick: (task: Task) => void,
   onDeleteClick: (task: Task) => void,
   onToggle: (taskId: number) => void,
-  deleteTask: ModalHandler
+  deleteTask: ModalHandler,
+  isEditable: boolean,
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
@@ -29,7 +30,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
   onEditClick,
   onToggle,
   deleteTask,
-  onDeleteClick
+  onDeleteClick,
+  isEditable
 }) => {
 
 
@@ -83,7 +85,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
             </Box>
           </Box>
         </CardContent>
-        <CardActions>
+        {isEditable && <CardActions>
           <Button variant="contained" color="primary" onClick={handleEdit}>
             Edit
           </Button>
@@ -97,7 +99,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           <Button variant="contained" color="error" onClick={handleDelete}>
             Delete
           </Button>
-        </CardActions>
+        </CardActions>}
       </Card>
     </Grid>
   );
