@@ -1,32 +1,34 @@
 import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { Project } from 'src/models/project.model';
 import { styles } from 'src/components/modalForm/styles';
 import { observer } from 'mobx-react';
+import { Item } from 'src/models/item.model';
 
-interface DeleteProjectFormProps {
-  project: Project | null;
-  onDelete: (projectId: number) => Promise<void>;
+interface DeleteModalProps<T extends Item> {
+  item: T | null;
+  onDelete: (id: number) => Promise<void>;
   onClose: () => void;
+  children: React.ReactNode;
 }
 
-const DeleteProjectForm: React.FC<DeleteProjectFormProps> = ({ project, onDelete, onClose }) => {
+const DeleteModal = <T extends Item, >({
+  item,
+  onDelete,
+  onClose,
+  children
+}: DeleteModalProps<T>) => {
   const handleDelete = async () => {
-    if (!project) return;
-    await onDelete(project.id);
+    if (!item) return;
+    await onDelete(item.id);
     onClose();
   };
 
   return (
     <Stack component="form" sx={styles.container}>
-      <Typography variant="h6" mb={1}>Confirm Project Deletion</Typography>
+      <Typography variant="h6" mb={1}>Confirm Deletion</Typography>
       <Box>
-        <Typography variant="body1">
-          Are you sure you want to delete project &quot;{project?.name}&quot;?
-          This action is irreversible.
-        </Typography>
+        {children}
       </Box>
-
       <Box sx={styles.buttonContainer}>
         <Button onClick={handleDelete} variant="contained" color="error">
           Delete
@@ -39,4 +41,4 @@ const DeleteProjectForm: React.FC<DeleteProjectFormProps> = ({ project, onDelete
   );
 };
 
-export default observer(DeleteProjectForm);
+export default observer(DeleteModal);
