@@ -12,6 +12,7 @@ interface ProjectsSectionProps {
   projects: ModalHandler,
   team: Team,
   handleDeleteClick: (project: Project) => void,
+  isAdmin?: boolean;
 }
 
 const ProjectsSection: React.FC<ProjectsSectionProps> = ({
@@ -19,6 +20,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   projects,
   team,
   handleDeleteClick,
+  isAdmin = false,
 }) => (
   <>
     <Stack>
@@ -26,9 +28,9 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         Projects
       </Typography>
       <Box sx={styles.controlsBox}>
-        <Button variant="outlined" color="primary" onClick={createProject.open}>
+        {isAdmin && <Button variant="outlined" color="primary" onClick={createProject.open}>
           Create new Project
-        </Button>
+        </Button>}
         {team.projects.length ? <Button variant="outlined"
           color="primary"
           onClick={projects.open}>
@@ -36,13 +38,17 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         </Button> : <></>}
       </Box>
       <Stack>
-        <ProjectList projects={team.projects.slice(0, 5)} onDelete={handleDeleteClick} />
+        <ProjectList
+          isAdmin={isAdmin}
+          projects={team.projects.slice(0, 5)}
+          onDelete={handleDeleteClick}
+        />
       </Stack>
       <ModalInfo
         open={projects.isOpen}
         handleClose={projects.close}
         title="Team projects">
-        <ProjectList projects={team.projects} onDelete={handleDeleteClick} />
+        <ProjectList isAdmin={isAdmin} projects={team.projects} onDelete={handleDeleteClick} />
       </ModalInfo>
     </Stack>
   </>

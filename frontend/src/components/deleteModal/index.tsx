@@ -1,29 +1,33 @@
 import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
-import { Task } from 'src/models/task.model';
+import { observer } from 'mobx-react';
+import { Item } from 'src/models/item.model';
 
-interface DeleteTaskFormProps {
-  task: Task | null;
-  onDelete: () => void;
+interface DeleteModalProps<T extends Item> {
+  item: T | null;
+  onDelete: (id: number) => Promise<void>;
   onClose: () => void;
+  children: React.ReactNode;
 }
 
-const DeleteTaskForm: React.FC<DeleteTaskFormProps> = ({ task, onDelete, onClose }) => {
-  const handleDelete = () => {
-    if (!task) return;
-    onDelete();
+const DeleteModal = <T extends Item, >({
+  item,
+  onDelete,
+  onClose,
+  children,
+}: DeleteModalProps<T>) => {
+  const handleDelete = async () => {
+    if (!item) return;
+    await onDelete(item.id);
     onClose();
   };
 
   return (
     <Stack component="form" sx={styles.container}>
-      <Typography variant="h6" mb={1}>Confirm Project Deletion</Typography>
+      <Typography variant="h6" mb={1}>Confirm Deletion</Typography>
       <Box>
-        <Typography variant="body1">
-          Are you sure you want to delete this task?
-          This action is irreversible.
-        </Typography>
+        {children}
       </Box>
       <Box sx={styles.buttonContainer}>
         <Button onClick={handleDelete} variant="contained" color="error">
@@ -37,4 +41,4 @@ const DeleteTaskForm: React.FC<DeleteTaskFormProps> = ({ task, onDelete, onClose
   );
 };
 
-export default DeleteTaskForm;
+export default observer(DeleteModal);

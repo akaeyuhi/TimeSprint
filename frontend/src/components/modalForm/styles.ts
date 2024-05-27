@@ -26,7 +26,7 @@ export const styles = createStyleSheet({
     '& > *': {
       mb: '1rem',
       '& > div': {
-        padding: '0 0.5rem ',
+        padding: '0 0.2rem ',
       },
     },
   },

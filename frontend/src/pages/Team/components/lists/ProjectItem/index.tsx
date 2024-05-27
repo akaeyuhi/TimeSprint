@@ -6,10 +6,11 @@ import { Link } from 'react-router-dom';
 
 interface ProjectItemProps {
   project: Project;
+  isAdmin?: boolean;
   onDelete: (project: Project) => void;
 }
 
-const ProjectItem: React.FC<ProjectItemProps> = ({ project, onDelete }) => (
+const ProjectItem: React.FC<ProjectItemProps> = ({ project, onDelete, isAdmin = false }) => (
   <Card sx={{ ...styles.card, opacity: project.isCompleted ? 0.7 : 1 }} variant="outlined">
     <CardContent>
       <Typography variant="h6">{project.name}</Typography>
@@ -22,9 +23,10 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ project, onDelete }) => (
           Go to Project Page
         </Button>
       </Link>
-      <Button variant="contained" color="error" sx={{ mt: 1 }} onClick={() => onDelete(project)}>
+      {isAdmin &&
+        <Button variant="contained" color="error" sx={{ mt: 1 }} onClick={() => onDelete(project)}>
         Delete project
-      </Button>
+        </Button>}
     </CardActions>
 
   </Card>

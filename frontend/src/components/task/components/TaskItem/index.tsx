@@ -1,30 +1,33 @@
 import React from 'react';
-import { Avatar, Box, Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, CardActions, CardContent, Grid, Typography } from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
 import { styles } from 'src/components/task/components/TaskItem/styles';
-import { toast } from 'react-toastify';
+import { observer } from 'mobx-react';
 
 interface TaskItemProps {
-  task: Task;
+  task: Task,
   editTask: ModalHandler,
-  deleteTask: ModalHandler,
   onEditClick: (task: Task) => void,
   onDeleteClick: (task: Task) => void,
+  onToggle: (taskId: number) => void,
+  deleteTask: ModalHandler,
+  isEditable: boolean,
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
   task,
   editTask,
-  deleteTask,
   onEditClick,
+  onToggle,
+  deleteTask,
   onDeleteClick,
+  isEditable,
 }) => {
 
 
   const toggleTask = () => {
-    task.isCompleted = !task.isCompleted;
-    toast.success(task.isCompleted);
+    onToggle(task.id);
   };
 
   const handleEdit = () => {
@@ -38,7 +41,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
   };
 
   return (
-    <>
+    <Grid item xs={6} md={4}>
       <Card sx={{ ...styles.card, ...(task.isCompleted && { textDecoration: 'line-through' }) }}>
         <CardContent>
           <Box sx={styles.descriptionContainer}>
@@ -57,6 +60,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
               <Typography variant="body2" sx={{ color: task.importance ? 'red' : 'green' }}>
                 Importance: {task.importance ? 'High' : 'Low'}
               </Typography>
+              <Typography variant="body2">
+                Dependencies: {task.dependencies.length}
+              </Typography>
             </Box>
             <Box>
               {task.user && (
@@ -69,10 +75,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
               )}
             </Box>
           </Box>
-
-
         </CardContent>
-        <CardActions>
+        {isEditable && <CardActions>
           <Button variant="contained" color="primary" onClick={handleEdit}>
             Edit
           </Button>
@@ -86,10 +90,10 @@ const TaskItem: React.FC<TaskItemProps> = ({
           <Button variant="contained" color="error" onClick={handleDelete}>
             Delete
           </Button>
-        </CardActions>
+        </CardActions>}
       </Card>
-    </>
+    </Grid>
   );
 };
 
-export default TaskItem;
+export default observer(TaskItem);

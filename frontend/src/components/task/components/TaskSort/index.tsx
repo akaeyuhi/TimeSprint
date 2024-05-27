@@ -1,19 +1,22 @@
-import React, { memo, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { SortBy, useSorting } from 'src/hooks/use-sorting';
+import { observer } from 'mobx-react';
 
 interface TaskSorterProps {
   tasks: Task[];
   onSort: (tasks: Task[]) => void;
-  isUserPage: boolean;
+  isEditable: boolean;
+  isProjectPage: boolean;
   handleGetImportantTasks?: () => void;
 }
 
 const TaskSorter: React.FC<TaskSorterProps> = ({
   tasks,
   onSort,
-  isUserPage,
+  isEditable,
+  isProjectPage,
   handleGetImportantTasks,
 }) => {
   const [sortBy, setSorting, sorted] = useSorting(tasks);
@@ -22,7 +25,7 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
     setSorting(e.target.value as SortBy);
   };
 
-  useEffect(() => onSort(sorted), [onSort, sorted]);
+  useEffect(() => onSort(sorted), [sorted]);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -44,7 +47,7 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
         </Select>
       </FormControl>
       <Box>
-        {isUserPage && (
+        {(isEditable && !isProjectPage) && (
           <Button variant="contained" onClick={handleGetImportantTasks}>
             Get Important Tasks
           </Button>
@@ -54,4 +57,4 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
   );
 };
 
-export default memo(TaskSorter);
+export default observer(TaskSorter);

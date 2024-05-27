@@ -6,6 +6,7 @@ import { styles } from 'src/pages/Team/styles';
 import { stringAvatar } from 'src/utils/common/stringAvatar';
 import ModalInfo from 'src/components/modalInfo';
 import { MemberList } from 'src/pages/Team/components/lists/MemberList';
+import { User } from 'src/models/user.model';
 
 interface MembersSectionProps {
   members: ModalHandler,
@@ -13,6 +14,9 @@ interface MembersSectionProps {
   addUser: ModalHandler,
   addAdmin: ModalHandler
   team: Team,
+  isAdmin?: boolean,
+  onDeleteUser: (user: User) => void,
+  onDeleteAdmin: (user: User) => void,
 }
 
 
@@ -22,6 +26,9 @@ const MembersSection: React.FC<MembersSectionProps> = ({
   addUser,
   addAdmin,
   team,
+  isAdmin = false,
+  onDeleteUser,
+  onDeleteAdmin,
 }) => (
   <>
     <Stack>
@@ -32,14 +39,14 @@ const MembersSection: React.FC<MembersSectionProps> = ({
         <Button variant="outlined" color="primary" onClick={members.open}>
           View All
         </Button>
-        <Button
+        {isAdmin && <Button
           variant="outlined"
           color="primary"
           onClick={addUser?.open}
           sx={{ ml: '0.5rem' }}
         >
           Add new member
-        </Button>
+        </Button>}
       </Box>
       <Box sx={styles.avatarBox}>
         <AvatarGroup max={10}>
@@ -57,14 +64,15 @@ const MembersSection: React.FC<MembersSectionProps> = ({
         <Button variant="outlined" color="primary" onClick={admins?.open}>
           View All
         </Button>
-        <Button
+        {isAdmin && <Button
           variant="outlined"
           color="primary"
           onClick={addAdmin?.open}
           sx={{ ml: '0.5rem' }}
         >
           Add new admin
-        </Button>
+        </Button>}
+
       </Box>
       <Box sx={styles.avatarBox}>
         <AvatarGroup max={10}>
@@ -78,13 +86,13 @@ const MembersSection: React.FC<MembersSectionProps> = ({
       open={members.isOpen}
       handleClose={members.close}
       title="Team Members">
-      <MemberList members={team.members} />
+      <MemberList isAdmin={isAdmin} members={team.members} onDelete={onDeleteUser} />
     </ModalInfo>
     <ModalInfo
       open={admins.isOpen}
       handleClose={admins.close}
       title="Team Admins">
-      <MemberList members={team.admins} />
+      <MemberList isAdmin={isAdmin} members={team.admins} onDelete={onDeleteAdmin} />
     </ModalInfo>
   </>
 );

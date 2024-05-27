@@ -4,7 +4,8 @@ import { styles } from 'src/components/modalForm/styles';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { Project } from 'src/models/project.model';
-import { UpdateProjectDto } from 'src/dto/project/update-project.dto';
+import { UpdateProjectDto } from 'src/services/dto/project/update-project.dto';
+import { observer } from 'mobx-react';
 
 interface EditProjectFormProps {
   project: Project,
@@ -78,4 +79,4 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ project, onSubmit, on
   );
 };
 
-export default EditProjectForm;
+export default observer(EditProjectForm);

@@ -1,70 +1,54 @@
 import React, { useState } from 'react';
 import { useModals } from 'src/hooks/use-modals';
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { styles } from 'src/pages/Team/styles';
-import ModalInfo from 'src/components/modalInfo';
 import TaskList from 'src/components/task/components/TaskList';
-import { Task } from 'src/models/task.model';
-import { User } from 'src/models/user.model';
 
 interface TaskSectionProps {
-  tasksArray: Task[],
-  members?: User[],
+  isProjectPage: boolean,
+  isEditable?: boolean,
+  isAdmin?: boolean,
 }
 
 interface TaskModals {
-  tasks: boolean,
   createTask: boolean,
   editTask: boolean,
   deleteTask: boolean,
 }
 
 const TaskSection: React.FC<TaskSectionProps> = ({
-  tasksArray,
-  members,
+  isProjectPage,
+  isEditable = false,
+  isAdmin = false,
 }) => {
-  const [taskModals, setTaskModals] = useState({
-    tasks: false,
+  const [taskModals, setTaskModals] = useState<TaskModals>({
     createTask: false,
     editTask: false,
     deleteTask: false,
   });
 
+  const isProjectAdmin = isProjectPage && isAdmin;
+
   const modalHandlers = useModals<TaskModals>(taskModals, setTaskModals);
 
   return (
     <Stack mt={2}>
-      <Box sx={styles.controlsBox}>
+      <Typography variant="h4" gutterBottom>
+        Tasks
+      </Typography>
+      {(isEditable || isProjectAdmin) && <Box sx={styles.controlsBox}>
         <Button variant="contained" color="primary" onClick={modalHandlers.createTask.open}>
           Create new task
         </Button>
-        {tasksArray.length ? <Button variant="outlined"
-          color="primary"
-          onClick={modalHandlers.tasks.open}>
-          View All Tasks
-        </Button> : <></>}
-      </Box>
+      </Box>}
       <Stack>
         <TaskList
-          tasks={tasksArray.slice(0, 6)}
-          members={members}
-          editTask={modalHandlers.editTask}
-          createTask={modalHandlers.createTask}
-          deleteTask={modalHandlers.deleteTask}
+          isProjectPage={isProjectPage}
+          isEditable={isEditable}
+          isAdmin={isAdmin}
+          {...modalHandlers}
         />
       </Stack>
-      <ModalInfo
-        open={modalHandlers.tasks.isOpen}
-        handleClose={modalHandlers.tasks.close}
-        title="All tasks">
-        <TaskList
-          tasks={tasksArray}
-          members={members}
-          editTask={modalHandlers.editTask}
-          createTask={modalHandlers.createTask}
-          deleteTask={modalHandlers.deleteTask}
-        />
-      </ModalInfo>
     </Stack>
   );
 };

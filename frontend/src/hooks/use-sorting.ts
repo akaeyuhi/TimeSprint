@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Task } from 'src/models/task.model';
 
 export enum SortBy {
@@ -11,27 +11,32 @@ export enum SortBy {
   UNCOMPLETED = 'uncompleted'
 }
 
-type ReturnType = [SortBy, React.Dispatch<React.SetStateAction<SortBy>>, Task[]]
+export const useSorting = (initialTasks: Task[]) => {
+  const [sortBy, setSortBy] = useState<SortBy>(SortBy.NAME);
+  const [sorted, setSorted] = useState<Task[]>(initialTasks);
 
-export const useSorting = (tasks: Task[]): ReturnType => {
-  const [sortingBy, setSortingBy] = useState<SortBy>(SortBy.EMPTY);
-  const sorted = useMemo(() => {
-    switch (sortingBy) {
+  useEffect(() => {
+    const sortedTasks = [...initialTasks];
+    switch (sortBy) {
     case SortBy.NAME:
-      return tasks.slice().sort((a, b) =>
-        a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+      sortedTasks.sort((a, b) => a.name.localeCompare(b.name));
+      break;
     case SortBy.URGENCY:
-      return tasks.slice().sort((b, a) =>
-        (Number(a.urgency) - Number(b.urgency)));
+      sortedTasks.sort((a, b) => Number(a.urgency) - Number(b.urgency));
+      break;
     case SortBy.IMPORTANCE:
-      return tasks.slice().sort((b, a) =>
-        (Number(a.importance) - Number(b.importance)));
+      sortedTasks.sort((a, b) => Number(a.importance) - Number(b.importance));
+      break;
     case SortBy.DEADLINE:
-      return tasks.slice().sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
-    default:
-      return tasks;
+      sortedTasks.sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
+      break;
     }
-  }, [sortingBy, tasks]);
+    setSorted(sortedTasks);
+  }, [sortBy, initialTasks]);
 
-  return [sortingBy, setSortingBy, sorted];
+  const setSorting = (sort: SortBy) => {
+    setSortBy(sort);
+  };
+
+  return [sortBy, setSorting, sorted] as const;
 };

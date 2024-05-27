@@ -1,10 +1,8 @@
 import { User } from 'src/models/user.model';
 import { Project } from 'src/models/project.model';
+import { Item } from 'src/models/item.model';
 
-export interface Task {
-  id: number;
-  name: string;
-  description: string;
+export interface Task extends Item {
   urgency: boolean;
   importance: boolean;
   startDate: Date;

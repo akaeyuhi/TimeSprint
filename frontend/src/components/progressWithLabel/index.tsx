@@ -1,6 +1,7 @@
 import { Box, LinearProgress, LinearProgressProps, Typography } from '@mui/material';
+import { observer } from 'mobx-react';
 
-export default function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
+function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ width: '100%', mr: 1 }}>
@@ -14,3 +15,5 @@ export default function LinearProgressWithLabel(props: LinearProgressProps & { v
     </Box>
   );
 }
+
+export default observer(LinearProgressWithLabel);

@@ -1,54 +1,105 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import TaskItem from '../TaskItem';
 import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
-import { CreateTaskDto } from 'src/dto/task/create-task.dto';
+import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import { toast } from 'react-toastify';
 import EditTaskForm from 'src/components/task/components/EditTaskForm';
 import ModalForm from 'src/components/modalForm';
 import CreateTaskForm from 'src/components/task/components/CreateTaskForm';
-import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
+import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { useStores } from 'src/hooks';
 import { styles } from 'src/components/task/components/TaskList/styles';
-import { User } from 'src/models/user.model';
 import TaskSort from 'src/components/task/components/TaskSort';
-import DeleteTaskForm from 'src/components/task/components/DeleteTaskForm';
+import DeleteTaskForm from 'src/components/task/components/DeleteTaskModal';
+import TaskStore from 'src/stores/task.store';
+import Loader from 'src/components/loader';
+import { observer } from 'mobx-react';
+import { TaskContainer } from 'src/models/task-container.model';
+import { Project } from 'src/models/project.model';
 
 interface TaskListProps {
-  tasks: Task[];
-  members?: User[];
-  createTask: ModalHandler
+  isProjectPage: boolean,
+  isEditable: boolean,
+  isAdmin?: boolean,
+  createTask: ModalHandler,
   editTask: ModalHandler,
   deleteTask: ModalHandler,
 }
 
 const TaskList: React.FC<TaskListProps> = ({
-  tasks,
-  members,
+  isProjectPage = false,
+  isEditable = true,
+  isAdmin = false,
   createTask,
   editTask,
   deleteTask,
 }) => {
-  const { taskStore } = useStores();
-  const [editedTask, setEditedTask] = useState<Task>();
+  const { userStore, projectStore } = useStores();
+  const [store, setStore] = useState<TaskStore<TaskContainer>>(userStore);
+  const [editedTask, setEditedTask] = useState<Task | null>(null);
   const [deletedTask, setDeletedTask] = useState<Task | null>(null);
-  const [listTasks, setListTasks] = useState<Task[]>(tasks);
 
-  const createTaskHandler = (createTaskDto: CreateTaskDto) => {
-    console.log('created task', createTaskDto);
-    toast.success(`Created task! ${createTaskDto.name}`);
-    createTask.close();
-  };
-  const submitEditHandler = (taskId: number, updatedTask: UpdateTaskDto) => {
-    const task = taskStore.tasks.find(task => task.id === taskId);
-    if (task) {
-      Object.assign(task, updatedTask);
-      toast.success(`Updated task! ${updatedTask.name}`);
-      console.log(task);
+  useEffect(() => {
+    if (isProjectPage) setStore(projectStore);
+  }, [isProjectPage, projectStore]);
+
+  useEffect(() => {
+    store.fetch();
+  }, [store]);
+
+  const members = (store.current as Project).team?.members;
+  const isProjectAdmin = isProjectPage && isAdmin;
+
+  const createTaskHandler = useCallback(async (createTaskDto: CreateTaskDto) => {
+    try {
+      await store.createTask(createTaskDto);
+      toast.success(`Created task! ${createTaskDto.name}`);
+    } catch (e) {
+      toast.error(`Error occurred! ${store.error}`);
+    } finally {
+      createTask.close();
     }
-    editTask.close();
-    setEditedTask(undefined);
+  }, [createTask, store]);
+
+  const submitEditHandler = useCallback(async (taskId: number, updatedTask: UpdateTaskDto) => {
+    try {
+      await store.updateTask(taskId, updatedTask);
+      toast.success(`Edited task! ${updatedTask.name}`);
+    } catch (e) {
+      toast.error(`Error occurred! ${store.error}`);
+    } finally {
+      editTask.close();
+      setEditedTask(null);
+    }
+  }, [editTask, store]);
+
+  const deleteTaskHandler = useCallback(async (taskId: number) => {
+    try {
+      await store.deleteTask(taskId);
+      toast.success(`Deleted task! ${deletedTask?.name}`);
+    } catch (e) {
+      console.error(e);
+      toast.error(`Error occurred! ${store.error}`);
+    } finally {
+      deleteTask.close();
+      setDeletedTask(null);
+    }
+  }, [deleteTask, deletedTask?.name, store]);
+
+  const toggleTaskHandler = useCallback(async (taskId: number) => {
+    try {
+      await store.toggleTask(taskId);
+      toast.success(`Toggled task!`);
+    } catch (e) {
+      console.error(e);
+      toast.error(`Error occurred! ${store.error}`);
+    }
+  }, [store]);
+
+  const onSort = (newTasks: Task[]) => {
+    store.sortTasks(newTasks);
   };
 
   const onEditClick = (task: Task) => {
@@ -59,37 +110,33 @@ const TaskList: React.FC<TaskListProps> = ({
     setDeletedTask(task);
   };
 
-  const onTaskDelete = () => {
-    if (deletedTask) {
-      taskStore.tasks = taskStore.tasks.filter((task) => task.id !== deletedTask.id);
-    }
-    deleteTask.close();
-    setDeletedTask(null);
-  };
-
-  const onSort = (newTasks: Task[]) => {
-    setListTasks(newTasks);
-  };
+  if (store.isLoading || !store.tasks) return <Loader />;
 
   return (
     <Box sx={styles.container}>
-      {tasks.length === 0 ? (
+      {store.tasks.length === 0 ? (
         <Typography variant="body1">No tasks available</Typography>
       ) : (
-        <Grid container spacing={2} mt={1}>
+        <Grid container spacing={2} mt={1} alignItems="stretch">
           <Grid item xs={12}>
-            <TaskSort isUserPage={!!members} onSort={onSort} tasks={listTasks} />
+            <TaskSort
+              isEditable={isEditable}
+              isProjectPage={isProjectPage}
+              onSort={onSort}
+              tasks={store.tasks}
+            />
           </Grid>
-          {listTasks.map(task => (
-            <Grid item key={task.id} xs={6} md={4}>
-              <TaskItem
-                task={task}
-                editTask={editTask}
-                onEditClick={onEditClick}
-                deleteTask={deleteTask}
-                onDeleteClick={onDeleteClick}
-              />
-            </Grid>
+          {store.tasks.map(task => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              editTask={editTask}
+              onEditClick={onEditClick}
+              deleteTask={deleteTask}
+              onDeleteClick={onDeleteClick}
+              onToggle={toggleTaskHandler}
+              isEditable={isEditable || isProjectAdmin}
+            />
           ))}
         </Grid>
       )}
@@ -98,14 +145,14 @@ const TaskList: React.FC<TaskListProps> = ({
           onCancel={createTask.close}
           members={members}
           onSubmit={createTaskHandler}
-          tasks={listTasks}
+          tasks={store.tasks}
         />
       </ModalForm>
       <ModalForm open={editTask.isOpen} handleClose={editTask.close}>
         <EditTaskForm
           task={editedTask}
           members={members}
-          tasks={listTasks}
+          tasks={store.tasks}
           onCancel={editTask.close}
           onSubmit={submitEditHandler}
         />
@@ -113,11 +160,11 @@ const TaskList: React.FC<TaskListProps> = ({
       <ModalForm open={deleteTask.isOpen} handleClose={deleteTask.close}>
         <DeleteTaskForm
           task={deletedTask}
-          onDelete={onTaskDelete}
+          onDelete={deleteTaskHandler}
           onClose={deleteTask.close} />
       </ModalForm>
     </Box>
   );
 };
 
-export default TaskList;
+export default observer(TaskList);

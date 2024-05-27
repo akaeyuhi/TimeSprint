@@ -16,9 +16,10 @@ import {
 import { styles } from 'src/components/modalForm/styles';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import { CreateTaskDto } from 'src/dto/task/create-task.dto';
+import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import { Task } from 'src/models/task.model';
 import { User } from 'src/models/user.model';
+import { observer } from 'mobx-react';
 
 interface CreateTaskFormProps {
   onSubmit: (newTask: CreateTaskDto) => void;
@@ -63,7 +64,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
 
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6" gutterBottom mb={1}>
         Create Task
       </Typography>
       <FormControl>
@@ -175,4 +176,4 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
   );
 };
 
-export default CreateTaskForm;
+export default observer(CreateTaskForm);

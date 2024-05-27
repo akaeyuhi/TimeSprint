@@ -1,13 +1,10 @@
 import { Team } from './team.model';
-import { Task } from 'src/models/task.model';
+import { TaskContainer } from 'src/models/task-container.model';
+import { Item } from 'src/models/item.model';
 
-export interface Project {
-  id: number;
-  name: string;
-  description: string;
+export interface Project extends TaskContainer, Item {
   startDate: Date;
   endDate: Date;
   isCompleted: boolean;
   team?: Team;
-  tasks: Task[];
 }

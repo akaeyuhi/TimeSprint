@@ -17,11 +17,12 @@ import { styles } from 'src/components/modalForm/styles';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { Task } from 'src/models/task.model';
-import { UpdateTaskDto } from 'src/dto/task/update-task.dto';
+import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { User } from 'src/models/user.model';
+import { observer } from 'mobx-react';
 
 interface EditTaskFormProps {
-  task?: Task,
+  task: Task | null,
   members?: User[],
   onSubmit: (taskId: number, updatedTask: UpdateTaskDto) => void,
   onCancel: () => void,
@@ -36,19 +37,15 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
   tasks,
 }) => {
   const [formData, setFormData] = useState<UpdateTaskDto>({
-    name: task?.name,
-    description: task?.description,
-    urgency: task?.urgency,
-    importance: task?.importance,
-    startDate: task?.startDate,
-    endDate: task?.endDate,
-    dependencies: task?.dependencies,
+    name: task?.name ?? '',
+    description: task?.description ?? '',
+    urgency: task?.urgency ?? false,
+    importance: task?.importance ?? false,
+    startDate: task?.startDate ?? new Date(),
+    endDate: task?.endDate ?? new Date(),
+    dependencies: task?.dependencies ?? [],
     user: task?.user,
   });
-
-  if (!task) {
-    return <>{'Error'}</>;
-  }
 
   const selectStyle = {
     maxHeight: 224,
@@ -56,7 +53,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
   };
 
   const handleDependencyChange = (event: SelectChangeEvent<Task[]>) => {
-    const dependencies = [...task.dependencies, ...event.target.value as Task[]];
+    const dependencies = [...task?.dependencies as [], ...event.target.value as Task[]];
     //const taskDeps = taskStore.getTaskArrayByIds(dependencies);
     setFormData({ ...formData, dependencies });
   };
@@ -68,14 +65,14 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(task.id, {
+    onSubmit(Number(task?.id), {
       ...formData,
     });
   };
 
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6" gutterBottom mb={1}>
         Edit Task
       </Typography>
       <FormControl>
@@ -188,4 +185,4 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
   );
 };
 
-export default EditTaskForm;
+export default observer(EditTaskForm);
