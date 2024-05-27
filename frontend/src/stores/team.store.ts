@@ -55,11 +55,15 @@ export class TeamStore {
   }
 
   isAdmin(user: User) {
-    return this.currentTeam.admins.includes(user);
+    return !!this.currentTeam.admins.find(admin => admin.id === user.id);
   }
 
   isMember(user: User) {
-    return this.currentTeam.members.includes(user);
+    return this.currentTeam.members.find(member => member.id === user.id);
+  }
+
+  getUserById(id: number) {
+    return this.currentTeam.members.find(member => member.id === id);
   }
 
   async fetch(teamId: number) {
@@ -116,5 +120,38 @@ export class TeamStore {
     }
   }
 
+  async deleteUser(userId: number): Promise<void> {
+    this.isLoading = true;
+    const user = this.getUserById(userId);
+    if (user && !this.isAdmin(user)) {
+      this.currentTeam.members = this.currentTeam.members.filter(member => member.id !== userId);
+      this.isLoading = false;
+      return;
+    }
+    if (user && this.isAdmin(user)) {
+      this.error = new Error('This user has admin privilege');
+      this.isLoading = false;
+    } else {
+      this.error = new Error('User does not exist');
+      this.isLoading = false;
+    }
 
+  }
+
+  async deleteAdmin(userId: number): Promise<void> {
+    this.isLoading = true;
+    const user = this.getUserById(userId);
+    if (user && this.isAdmin(user)) {
+      this.currentTeam.admins = this.currentTeam.admins.filter(admin => admin.id !== userId);
+      this.isLoading = false;
+      return;
+    }
+    if (user && !this.isAdmin(user)) {
+      this.error = new Error('This user has no admin privilege');
+      this.isLoading = false;
+    } else {
+      this.error = new Error('User does not exist');
+      this.isLoading = false;
+    }
+  }
 }
