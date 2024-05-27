@@ -46,11 +46,22 @@ const TeamPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [deleteProject, setDeleteProject] = useState<Project | null>(null);
-  const [deleteUser, setDeleteUser] = useState(0);
+  const [deleteUser, setDeleteUser] = useState<User | null>(null);
+  const [isCurrentAdmin, setIsCurrentAdmin] = useState(false);
 
   useEffect(() => {
     teamStore.fetch(Number(id));
   }, [id, teamStore]);
+
+  useEffect(() => {
+    console.log(authStore.auth);
+    const currentUser = teamStore.getUserById(3);
+    if (!currentUser) {
+      toast.error('Something went wrong');
+      return;
+    }
+    setIsCurrentAdmin(teamStore.isAdmin(currentUser));
+  }, [authStore.auth?.user?.id, teamStore]);
 
   const handleCreateSubmit = useCallback(async (projectDto: CreateProjectDto) => {
     try {
@@ -117,18 +128,42 @@ const TeamPage: React.FC = () => {
     userStore,
   ]);
 
+  const handleDeleteUser = useCallback(async (userId: number) => {
+    try {
+      await teamStore.deleteUser(userId);
+      toast.success(`Deleted user!`);
+    } catch (e) {
+      toast.error(`Error occurred: ${teamStore.error}!`);
+    } finally {
+      modalHandlers.deleteUser.close();
+      setDeleteUser(null);
+    }
+  }, [modalHandlers.deleteUser, teamStore]);
+
+  const handleDeleteAdmin = useCallback(async (userId: number) => {
+    try {
+      await teamStore.deleteAdmin(userId);
+      toast.success(`Deleted admin!`);
+    } catch (e) {
+      toast.error(`Error occurred: ${teamStore.error}!`);
+    } finally {
+      modalHandlers.deleteAdmin.close();
+      setDeleteUser(null);
+    }
+  }, [modalHandlers.deleteAdmin, teamStore]);
+
   const handleDeleteClick = (project: Project) => {
     setDeleteProject(project);
     modalHandlers.deleteProject.open();
   };
 
-  const handleDeleteUser = (id: number) => {
-    setDeleteUser(id);
+  const handleDeleteUserClick = (user: User) => {
+    setDeleteUser(user);
     modalHandlers.deleteUser.open();
   };
 
-  const handleDeleteAdmin = (id: number) => {
-    setDeleteUser(id);
+  const handleDeleteAdminClick = (user: User) => {
+    setDeleteUser(user);
     modalHandlers.deleteAdmin.open();
   };
 
@@ -147,14 +182,19 @@ const TeamPage: React.FC = () => {
       <ProjectsSection
         team={teamStore.currentTeam}
         handleDeleteClick={handleDeleteClick}
-        {...modalHandlers} />
+        isAdmin={isCurrentAdmin}
+        {...modalHandlers}
+      />
       <MembersSection
         team={teamStore.currentTeam}
-        onDeleteUser={handleDeleteUser}
-        onDeleteAdmin={handleDeleteUser}
+        onDeleteUser={handleDeleteUserClick}
+        onDeleteAdmin={handleDeleteAdminClick}
+        isAdmin={isCurrentAdmin}
         {...modalHandlers}
       />
       <Modals
+        handleDeleteUser={handleDeleteUser}
+        handleDeleteAdmin={handleDeleteAdmin}
         handleCreateSubmit={handleCreateSubmit}
         handleAddUserSubmit={handleAddUserSubmit}
         handleAddAdminSubmit={handleAddAdminSubmit}
@@ -162,6 +202,7 @@ const TeamPage: React.FC = () => {
         handleLeaveTeam={handleLeaveTeam}
         team={teamStore.currentTeam}
         deletedProject={deleteProject}
+        deletedUser={deleteUser}
         {...modalHandlers} />
     </Container>
   );
