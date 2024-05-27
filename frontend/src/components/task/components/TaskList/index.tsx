@@ -22,6 +22,7 @@ import { Project } from 'src/models/project.model';
 interface TaskListProps {
   isProjectPage: boolean,
   isEditable: boolean,
+  isAdmin?: boolean,
   createTask: ModalHandler,
   editTask: ModalHandler,
   deleteTask: ModalHandler,
@@ -30,6 +31,7 @@ interface TaskListProps {
 const TaskList: React.FC<TaskListProps> = ({
   isProjectPage = false,
   isEditable = true,
+  isAdmin = false,
   createTask,
   editTask,
   deleteTask,
@@ -48,6 +50,7 @@ const TaskList: React.FC<TaskListProps> = ({
   }, [store]);
 
   const members = (store.current as Project).team?.members;
+  const isProjectAdmin = isProjectPage && isAdmin;
 
   const createTaskHandler = useCallback(async (createTaskDto: CreateTaskDto) => {
     try {
@@ -132,7 +135,7 @@ const TaskList: React.FC<TaskListProps> = ({
               deleteTask={deleteTask}
               onDeleteClick={onDeleteClick}
               onToggle={toggleTaskHandler}
-              isEditable={isEditable}
+              isEditable={isEditable || isProjectAdmin}
             />
           ))}
         </Grid>

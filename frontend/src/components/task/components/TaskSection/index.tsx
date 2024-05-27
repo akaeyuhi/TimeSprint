@@ -6,7 +6,8 @@ import TaskList from 'src/components/task/components/TaskList';
 
 interface TaskSectionProps {
   isProjectPage: boolean,
-  isEditable: boolean,
+  isEditable?: boolean,
+  isAdmin?: boolean,
 }
 
 interface TaskModals {
@@ -17,13 +18,16 @@ interface TaskModals {
 
 const TaskSection: React.FC<TaskSectionProps> = ({
   isProjectPage,
-  isEditable = true,
+  isEditable = false,
+  isAdmin = false,
 }) => {
   const [taskModals, setTaskModals] = useState<TaskModals>({
     createTask: false,
     editTask: false,
     deleteTask: false,
   });
+
+  const isProjectAdmin = isProjectPage && isAdmin;
 
   const modalHandlers = useModals<TaskModals>(taskModals, setTaskModals);
 
@@ -32,7 +36,7 @@ const TaskSection: React.FC<TaskSectionProps> = ({
       <Typography variant="h4" gutterBottom>
         Tasks
       </Typography>
-      {isEditable && <Box sx={styles.controlsBox}>
+      {(isEditable || isProjectAdmin) && <Box sx={styles.controlsBox}>
         <Button variant="contained" color="primary" onClick={modalHandlers.createTask.open}>
           Create new task
         </Button>
@@ -41,6 +45,7 @@ const TaskSection: React.FC<TaskSectionProps> = ({
         <TaskList
           isProjectPage={isProjectPage}
           isEditable={isEditable}
+          isAdmin={isAdmin}
           {...modalHandlers}
         />
       </Stack>

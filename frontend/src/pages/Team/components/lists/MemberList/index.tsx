@@ -5,12 +5,13 @@ import { User } from 'src/models/user.model';
 
 interface MemberListProps {
   members: User[];
-  onDelete: (id: number) => void;
+  isAdmin?: boolean;
+  onDelete: (user: User) => void;
 }
 
-export const MemberList: React.FC<MemberListProps> = ({ members, onDelete }) => {
-  const handleDelete = (id: number) => {
-    onDelete(id);
+export const MemberList: React.FC<MemberListProps> = ({ members, onDelete, isAdmin = false }) => {
+  const handleDelete = (user: User) => {
+    onDelete(user);
   };
 
   return (
@@ -19,11 +20,11 @@ export const MemberList: React.FC<MemberListProps> = ({ members, onDelete }) => 
         <Grid item key={member.id} xs={8} md={4}>
           <Box sx={styles.avatarBox}>
             <Avatar alt={member.username} src="#" sx={styles.modalAvatar} />
-            <Box className="deleteButton"
+            {isAdmin && <Box className="deleteButton"
               sx={styles.deleteButton}
-              onClick={() => handleDelete(member.id)}>
+              onClick={() => handleDelete(member)}>
               X
-            </Box>
+            </Box>}
           </Box>
           <Typography align="center">{member.username}</Typography>
         </Grid>
