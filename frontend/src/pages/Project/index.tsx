@@ -18,17 +18,30 @@ interface ProjectModals {
 
 
 const ProjectPage = () => {
-  const { projectStore } = useStores(); // Assuming you have a MobX store for projects
+  const { teamStore, projectStore, authStore } = useStores();
   const { id } = useParams();
   const [projectModals, setProjectModals] = useState<ProjectModals>({
     edit: false,
   });
+  const [isCurrentAdmin, setIsCurrentAdmin] = useState(false);
 
   const modalHandlers = useModals<ProjectModals>(projectModals, setProjectModals);
 
   useEffect(() => {
-    projectStore.fetch(Number(id));
-  }, [id, projectStore]);
+    projectStore.fetch(Number(id)).then(() => {
+      teamStore.fetch(Number(projectStore.current.team?.id));
+    });
+  }, [id, projectStore, teamStore]);
+
+  useEffect(() => {
+    console.log(authStore.auth);
+    const currentUser = teamStore.getUserById(3);
+    if (!currentUser) {
+      toast.error('Something went wrong');
+      return;
+    }
+    setIsCurrentAdmin(teamStore.isAdmin(currentUser));
+  }, [authStore.auth?.user?.id, teamStore]);
 
 
   const handleEditSubmit = useCallback(async (updateProjectDto: UpdateProjectDto) => {
@@ -62,7 +75,8 @@ const ProjectPage = () => {
             </Typography>
           </Box>
           <Box>
-            <Button variant="outlined" onClick={modalHandlers.edit.open}>Edit</Button>
+            {isCurrentAdmin &&
+              <Button variant="outlined" onClick={modalHandlers.edit.open}>Edit</Button>}
           </Box>
         </Box>
         <ModalForm open={projectModals.edit} handleClose={modalHandlers.edit.close}>
@@ -74,7 +88,7 @@ const ProjectPage = () => {
         </ModalForm>
       </Stack>
       <ProjectProgressBar progress={projectStore.progress} />
-      <TaskSection isProjectPage isEditable />
+      <TaskSection isProjectPage isAdmin={isCurrentAdmin} />
     </Container>
   );
 };
