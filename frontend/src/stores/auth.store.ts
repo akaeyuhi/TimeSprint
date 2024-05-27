@@ -9,7 +9,7 @@ type Auth = {
 };
 
 export class AuthStore {
-  auth: Auth = { user: { id: 1 } } as Auth;
+  auth: Auth = { user: { id: 3 } } as Auth;
   error: Error | null = null;
   isLoading = false;
 
