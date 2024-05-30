@@ -144,9 +144,12 @@ export class ProjectController {
   @TeamRoles(TeamRole.ADMIN)
   async addTaskToProject(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Body() taskIds: AddTasksDto,
-  ): Promise<Task[]> {
-    return await this.projectService.addTaskToProject(projectId, taskIds);
+    @Body() createTaskDto: CreateTaskDto,
+  ): Promise<Task> {
+    return await this.projectService.createTaskInProject(
+      projectId,
+      createTaskDto,
+    );
   }
 
   @Delete(':projectId/tasks/:taskId')
@@ -234,17 +237,6 @@ export class ProjectController {
     @Param('teamId', ParseIntPipe) teamId: number,
   ): Promise<Project[]> {
     return await this.projectService.findProjectsByTeam(teamId);
-  }
-
-  @Post(':projectId/create-task')
-  async createTaskInProject(
-    @Param('projectId', ParseIntPipe) projectId: number,
-    @Body() createTaskDto: CreateTaskDto,
-  ): Promise<Task> {
-    return await this.projectService.createTaskInProject(
-      projectId,
-      createTaskDto,
-    );
   }
 
   @Get(':projectId/tasks')
