@@ -1,12 +1,5 @@
 import { makePersistable } from 'mobx-persist-store';
-import { User } from 'src/models/user.model';
 import { makeAutoObservable } from 'mobx';
-
-type Auth = {
-  refreshToken: string;
-  accessToken: string;
-  user: User;
-};
 
 export class AuthStore {
   auth: Auth = { user: { id: 3 } } as Auth;
@@ -25,6 +18,14 @@ export class AuthStore {
 
   get isAuthenticated() {
     return !!this.auth.accessToken;
+  }
+
+  setAccessToken(token: string) {
+    this.auth.accessToken = token;
+  }
+
+  logout() {
+    this.auth = {} as Auth;
   }
 
   login() {
