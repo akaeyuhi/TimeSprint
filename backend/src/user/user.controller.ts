@@ -215,4 +215,25 @@ export class UserController {
     await this.userService.changeUserRole(userId, AdminRole.USER);
     await this.adminService.removeSiteAdmin(userId);
   }
+
+  @Get(':userId/tasks')
+  @ApiOperation({
+    summary: 'Gets tasks of the user',
+  })
+  @ApiParam({
+    name: 'userId',
+    required: true,
+    description: 'User identifier',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'User not found',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  async findTasksInProject(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<Task[]> {
+    return await this.userService.getUserTasks(userId);
+  }
 }

@@ -19,12 +19,12 @@ export class AuthService {
   ) {}
 
   async validateUser(
-    username: string,
+    email: string,
     password: string,
     user: User,
   ): Promise<boolean> {
     const passwordCheck = await bcrypt.compare(password, user.password);
-    return user.email === username && passwordCheck;
+    return user.email === email && passwordCheck;
   }
 
   async doesUserExists(checkDto: CreateUserDto | LoginDto): Promise<boolean> {
@@ -32,9 +32,9 @@ export class AuthService {
     return !!user;
   }
 
-  async login(username: string, pass: string): Promise<any> {
-    const user = await this.userService.findUserWithPassword(username);
-    if (!user || !(await this.validateUser(username, pass, user))) {
+  async login(email: string, pass: string): Promise<any> {
+    const user = await this.userService.findUserWithPassword(email);
+    if (!user || !(await this.validateUser(email, pass, user))) {
       throw new UnauthorizedException('Invalid password or email');
     }
     const payload = {
@@ -44,7 +44,7 @@ export class AuthService {
       role: user.role,
       sub: user.id,
     };
-    const tokens = this.getTokens(payload);
+    const tokens = await this.getTokens(payload);
     return {
       tokens,
       user: {
@@ -62,7 +62,7 @@ export class AuthService {
       throw new ConflictException('Such user already exists');
     }
     await this.userService.createUser(createUserDto);
-    return this.login(createUserDto.email, createUserDto.password);
+    return this.login(createUserDto.username, createUserDto.password);
   }
   async refreshAccessToken(user: JwtPayload) {
     const { accessToken } = await this.getTokens(user);

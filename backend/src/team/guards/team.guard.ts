@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRole } from 'src/user/utils';
+import { TeamRole } from 'src/user/utils';
 import { TeamService } from 'src/team/team.service';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class TeamRolesGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRole = this.reflector.get<UserRole>(
+    const requiredRole = this.reflector.get<TeamRole>(
       'roles',
       context.getHandler(),
     );

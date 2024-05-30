@@ -52,5 +52,10 @@ export class Task {
 
   @ManyToMany(() => Task, task => task.dependencies)
   @JoinTable()
+  // eslint-disable-next-line no-use-before-define
+  dependent: Task[];
+
+  @ManyToMany(() => Task, task => task.dependent)
+  // eslint-disable-next-line no-use-before-define
   dependencies: Task[];
 }

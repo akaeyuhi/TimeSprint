@@ -25,7 +25,7 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @Post('login')
   login(@Body() signInDto: LoginDto) {
-    return this.authService.login(signInDto.username, signInDto.password);
+    return this.authService.login(signInDto.email, signInDto.password);
   }
 
   @ApiOperation({ summary: 'Registers new user in' })
