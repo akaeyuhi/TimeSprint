@@ -18,7 +18,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async getAllUsers(): Promise<User[] | null> {
+  async getAllUsers(): Promise<UserReturn> {
     try {
       return await this.httpRequest.get<User[]>('/users');
     } catch (error) {
@@ -50,7 +50,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async getTasks(item: User): Promise<Task[] | null> {
+  async getTasks(item: User): Promise<TaskReturn> {
     try {
       return this.httpRequest.get<Task[]>(`/users/${item.id}/tasks`);
     } catch (error) {

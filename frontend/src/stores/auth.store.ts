@@ -1,5 +1,6 @@
 import { makePersistable } from 'mobx-persist-store';
 import { makeAutoObservable } from 'mobx';
+import { Auth } from 'src/services/types';
 
 export class AuthStore {
   auth: Auth = { user: { id: 3 } } as Auth;
