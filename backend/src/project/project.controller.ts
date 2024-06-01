@@ -185,39 +185,6 @@ export class ProjectController {
     await this.projectService.removeTaskFromProject(projectId, taskId);
   }
 
-  @Post(':projectId/assign-to-team/:teamId')
-  @ApiOperation({
-    summary: 'Assigns project to the team. Team admin rights required.',
-  })
-  @ApiParam({
-    name: 'projectId',
-    required: true,
-    description: 'Project identifier',
-  })
-  @ApiParam({
-    name: 'teamId',
-    required: true,
-    description: 'Team identifier',
-  })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Project not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Team not found',
-  })
-  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
-  @TeamRoles(TeamRole.ADMIN)
-  async assignProjectToTeam(
-    @Param('projectId', ParseIntPipe) projectId: number,
-    @Param('teamId', ParseIntPipe) teamId: number,
-  ): Promise<void> {
-    await this.projectService.assignProjectToTeam(projectId, teamId);
-  }
-
   @Get('by-team/:teamId')
   @ApiOperation({
     summary: 'Gets projects by team',

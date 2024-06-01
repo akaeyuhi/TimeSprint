@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IRepository } from 'src/interfaces/repository.interface';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class TeamRepository implements IRepository<Team> {
@@ -56,10 +57,6 @@ export class TeamRepository implements IRepository<Team> {
       .getMany();
   }
 
-  save(entity: Team) {
-    return this.repository.save(entity);
-  }
-
   async getTeamIdByProject(projectId: number): Promise<number> {
     const team = await this.repository
       .createQueryBuilder('team')
@@ -93,5 +90,25 @@ export class TeamRepository implements IRepository<Team> {
     }
 
     return user.role;
+  }
+
+  async addMember(team: Team, user: User): Promise<Team> {
+    team.members.push(user);
+    return await this.repository.save(team);
+  }
+
+  async addAdmin(team: Team, user: User): Promise<Team> {
+    team.admins.push(user);
+    return await this.repository.save(team);
+  }
+
+  async deleteAdmin(team: Team, user: User): Promise<Team> {
+    team.admins = team.admins.filter(admin => admin.id !== user.id);
+    return await this.repository.save(team);
+  }
+
+  async deleteMember(team: Team, user: User): Promise<Team> {
+    team.members = team.members.filter(member => member.id !== user.id);
+    return await this.repository.save(team);
   }
 }
