@@ -6,6 +6,7 @@ import axios, {
   AxiosResponse,
   AxiosRequestConfig } from 'axios';
 import { ErrorHandler } from './errorHandler';
+import { AuthStore } from 'src/stores/auth.store';
 
 export type HttpClientRequestConfig = {
   url: string;
@@ -22,20 +23,20 @@ export interface IHttpClient {
 
 type CustomHttpClientArgs = {
   baseUrl: string;
-  rootStore: RootStore;
+  authStore: AuthStore;
 };
 
 class CustomHttpClient implements IHttpClient {
   baseUrl: string;
   private axios: AxiosInstance = axios.create();
   private errorHandler: ErrorHandler = new ErrorHandler();
-  private rootStore: RootStore | undefined;
+  private authStore: AuthStore | undefined;
   private isRefreshing = false;
   private refreshSubscribers: ((token: string) => void)[] = [];
 
-  constructor({ baseUrl, rootStore }: CustomHttpClientArgs) {
+  constructor({ baseUrl, authStore }: CustomHttpClientArgs) {
     this.baseUrl = baseUrl;
-    this.rootStore = rootStore;
+    this.authStore = authStore;
 
     this.initializeTokenInterceptor();
     this.initializeRefreshInterceptor();
@@ -44,8 +45,8 @@ class CustomHttpClient implements IHttpClient {
   private initializeTokenInterceptor() {
     this.axios.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        if (this.rootStore?.authStore.isAuthenticated) {
-          config.headers['Authorization'] = `Bearer ${this.rootStore?.authStore.auth.accessToken}`;
+        if (this.authStore?.isAuthenticated) {
+          config.headers['Authorization'] = `Bearer ${this.authStore?.auth.accessToken}`;
         }
         return config;
       },
@@ -80,7 +81,7 @@ class CustomHttpClient implements IHttpClient {
             return this.axios(originalRequest);
           } catch (err) {
             this.isRefreshing = false;
-            this.rootStore?.authStore.logout();
+            this.authStore?.logout();
             return Promise.reject(err);
           }
         }
@@ -92,10 +93,10 @@ class CustomHttpClient implements IHttpClient {
 
   private async refreshToken(): Promise<string> {
     const response = await this.axios.post('/auth/refresh', {
-      refreshToken: this.rootStore?.authStore.auth.refreshToken,
+      refreshToken: this.authStore?.auth.refreshToken,
     });
     const newToken = response.data.accessToken;
-    this.rootStore?.authStore.setAccessToken(newToken);
+    this.authStore?.setAccessToken(newToken);
     return newToken;
   }
 

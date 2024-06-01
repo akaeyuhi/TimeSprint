@@ -7,6 +7,7 @@ import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { Task } from 'src/models/task.model';
 import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import TaskStore from 'src/stores/task.store';
+import ProjectService from 'src/services/project.service';
 
 export class ProjectStore extends TaskStore<Project> {
   @observable error = null;
@@ -148,9 +149,11 @@ export class ProjectStore extends TaskStore<Project> {
     ],
   };
   @observable.deep tasks = [] as Task[];
+  projectService: ProjectService;
 
-  constructor() {
+  constructor(projectService: ProjectService) {
     super();
+    this.projectService = projectService;
     makeObservable(this);
   }
 

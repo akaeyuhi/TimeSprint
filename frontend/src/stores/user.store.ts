@@ -6,6 +6,7 @@ import { Team } from 'src/models/team.model';
 import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
 import TaskStore from 'src/stores/task.store';
+import UserService from 'src/services/user.service';
 
 
 export class UserStore extends TaskStore<User> {
@@ -81,10 +82,12 @@ export class UserStore extends TaskStore<User> {
     isCompleted: false,
     dependencies: [] as Task[],
   }];
+  userService: UserService;
 
 
-  constructor() {
+  constructor(userService: UserService) {
     super();
+    this.userService = userService;
     makeObservable(this);
   }
 

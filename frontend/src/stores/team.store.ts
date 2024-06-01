@@ -4,6 +4,7 @@ import { User } from 'src/models/user.model';
 import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
 import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
 import { Project } from 'src/models/project.model';
+import TeamService from 'src/services/team.service';
 
 export class TeamStore {
   error: Error | null = null;
@@ -49,8 +50,10 @@ export class TeamStore {
       },
     ],
   } as Team;
+  teamService: TeamService;
 
-  constructor() {
+  constructor(teamService: TeamService) {
+    this.teamService = teamService;
     makeAutoObservable(this);
   }
 
