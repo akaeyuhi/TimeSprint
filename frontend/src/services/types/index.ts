@@ -9,7 +9,7 @@ export type Auth = {
   user: User;
 };
 
-export type UserReturn = User | User[] | null;
-export type TaskReturn = Task | Task[] | null;
-export type TeamReturn = Team | Team[] | null;
-export type ProjectReturn = Project | Project[] | null;
+export type UserReturn = User | null;
+export type TaskReturn = Task | null;
+export type TeamReturn = Team | null;
+export type ProjectReturn = Project | null;
