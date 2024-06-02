@@ -104,7 +104,7 @@ export class UserStore extends TaskStore<User> {
   async deleteTask(taskId: number): Promise<void> {
     this.isLoading = true;
     try {
-      await this.userService.deleteTask(taskId, this.current!);
+      await this.userService.deleteTask(taskId, this.current as User);
       runInAction(() => {
         this.tasks = this.tasks.filter(task => task.id !== taskId);
         this.isLoading = false;

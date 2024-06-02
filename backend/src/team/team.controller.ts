@@ -41,7 +41,10 @@ export class TeamController {
   @ApiOperation({ summary: 'Creates new team.' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async createTeam(@Body() createTeamDto: CreateTeamDto, @Req() req: any): Promise<Team> {
+  async createTeam(
+    @Body() createTeamDto: CreateTeamDto,
+    @Req() req: any,
+  ): Promise<Team> {
     return this.teamService.createTeam(createTeamDto, req.user.id);
   }
 
