@@ -16,7 +16,7 @@ export class RootStore {
     this.authStore.setAuthService(this.rootService.authService);
     this.teamStore = new TeamStore(this.rootService.teamService);
     this.projectStore = new ProjectStore(this.rootService.projectService);
-    this.userStore = new UserStore(this.rootService.userService);
+    this.userStore = new UserStore(this.rootService.userService, this.rootService.teamService);
   }
 
   get services() {
