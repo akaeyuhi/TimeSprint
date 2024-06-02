@@ -14,7 +14,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async getAllTeams(): Promise<TeamReturn> {
+  async getAllTeams(): Promise<Team[] | null> {
     try {
       return await this.httpRequest.get<Team[]>('/teams');
     } catch (error) {
@@ -24,7 +24,7 @@ class TeamService extends BaseService {
 
   async createTeam(createTeamDto: CreateTeamDto): Promise<TeamReturn> {
     try {
-      return this.httpRequest.post<Team>('/users', createTeamDto);
+      return this.httpRequest.post<Team>('/teams', createTeamDto);
     } catch (error) {
       throw new TeamError('Error creating user');
     }

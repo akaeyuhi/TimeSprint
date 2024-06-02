@@ -18,7 +18,15 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async getAllUsers(): Promise<UserReturn> {
+  async getUserByUsername(username: string): Promise<UserReturn> {
+    try {
+      return await this.httpRequest.get<User>(`/users/by-username/${username}`);
+    } catch (error) {
+      throw new UserError('Error fetching user data');
+    }
+  }
+
+  async getAllUsers(): Promise<User[] | null> {
     try {
       return await this.httpRequest.get<User[]>('/users');
     } catch (error) {
@@ -50,7 +58,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async getTasks(item: User): Promise<TaskReturn> {
+  async getTasks(item: User): Promise<Task[] | null> {
     try {
       return this.httpRequest.get<Task[]>(`/users/${item.id}/tasks`);
     } catch (error) {

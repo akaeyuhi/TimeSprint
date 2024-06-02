@@ -6,7 +6,7 @@ import { TaskContainer } from 'src/models/task-container.model';
 export default abstract class TaskStore<T extends TaskContainer> {
   abstract error: Error | null;
   abstract isLoading: boolean;
-  abstract current: T;
+  abstract current: T | null;
   abstract tasks: Task[];
 
   abstract fetch(id?: number): Promise<void>;
@@ -19,7 +19,7 @@ export default abstract class TaskStore<T extends TaskContainer> {
 
   abstract updateTask(taskId: number, taskDto: UpdateTaskDto): Promise<Task | null>;
 
-  abstract deleteTask(taskId: number): Promise<number>;
+  abstract deleteTask(taskId: number): Promise<void>;
 
   abstract toggleTask(taskId: number): Promise<Task | null>;
 

@@ -19,7 +19,7 @@ class ProjectService extends BaseService implements ITaskService<Project> {
     }
   }
 
-  async getAllProjects(): Promise<ProjectReturn> {
+  async getAllProjects(): Promise<Project[] | null> {
     try {
       return await this.httpRequest.get<Project[]>('/projects');
     } catch (error) {
@@ -43,7 +43,7 @@ class ProjectService extends BaseService implements ITaskService<Project> {
     }
   }
 
-  async getTasks(item: Project): Promise<TaskReturn> {
+  async getTasks(item: Project): Promise<Task[] | null> {
     try {
       return this.httpRequest.get<Task[]>(`/projects/${item.id}/tasks`);
     } catch (error) {
