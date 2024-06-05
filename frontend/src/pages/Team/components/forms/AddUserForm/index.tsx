@@ -10,26 +10,29 @@ import {
   Typography
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
+import { store } from 'src/stores/root.store';
+import { User } from 'src/models/user.model';
 
 interface AddUserFormProps {
-  onSubmit: (username: string) => void;
+  onSubmit: (user: User) => Promise<void>;
   onClose: () => void;
 }
 
 const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
+  const { userService } = store.services;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Validate username format
-    const isValidUsername = /^[\w\d]+$/.test(username) && true; // future server validation
-    if (isValidUsername) {
-      onSubmit(username);
+    const candidate = await userService.getUserByUsername(username);
+    if (candidate) {
+      onSubmit(candidate);
       setUsername('');
       setError('');
     } else {
-      setError('Invalid username format');
+      setError('Invalid username');
     }
   };
 
