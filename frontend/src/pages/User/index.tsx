@@ -15,7 +15,7 @@ const UserPage: React.FC = () => {
 
   useEffect(() => {
     store.fetch(userId);
-  }, []);
+  }, [store, userId]);
 
   if (store.isLoading || !store.current) return <Loader />;
   if (store.error) throw store.error;
