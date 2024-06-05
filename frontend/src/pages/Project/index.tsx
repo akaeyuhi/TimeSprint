@@ -57,6 +57,7 @@ const ProjectPage = () => {
   }, [modalHandlers.edit, projectStore]);
 
   if (projectStore.isLoading) return <Loader />;
+  if (projectStore.error) throw projectStore.error;
 
   return (
     <Container>
