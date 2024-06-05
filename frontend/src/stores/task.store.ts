@@ -6,7 +6,7 @@ import { TaskContainer } from 'src/models/task-container.model';
 export default abstract class TaskStore<T extends TaskContainer> {
   abstract error: Error | null;
   abstract isLoading: boolean;
-  abstract current: T | null;
+  abstract current: T;
   abstract tasks: Task[];
 
   abstract fetch(id?: number): Promise<void>;

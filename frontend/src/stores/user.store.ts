@@ -12,7 +12,7 @@ import TeamService from 'src/services/team.service';
 export class UserStore extends TaskStore<User> {
   @observable error: Error | null = null;
   @observable isLoading = false;
-  @observable.deep current: User | null = null;
+  @observable.deep current: User = {} as User;
   @observable.deep tasks: Task[] = [];
 
   constructor(
@@ -217,6 +217,25 @@ export class UserStore extends TaskStore<User> {
         this.isLoading = false;
       });
       return updatedUser;
+    } catch (error) {
+      runInAction(() => {
+        this.error = <Error> error;
+        this.isLoading = false;
+      });
+      throw error;
+    }
+  }
+
+  @action
+  async loadImportantTasks() {
+    this.isLoading = true;
+    try {
+      const newTasks = <Task[]> await this.userService.getImportantUserTasks(this.current.id);
+      runInAction(() => {
+        this.sortTasks(newTasks);
+        this.isLoading = false;
+      });
+      return newTasks;
     } catch (error) {
       runInAction(() => {
         this.error = <Error> error;
