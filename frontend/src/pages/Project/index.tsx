@@ -34,7 +34,7 @@ const ProjectPage = () => {
   }, [id, projectStore, teamStore]);
 
   useEffect(() => {
-    const currentUser = teamStore.getUserById(3);
+    const currentUser = teamStore.getUserById(authStore.auth.user.id);
     if (!currentUser) {
       toast.error('Something went wrong');
       return;
