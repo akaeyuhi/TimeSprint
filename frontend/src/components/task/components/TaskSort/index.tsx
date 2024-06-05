@@ -1,5 +1,13 @@
 import React, { useEffect } from 'react';
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent
+} from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { SortBy, useSorting } from 'src/hooks/use-sorting';
 import { observer } from 'mobx-react';
@@ -9,7 +17,7 @@ interface TaskSorterProps {
   onSort: (tasks: Task[]) => void;
   isEditable: boolean;
   isProjectPage: boolean;
-  handleGetImportantTasks?: () => void;
+  handleGetImportantTasks?: () => Promise<void>;
 }
 
 const TaskSorter: React.FC<TaskSorterProps> = ({

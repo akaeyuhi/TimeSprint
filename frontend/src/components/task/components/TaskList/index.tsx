@@ -18,6 +18,7 @@ import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
 import { TaskContainer } from 'src/models/task-container.model';
 import { Project } from 'src/models/project.model';
+import { UserStore } from 'src/stores/user.store';
 
 interface TaskListProps {
   isProjectPage: boolean,
@@ -98,6 +99,18 @@ const TaskList: React.FC<TaskListProps> = ({
     }
   }, [store]);
 
+  const handleImportantTasks = useCallback(async () => {
+    if (!isProjectPage) {
+      try {
+        await (store as UserStore).loadImportantTasks();
+      } catch (e) {
+        console.error(e);
+        toast.error(`Error occurred! ${store.error}`);
+      }
+    }
+
+  }, [isProjectPage, store]);
+
   const onSort = (newTasks: Task[]) => {
     store.sortTasks(newTasks);
   };
@@ -110,7 +123,8 @@ const TaskList: React.FC<TaskListProps> = ({
     setDeletedTask(task);
   };
 
-  if (store.isLoading || !store.tasks) return <Loader />;
+  if (store.isLoading) return <Loader />;
+  if (store.error || !store.tasks) throw store.error;
 
   return (
     <Box sx={styles.container}>
@@ -124,6 +138,7 @@ const TaskList: React.FC<TaskListProps> = ({
               isProjectPage={isProjectPage}
               onSort={onSort}
               tasks={store.tasks}
+              handleGetImportantTasks={handleImportantTasks}
             />
           </Grid>
           {store.tasks.map(task => (

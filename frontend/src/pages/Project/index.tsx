@@ -34,14 +34,13 @@ const ProjectPage = () => {
   }, [id, projectStore, teamStore]);
 
   useEffect(() => {
-    console.log(authStore.auth);
     const currentUser = teamStore.getUserById(3);
     if (!currentUser) {
       toast.error('Something went wrong');
       return;
     }
     setIsCurrentAdmin(teamStore.isAdmin(currentUser));
-  }, [authStore.auth?.user?.id, teamStore]);
+  }, [authStore.auth.user.id, teamStore]);
 
 
   const handleEditSubmit = useCallback(async (updateProjectDto: UpdateProjectDto) => {

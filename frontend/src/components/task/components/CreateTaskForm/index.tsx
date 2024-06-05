@@ -20,6 +20,7 @@ import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import { Task } from 'src/models/task.model';
 import { User } from 'src/models/user.model';
 import { observer } from 'mobx-react';
+import { store } from 'src/stores/root.store';
 
 interface CreateTaskFormProps {
   onSubmit: (newTask: CreateTaskDto) => void;
@@ -39,20 +40,23 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
     dependencies: [],
   });
 
+  const { userService } = store.services;
+
   const selectStyle = {
     maxHeight: 224,
     width: 250,
   };
 
-  const handleDependencyChange = (event: SelectChangeEvent<Task[]>) => {
-    const dependencies = [...event.target.value as Task[]];
-    //const taskDeps = taskStore.getTaskArrayByIds(dependencies);
+  const handleDependencyChange = async (event: SelectChangeEvent) => {
+    const task = await userService.getTaskById(parseInt(event.target.value));
+    if (!task) return;
+    const dependencies = [...task?.dependencies as [], task];
     setFormData({ ...formData, dependencies });
   };
 
-  const handleUserChange = (event: SelectChangeEvent<User>) => {
-    //const user = userStore.getUserById(event.target.value);
-    setFormData({ ...formData, user: event.target.value as User });
+  const handleUserChange = async (event: SelectChangeEvent) => {
+    const user = await userService.getUserByUsername(event.target.value);
+    if (user) setFormData({ ...formData, user });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -126,7 +130,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
           labelId="dependencies-label"
           id="dependencies"
           multiple
-          value={formData.dependencies}
+          value="Task dependencies"
           onChange={handleDependencyChange}
           input={<Input />}
           MenuProps={{
@@ -148,7 +152,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = ({ tasks, members, onSubmi
           labelId="users-label"
           label="Assigned User"
           id="assigned-users"
-          value={formData.user}
+          value={formData.user?.username ?? 'Select user'}
           onChange={handleUserChange}
           input={<Input />}
           MenuProps={{
