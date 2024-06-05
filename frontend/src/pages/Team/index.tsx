@@ -54,8 +54,7 @@ const TeamPage: React.FC = () => {
   }, [id, teamStore]);
 
   useEffect(() => {
-    console.log(authStore.auth);
-    const currentUser = teamStore.getUserById(3);
+    const currentUser = teamStore.getUserById(authStore.auth.user.id);
     if (!currentUser) {
       toast.error('Something went wrong');
       return;
@@ -74,11 +73,10 @@ const TeamPage: React.FC = () => {
     }
   }, [modalHandlers.createProject, teamStore]);
 
-  const handleAddUserSubmit = useCallback(async (username: string) => {
+  const handleAddUserSubmit = useCallback(async (user: User) => {
     try {
-      await userStore.fetchByUsername(username);
-      await teamStore.addMember(userStore.current);
-      toast.success(`Added new member! ${username}!`);
+      await teamStore.addMember(user);
+      toast.success(`Added new member! ${user.username}!`);
     } catch (e) {
       toast.error(`Error occurred: ${teamStore.error ?? userStore.error}!`);
     } finally {
@@ -110,7 +108,7 @@ const TeamPage: React.FC = () => {
 
   const handleLeaveTeam = useCallback(async () => {
     try {
-      const userId = authStore.auth.user.id ?? 1;
+      const userId = authStore.auth.user.id;
       await userStore.fetch(userId);
       await userStore.leaveTeam(teamStore.currentTeam.id);
       navigate('/teams');
