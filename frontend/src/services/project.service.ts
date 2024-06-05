@@ -51,6 +51,14 @@ class ProjectService extends BaseService implements ITaskService<Project> {
     }
   }
 
+  async getTaskById(id: number): Promise<TaskReturn> {
+    try {
+      return this.httpRequest.get<Task>(`/tasks/${id}`);
+    } catch (error) {
+      throw new TaskError('Error getting task');
+    }
+  }
+
   async createTask(dto: CreateTaskDto, item: Project): Promise<TaskReturn> {
     try {
       return this.httpRequest.post<Task>(`/projects/${item.id}/tasks`, dto);

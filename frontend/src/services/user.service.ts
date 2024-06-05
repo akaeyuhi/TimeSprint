@@ -54,7 +54,15 @@ class UserService extends BaseService implements ITaskService<User> {
     try {
       return this.httpRequest.delete<User>(`/users/${id}`);
     } catch (error) {
-      throw new UserError('Error updating users data');
+      throw new UserError('Error deleting users data');
+    }
+  }
+
+  async getImportantUserTasks(id: number): Promise<Task[] | null> {
+    try {
+      return this.httpRequest.get<Task[]>(`/users/${id}/prioritized`);
+    } catch (error) {
+      throw new TaskError('Error getting prioritized user tasks');
     }
   }
 
@@ -63,6 +71,14 @@ class UserService extends BaseService implements ITaskService<User> {
       return this.httpRequest.get<Task[]>(`/users/${item.id}/tasks`);
     } catch (error) {
       throw new TaskError('Error getting user tasks');
+    }
+  }
+
+  async getTaskById(id: number): Promise<TaskReturn> {
+    try {
+      return this.httpRequest.get<Task>(`/tasks/${id}`);
+    } catch (error) {
+      throw new TaskError('Error getting task');
     }
   }
 
