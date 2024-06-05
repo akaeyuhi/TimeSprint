@@ -15,7 +15,6 @@ import { Project } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
-import { AddTasksDto } from 'src/project/dto/add-tasks.dto';
 import { Task } from 'src/task/entities/task.entity';
 import { TeamRole } from 'src/user/utils';
 import { TeamRolesGuard } from 'src/team/guards/team.guard';
