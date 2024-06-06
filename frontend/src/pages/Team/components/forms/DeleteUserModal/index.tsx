@@ -12,11 +12,11 @@ interface DeleteUserModalProps {
 }
 
 const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
-                                                           user,
-                                                           onDelete,
-                                                           onClose,
-                                                           isAdmin = false,
-                                                         }) => (
+  user,
+  onDelete,
+  onClose,
+  isAdmin = false,
+}) => (
   <DeleteModal<Item>
     item={{ id: user?.id, name: user?.username, isAdmin } as unknown as Item}
     onDelete={onDelete}

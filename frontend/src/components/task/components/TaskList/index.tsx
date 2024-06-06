@@ -30,13 +30,13 @@ interface TaskListProps {
 }
 
 const TaskList: React.FC<TaskListProps> = ({
-                                             isProjectPage = false,
-                                             isEditable = true,
-                                             isAdmin = false,
-                                             createTask,
-                                             editTask,
-                                             deleteTask,
-                                           }) => {
+  isProjectPage = false,
+  isEditable = true,
+  isAdmin = false,
+  createTask,
+  editTask,
+  deleteTask,
+}) => {
   const { userStore, projectStore } = useStores();
   const [store, setStore] = useState<TaskStore<TaskContainer>>(userStore);
   const [editedTask, setEditedTask] = useState<Task | null>(null);

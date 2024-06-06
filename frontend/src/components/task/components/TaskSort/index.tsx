@@ -13,12 +13,12 @@ interface TaskSorterProps {
 }
 
 const TaskSorter: React.FC<TaskSorterProps> = ({
-                                                 tasks,
-                                                 onSort,
-                                                 isEditable,
-                                                 isProjectPage,
-                                                 handleGetImportantTasks,
-                                               }) => {
+  tasks,
+  onSort,
+  isEditable,
+  isProjectPage,
+  handleGetImportantTasks,
+}) => {
   const [sortBy, setSorting, sorted] = useSorting(tasks);
 
   const onChange = (e: SelectChangeEvent) => {

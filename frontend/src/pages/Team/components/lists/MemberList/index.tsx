@@ -21,8 +21,8 @@ export const MemberList: React.FC<MemberListProps> = ({ members, onDelete, isAdm
           <Box sx={styles.avatarBox}>
             <Avatar alt={member.username} src="#" sx={styles.modalAvatar} />
             {isAdmin && <Box className="deleteButton"
-                             sx={styles.deleteButton}
-                             onClick={() => handleDelete(member)}>
+              sx={styles.deleteButton}
+              onClick={() => handleDelete(member)}>
               X
             </Box>}
           </Box>

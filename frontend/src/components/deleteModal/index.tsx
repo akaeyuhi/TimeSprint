@@ -12,11 +12,11 @@ interface DeleteModalProps<T extends Item> {
 }
 
 const DeleteModal = <T extends Item, >({
-                                         item,
-                                         onDelete,
-                                         onClose,
-                                         children,
-                                       }: DeleteModalProps<T>) => {
+  item,
+  onDelete,
+  onClose,
+  children,
+}: DeleteModalProps<T>) => {
   const handleDelete = async () => {
     if (!item) return;
     await onDelete(item.id);

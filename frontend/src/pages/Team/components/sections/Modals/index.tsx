@@ -34,24 +34,24 @@ interface ModalsProps {
 
 
 const Modals: React.FC<ModalsProps> = ({
-                                         createProject,
-                                         deleteProject,
-                                         addUser,
-                                         addAdmin,
-                                         leaveTeam,
-                                         deleteAdmin,
-                                         deleteUser,
-                                         deletedProject,
-                                         deletedUser,
-                                         team,
-                                         handleCreateSubmit,
-                                         handleAddUserSubmit,
-                                         handleAddAdminSubmit,
-                                         handleDeleteProject,
-                                         handleDeleteUser,
-                                         handleDeleteAdmin,
-                                         handleLeaveTeam,
-                                       }) => (
+  createProject,
+  deleteProject,
+  addUser,
+  addAdmin,
+  leaveTeam,
+  deleteAdmin,
+  deleteUser,
+  deletedProject,
+  deletedUser,
+  team,
+  handleCreateSubmit,
+  handleAddUserSubmit,
+  handleAddAdminSubmit,
+  handleDeleteProject,
+  handleDeleteUser,
+  handleDeleteAdmin,
+  handleLeaveTeam,
+}) => (
   <>
     <ModalForm open={createProject.isOpen} handleClose={createProject.close}>
       <CreateProjectForm onSubmit={handleCreateSubmit} onClose={createProject.close} />

@@ -16,14 +16,14 @@ interface TaskItemProps {
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
-                                             task,
-                                             editTask,
-                                             onEditClick,
-                                             onToggle,
-                                             deleteTask,
-                                             onDeleteClick,
-                                             isEditable,
-                                           }) => {
+  task,
+  editTask,
+  onEditClick,
+  onToggle,
+  deleteTask,
+  onDeleteClick,
+  isEditable,
+}) => {
 
 
   const toggleTask = () => {

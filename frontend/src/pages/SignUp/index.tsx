@@ -35,22 +35,22 @@ const SignUpPage = () => {
           <FormControl sx={styles.form}>
             <InputLabel htmlFor="email">Email</InputLabel>
             <Input id="email" type="email"
-                   onChange={(e) => setData({ ...data, email: e.target.value })} />
+              onChange={(e) => setData({ ...data, email: e.target.value })} />
           </FormControl>
           <FormControl sx={styles.form}>
             <InputLabel htmlFor="username">Username</InputLabel>
             <Input id="username" type="text"
-                   onChange={(e) => setData({ ...data, username: e.target.value })} />
+              onChange={(e) => setData({ ...data, username: e.target.value })} />
           </FormControl>
           <FormControl sx={styles.form}>
             <InputLabel htmlFor="password">Password</InputLabel>
             <Input id="password" type="password"
-                   onChange={(e) => setData({ ...data, password: e.target.value })} />
+              onChange={(e) => setData({ ...data, password: e.target.value })} />
           </FormControl>
           <FormControl sx={styles.form}>
             <InputLabel htmlFor="confirm">Confirm password</InputLabel>
             <Input id="confirm" type="confirm"
-                   onChange={(e) => setData({ ...data, confirmPassword: e.target.value })} />
+              onChange={(e) => setData({ ...data, confirmPassword: e.target.value })} />
           </FormControl>
         </Stack>
         <Stack sx={styles.buttonBox}>

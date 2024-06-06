@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <AppConfig>
     <DevSupport ComponentPreviews={ComponentPreviews}
-                useInitialHook={useInitial}
+      useInitialHook={useInitial}
     >
       <App />
     </DevSupport>

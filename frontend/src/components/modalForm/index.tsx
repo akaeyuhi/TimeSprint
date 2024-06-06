@@ -10,11 +10,11 @@ interface ModalFormProps {
 
 const ModalForm: React.FC<ModalFormProps> = ({ open, handleClose, children }) => (
   <Modal open={open} onClose={handleClose} closeAfterTransition slots={{ backdrop: Backdrop }}
-         slotProps={{
-           backdrop: {
-             timeout: 500,
-           },
-         }}>
+    slotProps={{
+      backdrop: {
+        timeout: 500,
+      },
+    }}>
     <Fade in={open}>
       <Box
         sx={styles.box}

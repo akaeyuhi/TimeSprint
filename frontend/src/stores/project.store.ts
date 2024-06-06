@@ -36,7 +36,7 @@ export class ProjectStore extends TaskStore<Project> {
   async fetch(projectId: number) {
     this.isLoading = true;
     try {
-      const project = <Project>await this.projectService.getProject(projectId);
+      const project = <Project> await this.projectService.getProject(projectId);
       runInAction(() => {
         this.current = project;
         this.tasks = project.tasks;
@@ -59,7 +59,7 @@ export class ProjectStore extends TaskStore<Project> {
   async createTask(taskDto: CreateTaskDto): Promise<Task> {
     this.isLoading = true;
     try {
-      const newTask = <Task>await this.projectService.createTask(taskDto, this.current as Project);
+      const newTask = <Task> await this.projectService.createTask(taskDto, this.current as Project);
       runInAction(() => {
         this.current?.tasks.push(newTask);
         this.isLoading = false;
@@ -78,7 +78,7 @@ export class ProjectStore extends TaskStore<Project> {
   async updateTask(taskId: number, taskDto: UpdateTaskDto) {
     this.isLoading = true;
     try {
-      const updatedTask = <Task>await this.projectService.updateTask(taskDto, taskId);
+      const updatedTask = <Task> await this.projectService.updateTask(taskDto, taskId);
       runInAction(() => {
         const taskIndex = this.current?.tasks.findIndex(task => task.id === taskId);
         if (this.current && taskIndex && taskIndex >= 0) {
@@ -123,7 +123,7 @@ export class ProjectStore extends TaskStore<Project> {
   async editProject(projectDto: UpdateProjectDto) {
     this.isLoading = true;
     try {
-      const updatedProject = <Project>await this.projectService.updateProjects(
+      const updatedProject = <Project> await this.projectService.updateProjects(
         this.current.id,
         projectDto,
       );

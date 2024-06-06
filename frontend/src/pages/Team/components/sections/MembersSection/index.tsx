@@ -21,15 +21,15 @@ interface MembersSectionProps {
 
 
 const MembersSection: React.FC<MembersSectionProps> = ({
-                                                         members,
-                                                         admins,
-                                                         addUser,
-                                                         addAdmin,
-                                                         team,
-                                                         isAdmin = false,
-                                                         onDeleteUser,
-                                                         onDeleteAdmin,
-                                                       }) => (
+  members,
+  admins,
+  addUser,
+  addAdmin,
+  team,
+  isAdmin = false,
+  onDeleteUser,
+  onDeleteAdmin,
+}) => (
   <>
     <Stack>
       <Box mt={3} sx={styles.textBox}>
