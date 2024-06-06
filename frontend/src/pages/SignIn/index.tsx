@@ -1,12 +1,4 @@
-import {
-  Button,
-  Container,
-  FormControl,
-  Input,
-  InputLabel,
-  Stack,
-  Typography
-} from '@mui/material';
+import { Button, Container, FormControl, Input, InputLabel, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { styles } from './styles';
@@ -42,12 +34,12 @@ const SignInPage = () => {
         <FormControl sx={styles.form}>
           <InputLabel htmlFor="email">Email</InputLabel>
           <Input id="email" type="email"
-            onChange={(e) => setData({ ...data, username: e.target.value })} />
+                 onChange={(e) => setData({ ...data, username: e.target.value })} />
         </FormControl>
         <FormControl sx={styles.form}>
           <InputLabel htmlFor="password">Password</InputLabel>
           <Input id="password" type="password"
-            onChange={(e) => setData({ ...data, password: e.target.value })} />
+                 onChange={(e) => setData({ ...data, password: e.target.value })} />
         </FormControl>
       </Stack>
       <Stack sx={styles.buttonBox}>

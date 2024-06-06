@@ -18,18 +18,18 @@ export const useSorting = (initialTasks: Task[]) => {
   useEffect(() => {
     const sortedTasks = [...initialTasks];
     switch (sortBy) {
-    case SortBy.NAME:
-      sortedTasks.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case SortBy.URGENCY:
-      sortedTasks.sort((a, b) => Number(a.urgency) - Number(b.urgency));
-      break;
-    case SortBy.IMPORTANCE:
-      sortedTasks.sort((a, b) => Number(a.importance) - Number(b.importance));
-      break;
-    case SortBy.DEADLINE:
-      sortedTasks.sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
-      break;
+      case SortBy.NAME:
+        sortedTasks.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case SortBy.URGENCY:
+        sortedTasks.sort((a, b) => Number(a.urgency) - Number(b.urgency));
+        break;
+      case SortBy.IMPORTANCE:
+        sortedTasks.sort((a, b) => Number(a.importance) - Number(b.importance));
+        break;
+      case SortBy.DEADLINE:
+        sortedTasks.sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
+        break;
     }
     setSorted(sortedTasks);
   }, [sortBy, initialTasks]);

@@ -17,10 +17,10 @@ interface TaskModals {
 }
 
 const TaskSection: React.FC<TaskSectionProps> = ({
-  isProjectPage,
-  isEditable = false,
-  isAdmin = false,
-}) => {
+                                                   isProjectPage,
+                                                   isEditable = false,
+                                                   isAdmin = false,
+                                                 }) => {
   const [taskModals, setTaskModals] = useState<TaskModals>({
     createTask: false,
     editTask: false,

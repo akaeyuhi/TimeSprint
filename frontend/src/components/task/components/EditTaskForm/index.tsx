@@ -31,12 +31,12 @@ interface EditTaskFormProps {
 }
 
 const EditTaskForm: React.FC<EditTaskFormProps> = ({
-  task,
-  members,
-  onSubmit,
-  onCancel,
-  tasks,
-}) => {
+                                                     task,
+                                                     members,
+                                                     onSubmit,
+                                                     onCancel,
+                                                     tasks,
+                                                   }) => {
   const [formData, setFormData] = useState<UpdateTaskDto>({
     name: task?.name ?? '',
     description: task?.description ?? '',

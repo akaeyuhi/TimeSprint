@@ -5,11 +5,11 @@ import { UserStore } from 'src/stores/user.store';
 import { RootService } from 'src/services';
 
 export class RootStore {
-  private readonly rootService: RootService;
   readonly authStore = new AuthStore();
   readonly teamStore: TeamStore;
   readonly projectStore: ProjectStore;
   readonly userStore: UserStore;
+  private readonly rootService: RootService;
 
   constructor() {
     this.rootService = new RootService(this.authStore);

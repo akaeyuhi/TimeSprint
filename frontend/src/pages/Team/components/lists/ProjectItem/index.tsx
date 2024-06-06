@@ -25,7 +25,7 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ project, onDelete, isAdmin = 
       </Link>
       {isAdmin &&
         <Button variant="contained" color="error" sx={{ mt: 1 }} onClick={() => onDelete(project)}>
-        Delete project
+          Delete project
         </Button>}
     </CardActions>
 

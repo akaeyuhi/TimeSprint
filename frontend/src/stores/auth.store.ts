@@ -20,12 +20,12 @@ export class AuthStore {
     });
   }
 
-  setAuthService(authService: AuthService) {
-    this.authService = authService;
-  }
-
   get isAuthenticated() {
     return !!this.auth.accessToken;
+  }
+
+  setAuthService(authService: AuthService) {
+    this.authService = authService;
   }
 
   setAccessToken(token: string) {

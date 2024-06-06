@@ -1,10 +1,10 @@
-import { RootStore } from 'src/stores/root.store';
 import axios, {
   AxiosError,
   AxiosInstance,
-  InternalAxiosRequestConfig,
+  AxiosRequestConfig,
   AxiosResponse,
-  AxiosRequestConfig } from 'axios';
+  InternalAxiosRequestConfig,
+} from 'axios';
 import { ErrorHandler } from './errorHandler';
 import { AuthStore } from 'src/stores/auth.store';
 
@@ -42,6 +42,22 @@ class CustomHttpClient implements IHttpClient {
     this.initializeRefreshInterceptor();
   }
 
+  async request<T>({ url, method }: HttpClientRequestConfig) {
+    const requestConfig: AxiosRequestConfig = {
+      url: this.baseUrl + url,
+      method,
+    };
+
+    try {
+      const res = await this.axios.request<T>(requestConfig);
+      return res?.data;
+    } catch (err) {
+      this.errorHandler.handle(String(err as AxiosError));
+    }
+
+    return null;
+  }
+
   private initializeTokenInterceptor() {
     this.axios.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
@@ -50,7 +66,7 @@ class CustomHttpClient implements IHttpClient {
         }
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => Promise.reject(error),
     );
   }
 
@@ -87,7 +103,7 @@ class CustomHttpClient implements IHttpClient {
         }
 
         return Promise.reject(error);
-      }
+      },
     );
   }
 
@@ -103,22 +119,6 @@ class CustomHttpClient implements IHttpClient {
   private onRefreshed(token: string) {
     this.refreshSubscribers.forEach((callback) => callback(token));
     this.refreshSubscribers = [];
-  }
-
-  async request<T>({ url, method }: HttpClientRequestConfig) {
-    const requestConfig: AxiosRequestConfig = {
-      url: this.baseUrl + url,
-      method,
-    };
-
-    try {
-      const res = await this.axios.request<T>(requestConfig);
-      return res?.data;
-    } catch (err) {
-      this.errorHandler.handle(String(err as AxiosError));
-    }
-
-    return null;
   }
 }
 

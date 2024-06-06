@@ -33,7 +33,6 @@ export const AppConfig: FC<Props> = ({ children }) => (
               draggable />
           </RootStoreProvider>
         </ErrorBoundary>
-
       </ThemeConfig>
     </BrowserRouter>
   </StrictMode>

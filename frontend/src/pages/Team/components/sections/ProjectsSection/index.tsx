@@ -16,12 +16,12 @@ interface ProjectsSectionProps {
 }
 
 const ProjectsSection: React.FC<ProjectsSectionProps> = ({
-  createProject,
-  projects,
-  team,
-  handleDeleteClick,
-  isAdmin = false,
-}) => (
+                                                           createProject,
+                                                           projects,
+                                                           team,
+                                                           handleDeleteClick,
+                                                           isAdmin = false,
+                                                         }) => (
   <>
     <Stack>
       <Typography variant="h5" gutterBottom>
@@ -32,8 +32,8 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           Create new Project
         </Button>}
         {team.projects.length ? <Button variant="outlined"
-          color="primary"
-          onClick={projects.open}>
+                                        color="primary"
+                                        onClick={projects.open}>
           View All Projects
         </Button> : <></>}
       </Box>

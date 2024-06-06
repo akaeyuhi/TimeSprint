@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import 'typeface-jost';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -14,7 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <AppConfig>
     <DevSupport ComponentPreviews={ComponentPreviews}
-      useInitialHook={useInitial}
+                useInitialHook={useInitial}
     >
       <App />
     </DevSupport>

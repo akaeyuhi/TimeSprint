@@ -16,7 +16,7 @@ export class RootService {
   constructor(authStore: AuthStore) {
     const httpClient = new CustomHttpClient({
       authStore,
-      baseUrl: process.env.REACT_APP_API_URL!
+      baseUrl: process.env.REACT_APP_API_URL!,
     });
     const httpRequest = new HttpRequest(httpClient);
 

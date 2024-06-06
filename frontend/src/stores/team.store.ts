@@ -28,7 +28,7 @@ export class TeamStore {
   async fetch(teamId: number) {
     this.isLoading = true;
     try {
-      this.currentTeam = <Team> await this.teamService.getTeam(teamId);
+      this.currentTeam = <Team>await this.teamService.getTeam(teamId);
     } catch (error) {
       this.error = error as Error;
     } finally {
@@ -44,9 +44,9 @@ export class TeamStore {
   async createProject(projectDto: CreateProjectDto) {
     this.isLoading = true;
     try {
-      this.currentTeam = <Team> await this.teamService.createProject(
+      this.currentTeam = <Team>await this.teamService.createProject(
         this.currentTeam.id,
-        projectDto
+        projectDto,
       );
     } catch (error) {
       this.error = error as Error;
@@ -59,9 +59,9 @@ export class TeamStore {
   async deleteProject(projectId: number) {
     this.isLoading = true;
     try {
-      this.currentTeam = <Team> await this.teamService.deleteProject(
+      this.currentTeam = <Team>await this.teamService.deleteProject(
         this.currentTeam.id,
-        projectId
+        projectId,
       );
     } catch (error) {
       this.error = error as Error;
@@ -75,7 +75,7 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isMember(user)) {
-        this.currentTeam = <Team> await this.teamService.addMember(this.currentTeam.id, user.id);
+        this.currentTeam = <Team>await this.teamService.addMember(this.currentTeam.id, user.id);
       } else {
         this.error = new Error('User already in team');
       }
@@ -91,7 +91,7 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isAdmin(user)) {
-        this.currentTeam = <Team> await this.teamService.addAdmin(this.currentTeam.id, user.id);
+        this.currentTeam = <Team>await this.teamService.addAdmin(this.currentTeam.id, user.id);
       } else {
         this.error = new Error('User already is admin');
       }
@@ -108,7 +108,7 @@ export class TeamStore {
     try {
       const user = this.getUserById(userId);
       if (user && !this.isAdmin(user)) {
-        this.currentTeam = <Team> await this.teamService.deleteMember(this.currentTeam.id, userId);
+        this.currentTeam = <Team>await this.teamService.deleteMember(this.currentTeam.id, userId);
       } else if (user && this.isAdmin(user)) {
         this.error = new Error('This user has admin privilege');
       } else {
@@ -126,7 +126,7 @@ export class TeamStore {
     try {
       const user = this.getUserById(userId);
       if (user && this.isAdmin(user)) {
-        this.currentTeam = <Team> await this.teamService.deleteAdmin(this.currentTeam.id, userId);
+        this.currentTeam = <Team>await this.teamService.deleteAdmin(this.currentTeam.id, userId);
       } else if (user && !this.isAdmin(user)) {
         this.error = new Error('This user has no admin privilege');
       } else {

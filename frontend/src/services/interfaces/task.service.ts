@@ -6,9 +6,14 @@ import { TaskReturn } from 'src/services/types';
 
 export interface ITaskService<T extends TaskContainer> {
   getTasks(item: T): Promise<Task[] | null>;
+
   getTaskById(id: number): Promise<TaskReturn>;
+
   createTask(dto: CreateTaskDto, item: T): Promise<TaskReturn>;
+
   updateTask(dto: UpdateTaskDto, taskId: number): Promise<TaskReturn>;
+
   deleteTask(taskId: number, item: T): Promise<TaskReturn>;
+
   toggleTask(task: Task, item: T): Promise<TaskReturn>;
 }
