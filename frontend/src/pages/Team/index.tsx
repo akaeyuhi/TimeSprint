@@ -41,7 +41,7 @@ const TeamPage: React.FC = () => {
     deleteAdmin: false,
     leaveTeam: false,
   });
-  const { authStore, userStore, teamStore } = useStores();
+  const { authStore, userStore, teamStore, handler } = useStores();
   const modalHandlers = useModals<TeamModals>(teamModals, setTeamModals);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const TeamPage: React.FC = () => {
   useEffect(() => {
     const currentUser = teamStore.getUserById(authStore.auth.user.id);
     if (!currentUser) {
-      toast.error('Something went wrong');
+      handler.handle('Something went wrong');
       return;
     }
     setIsCurrentAdmin(teamStore.isAdmin(currentUser));
@@ -67,7 +67,7 @@ const TeamPage: React.FC = () => {
       await teamStore.createProject(projectDto);
       toast.success(`Created project ${projectDto.name}!`);
     } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
+      handler.handle(`Error occurred: ${teamStore.error}!`);
     } finally {
       modalHandlers.createProject.close();
     }
@@ -78,7 +78,7 @@ const TeamPage: React.FC = () => {
       await teamStore.addMember(user);
       toast.success(`Added new member! ${user.username}!`);
     } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error ?? userStore.error}!`);
+      handler.handle(`Error occurred: ${teamStore.error ?? userStore.error}!`);
     } finally {
       modalHandlers.addUser.close();
     }
@@ -89,7 +89,7 @@ const TeamPage: React.FC = () => {
       await teamStore.addAdmin(user);
       toast.success(`Added new admin! ${user.username}!`);
     } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
+      handler.handle(`Error occurred: ${teamStore.error}!`);
     } finally {
       modalHandlers.addAdmin.close();
     }
@@ -100,7 +100,7 @@ const TeamPage: React.FC = () => {
       await teamStore.deleteProject(projectId);
       toast.success(`Deleted project!`);
     } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
+      handler.handle(`Error occurred: ${teamStore.error}!`);
     } finally {
       modalHandlers.deleteProject.close();
     }
@@ -114,7 +114,7 @@ const TeamPage: React.FC = () => {
       navigate('/teams');
       toast.success(`Left team ${teamStore.currentTeam}`);
     } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
+      handler.handle(`Error occurred: ${teamStore.error}!`);
     } finally {
       modalHandlers.leaveTeam.close();
     }
@@ -131,7 +131,7 @@ const TeamPage: React.FC = () => {
       await teamStore.deleteUser(userId);
       toast.success(`Deleted user!`);
     } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
+      handler.handle(`Error occurred: ${teamStore.error}!`);
     } finally {
       modalHandlers.deleteUser.close();
       setDeleteUser(null);
@@ -143,7 +143,7 @@ const TeamPage: React.FC = () => {
       await teamStore.deleteAdmin(userId);
       toast.success(`Deleted admin!`);
     } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
+      handler.handle(`Error occurred: ${teamStore.error}!`);
     } finally {
       modalHandlers.deleteAdmin.close();
       setDeleteUser(null);
@@ -166,6 +166,9 @@ const TeamPage: React.FC = () => {
   };
 
   if (teamStore.isLoading) return <Loader />;
+  if (teamStore.error) handler.handle(teamStore.error.message);
+  if (userStore.error) handler.handle(userStore.error.message);
+  if (authStore.error) handler.handle(authStore.error.message);
 
   return (
     <Container>

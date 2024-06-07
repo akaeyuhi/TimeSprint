@@ -1,4 +1,12 @@
-import { Button, Container, FormControl, Input, InputLabel, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  Container,
+  FormControl,
+  Input,
+  InputLabel,
+  Stack,
+  Typography
+} from '@mui/material';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { styles } from './styles';
@@ -6,21 +14,25 @@ import Logo from 'src/components/logo';
 import { useStore } from 'src/hooks';
 import Loader from 'src/components/loader';
 import { RegisterDto } from 'src/services/dto/auth/register.dto';
+import { observer } from 'mobx-react';
 
 const SignUpPage = () => {
   const store = useStore('authStore');
+  const handler = useStore('handler');
   const navigate = useNavigate();
   const { error, isLoading } = store;
   const [data, setData] = useState({} as RegisterDto);
 
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     await store.register(data);
-    navigate('/home');
+    if (!error && store.auth) navigate('/home');
   };
 
   if (isLoading) return <Loader />;
-  if (error) throw error;
+  if (error) handler.handle(error.message);
+
 
   return (
     <Container sx={styles.mainContainer}>
@@ -49,19 +61,19 @@ const SignUpPage = () => {
           </FormControl>
           <FormControl sx={styles.form}>
             <InputLabel htmlFor="confirm">Confirm password</InputLabel>
-            <Input id="confirm" type="confirm"
+            <Input id="confirm" type="password"
               onChange={(e) => setData({ ...data, confirmPassword: e.target.value })} />
           </FormControl>
-        </Stack>
-        <Stack sx={styles.buttonBox}>
-          <Button>Sign Up</Button>
-          <Link to="/auth/sign-in" style={{ textDecoration: 'none' }}>
-            <Button color="secondary">Sign In</Button>
-          </Link>
+          <Stack sx={styles.buttonBox}>
+            <Button type="submit">Sign Up</Button>
+            <Link to="/auth/sign-in" style={{ textDecoration: 'none' }}>
+              <Button color="secondary">Sign In</Button>
+            </Link>
+          </Stack>
         </Stack>
       </Stack>
     </Container>
   );
 };
 
-export default SignUpPage;
+export default observer(SignUpPage);

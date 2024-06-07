@@ -18,7 +18,7 @@ interface ProjectModals {
 
 
 const ProjectPage = () => {
-  const { teamStore, projectStore, authStore } = useStores();
+  const { teamStore, projectStore, authStore, handler } = useStores();
   const { id } = useParams();
   const [projectModals, setProjectModals] = useState<ProjectModals>({
     edit: false,
@@ -36,7 +36,7 @@ const ProjectPage = () => {
   useEffect(() => {
     const currentUser = teamStore.getUserById(authStore.auth.user.id);
     if (!currentUser) {
-      toast.error('Something went wrong');
+      handler.handle('Something went wrong');
       return;
     }
     setIsCurrentAdmin(teamStore.isAdmin(currentUser));
@@ -49,14 +49,17 @@ const ProjectPage = () => {
       modalHandlers.edit.close();
       toast.success('Edited project!');
     } catch (e) {
-      toast.error(`Error occurred: ${projectStore.error}`);
+      handler.handle(`Error occurred: ${projectStore.error}`);
     } finally {
       modalHandlers.edit.close();
     }
   }, [modalHandlers.edit, projectStore]);
 
   if (projectStore.isLoading) return <Loader />;
-  if (projectStore.error) throw projectStore.error;
+  if (projectStore.error) handler.handle(projectStore.error.message);
+  if (teamStore.error) handler.handle(teamStore.error.message);
+  if (authStore.error) handler.handle(authStore.error.message);
+
 
   return (
     <Container>

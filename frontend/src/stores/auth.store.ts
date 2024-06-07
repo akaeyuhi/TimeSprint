@@ -21,7 +21,7 @@ export class AuthStore {
   }
 
   get isAuthenticated() {
-    return !!this.auth.accessToken;
+    return !!this.auth?.accessToken;
   }
 
   setAuthService(authService: AuthService) {

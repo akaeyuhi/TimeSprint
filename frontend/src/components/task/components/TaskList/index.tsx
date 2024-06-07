@@ -37,7 +37,7 @@ const TaskList: React.FC<TaskListProps> = ({
   editTask,
   deleteTask,
 }) => {
-  const { userStore, projectStore } = useStores();
+  const { userStore, projectStore, handler } = useStores();
   const [store, setStore] = useState<TaskStore<TaskContainer>>(userStore);
   const [editedTask, setEditedTask] = useState<Task | null>(null);
   const [deletedTask, setDeletedTask] = useState<Task | null>(null);
@@ -124,7 +124,8 @@ const TaskList: React.FC<TaskListProps> = ({
   };
 
   if (store.isLoading) return <Loader />;
-  if (store.error || !store.tasks) throw store.error;
+  if (store.error) handler.handle(store.error.message);
+
 
   return (
     <Box sx={styles.container}>

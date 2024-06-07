@@ -26,6 +26,12 @@ type CustomHttpClientArgs = {
   authStore: AuthStore;
 };
 
+type BackendError = {
+  message: string | string[],
+  error: string,
+  statusCode: number,
+}
+
 class CustomHttpClient implements IHttpClient {
   baseUrl: string;
   private axios: AxiosInstance = axios.create();
@@ -42,19 +48,22 @@ class CustomHttpClient implements IHttpClient {
     this.initializeRefreshInterceptor();
   }
 
-  async request<T>({ url, method }: HttpClientRequestConfig) {
+  async request<T>({ url, method, data }: HttpClientRequestConfig) {
     const requestConfig: AxiosRequestConfig = {
       url: this.baseUrl + url,
       method,
+      data,
     };
-
     try {
       const res = await this.axios.request<T>(requestConfig);
       return res?.data;
     } catch (err) {
-      this.errorHandler.handle(String(err as AxiosError));
+      const error = err as AxiosError;
+      const data = error.response?.data as BackendError;
+      const errorMsg = (data && data.message instanceof Array ?
+        'Error: ' + data.message.join(', ') : String(error));
+      this.errorHandler.handle(errorMsg);
     }
-
     return null;
   }
 

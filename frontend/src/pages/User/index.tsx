@@ -8,7 +8,7 @@ import Loader from 'src/components/loader';
 import { useParams } from 'react-router-dom';
 
 const UserPage: React.FC = () => {
-  const { userStore: store, authStore } = useStores();
+  const { userStore: store, authStore, handler } = useStores();
   const { id } = useParams();
 
   const userId = id ? parseInt(id) : authStore.auth.user.id;
@@ -18,7 +18,8 @@ const UserPage: React.FC = () => {
   }, [store, userId]);
 
   if (store.isLoading || !store.current) return <Loader />;
-  if (store.error) throw store.error;
+  if (store.error) handler.handle(store.error.message);
+  if (authStore.error) handler.handle(authStore.error.message);
 
   const isOwnPage = userId !== authStore.auth?.user?.id;
   const getWelcomeText = () => (isOwnPage ?

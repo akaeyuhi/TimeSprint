@@ -16,7 +16,7 @@ interface TeamModals {
 }
 
 const TeamsPage: React.FC = () => {
-  const { authStore, userStore } = useStores();
+  const { authStore, userStore, handler } = useStores();
   const [modal, setModal] = useState({
     createTeam: false,
   });
@@ -36,7 +36,7 @@ const TeamsPage: React.FC = () => {
     )(), [modalHandlers.createTeam, userStore]);
 
   if (userStore.isLoading) return <Loader />;
-  if (userStore.error) throw userStore.error;
+  if (userStore.error) handler.handle(userStore.error.message);
 
   return (
     <Container>

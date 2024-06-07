@@ -8,7 +8,7 @@ import Loader from 'src/components/loader';
 
 const HomePage: React.FC = () => {
   const currentDate = new Date();
-  const { authStore, userStore } = useStores();
+  const { authStore, userStore, handler } = useStores();
   const { username } = authStore.auth.user;
   const formattedDate = currentDate.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
   }, [authStore.auth.user.id, userStore]);
 
   if (userStore.isLoading) return <Loader />;
-  if (userStore.error) throw userStore.error;
+  if (userStore.error) handler.handle(userStore.error.message);
 
   return (
     <Container maxWidth="lg" sx={styles.container}>

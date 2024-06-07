@@ -3,9 +3,11 @@ import { TeamStore } from 'src/stores/team.store';
 import { ProjectStore } from 'src/stores/project.store';
 import { UserStore } from 'src/stores/user.store';
 import { RootService } from 'src/services';
+import ErrorHandler from 'src/utils/common/errorHandler';
 
 export class RootStore {
   readonly authStore = new AuthStore();
+  readonly handler = new ErrorHandler();
   readonly teamStore: TeamStore;
   readonly projectStore: ProjectStore;
   readonly userStore: UserStore;
