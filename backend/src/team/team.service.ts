@@ -27,6 +27,7 @@ export class TeamService {
     userId: number,
   ): Promise<Team> {
     const admins = [];
+    createTeamDto.adminIds = [];
     createTeamDto.adminIds.push(userId);
     for (const id of createTeamDto.adminIds) {
       const admin = await this.userService.findById(id);

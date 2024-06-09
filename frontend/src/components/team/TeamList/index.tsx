@@ -10,8 +10,8 @@ interface TeamListProps {
 
 const TeamList: React.FC<TeamListProps> = ({ teams }) => (
   <>
-    {teams.length === 0 ? (
-      <Typography variant="body1">No teams available</Typography>
+    {!teams || teams.length === 0 ? (
+      <Typography variant="h5" sx={{ mt: '0.5rem' }}>No teams available</Typography>
     ) : (
       <Grid container spacing={2} sx={{ mt: '0.5rem' }}>
         {teams.map(team => (

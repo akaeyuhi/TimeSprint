@@ -24,7 +24,7 @@ export const styles = createStyleSheet({
   container: {
     width: '100%',
     '& > *': {
-      mb: '1rem',
+      mb: '1.5rem',
       '& > div': {
         padding: '0 1rem ',
       },

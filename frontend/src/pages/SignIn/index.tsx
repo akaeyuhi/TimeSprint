@@ -1,11 +1,11 @@
 import {
   Button,
   Container,
-  FormControl,
+  FormControl, FormHelperText,
   Input,
   InputLabel,
   Stack,
-  Typography
+  Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -16,20 +16,41 @@ import { useStore } from 'src/hooks';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
 
+export const passwordRegex = new RegExp(
+  '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?!.* ).{8,}$',
+);
+
+
 const SignInPage = () => {
   const store = useStore('authStore');
   const handler = useStore('handler');
   const navigate = useNavigate();
   const { error, isLoading } = store;
-  const [data, setData] = useState({} as LoginDto);
+  const [data, setData] = useState({
+    email: '',
+    password: '',
+  } as LoginDto);
+  const [errors, setErrors] = useState({
+    email: false,
+    password: false,
+  });
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const passwordValidate = data.password.length > 8 && passwordRegex.test(data.password);
+  const emailValidate = !!data.email;
+
+  const handleSubmit = async (event: React.MouseEvent) => {
     event.preventDefault();
-    await store.login(data);
-    if (!error && store.auth) navigate('/home');
+    setErrors({
+      email: !emailValidate,
+      password: !passwordValidate,
+    });
+    if (!(errors.email || errors.password)) {
+      await store.login(data);
+      if (!error && store.auth && store.isAuthenticated) navigate('/home');
+    }
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <Container sx={styles.mainContainer}><Loader /></Container>;
   if (error) handler.handle(error.message);
 
   return <Container sx={styles.mainContainer}>
@@ -40,23 +61,32 @@ const SignInPage = () => {
           Sign in
         </Typography>
       </Stack>
-      <Stack component="form" sx={styles.container} onSubmit={handleSubmit}>
-        <FormControl sx={styles.form}>
+      <Stack component="form" sx={styles.container}>
+        <FormControl sx={styles.form} error={errors.email}>
           <InputLabel htmlFor="email">Email</InputLabel>
-          <Input id="email" type="email"
-            onChange={(e) => setData({ ...data, username: e.target.value })} />
+          <Input id="email" type="email" required
+            aria-describedby="email-error"
+            value={data.email}
+            onChange={(e) => setData({ ...data, email: e.target.value })} />
+          {errors.email && <FormHelperText error id="email-error">Must be email</ FormHelperText>}
         </FormControl>
-        <FormControl sx={styles.form}>
+        <FormControl sx={styles.form} error={errors.password}>
           <InputLabel htmlFor="password">Password</InputLabel>
-          <Input id="password" type="password"
+          <Input id="password" type="password" required
+            aria-describedby="password-error"
+            value={data.password}
             onChange={(e) => setData({ ...data, password: e.target.value })} />
+          {errors.password && <FormHelperText error id="password-error">
+            Password mush have 8 characters, 1 number,
+            1 uppercase and lowercase character and 1 special character
+          </ FormHelperText>}
         </FormControl>
-        <Stack sx={styles.buttonBox}>
-          <Button type="submit">Sign In</Button>
-          <Link to="/auth/sign-up" style={{ textDecoration: 'none' }}>
-            <Button color="secondary">Sign Up</Button>
-          </Link>
-        </Stack>
+      </Stack>
+      <Stack sx={styles.buttonBox}>
+        <Button onClick={handleSubmit}>Sign In</Button>
+        <Link to="/auth/sign-up" style={{ textDecoration: 'none' }}>
+          <Button color="secondary">Sign Up</Button>
+        </Link>
       </Stack>
     </Stack>
   </Container>;

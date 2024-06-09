@@ -1,6 +1,6 @@
 import {
   ConflictException,
-  Injectable,
+  Injectable, NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
@@ -34,7 +34,10 @@ export class AuthService {
 
   async login(email: string, pass: string): Promise<any> {
     const user = await this.userService.findUserWithPassword(email);
-    if (!user || !(await this.validateUser(email, pass, user))) {
+    if (!user) {
+      throw new NotFoundException(`User with such email doesn't exist`);
+    }
+    if (!(await this.validateUser(email, pass, user))) {
       throw new UnauthorizedException('Invalid password or email');
     }
     const payload = {
@@ -46,7 +49,7 @@ export class AuthService {
     };
     const tokens = await this.getTokens(payload);
     return {
-      tokens,
+      ...tokens,
       user: {
         id: user.id,
         role: user.role,

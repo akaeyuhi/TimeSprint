@@ -61,7 +61,7 @@ class CustomHttpClient implements IHttpClient {
       const error = err as AxiosError;
       const data = error.response?.data as BackendError;
       const errorMsg = (data && data.message instanceof Array ?
-        'Error: ' + data.message.join(', ') : String(error));
+        'Error: ' + data.message.join(', ') : String(data.message));
       this.errorHandler.handle(errorMsg);
     }
     return null;
@@ -85,7 +85,8 @@ class CustomHttpClient implements IHttpClient {
       async (error: AxiosError) => {
         const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-        if (error.response?.status === 401 && !originalRequest?._retry) {
+        if (error.response?.status === 401 && !originalRequest?._retry &&
+          (error.response?.data as any).message !== 'Invalid password or email') {
           if (this.isRefreshing) {
             return new Promise((resolve) => {
               this.refreshSubscribers.push((token: string) => {
