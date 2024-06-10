@@ -23,9 +23,9 @@ export const styles = createStyleSheet({
   },
   container: {
     width: '100%',
-    '& > *': {
-      mb: '1.5rem',
-      '& > div': {
+    '& > div': {
+      mb: '1rem',
+      '& > input': {
         padding: '0 1rem ',
       },
     },
