@@ -19,7 +19,7 @@ export class TeamRolesGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRole = this.reflector.get<TeamRole>(
-      'roles',
+      'role',
       context.getHandler(),
     );
     if (!requiredRole) {

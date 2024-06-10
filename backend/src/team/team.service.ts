@@ -1,5 +1,7 @@
 import {
-  BadRequestException, forwardRef, Inject,
+  BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,6 +14,7 @@ import { ProjectService } from 'src/project/project.service';
 import { Project } from 'src/project/entities/project.entity';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/entities/user.entity';
+import { TeamRole } from 'src/user/utils';
 
 @Injectable()
 export class TeamService {
@@ -27,16 +30,23 @@ export class TeamService {
     userId: number,
   ): Promise<Team> {
     const admins = [];
+    const members = [];
     createTeamDto.adminIds = [];
     createTeamDto.adminIds.push(userId);
     for (const id of createTeamDto.adminIds) {
       const admin = await this.userService.findById(id);
+      members.push(admin);
       admins.push(admin);
     }
     if (!admins.length || !createTeamDto.adminIds) {
       throw new NotFoundException('Admin not found');
     }
-    return await this.teamRepository.create({ ...createTeamDto, admins });
+    return await this.teamRepository.create({
+      ...createTeamDto,
+      members,
+      admins,
+      projects: [],
+    });
   }
 
   async findById(id: number): Promise<Team> {
@@ -74,6 +84,10 @@ export class TeamService {
     return this.teamRepository.addMember(team, member);
   }
 
+  async addProjectToTeam(team: Team, project: Project) {
+    return this.teamRepository.addProjectToTeam(team, project);
+  }
+
   async addAdmin(teamId: number, adminId: number): Promise<Team> {
     const team = await this.teamRepository.findById(teamId);
     if (!team) {
@@ -98,8 +112,20 @@ export class TeamService {
     return await this.teamRepository.getTeamIdByProject(projectId);
   }
 
-  async getUserRoleInTeam(userId: number, teamId: number): Promise<string> {
-    return await this.teamRepository.getUserRoleInTeam(userId, teamId);
+  async getUserRoleInTeam(userId: number, teamId: number): Promise<TeamRole> {
+    const team = await this.teamRepository.findById(teamId);
+
+    if (!team) {
+      throw new NotFoundException(`Team with ID ${teamId} not found`);
+    }
+
+    const user = team.members.find(user => user.id === userId);
+
+    if (!user) {
+      return null; // User is not a member of the team
+    }
+
+    return this.isAdmin(user, team) ? TeamRole.ADMIN : TeamRole.COLLABORATOR;
   }
 
   async deleteTeam(teamId: number): Promise<void> {
@@ -137,14 +163,14 @@ export class TeamService {
     teamId: number,
     createProjectDto: CreateProjectDto,
   ): Promise<Project> {
-    try {
-      const team = await this.findById(teamId);
-      const newProject =
-        await this.projectService.createProject(createProjectDto);
-      return await this.projectService.assignProjectToTeam(newProject.id, team);
-    } catch (e) {
-      console.error(e);
+    const team = await this.findById(teamId);
+    if (!team) {
+      throw new NotFoundException('Team not found');
     }
+    const newProject =
+      await this.projectService.createProject(createProjectDto);
+    await this.teamRepository.addProjectToTeam(team, newProject);
+    return newProject;
   }
 
   async deleteTeamProject(teamId: number, projectId: number): Promise<void> {
