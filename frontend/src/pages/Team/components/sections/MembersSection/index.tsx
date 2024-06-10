@@ -50,9 +50,9 @@ const MembersSection: React.FC<MembersSectionProps> = ({
       </Box>
       <Box sx={styles.avatarBox}>
         <AvatarGroup max={10}>
-          {team?.members.map(member => (
+          {team && team?.members?.length ? team.members.map(member => (
             <Avatar key={member.id} {...stringAvatar(member.username)} />
-          ))}
+          )) : <Typography variant="body1">No members for now</Typography>}
         </AvatarGroup>
       </Box>
     </Stack>
@@ -76,9 +76,9 @@ const MembersSection: React.FC<MembersSectionProps> = ({
       </Box>
       <Box sx={styles.avatarBox}>
         <AvatarGroup max={10}>
-          {team?.admins.map(admin => (
+          {team && team?.admins?.length ? team.admins.map(admin => (
             <Avatar key={admin.id} {...stringAvatar(admin.username)} />
-          ))}
+          )) : <Typography variant="body1">No admins for now</Typography>}
         </AvatarGroup>
       </Box>
     </Stack>
@@ -86,13 +86,13 @@ const MembersSection: React.FC<MembersSectionProps> = ({
       open={members.isOpen}
       handleClose={members.close}
       title="Team Members">
-      <MemberList isAdmin={isAdmin} members={team.members} onDelete={onDeleteUser} />
+      <MemberList isAdmin={isAdmin} members={team?.members} onDelete={onDeleteUser} />
     </ModalInfo>
     <ModalInfo
       open={admins.isOpen}
       handleClose={admins.close}
       title="Team Admins">
-      <MemberList isAdmin={isAdmin} members={team.admins} onDelete={onDeleteAdmin} />
+      <MemberList isAdmin={isAdmin} members={team?.admins} onDelete={onDeleteAdmin} />
     </ModalInfo>
   </>
 );

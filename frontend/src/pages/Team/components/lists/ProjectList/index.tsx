@@ -11,7 +11,7 @@ interface ProjectListProps {
 
 const ProjectList: React.FC<ProjectListProps> = ({ projects, onDelete, isAdmin = false }) => (
   <>
-    {(projects.length !== 0) ? <Grid container spacing={2} mt={1}>
+    {(projects && projects?.length !== 0) ? <Grid container spacing={2} mt={1}>
       {projects.map(project => (
         <Grid item key={project.id} xs={12}>
           <ProjectItem project={project} onDelete={onDelete} isAdmin={isAdmin} />
