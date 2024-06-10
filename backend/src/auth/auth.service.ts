@@ -1,6 +1,7 @@
 import {
   ConflictException,
-  Injectable, NotFoundException,
+  Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
@@ -68,6 +69,7 @@ export class AuthService {
     return this.login(createUserDto.username, createUserDto.password);
   }
   async refreshAccessToken(user: JwtPayload) {
+    console.log(user);
     const { accessToken } = await this.getTokens(user);
     return {
       accessToken,
