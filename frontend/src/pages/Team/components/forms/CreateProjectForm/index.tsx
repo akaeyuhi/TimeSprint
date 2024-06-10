@@ -1,67 +1,97 @@
-import React, { useState } from 'react';
-import { Box, Button, FormControl, Input, InputLabel, Stack, Typography } from '@mui/material';
+import React from 'react';
+import {
+  Box,
+  Button,
+  FormControl, FormHelperText,
+  InputLabel,
+  OutlinedInput,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
 import { DatePicker } from '@mui/x-date-pickers';
 import { styles } from 'src/components/modalForm/styles';
 import dayjs from 'dayjs';
+import { useValidation, ValidationErrors } from 'src/hooks/use-validation';
 
 interface CreateProjectFormProps {
   onSubmit: (data: CreateProjectDto) => void;
   onClose: () => void;
 }
 
+const validate = (state: CreateProjectDto): ValidationErrors<CreateProjectDto> => ({
+  name: !(state.name.length > 8),
+  description: !(state.description.length > 20),
+  startDate: state.startDate > new Date(),
+  endDate: state.startDate >= state.endDate,
+});
+
+
 const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose }) => {
-  const [formData, setFormData] = useState<CreateProjectDto>({
+  const [formData, setFormData, errors] = useValidation<CreateProjectDto>({
     name: '',
     description: '',
     startDate: new Date(),
     endDate: new Date(),
-  });
+  }, validate);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({
-      ...formData,
-    });
+    if (!errors.name && !errors.description && !errors.startDate && !errors.endDate)
+      onSubmit({
+        ...formData,
+      });
   };
 
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
-      <Typography variant="h6" mb={1}>
+      <Typography variant="h6" mb={2}>
         Create New Project
       </Typography>
-      <FormControl>
-        <InputLabel htmlFor="name">Project Name</InputLabel>
-        <Input
+      <FormControl error={errors.name}>
+        <InputLabel htmlFor="name">Project name</InputLabel>
+        <OutlinedInput
           id="name"
           type="text"
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onChange={(e) => setFormData('name', e.target.value)}
           required
+          aria-describedby="name-error"
+          label="Project name"
           value={formData.name} />
+        {errors.name && <FormHelperText error id="name-error">
+          Name should be 8 characters long
+        </ FormHelperText>}
       </FormControl>
-      <FormControl>
+      <FormControl error={errors.description}>
         <InputLabel htmlFor="description">Project description</InputLabel>
-        <Input
+        <OutlinedInput
           id="description"
           type="text"
           onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })}
+            setFormData('description', e.target.value)}
           rows={4}
           required
+          aria-describedby="desc-error"
+          label="Project description"
           value={formData.description} />
+        {errors.description && <FormHelperText error id="desc-error">
+          Description should be 20 characters long
+        </ FormHelperText>}
       </FormControl>
-      <FormControl>
+      <FormControl error={errors.startDate}>
         <DatePicker
           label="Start date"
+          disablePast={true}
           onChange={(newValue) =>
-            setFormData({ ...formData, startDate: newValue?.toDate() ?? new Date() })}
+            setFormData('startDate', newValue?.toDate() ?? new Date())}
           value={dayjs(formData.startDate)} />
       </FormControl>
-      <FormControl>
+      <FormControl error={errors.endDate}>
         <DatePicker
           label="End date"
+          disablePast={true}
           onChange={(newValue) =>
-            setFormData({ ...formData, endDate: newValue?.toDate() ?? new Date() })}
+            setFormData('endDate', newValue?.toDate() ?? new Date())}
           value={dayjs(formData.endDate)} />
       </FormControl>
       <Box sx={styles.buttonContainer}>
