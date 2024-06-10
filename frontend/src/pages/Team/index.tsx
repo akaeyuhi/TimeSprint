@@ -117,15 +117,7 @@ const TeamPage: React.FC = () => {
     } finally {
       modalHandlers.leaveTeam.close();
     }
-  }, [
-    authStore.auth.user.id,
-    handler,
-    modalHandlers.leaveTeam,
-    navigate,
-    teamStore.current,
-    teamStore.error,
-    userStore
-  ]);
+  }, [authStore.auth.user.id, handler, modalHandlers.leaveTeam, navigate, teamStore, userStore]);
 
   const handleDeleteUser = useCallback(async (userId: number) => {
     try {
