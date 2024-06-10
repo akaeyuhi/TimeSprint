@@ -13,17 +13,16 @@ import { useStores } from 'src/hooks';
 import { styles } from 'src/components/task/components/TaskList/styles';
 import TaskSort from 'src/components/task/components/TaskSort';
 import DeleteTaskForm from 'src/components/task/components/DeleteTaskModal';
-import TaskStore from 'src/stores/task.store';
-import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
-import { TaskContainer } from 'src/models/task-container.model';
 import { Project } from 'src/models/project.model';
 import { UserStore } from 'src/stores/user.store';
+import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 
 interface TaskListProps {
   isProjectPage: boolean,
   isEditable: boolean,
   isAdmin?: boolean,
+  projectId?: number,
   createTask: ModalHandler,
   editTask: ModalHandler,
   deleteTask: ModalHandler,
@@ -33,22 +32,21 @@ const TaskList: React.FC<TaskListProps> = ({
   isProjectPage = false,
   isEditable = true,
   isAdmin = false,
+  projectId,
   createTask,
   editTask,
   deleteTask,
 }) => {
-  const { userStore, projectStore, handler } = useStores();
-  const [store, setStore] = useState<TaskStore<TaskContainer>>(userStore);
+  const { userStore, projectStore, authStore } = useStores();
   const [editedTask, setEditedTask] = useState<Task | null>(null);
   const [deletedTask, setDeletedTask] = useState<Task | null>(null);
+  const store = projectId ? projectStore : userStore;
 
   useEffect(() => {
-    if (isProjectPage) setStore(projectStore);
-  }, [isProjectPage, projectStore]);
-
-  useEffect(() => {
-    store.fetch();
-  }, [store]);
+    if (isObjectEmpty(store.current)) {
+      store.fetch(projectId ?? authStore.auth.user.id);
+    }
+  }, [authStore.auth.user.id, projectId, store]);
 
   const members = (store.current as Project).team?.members;
   const isProjectAdmin = isProjectPage && isAdmin;
@@ -123,16 +121,12 @@ const TaskList: React.FC<TaskListProps> = ({
     setDeletedTask(task);
   };
 
-  if (store.isLoading) return <Loader />;
-  if (store.error) handler.handle(store.error.message);
-
-
   return (
     <Box sx={styles.container}>
       {store.tasks.length === 0 ? (
-        <Typography variant="body1">No tasks available</Typography>
+        <Typography variant="h6" mt={2}>No tasks available</Typography>
       ) : (
-        <Grid container spacing={2} mt={1} alignItems="stretch">
+        <Grid container spacing={2} mt={2} alignItems="stretch">
           <Grid item xs={12}>
             <TaskSort
               isEditable={isEditable}

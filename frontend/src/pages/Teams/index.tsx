@@ -10,6 +10,7 @@ import { useModals } from 'src/hooks/use-modals';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
 import { catchWrapper } from 'src/utils/common/catchWrapper';
+import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 
 interface TeamModals {
   createTeam: boolean;
@@ -35,7 +36,7 @@ const TeamsPage: React.FC = () => {
       modalHandlers.createTeam,
     )(), [modalHandlers.createTeam, userStore]);
 
-  if (userStore.isLoading) return <Loader />;
+  if (userStore.isLoading || isObjectEmpty(userStore.current)) return <Loader />;
   if (userStore.error) handler.handle(userStore.error.message);
 
   return (
