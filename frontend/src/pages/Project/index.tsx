@@ -11,6 +11,7 @@ import ProjectProgressBar from 'src/pages/Project/components/ProjectProgressBar'
 import EditProjectForm from 'src/pages/Project/components/EditProjectForm';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
+import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 
 interface ProjectModals {
   edit: boolean,
@@ -18,7 +19,7 @@ interface ProjectModals {
 
 
 const ProjectPage = () => {
-  const { teamStore, projectStore, authStore, handler } = useStores();
+  const { projectStore, authStore, handler } = useStores();
   const { id } = useParams();
   const [projectModals, setProjectModals] = useState<ProjectModals>({
     edit: false,
@@ -28,19 +29,12 @@ const ProjectPage = () => {
   const modalHandlers = useModals<ProjectModals>(projectModals, setProjectModals);
 
   useEffect(() => {
-    projectStore.fetch(Number(id)).then(() => {
-      teamStore.fetch(Number(projectStore.current.team?.id));
-    });
-  }, [id, projectStore, teamStore]);
-
-  useEffect(() => {
-    const currentUser = teamStore.getUserById(authStore.auth.user.id);
-    if (!currentUser) {
-      handler.handle('Something went wrong');
-      return;
+    if (id) {
+      projectStore.fetch(Number(id)).then(() => {
+        setIsCurrentAdmin(projectStore.isUserAdmin(authStore.auth.user.id));
+      });
     }
-    setIsCurrentAdmin(teamStore.isAdmin(currentUser));
-  }, [authStore.auth.user.id, teamStore]);
+  }, [authStore.auth.user.id, id, projectStore]);
 
 
   const handleEditSubmit = useCallback(async (updateProjectDto: UpdateProjectDto) => {
@@ -53,13 +47,10 @@ const ProjectPage = () => {
     } finally {
       modalHandlers.edit.close();
     }
-  }, [modalHandlers.edit, projectStore]);
+  }, [handler, modalHandlers.edit, projectStore]);
 
-  if (projectStore.isLoading) return <Loader />;
+  if (projectStore.isLoading || isObjectEmpty(projectStore.current)) return <Loader />;
   if (projectStore.error) handler.handle(projectStore.error.message);
-  if (teamStore.error) handler.handle(teamStore.error.message);
-  if (authStore.error) handler.handle(authStore.error.message);
-
 
   return (
     <Container>
@@ -91,7 +82,7 @@ const ProjectPage = () => {
         </ModalForm>
       </Stack>
       <ProjectProgressBar progress={projectStore.progress} />
-      <TaskSection isProjectPage isAdmin={isCurrentAdmin} />
+      <TaskSection isProjectPage isAdmin={isCurrentAdmin} projectId={Number(id)} />
     </Container>
   );
 };
