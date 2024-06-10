@@ -11,9 +11,9 @@ interface TeamListProps {
 const TeamList: React.FC<TeamListProps> = ({ teams }) => (
   <>
     {!teams || teams.length === 0 ? (
-      <Typography variant="h5" sx={{ mt: '0.5rem' }}>No teams available</Typography>
+      <Typography variant="h5" sx={{ mt: '1rem' }}>No teams available</Typography>
     ) : (
-      <Grid container spacing={2} sx={{ mt: '0.5rem' }}>
+      <Grid container spacing={2} sx={{ mt: '1rem' }}>
         {teams.map(team => (
           <Grid item xs={12} key={team.id}>
             <TeamItem team={team} />
