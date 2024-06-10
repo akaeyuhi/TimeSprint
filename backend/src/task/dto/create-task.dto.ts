@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsString, Length } from 'class-validator';
+import { IsBoolean, IsDateString, IsString, Length } from 'class-validator';
 
 export class CreateTaskDto {
   @Length(8, 20)
@@ -15,12 +15,12 @@ export class CreateTaskDto {
   @IsBoolean()
   importance = false;
 
-  @IsDate()
+  @IsDateString()
   startDate: Date;
 
   @IsBoolean()
   isCompleted = false;
 
-  @IsDate()
+  @IsDateString()
   endDate: Date;
 }

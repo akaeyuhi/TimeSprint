@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, Length } from 'class-validator';
+import { IsBoolean, IsDateString, Length } from 'class-validator';
 
 export class CreateProjectDto {
   @Length(8, 20)
@@ -7,10 +7,10 @@ export class CreateProjectDto {
   @Length(20)
   description: string;
 
-  @IsDate()
+  @IsDateString()
   startDate: Date;
 
-  @IsDate()
+  @IsDateString()
   endDate: Date;
 
   @IsBoolean()
