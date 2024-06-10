@@ -7,6 +7,7 @@ import axios, {
 } from 'axios';
 import { ErrorHandler } from './errorHandler';
 import { AuthStore } from 'src/stores/auth.store';
+import { parseISO } from 'date-fns';
 
 export type HttpClientRequestConfig = {
   url: string;
@@ -32,6 +33,11 @@ type BackendError = {
   statusCode: number,
 }
 
+const ISODateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?(?:[-+]\d{2}:?\d{2}|Z)?$/;
+
+const isIsoDateString = (value: unknown): value is string =>
+  typeof value === 'string' && ISODateFormat.test(value);
+
 class CustomHttpClient implements IHttpClient {
   baseUrl: string;
   private axios: AxiosInstance = axios.create();
@@ -44,6 +50,7 @@ class CustomHttpClient implements IHttpClient {
     this.baseUrl = baseUrl;
     this.authStore = authStore;
 
+    this.initializeDateInterceptor();
     this.initializeTokenInterceptor();
     this.initializeRefreshInterceptor();
   }
@@ -67,6 +74,19 @@ class CustomHttpClient implements IHttpClient {
     return null;
   }
 
+  private handleDates(data: unknown) {
+    if (isIsoDateString(data)) return parseISO(data);
+    if (data === null || data === undefined || typeof data !== 'object') return data;
+
+    for (const [key, val] of Object.entries(data)) {
+      // @ts-expect-error this is a hack to make the type checker happy
+      if (isIsoDateString(val)) data[key] = parseISO(val);
+      else if (typeof val === 'object') this.handleDates(val);
+    }
+
+    return data;
+  };
+
   private initializeTokenInterceptor() {
     this.axios.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
@@ -76,6 +96,15 @@ class CustomHttpClient implements IHttpClient {
         return config;
       },
       (error) => Promise.reject(error),
+    );
+  }
+
+  private initializeDateInterceptor() {
+    this.axios.interceptors.response.use(
+      (response: AxiosResponse) => {
+        this.handleDates(response.data);
+        return response;
+      }
     );
   }
 
