@@ -8,6 +8,7 @@ import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
 import TaskStore from 'src/stores/task.store';
 import UserService from 'src/services/user.service';
 import TeamService from 'src/services/team.service';
+import { Project } from 'src/models/project.model';
 
 export class UserStore extends TaskStore<User> {
   @observable error: Error | null = null;
@@ -24,21 +25,23 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async fetch(userId: number): Promise<void> {
+  async fetch(userId: number): Promise<User> {
     this.isLoading = true;
     try {
       const user = <User> await this.userService.getUser(userId);
       runInAction(() => {
         this.current = user;
-        this.tasks = user.tasks;
-        this.isLoading = false;
       });
     } catch (error) {
       runInAction(() => {
         this.error = error as Error;
+      });
+    } finally {
+      runInAction(() => {
         this.isLoading = false;
       });
     }
+    return this.current;
   }
 
   @action

@@ -12,18 +12,16 @@ export class ProjectStore extends TaskStore<Project> {
   @observable isLoading = false;
   @observable.deep current: Project = {} as Project;
   @observable.deep tasks: Task[] = [];
-  projectService: ProjectService;
 
-  constructor(projectService: ProjectService) {
+  constructor(private readonly projectService: ProjectService) {
     super();
-    this.projectService = projectService;
     makeObservable(this);
   }
 
   @computed
   get progress(): number {
     const totalTasks = this.current.tasks.length;
-    if (totalTasks === 0) return 0; // Avoid division by zero
+    if (totalTasks === 0) return 100; // Avoid division by zero
     const completedTasks = this.current.tasks.filter(task => task.isCompleted).length;
     return (completedTasks / totalTasks) * 100;
   }
@@ -39,20 +37,33 @@ export class ProjectStore extends TaskStore<Project> {
       const project = <Project> await this.projectService.getProject(projectId);
       runInAction(() => {
         this.current = project;
-        this.tasks = project.tasks;
-        this.isLoading = false;
       });
     } catch (error) {
       runInAction(() => {
         this.error = error as Error;
+      });
+    } finally {
+      runInAction(() => {
         this.isLoading = false;
       });
-      throw error;
     }
+    return this.current;
   }
 
   getTaskById(taskId: number): Task | null {
     return this.current?.tasks.find(task => task.id === taskId) ?? null;
+  }
+
+  isUserMember(userId: number) {
+    if (this.current.team) {
+      return this.current.team.members.some((user) => user.id === userId);
+    } else return false;
+  }
+
+  isUserAdmin(userId: number) {
+    if (this.current.team && this.isUserMember(userId)) {
+      return this.current.team.admins.some((user) => user.id === userId);
+    } else return false;
   }
 
   @action

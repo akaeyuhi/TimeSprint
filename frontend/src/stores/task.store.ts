@@ -9,7 +9,7 @@ export default abstract class TaskStore<T extends TaskContainer> {
   abstract current: T;
   abstract tasks: Task[];
 
-  abstract fetch(id?: number): Promise<void>;
+  abstract fetch(id?: number): Promise<T>;
 
   abstract getTasks(): Task[];
 

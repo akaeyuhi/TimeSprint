@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
 import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
@@ -7,45 +7,52 @@ import TeamService from 'src/services/team.service';
 export class TeamStore {
   error: Error | null = null;
   isLoading = false;
-  currentTeam: Team = {} as Team;
+  current: Team = {} as Team;
 
   constructor(private readonly teamService: TeamService) {
     makeAutoObservable(this);
   }
 
   isAdmin(user: User) {
-    return !!this.currentTeam.admins.find(admin => admin.id === user.id);
+    return !!this.current.admins.find(admin => admin.id === user.id);
   }
 
   isMember(user: User) {
-    return !!this.currentTeam.members.find(member => member.id === user.id);
+    return !!this.current.members.find(member => member.id === user.id);
   }
 
   getUserById(id: number) {
-    return this.currentTeam.members.find(member => member.id === id);
+    return this.current.members.find(member => member.id === id);
   }
 
   async fetch(teamId: number) {
     this.isLoading = true;
     try {
-      this.currentTeam = <Team> await this.teamService.getTeam(teamId);
+      const team = <Team> await this.teamService.getTeam(teamId);
+      runInAction(() => {
+        this.current = team;
+      });
     } catch (error) {
-      this.error = error as Error;
+      runInAction(() => {
+        this.error = error as Error;
+      });
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
-    return this.currentTeam;
+    return this.current;
   }
 
   getProjects() {
-    return this.currentTeam.projects;
+    return this.current.projects;
   }
 
   async createProject(projectDto: CreateProjectDto) {
     this.isLoading = true;
     try {
-      this.currentTeam = <Team> await this.teamService.createProject(
-        this.currentTeam.id,
+      this.current = <Team> await this.teamService.createProject(
+        this.current.id,
         projectDto,
       );
     } catch (error) {
@@ -53,14 +60,14 @@ export class TeamStore {
     } finally {
       this.isLoading = false;
     }
-    return this.currentTeam.projects;
+    return this.current.projects;
   }
 
   async deleteProject(projectId: number) {
     this.isLoading = true;
     try {
-      this.currentTeam = <Team> await this.teamService.deleteProject(
-        this.currentTeam.id,
+      this.current = <Team> await this.teamService.deleteProject(
+        this.current.id,
         projectId,
       );
     } catch (error) {
@@ -68,14 +75,14 @@ export class TeamStore {
     } finally {
       this.isLoading = false;
     }
-    return this.currentTeam.projects;
+    return this.current.projects;
   }
 
   async addMember(user: User) {
     this.isLoading = true;
     try {
       if (!this.isMember(user)) {
-        this.currentTeam = <Team> await this.teamService.addMember(this.currentTeam.id, user.id);
+        this.current = <Team> await this.teamService.addMember(this.current.id, user.id);
       } else {
         this.error = new Error('User already in team');
       }
@@ -91,7 +98,7 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isAdmin(user)) {
-        this.currentTeam = <Team> await this.teamService.addAdmin(this.currentTeam.id, user.id);
+        this.current = <Team> await this.teamService.addAdmin(this.current.id, user.id);
       } else {
         this.error = new Error('User already is admin');
       }
@@ -108,7 +115,7 @@ export class TeamStore {
     try {
       const user = this.getUserById(userId);
       if (user && !this.isAdmin(user)) {
-        this.currentTeam = <Team> await this.teamService.deleteMember(this.currentTeam.id, userId);
+        this.current = <Team> await this.teamService.deleteMember(this.current.id, userId);
       } else if (user && this.isAdmin(user)) {
         this.error = new Error('This user has admin privilege');
       } else {
@@ -126,7 +133,7 @@ export class TeamStore {
     try {
       const user = this.getUserById(userId);
       if (user && this.isAdmin(user)) {
-        this.currentTeam = <Team> await this.teamService.deleteAdmin(this.currentTeam.id, userId);
+        this.current = <Team> await this.teamService.deleteAdmin(this.current.id, userId);
       } else if (user && !this.isAdmin(user)) {
         this.error = new Error('This user has no admin privilege');
       } else {
