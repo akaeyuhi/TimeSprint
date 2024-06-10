@@ -23,14 +23,43 @@ export class Team {
   @Length(20)
   description: string;
 
-  @ManyToMany(() => User)
-  @JoinTable()
+  @ManyToMany(() => User, user => user.teams, {
+    eager: true,
+    cascade: ['update'],
+  })
+  @JoinTable({
+    name: 'team_members',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'team_id',
+      referencedColumnName: 'id',
+    },
+  })
   members: User[];
 
-  @ManyToMany(() => User)
-  @JoinTable()
+  @ManyToMany(() => User, {
+    eager: true,
+    cascade: ['update'],
+  })
+  @JoinTable({
+    name: 'team_admins',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'team_id',
+      referencedColumnName: 'id',
+    },
+  })
   admins: User[];
 
-  @OneToMany(() => Project, project => project.team)
+  @OneToMany(() => Project, project => project.team, {
+    eager: true,
+    cascade: true,
+  })
   projects: Project[];
 }

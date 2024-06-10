@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IRepository } from 'src/interfaces/repository.interface';
 import { User } from 'src/user/entities/user.entity';
+import { Project } from 'src/project/entities/project.entity';
 
 @Injectable()
 export class TeamRepository implements IRepository<Team> {
@@ -12,11 +13,16 @@ export class TeamRepository implements IRepository<Team> {
     private readonly repository: Repository<Team>,
   ) {}
   async findAll(): Promise<Team[]> {
-    return this.repository.find({ relations: ['members', 'admins'] });
+    return this.repository.find({
+      relations: ['members', 'admins', 'projects'],
+    });
   }
 
   async findById(id: number): Promise<Team> {
-    return this.repository.findOneBy({ id });
+    return this.repository.findOne({
+      where: { id },
+      relations: ['members', 'admins', 'projects'],
+    });
   }
 
   async create(createTeamDto: Partial<Team>): Promise<Team> {
@@ -73,25 +79,6 @@ export class TeamRepository implements IRepository<Team> {
     return team.id;
   }
 
-  async getUserRoleInTeam(userId: number, teamId: number): Promise<string> {
-    const team = await this.repository.findOne({
-      where: { id: userId },
-      relations: ['users'],
-    });
-
-    if (!team) {
-      throw new NotFoundException(`Team with ID ${teamId} not found`);
-    }
-
-    const user = team.members.find(user => user.id === userId);
-
-    if (!user) {
-      return null; // User is not a member of the team
-    }
-
-    return user.role;
-  }
-
   async addMember(team: Team, user: User): Promise<Team> {
     team.members.push(user);
     return await this.repository.save(team);
@@ -100,6 +87,11 @@ export class TeamRepository implements IRepository<Team> {
   async addAdmin(team: Team, user: User): Promise<Team> {
     team.admins.push(user);
     return await this.repository.save(team);
+  }
+
+  async addProjectToTeam(team: Team, project: Project) {
+    team.projects.push(project);
+    return this.repository.save(team);
   }
 
   async deleteAdmin(team: Team, user: User): Promise<Team> {

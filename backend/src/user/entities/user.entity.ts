@@ -5,7 +5,7 @@ import {
   OneToMany,
   BeforeInsert,
   ManyToMany,
-  JoinTable,
+  BeforeUpdate,
 } from 'typeorm';
 import { Team } from 'src/team/entities/team.entity';
 import { Task } from 'src/task/entities/task.entity';
@@ -40,17 +40,20 @@ export class User {
   })
   role: AdminRole;
 
-  @OneToMany(() => LeisureActivity, activity => activity.user)
+  @OneToMany(() => LeisureActivity, activity => activity.user, {
+    cascade: true,
+  })
   activities: LeisureActivity[];
 
-  @OneToMany(() => Task, task => task.user)
+  @OneToMany(() => Task, task => task.user, { cascade: true })
   tasks: Task[];
 
-  @ManyToMany(() => Team)
-  @JoinTable()
+  @ManyToMany(() => Team, team => team.members, { cascade: ['update'] })
   teams: Team[];
 
-  @BeforeInsert() async hashPassword() {
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
     this.password = await hash(this.password, 10);
   }
 }

@@ -38,9 +38,9 @@ export class Task {
   @IsDate()
   endDate: Date;
 
-  @Column()
+  @Column({ type: 'boolean' })
   @IsBoolean()
-  isCompleted: boolean;
+  isCompleted = false;
 
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'project_id' })
@@ -55,7 +55,7 @@ export class Task {
   // eslint-disable-next-line no-use-before-define
   dependent: Task[];
 
-  @ManyToMany(() => Task, task => task.dependent)
+  @ManyToMany(() => Task, task => task.dependent, { eager: true })
   // eslint-disable-next-line no-use-before-define
   dependencies: Task[];
 }
