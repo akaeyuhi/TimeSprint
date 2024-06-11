@@ -9,8 +9,8 @@ import TeamList from 'src/components/team/TeamList';
 import { useModals } from 'src/hooks/use-modals';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
-import { catchWrapper } from 'src/utils/common/catchWrapper';
 import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
+import { toast } from 'react-toastify';
 
 interface TeamModals {
   createTeam: boolean;
@@ -28,13 +28,13 @@ const TeamsPage: React.FC = () => {
 
   const modalHandlers = useModals<TeamModals>(modal, setModal);
 
-  const handleCreateTeamSubmit = useCallback((teamDto: CreateTeamDto) =>
-    catchWrapper(
-      async () => await userStore.createTeam(teamDto),
-      `Created team: ${teamDto.name}`,
-      `Error!: ${userStore.error}`,
-      modalHandlers.createTeam,
-    )(), [modalHandlers.createTeam, userStore]);
+  const handleCreateTeamSubmit = useCallback(async (teamDto: CreateTeamDto) => {
+    await userStore.createTeam(teamDto);
+    if (!userStore.error && !userStore.isLoading)  {
+      toast.success(`Created team: ${teamDto.name}`);
+      modalHandlers.createTeam.close();
+    }
+  }, [modalHandlers.createTeam, userStore]);
 
   if (userStore.isLoading || isObjectEmpty(userStore.current)) return <Loader />;
   if (userStore.error) handler.handle(userStore.error.message);

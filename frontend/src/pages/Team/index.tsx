@@ -48,100 +48,77 @@ const TeamPage: React.FC = () => {
   const navigate = useNavigate();
   const [deleteProject, setDeleteProject] = useState<Project | null>(null);
   const [deleteUser, setDeleteUser] = useState<User | null>(null);
-  const [isCurrentAdmin, setIsCurrentAdmin] = useState(false);
+  const [isCurrentAdmin, setIsCurrentAdmin] = useState(
+    !isObjectEmpty(teamStore.current) ? teamStore.isAdmin(authStore.auth.user.id) : false);
 
   useEffect(() => {
-    teamStore.fetch(Number(id)).then(() => {
-      const currentUser = teamStore.getUserById(authStore.auth.user.id);
-      if (!currentUser) {
-        handler.handle('Something went wrong');
-        return;
-      }
-      setIsCurrentAdmin(teamStore.isAdmin(currentUser));
-    });
+    if (isObjectEmpty(teamStore.current)) {
+      teamStore.fetch(Number(id)).then(() =>
+        setIsCurrentAdmin(teamStore.isAdmin(authStore.auth.user.id)));
+    }
   }, [authStore.auth.user.id, handler, id, teamStore]);
 
   const handleCreateSubmit = useCallback(async (projectDto: CreateProjectDto) => {
-    try {
-      await teamStore.createProject(projectDto);
+    await teamStore.createProject(projectDto);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Created project ${projectDto.name}!`);
-    } catch (e) {
-      handler.handle(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.createProject.close();
     }
-  }, [handler, modalHandlers.createProject, teamStore]);
+  }, [modalHandlers.createProject, teamStore]);
 
   const handleAddUserSubmit = useCallback(async (user: User) => {
-    try {
-      await teamStore.addMember(user);
+    await teamStore.addMember(user);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Added new member! ${user.username}!`);
-    } catch (e) {
-      handler.handle(`Error occurred: ${teamStore.error ?? userStore.error}!`);
-    } finally {
       modalHandlers.addUser.close();
     }
-  }, [handler, modalHandlers.addUser, teamStore, userStore.error]);
+  }, [modalHandlers.addUser, teamStore]);
 
   const handleAddAdminSubmit = useCallback(async (user: User) => {
-    try {
-      await teamStore.addAdmin(user);
+    await teamStore.addAdmin(user);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Added new admin! ${user.username}!`);
-    } catch (e) {
-      handler.handle(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.addAdmin.close();
     }
-  }, [handler, modalHandlers.addAdmin, teamStore]);
+  }, [modalHandlers.addAdmin, teamStore]);
 
   const handleDeleteProject = useCallback(async (projectId: number) => {
-    try {
-      await teamStore.deleteProject(projectId);
+    await teamStore.deleteProject(projectId);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Deleted project!`);
-    } catch (e) {
-      handler.handle(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.deleteProject.close();
+      setDeleteUser(null);
     }
-  }, [handler, modalHandlers.deleteProject, teamStore]);
+  }, [modalHandlers.deleteProject, teamStore]);
 
   const handleLeaveTeam = useCallback(async () => {
-    try {
-      const userId = authStore.auth.user.id;
-      await userStore.fetch(userId);
-      await userStore.leaveTeam(teamStore.current.id);
+    const userId = authStore.auth.user.id;
+    await userStore.fetch(userId);
+    await userStore.leaveTeam(teamStore.current.id);
+    if (!teamStore.error && !teamStore.isLoading)  {
       navigate('/teams');
       toast.success(`Left team ${teamStore.current}`);
-    } catch (e) {
-      handler.handle(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.leaveTeam.close();
     }
-  }, [authStore.auth.user.id, handler, modalHandlers.leaveTeam, navigate, teamStore, userStore]);
+  }, [authStore.auth.user.id, modalHandlers.leaveTeam, navigate, teamStore, userStore]);
 
   const handleDeleteUser = useCallback(async (userId: number) => {
-    try {
-      await teamStore.deleteUser(userId);
+    await teamStore.deleteUser(userId);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Deleted user!`);
-    } catch (e) {
-      handler.handle(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.deleteUser.close();
       setDeleteUser(null);
     }
-  }, [handler, modalHandlers.deleteUser, teamStore]);
+  }, [modalHandlers.deleteUser, teamStore]);
 
   const handleDeleteAdmin = useCallback(async (userId: number) => {
-    try {
-      await teamStore.deleteAdmin(userId);
+    await teamStore.deleteAdmin(userId);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Deleted admin!`);
-    } catch (e) {
-      handler.handle(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.deleteAdmin.close();
       setDeleteUser(null);
     }
-  }, [handler, modalHandlers.deleteAdmin, teamStore]);
+  }, [modalHandlers.deleteAdmin, teamStore]);
 
   const handleDeleteClick = (project: Project) => {
     setDeleteProject(project);

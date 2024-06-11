@@ -52,66 +52,49 @@ const TaskList: React.FC<TaskListProps> = ({
   const isProjectAdmin = isProjectPage && isAdmin;
 
   const createTaskHandler = useCallback(async (createTaskDto: CreateTaskDto) => {
-    try {
-      await store.createTask(createTaskDto);
-      toast.success(`Created task! ${createTaskDto.name}`);
-    } catch (e) {
-      toast.error(`Error occurred! ${store.error}`);
-    } finally {
+    await store.createTask(createTaskDto);
+    if (!store.error && !store.isLoading)  {
       createTask.close();
+      toast.success(`Created task! ${createTaskDto.name}`);
     }
   }, [createTask, store]);
 
   const submitEditHandler = useCallback(async (taskId: number, updatedTask: UpdateTaskDto) => {
-    try {
-      await store.updateTask(taskId, updatedTask);
-      toast.success(`Edited task! ${updatedTask.name}`);
-    } catch (e) {
-      toast.error(`Error occurred! ${store.error}`);
-    } finally {
+    await store.updateTask(taskId, updatedTask);
+    if (!store.error && !store.isLoading)  {
       editTask.close();
       setEditedTask(null);
+      toast.success(`Edited task! ${updatedTask.name}`);
     }
   }, [editTask, store]);
 
   const deleteTaskHandler = useCallback(async (taskId: number) => {
-    try {
-      await store.deleteTask(taskId);
-      toast.success(`Deleted task! ${deletedTask?.name}`);
-    } catch (e) {
-      console.error(e);
-      toast.error(`Error occurred! ${store.error}`);
-    } finally {
+    await store.deleteTask(taskId);
+    if (!store.error && !store.isLoading)  {
       deleteTask.close();
       setDeletedTask(null);
+      toast.success(`Deleted task! ${deletedTask?.name}`);
     }
   }, [deleteTask, deletedTask?.name, store]);
 
   const toggleTaskHandler = useCallback(async (taskId: number) => {
-    try {
-      await store.toggleTask(taskId);
+    await store.toggleTask(taskId);
+    if (!store.error && !store.isLoading)  {
+      deleteTask.close();
+      setDeletedTask(null);
       toast.success(`Toggled task!`);
-    } catch (e) {
-      console.error(e);
-      toast.error(`Error occurred! ${store.error}`);
     }
-  }, [store]);
+  }, [deleteTask, store]);
 
   const handleImportantTasks = useCallback(async () => {
     if (!isProjectPage) {
-      try {
-        await (store as UserStore).loadImportantTasks();
-      } catch (e) {
-        console.error(e);
-        toast.error(`Error occurred! ${store.error}`);
-      }
+      await (store as UserStore).loadImportantTasks();
     }
-
   }, [isProjectPage, store]);
 
-  const onSort = (newTasks: Task[]) => {
+  const onSort = useCallback((newTasks: Task[]) => {
     store.sortTasks(newTasks);
-  };
+  }, [store]);
 
   const onEditClick = (task: Task) => {
     setEditedTask(task);
@@ -123,7 +106,7 @@ const TaskList: React.FC<TaskListProps> = ({
 
   return (
     <Box sx={styles.container}>
-      {store.tasks.length === 0 ? (
+      {store.current.tasks.length === 0 ? (
         <Typography variant="h6" mt={2}>No tasks available</Typography>
       ) : (
         <Grid container spacing={2} mt={2} alignItems="stretch">
@@ -132,11 +115,11 @@ const TaskList: React.FC<TaskListProps> = ({
               isEditable={isEditable}
               isProjectPage={isProjectPage}
               onSort={onSort}
-              tasks={store.tasks}
+              tasks={store.current.tasks}
               handleGetImportantTasks={handleImportantTasks}
             />
           </Grid>
-          {store.tasks.map(task => (
+          {store.current.tasks.map(task => (
             <TaskItem
               key={task.id}
               task={task}
@@ -155,14 +138,14 @@ const TaskList: React.FC<TaskListProps> = ({
           onCancel={createTask.close}
           members={members}
           onSubmit={createTaskHandler}
-          tasks={store.tasks}
+          tasks={store.current.tasks}
         />
       </ModalForm>
       <ModalForm open={editTask.isOpen} handleClose={editTask.close}>
         <EditTaskForm
           task={editedTask}
           members={members}
-          tasks={store.tasks}
+          tasks={store.current.tasks}
           onCancel={editTask.close}
           onSubmit={submitEditHandler}
         />

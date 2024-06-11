@@ -38,16 +38,12 @@ const ProjectPage = () => {
 
 
   const handleEditSubmit = useCallback(async (updateProjectDto: UpdateProjectDto) => {
-    try {
-      await projectStore.editProject(updateProjectDto);
+    await projectStore.editProject(updateProjectDto);
+    if (!projectStore.error && !projectStore.isLoading)  {
       modalHandlers.edit.close();
-      toast.success('Edited project!');
-    } catch (e) {
-      handler.handle(`Error occurred: ${projectStore.error}`);
-    } finally {
-      modalHandlers.edit.close();
+      toast.success(`Edited project!`);
     }
-  }, [handler, modalHandlers.edit, projectStore]);
+  }, [modalHandlers.edit, projectStore]);
 
   if (projectStore.isLoading || isObjectEmpty(projectStore.current)) return <Loader />;
   if (projectStore.error) handler.handle(projectStore.error.message);
@@ -77,7 +73,7 @@ const ProjectPage = () => {
           <EditProjectForm
             project={projectStore.current}
             onSubmit={handleEditSubmit}
-            onCancel={modalHandlers.edit.close}
+            onClose={modalHandlers.edit.close}
           />
         </ModalForm>
       </Stack>

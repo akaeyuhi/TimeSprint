@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
           Today is {formattedDate}.
         </Typography>
         <Box>
-          <TaskList tasks={userStore.tasks} />
+          <TaskList tasks={userStore.current.tasks} />
         </Box>
         {/*<Box>*/}
         {/*  <LeisureActivityList leisureActivities={leisureActivities}/>*/}
