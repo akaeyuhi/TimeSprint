@@ -24,7 +24,7 @@ export class TaskRepository implements IRepository<Task> {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
     await this.repository.update(id, updateTaskDto);
-    return task;
+    return { ...task, ...updateTaskDto };
   }
 
   async findById(id: number): Promise<Task> {

@@ -3,6 +3,7 @@ import { TaskRepository } from './task.repository';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from './entities/task.entity';
 import { Project } from 'src/project/entities/project.entity';
+import { UpdateTaskDto } from 'src/task/dto/update-task.dto';
 
 @Injectable()
 export class TaskService {
@@ -24,7 +25,7 @@ export class TaskService {
 
   async updateTask(
     taskId: number,
-    updateTaskDto: Partial<CreateTaskDto>,
+    updateTaskDto: Partial<UpdateTaskDto>,
   ): Promise<Task> {
     return await this.taskRepository.update(taskId, updateTaskDto);
   }
