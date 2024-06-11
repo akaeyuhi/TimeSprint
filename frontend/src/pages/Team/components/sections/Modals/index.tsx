@@ -88,8 +88,7 @@ const Modals: React.FC<ModalsProps> = ({
     <ModalForm handleClose={addAdmin.close} open={addAdmin.isOpen}>
       <AddAdminForm
         onClose={addAdmin.close}
-        onSubmit={handleAddAdminSubmit}
-        candidates={team.members} />
+        onSubmit={handleAddAdminSubmit} />
     </ModalForm>
     <ModalForm handleClose={leaveTeam.close} open={leaveTeam.isOpen}>
       <LeaveTeamForm onClose={leaveTeam.close} team={team} onLeave={handleLeaveTeam} />
