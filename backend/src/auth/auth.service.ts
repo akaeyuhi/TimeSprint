@@ -66,7 +66,7 @@ export class AuthService {
       throw new ConflictException('Such user already exists');
     }
     await this.userService.createUser(createUserDto);
-    return this.login(createUserDto.username, createUserDto.password);
+    return this.login(createUserDto.email, createUserDto.password);
   }
   async refreshAccessToken(user: JwtPayload) {
     console.log(user);
