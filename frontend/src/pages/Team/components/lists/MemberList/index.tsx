@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar, Box, Grid, Typography } from '@mui/material';
 import { styles } from 'src/pages/Team/styles';
 import { User } from 'src/models/user.model';
+import { useStore } from 'src/hooks';
 
 interface MemberListProps {
   members: User[];
@@ -10,6 +11,8 @@ interface MemberListProps {
 }
 
 export const MemberList: React.FC<MemberListProps> = ({ members, onDelete, isAdmin = false }) => {
+  const { id } = useStore('authStore').auth.user;
+
   const handleDelete = (user: User) => {
     onDelete(user);
   };
@@ -20,7 +23,7 @@ export const MemberList: React.FC<MemberListProps> = ({ members, onDelete, isAdm
         <Grid item key={member.id} xs={8} md={4}>
           <Box sx={styles.avatarBox}>
             <Avatar alt={member.username} src="#" sx={styles.modalAvatar} />
-            {isAdmin && <Box className="deleteButton"
+            {(isAdmin && member.id !== id) && <Box className="deleteButton"
               sx={styles.deleteButton}
               onClick={() => handleDelete(member)}>
               X
