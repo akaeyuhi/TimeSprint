@@ -29,6 +29,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 import { CreateProjectDto } from 'src/project/dto/create-project.dto';
 import { Project } from 'src/project/entities/project.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @ApiTags('Teams')
 @ApiBearerAuth('JWT')
@@ -57,7 +58,7 @@ export class TeamController {
   async joinTeam(
     @Param('teamId') teamId: number,
     @Req() req: any,
-  ): Promise<Team> {
+  ): Promise<User> {
     return this.teamService.joinTeam(req.user.id, teamId);
   }
 
@@ -70,7 +71,7 @@ export class TeamController {
   async leaveTeam(
     @Param('teamId') teamId: number,
     @Req() req: any,
-  ): Promise<Team> {
+  ): Promise<void> {
     return this.teamService.leaveTeam(req.user.id, teamId);
   }
 
@@ -89,7 +90,7 @@ export class TeamController {
   async addMember(
     @Param('teamId') teamId: number,
     @Param('memberId') memberId: number,
-  ): Promise<Team> {
+  ): Promise<User> {
     return this.teamService.addMember(teamId, memberId);
   }
 
@@ -108,7 +109,7 @@ export class TeamController {
   async addAdmin(
     @Param('teamId') teamId: number,
     @Param('adminId') adminId: number,
-  ): Promise<Team> {
+  ): Promise<User> {
     return this.teamService.addAdmin(teamId, adminId);
   }
 
@@ -131,7 +132,7 @@ export class TeamController {
   async deleteMember(
     @Param('teamId') teamId: number,
     @Param('memberId') memberId: number,
-  ): Promise<Team> {
+  ): Promise<void> {
     return await this.teamService.deleteMember(teamId, memberId);
   }
 
@@ -154,7 +155,7 @@ export class TeamController {
   async deleteAdmin(
     @Param('teamId') teamId: number,
     @Param('adminId') adminId: number,
-  ): Promise<Team> {
+  ): Promise<void> {
     return await this.teamService.deleteAdmin(teamId, adminId);
   }
 

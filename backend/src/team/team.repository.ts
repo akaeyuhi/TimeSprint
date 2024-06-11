@@ -36,7 +36,7 @@ export class TeamRepository implements IRepository<Team> {
       throw new NotFoundException('Team not found');
     }
     await this.repository.update(id, updateTeamDto);
-    return team;
+    return { ...team, ...updateTeamDto };
   }
 
   async delete(id: number): Promise<void> {
