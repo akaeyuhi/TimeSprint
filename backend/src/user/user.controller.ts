@@ -64,6 +64,20 @@ export class UserController {
     return user;
   }
 
+  @Get('by-username/:username')
+  @ApiOperation({ summary: 'Gets user by username' })
+  @ApiParam({ name: 'username', required: true, description: 'Username' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  async findByUsername(@Param('username') username: string): Promise<User> {
+    const user = await this.userService.findByUsername(username);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
   @Post()
   @IsUserRole(AdminRole.ADMIN)
   @ApiOperation({ summary: 'Creates new user. Admin rights required' })

@@ -27,6 +27,10 @@ export class UserRepository implements IRepository<User> {
     return this.repository.findOneBy({ email });
   }
 
+  async findByUsername(username: string): Promise<User> {
+    return this.repository.findOneBy({ username });
+  }
+
   async create(userData: Partial<User>): Promise<User> {
     const newUser = this.repository.create(userData);
     return this.repository.save(newUser);
