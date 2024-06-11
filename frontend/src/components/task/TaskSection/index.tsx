@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useModals } from 'src/hooks/use-modals';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { styles } from 'src/pages/Team/styles';
-import TaskList from 'src/components/task/components/TaskList';
+import TaskList from 'src/components/task/TaskList';
 
 interface TaskSectionProps {
   isProjectPage: boolean,

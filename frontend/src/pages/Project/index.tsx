@@ -5,7 +5,7 @@ import ModalForm from 'src/components/modalForm';
 import { useParams } from 'react-router-dom';
 import { useModals } from 'src/hooks/use-modals';
 import { UpdateProjectDto } from 'src/services/dto/project/update-project.dto';
-import TaskSection from 'src/components/task/components/TaskSection';
+import TaskSection from 'src/components/task/TaskSection';
 import { toast } from 'react-toastify';
 import ProjectProgressBar from 'src/pages/Project/components/ProjectProgressBar';
 import EditProjectForm from 'src/pages/Project/components/EditProjectForm';

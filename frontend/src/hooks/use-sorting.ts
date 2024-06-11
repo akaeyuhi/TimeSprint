@@ -28,7 +28,7 @@ export const useSorting = (initialTasks: Task[]) => {
       sortedTasks.sort((a, b) => Number(a.importance) - Number(b.importance));
       break;
     case SortBy.DEADLINE:
-      sortedTasks.sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
+      sortedTasks.sort((a, b) => b.endDate.getTime() - a.endDate.getTime());
       break;
     }
     setSorted(sortedTasks);

@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
-import { styles } from 'src/components/task/components/TaskItem/styles';
+import { styles } from 'src/components/task/TaskItem/styles';
 import { observer } from 'mobx-react';
 
 interface TaskItemProps {
@@ -68,9 +68,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
               <Typography variant="body2" sx={{ color: task.importance ? 'red' : 'green' }}>
                 Importance: {task.importance ? 'High' : 'Low'}
               </Typography>
-              <Typography variant="body2">
-                Dependencies: {task.dependencies.length}
-              </Typography>
+              {/*<Typography variant="body2">*/}
+              {/*  Dependencies: {task.dependencies.length}*/}
+              {/*</Typography>*/}
             </Box>
             <Box>
               {task.user && (

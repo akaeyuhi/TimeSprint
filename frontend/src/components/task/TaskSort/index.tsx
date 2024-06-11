@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   Box,
   Button,
@@ -20,7 +20,7 @@ interface TaskSorterProps {
   handleGetImportantTasks?: () => Promise<void>;
 }
 
-const TaskSorter: React.FC<TaskSorterProps> = ({
+const TaskSort: React.FC<TaskSorterProps> = ({
   tasks,
   onSort,
   isEditable,
@@ -33,7 +33,7 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
     setSorting(e.target.value as SortBy);
   };
 
-  useEffect(() => onSort(sorted), [sorted]);
+  //useEffect(() => onSort(sorted), [onSort, sortBy, sorted]);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -65,4 +65,4 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
   );
 };
 
-export default observer(TaskSorter);
+export default observer(TaskSort);

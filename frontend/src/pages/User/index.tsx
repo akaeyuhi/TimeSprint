@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Container, Stack, Typography } from '@mui/material';
-import TaskSection from 'src/components/task/components/TaskSection';
+import TaskSection from 'src/components/task/TaskSection';
 import TeamList from 'src/components/team/TeamList';
 import { useStores } from 'src/hooks';
 import { observer } from 'mobx-react';

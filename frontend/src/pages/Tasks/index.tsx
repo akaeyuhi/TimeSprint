@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container } from '@mui/material';
-import TaskSection from 'src/components/task/components/TaskSection';
+import TaskSection from 'src/components/task/TaskSection';
 import { observer } from 'mobx-react';
 
 
