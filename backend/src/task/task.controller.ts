@@ -26,7 +26,7 @@ import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 @ApiTags('Tasks')
 @ApiBearerAuth('JWT')
 @UseGuards(JwtAuthGuard)
-@Controller('task')
+@Controller('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
