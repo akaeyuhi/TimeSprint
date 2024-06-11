@@ -3,6 +3,7 @@ import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
 import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
 import TeamService from 'src/services/team.service';
+import { Project } from 'src/models/project.model';
 
 export class TeamStore {
   error: Error | null = null;
@@ -13,12 +14,14 @@ export class TeamStore {
     makeAutoObservable(this);
   }
 
-  isAdmin(user: User) {
-    return !!this.current.admins.find(admin => admin.id === user.id);
+  isAdmin(user: User | number) {
+    const id = (typeof user === 'object') ? (user as User).id : user;
+    return !!this.current.admins.find(admin => admin.id === id);
   }
 
-  isMember(user: User) {
-    return !!this.current.members.find(member => member.id === user.id);
+  isMember(user: User | number) {
+    const id = (typeof user === 'object') ? (user as User).id : user;
+    return !!this.current.members.find(member => member.id === id);
   }
 
   getUserById(id: number) {
@@ -51,14 +54,23 @@ export class TeamStore {
   async createProject(projectDto: CreateProjectDto) {
     this.isLoading = true;
     try {
-      this.current = <Team> await this.teamService.createProject(
+      const project = <Project> await this.teamService.createProject(
         this.current.id,
         projectDto,
       );
+      runInAction(() => {
+        this.current.projects.push(project);
+      });
     } catch (error) {
-      this.error = error as Error;
+      runInAction(() => {
+        this.error = error as Error;
+      });
+
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
+
     }
     return this.current.projects;
   }
@@ -66,14 +78,22 @@ export class TeamStore {
   async deleteProject(projectId: number) {
     this.isLoading = true;
     try {
-      this.current = <Team> await this.teamService.deleteProject(
+      await this.teamService.deleteProject(
         this.current.id,
         projectId,
       );
+      runInAction(() => {
+        this.current.projects =
+          this.current.projects.filter(project => project.id !== projectId);
+      });
     } catch (error) {
-      this.error = error as Error;
+      runInAction(() => {
+        this.error = error as Error;
+      });
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
     return this.current.projects;
   }
@@ -82,14 +102,23 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isMember(user)) {
-        this.current = <Team> await this.teamService.addMember(this.current.id, user.id);
+        const newMember = <User> await this.teamService.addMember(this.current.id, user.id);
+        runInAction(() => {
+          this.current.members.push(newMember);
+        });
       } else {
-        this.error = new Error('User already in team');
+        runInAction(() => {
+          this.error = new Error('User already in team');
+        });
       }
     } catch (error) {
-      this.error = error as Error;
+      runInAction(() => {
+        this.error = error as Error;
+      });
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
     return user;
   }
@@ -98,14 +127,23 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isAdmin(user)) {
-        this.current = <Team> await this.teamService.addAdmin(this.current.id, user.id);
+        const newMember = <User> await this.teamService.addAdmin(this.current.id, user.id);
+        runInAction(() => {
+          this.current.admins.push(newMember);
+        });
       } else {
-        this.error = new Error('User already is admin');
+        runInAction(() => {
+          this.error = new Error('User already admin');
+        });
       }
     } catch (error) {
-      this.error = error as Error;
+      runInAction(() => {
+        this.error = error as Error;
+      });
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
     return user;
   }
@@ -114,17 +152,26 @@ export class TeamStore {
     this.isLoading = true;
     try {
       const user = this.getUserById(userId);
-      if (user && !this.isAdmin(user)) {
-        this.current = <Team> await this.teamService.deleteMember(this.current.id, userId);
-      } else if (user && this.isAdmin(user)) {
-        this.error = new Error('This user has admin privilege');
-      } else {
-        this.error = new Error('User does not exist');
-      }
+      await runInAction(async () => {
+        if (user && !this.isAdmin(user)) {
+          await this.teamService.deleteMember(this.current.id, userId);
+          this.current.members =
+            this.current.members.filter(member => member.id !== userId);
+        } else if (user && this.isAdmin(user)) {
+          this.error = new Error('This user has admin privilege');
+        } else {
+          this.error = new Error('User does not exist');
+        }
+      });
     } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
+      });
       this.error = error as Error;
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
   }
 
@@ -132,17 +179,26 @@ export class TeamStore {
     this.isLoading = true;
     try {
       const user = this.getUserById(userId);
-      if (user && this.isAdmin(user)) {
-        this.current = <Team> await this.teamService.deleteAdmin(this.current.id, userId);
-      } else if (user && !this.isAdmin(user)) {
-        this.error = new Error('This user has no admin privilege');
-      } else {
-        this.error = new Error('User does not exist');
-      }
+      await runInAction(async () => {
+        if (user && this.isAdmin(user)) {
+          await this.teamService.deleteAdmin(this.current.id, userId);
+          this.current.admins =
+            this.current.admins.filter(admin => admin.id !== userId);
+        } else if (user && !this.isAdmin(user)) {
+          this.error = new Error('This user has no admin privilege');
+        } else {
+          this.error = new Error('User does not exist');
+        }
+      });
     } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
+      });
       this.error = error as Error;
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
   }
 }

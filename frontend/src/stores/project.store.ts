@@ -11,7 +11,6 @@ export class ProjectStore extends TaskStore<Project> {
   @observable error: Error | null = null;
   @observable isLoading = false;
   @observable.deep current: Project = {} as Project;
-  @observable.deep tasks: Task[] = [];
 
   constructor(private readonly projectService: ProjectService) {
     super();
@@ -67,22 +66,23 @@ export class ProjectStore extends TaskStore<Project> {
   }
 
   @action
-  async createTask(taskDto: CreateTaskDto): Promise<Task> {
+  async createTask(taskDto: CreateTaskDto): Promise<Task[]> {
     this.isLoading = true;
     try {
       const newTask = <Task> await this.projectService.createTask(taskDto, this.current as Project);
       runInAction(() => {
-        this.current?.tasks.push(newTask);
-        this.isLoading = false;
+        this.current.tasks.push(newTask);
       });
-      return newTask;
     } catch (error) {
       runInAction(() => {
         this.error = error as Error;
+      });
+    } finally {
+      runInAction(() => {
         this.isLoading = false;
       });
-      throw error;
     }
+    return this.current.tasks;
   }
 
   @action
@@ -91,21 +91,21 @@ export class ProjectStore extends TaskStore<Project> {
     try {
       const updatedTask = <Task> await this.projectService.updateTask(taskDto, taskId);
       runInAction(() => {
-        const taskIndex = this.current?.tasks.findIndex(task => task.id === taskId);
-        if (this.current && taskIndex && taskIndex >= 0) {
+        const taskIndex = this.current.tasks.findIndex(task => task.id === taskId);
+        if (taskIndex >= 0) {
           this.current.tasks[taskIndex] = updatedTask;
-          this.tasks = this.current?.tasks;
         }
-        this.isLoading = false;
       });
-      return updatedTask;
     } catch (error) {
       runInAction(() => {
         this.error = error as Error;
+      });
+    } finally {
+      runInAction(() => {
         this.isLoading = false;
       });
-      throw error;
     }
+    return this.current.tasks;
   }
 
   @action
@@ -117,16 +117,16 @@ export class ProjectStore extends TaskStore<Project> {
       runInAction(() => {
         if (this.current) {
           this.current.tasks = this.current.tasks.filter(task => task.id !== taskId);
-          this.tasks = this.current.tasks;
-          this.isLoading = false;
         }
       });
     } catch (error) {
       runInAction(() => {
         this.error = error as Error;
+      });
+    } finally {
+      runInAction(() => {
         this.isLoading = false;
       });
-      throw error;
     }
   }
 
@@ -140,45 +140,42 @@ export class ProjectStore extends TaskStore<Project> {
       );
       runInAction(() => {
         this.current = updatedProject;
-        this.isLoading = false;
       });
       return updatedProject;
     } catch (error) {
       runInAction(() => {
         this.error = error as Error;
+      });
+    } finally {
+      runInAction(() => {
         this.isLoading = false;
       });
     }
   }
 
   @action
-  async toggleTask(taskId: number): Promise<Task | null> {
+  async toggleTask(taskId: number): Promise<Task[]> {
     try {
       const task = this.getTaskById(taskId);
-      if (task) {
-        const toggledTask = await this.projectService.toggleTask(task);
-        runInAction(() => {
-          const taskIndex = this.current?.tasks.findIndex(t => t.id === taskId);
-          if (this.current && taskIndex && taskIndex >= 0) {
-            if (toggledTask) {
-              this.current.tasks[taskIndex] = toggledTask;
-            }
-            this.tasks = this.current.tasks;
-          }
-        });
-        return toggledTask;
-      }
-      return null;
+      if (!task) throw new Error('Task not found');
+      const toggledTask = <Task> await this.projectService.toggleTask(task);
+      runInAction(() => {
+        const index = this.current.tasks.findIndex(t => t.id === taskId);
+        if (index !== -1) {
+          this.current.tasks[index] = toggledTask;
+        }
+      });
     } catch (error) {
       runInAction(() => {
         this.error = error as Error;
       });
-      return null;
     }
+    return this.current.tasks;
   }
 
   @action
   sortTasks(sorted: Task[]) {
-    this.tasks = sorted;
+    this.current.tasks = sorted;
+    console.log('set');
   }
 }

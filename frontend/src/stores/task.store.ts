@@ -7,7 +7,6 @@ export default abstract class TaskStore<T extends TaskContainer> {
   abstract error: Error | null;
   abstract isLoading: boolean;
   abstract current: T;
-  abstract tasks: Task[];
 
   abstract fetch(id?: number): Promise<T>;
 
@@ -15,13 +14,13 @@ export default abstract class TaskStore<T extends TaskContainer> {
 
   abstract getTaskById(taskId: number): Task | null;
 
-  abstract createTask(task: CreateTaskDto): Promise<Task>;
+  abstract createTask(task: CreateTaskDto): Promise<Task[]>;
 
-  abstract updateTask(taskId: number, taskDto: UpdateTaskDto): Promise<Task | null>;
+  abstract updateTask(taskId: number, taskDto: UpdateTaskDto): Promise<Task[]>;
 
   abstract deleteTask(taskId: number): Promise<void>;
 
-  abstract toggleTask(taskId: number): Promise<Task | null>;
+  abstract toggleTask(taskId: number): Promise<Task[]>;
 
   abstract sortTasks(tasks: Task[]): void;
 }
