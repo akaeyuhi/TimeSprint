@@ -1,9 +1,11 @@
 import BaseService from './base.service';
-import { TeamReturn } from 'src/services/types';
+import { ProjectReturn, TeamReturn, UserReturn } from 'src/services/types';
 import { Team } from 'src/models/team.model';
 import { TeamError } from 'src/services/errors/team.error';
 import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
 import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
+import { Project } from 'src/models/project.model';
+import { User } from 'src/models/user.model';
 
 class TeamService extends BaseService {
   async getTeam(id: number): Promise<TeamReturn> {
@@ -38,17 +40,17 @@ class TeamService extends BaseService {
     }
   }
 
-  async deleteTeam(id: number): Promise<TeamReturn> {
+  async deleteTeam(id: number): Promise<void | null> {
     try {
-      return this.httpRequest.delete<Team>(`/teams/${id}`);
+      return this.httpRequest.delete<void>(`/teams/${id}`);
     } catch (error) {
       throw new TeamError('Error deleting team data');
     }
   }
 
-  async leaveTeam(teamId: number): Promise<TeamReturn> {
+  async leaveTeam(teamId: number): Promise<void | null> {
     try {
-      return this.httpRequest.put<Team>(`/teams/${teamId}/leave`, {});
+      return this.httpRequest.put<void>(`/teams/${teamId}/leave`, {});
     } catch (error) {
       throw new TeamError('Error leaving team');
     }
@@ -62,57 +64,57 @@ class TeamService extends BaseService {
     }
   }
 
-  async addMember(teamId: number, memberId: number): Promise<TeamReturn> {
+  async addMember(teamId: number, memberId: number): Promise<UserReturn> {
     try {
-      return this.httpRequest.put<Team>(`/teams/${teamId}/add-member/${memberId}`, {});
+      return this.httpRequest.put<User>(`/teams/${teamId}/add-member/${memberId}`, {});
     } catch (error) {
       throw new TeamError('Error adding team member');
     }
   }
 
-  async addAdmin(teamId: number, adminId: number): Promise<TeamReturn> {
+  async addAdmin(teamId: number, adminId: number): Promise<UserReturn> {
     try {
-      return this.httpRequest.put<Team>(`/teams/${teamId}/add-admin/${adminId}`, {});
+      return this.httpRequest.put<User>(`/teams/${teamId}/add-admin/${adminId}`, {});
     } catch (error) {
       throw new TeamError('Error adding team admin');
     }
   }
 
-  async deleteMember(teamId: number, memberId: number): Promise<TeamReturn> {
+  async deleteMember(teamId: number, memberId: number): Promise<void | null> {
     try {
-      return this.httpRequest.delete<Team>(`/teams/${teamId}/delete-member/${memberId}`);
+      return this.httpRequest.delete<void>(`/teams/${teamId}/delete-member/${memberId}`);
     } catch (error) {
       throw new TeamError('Error deleting team member');
     }
   }
 
-  async deleteAdmin(teamId: number, adminId: number): Promise<TeamReturn> {
+  async deleteAdmin(teamId: number, adminId: number): Promise<void | null> {
     try {
-      return this.httpRequest.delete<Team>(`/teams/${teamId}/delete-admin/${adminId}`);
+      return this.httpRequest.delete<void>(`/teams/${teamId}/delete-admin/${adminId}`);
     } catch (error) {
       throw new TeamError('Error deleting team admin');
     }
   }
 
-  async deleteProject(teamId: number, projectId: number): Promise<TeamReturn> {
+  async deleteProject(teamId: number, projectId: number): Promise<void | null> {
     try {
-      return this.httpRequest.delete<Team>(`/teams/${teamId}/projects/${projectId}`);
+      return this.httpRequest.delete<void>(`/teams/${teamId}/projects/${projectId}`);
     } catch (error) {
       throw new TeamError('Error deleting team project');
     }
   }
 
-  async createProject(teamId: number, createProjectDto: CreateProjectDto): Promise<TeamReturn> {
+  async createProject(teamId: number, createProjectDto: CreateProjectDto): Promise<ProjectReturn> {
     try {
-      return this.httpRequest.post<Team>(`/teams/${teamId}/projects/`, createProjectDto);
+      return this.httpRequest.post<Project>(`/teams/${teamId}/projects/`, createProjectDto);
     } catch (error) {
       throw new TeamError('Error creating team project');
     }
   }
 
-  async getTeamProjects(teamId: number): Promise<TeamReturn> {
+  async getTeamProjects(teamId: number): Promise<Project[] | null> {
     try {
-      return this.httpRequest.get<Team>(`/teams/${teamId}/projects/`);
+      return this.httpRequest.get<Project[]>(`/teams/${teamId}/projects/`);
     } catch (error) {
       throw new TeamError('Error getting team projects');
     }
