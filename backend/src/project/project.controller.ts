@@ -45,7 +45,7 @@ export class ProjectController {
     return await this.projectService.findAllProjects();
   }
 
-  @Get(':id')
+  @Get(':projectId')
   @ApiOperation({
     summary: 'Gets project by id.',
   })
@@ -61,7 +61,7 @@ export class ProjectController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async getProjectById(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('projectId', ParseIntPipe) id: number,
   ): Promise<Project> {
     return await this.projectService.findProjectById(id);
   }
@@ -80,7 +80,7 @@ export class ProjectController {
     return await this.projectService.createProject(createProjectDto);
   }
 
-  @Put(':id')
+  @Put(':projectId')
   @ApiOperation({
     summary: 'Updates project by id. Team admin rights required.',
   })
@@ -98,13 +98,13 @@ export class ProjectController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async updateProject(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('projectId', ParseIntPipe) id: number,
     @Body() updateProjectDto: UpdateProjectDto,
   ): Promise<Project> {
     return await this.projectService.updateProject(id, updateProjectDto);
   }
 
-  @Delete(':id')
+  @Delete(':projectId')
   @ApiOperation({
     summary: 'Deletes project by id. Team admin rights required.',
   })
@@ -121,7 +121,7 @@ export class ProjectController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
-  async deleteProject(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  async deleteProject(@Param('projectId', ParseIntPipe) id: number): Promise<void> {
     await this.projectService.deleteProject(id);
   }
   @Post(':projectId/tasks')

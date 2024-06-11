@@ -24,7 +24,7 @@ export class ProjectRepository implements IRepository<Project> {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
     await this.repository.update(id, projectData);
-    return project;
+    return { ...project, ...projectData };
   }
 
   async delete(id: number): Promise<void> {
