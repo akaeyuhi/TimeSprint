@@ -12,24 +12,30 @@ import {
 } from '@mui/material';
 import { User } from 'src/models/user.model';
 import { styles } from 'src/components/modalForm/styles';
+import { useStore } from 'src/hooks';
 
 interface AddAdminFormProps {
-  candidates: User[];
   onSubmit: (member: User) => void;
   onClose: () => void;
 }
 
-const AddAdminForm: React.FC<AddAdminFormProps> = ({ candidates, onSubmit, onClose }) => {
+const AddAdminForm: React.FC<AddAdminFormProps> = ({ onSubmit, onClose }) => {
   const [username, setUsername] = useState<string>('');
+  const { members, admins } = useStore('teamStore').current;
+  const { id: currentUser } = useStore('authStore').auth.user;
+  const adminCandidates = members.filter(user => user.id !== currentUser &&
+    !admins.some(admin => admin.id !== user.id));
   const [error, setError] = useState('');
+  const [noCandidates, setNoCandidates] = useState(!!adminCandidates.length);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const user = candidates.find(user => user.username === username);
+    const user = adminCandidates.find(user => user.username === username);
     if (user) {
       onSubmit(user);
       setUsername('');
       setError('');
+      setNoCandidates(false);
     } else {
       setError('Please select a user');
     }
@@ -37,10 +43,10 @@ const AddAdminForm: React.FC<AddAdminFormProps> = ({ candidates, onSubmit, onClo
 
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
-      <Typography variant="h6" mb={1}>
+      <Typography variant="h6" mb={2}>
         Add new admin
       </Typography>
-      <FormControl>
+      <FormControl error={noCandidates}>
         <InputLabel id="user-select-label">Member</InputLabel>
         <Select
           id="user-select"
@@ -49,15 +55,24 @@ const AddAdminForm: React.FC<AddAdminFormProps> = ({ candidates, onSubmit, onClo
           onChange={(e) => setUsername(e.target.value)}
           fullWidth
           required
+          renderValue={(selected) => {
+            if (selected.length === 0) {
+              return <em>Member</em>;
+            }
+          }
+          }
           label="Member"
         >
-          {candidates.map((candidate) => (
+          <MenuItem disabled value="">
+            Member
+          </MenuItem>
+          {adminCandidates.map((candidate) => (
             <MenuItem key={candidate.id} value={candidate.username}>
               {candidate.username}
             </MenuItem>
           ))}
         </Select>
-        <FormHelperText error={true}>{error}</FormHelperText>
+        {noCandidates && <FormHelperText error>There are no candidates</FormHelperText>}
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button type="submit" variant="contained" color="primary">

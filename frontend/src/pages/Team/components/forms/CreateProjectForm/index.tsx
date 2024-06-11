@@ -19,20 +19,20 @@ interface CreateProjectFormProps {
   onClose: () => void;
 }
 
+
 const validate = (state: CreateProjectDto): ValidationErrors<CreateProjectDto> => ({
   name: !(state.name.length > 8),
   description: !(state.description.length > 20),
-  startDate: state.startDate > new Date(),
-  endDate: state.startDate >= state.endDate,
+  startDate: !(state.startDate < state.endDate),
+  endDate: !(state.startDate < state.endDate),
 });
-
 
 const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose }) => {
   const [formData, setFormData, errors] = useValidation<CreateProjectDto>({
     name: '',
     description: '',
     startDate: new Date(),
-    endDate: new Date(),
+    endDate: new Date(Date.now() + 1),
   }, validate);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -82,6 +82,12 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose
         <DatePicker
           label="Start date"
           disablePast={true}
+          slotProps={{
+            textField: {
+              error: errors.startDate,
+              helperText: errors.startDate ? 'Start date should be before end' : '',
+            },
+          }}
           onChange={(newValue) =>
             setFormData('startDate', newValue?.toDate() ?? new Date())}
           value={dayjs(formData.startDate)} />
@@ -90,6 +96,12 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose
         <DatePicker
           label="End date"
           disablePast={true}
+          slotProps={{
+            textField: {
+              error: errors.endDate,
+              helperText: errors.endDate ? 'End date should be later than start' : '',
+            },
+          }}
           onChange={(newValue) =>
             setFormData('endDate', newValue?.toDate() ?? new Date())}
           value={dayjs(formData.endDate)} />

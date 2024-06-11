@@ -49,12 +49,13 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
         Create New Team
       </Typography>
       <FormControl error={errors.name}>
-        <InputLabel htmlFor="name">Team Name</InputLabel>
+        <InputLabel htmlFor="name">Team name</InputLabel>
         <OutlinedInput
           id="name"
           type="text"
           onChange={(e) => setData('name', e.target.value)}
           required
+          label="Team name"
           aria-describedby="name-error"
           value={data.name} />
         {errors.name && <FormHelperText error id="name-error">
@@ -69,6 +70,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
           aria-describedby="desc-error"
           onChange={(e) => setData('description', e.target.value)}
           required
+          label="Team description"
           value={data.description} />
         {errors.description && <FormHelperText error id="desc-error">
           Description should be at least 20 characters
