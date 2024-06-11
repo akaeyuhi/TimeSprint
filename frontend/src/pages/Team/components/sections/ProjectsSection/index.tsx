@@ -29,7 +29,11 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           Projects
         </Typography>
         <Box>
-          {isAdmin && <Button variant="outlined" color="primary" onClick={createProject.open}>
+          {isAdmin && <Button
+            variant="outlined"
+            color="primary"
+            sx={{ mr: '1rem' }}
+            onClick={createProject.open}>
             Create new Project
           </Button>}
           {team && team?.projects?.length ? <Button variant="outlined"
@@ -42,7 +46,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       <Stack>
         <ProjectList
           isAdmin={isAdmin}
-          projects={team?.projects?.slice(0, 5)}
+          projects={team?.projects?.slice(0, 2)}
           onDelete={handleDeleteClick}
         />
       </Stack>
