@@ -1,15 +1,14 @@
-import BaseService from './base.service';
 import { User } from 'src/models/user.model';
 import { UserError } from 'src/services/errors/user.error';
-import { RegisterDto } from 'src/services/dto/auth/register.dto';
-import { ITaskService } from 'src/services/interfaces/task.service';
+import { RegisterDto } from 'src/services/dto/register.dto';
 import { Task } from 'src/models/task.model';
-import { TaskDto } from 'src/services/dto/task/task.dto';
-import { TaskReturn, UserReturn } from 'src/services/types';
+import { TaskDto } from 'src/services/dto/task.dto';
+import { Return } from 'src/services/types';
 import { TaskError } from 'src/services/errors/task.error';
+import { TaskService } from 'src/services/task.service';
 
-class UserService extends BaseService implements ITaskService<User> {
-  async getUser(id: number): Promise<UserReturn> {
+class UserService extends TaskService<User> {
+  async getUser(id: number): Promise<Return<User>> {
     try {
       return await this.httpRequest.get<User>(`/users/${id}`);
     } catch (error) {
@@ -17,7 +16,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async getUserByUsername(username: string): Promise<UserReturn> {
+  async getUserByUsername(username: string): Promise<Return<User>> {
     try {
       return await this.httpRequest.get<User>(`/users/by-username/${username}`);
     } catch (error) {
@@ -25,7 +24,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async getAllUsers(): Promise<User[] | null> {
+  async getAllUsers(): Promise<Return<User[]>> {
     try {
       return await this.httpRequest.get<User[]>('/users');
     } catch (error) {
@@ -33,7 +32,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async createUser(createUserDto: RegisterDto): Promise<UserReturn> {
+  async createUser(createUserDto: RegisterDto): Promise<Return<User>> {
     try {
       return this.httpRequest.post<User>('/users', createUserDto);
     } catch (error) {
@@ -41,7 +40,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async updateUser(id: number, user: Partial<RegisterDto>): Promise<UserReturn> {
+  async updateUser(id: number, user: Partial<RegisterDto>): Promise<Return<User>> {
     try {
       return this.httpRequest.put<User>(`/users/${id}`, user);
     } catch (error) {
@@ -49,7 +48,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async deleteUser(id: number): Promise<UserReturn> {
+  async deleteUser(id: number): Promise<Return<User>> {
     try {
       return this.httpRequest.delete<User>(`/users/${id}`);
     } catch (error) {
@@ -57,7 +56,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async getImportantUserTasks(id: number): Promise<Task[] | null> {
+  async getImportantUserTasks(id: number): Promise<Return<Task[]>> {
     try {
       return this.httpRequest.get<Task[]>(`/users/${id}/prioritized`);
     } catch (error) {
@@ -65,7 +64,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async getTasks(item: User): Promise<Task[] | null> {
+  async getTasks(item: User): Promise<Return<Task[]>> {
     try {
       return this.httpRequest.get<Task[]>(`/users/${item.id}/tasks`);
     } catch (error) {
@@ -73,15 +72,7 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async getTaskById(id: number): Promise<TaskReturn> {
-    try {
-      return this.httpRequest.get<Task>(`/tasks/${id}`);
-    } catch (error) {
-      throw new TaskError('Error getting task');
-    }
-  }
-
-  async createTask(dto: TaskDto, item: User): Promise<TaskReturn> {
+  async createTask(dto: TaskDto, item: User): Promise<Return<Task>> {
     try {
       return this.httpRequest.post<Task>(`/users/${item.id}/tasks`, dto);
     } catch (error) {
@@ -89,27 +80,11 @@ class UserService extends BaseService implements ITaskService<User> {
     }
   }
 
-  async deleteTask(id: number, item: User): Promise<TaskReturn> {
+  async deleteTask(id: number, item: User): Promise<Return<Task>> {
     try {
       return this.httpRequest.delete<Task>(`/users/${item.id}/tasks/${id}`);
     } catch (error) {
       throw new TaskError('Error deleting user task');
-    }
-  }
-
-  async updateTask(dto: TaskDto, taskId: number): Promise<TaskReturn> {
-    try {
-      return this.httpRequest.patch<Task>(`/tasks/${taskId}`, dto);
-    } catch (error) {
-      throw new TaskError('Error updating user task');
-    }
-  }
-
-  async toggleTask(task: Task): Promise<TaskReturn> {
-    try {
-      return this.httpRequest.patch<Task>(`/tasks/${task.id}`, { isCompleted: !task.isCompleted });
-    } catch (error) {
-      throw new TaskError('Error toggling user task');
     }
   }
 }
