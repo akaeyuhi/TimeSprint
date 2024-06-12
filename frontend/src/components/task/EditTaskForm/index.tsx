@@ -215,7 +215,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({
       </FormControl> : <></>}
       <Box sx={styles.buttonContainer}>
         <Button variant="contained" color="primary" type="submit">
-          Create
+          Edit
         </Button>
         <Button variant="outlined" color="secondary" onClick={onCancel}>
           Cancel

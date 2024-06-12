@@ -2,17 +2,16 @@ import { Task } from 'src/models/task.model';
 import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
 import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { TaskContainer } from 'src/models/task-container.model';
+import { SortBy } from 'src/utils/common/sortBy';
+import { action } from 'mobx';
 
 export default abstract class TaskStore<T extends TaskContainer> {
   abstract error: Error | null;
   abstract isLoading: boolean;
   abstract current: T;
+  abstract tasks: Task[];
 
   abstract fetch(id?: number): Promise<T>;
-
-  abstract getTasks(): Task[];
-
-  abstract getTaskById(taskId: number): Task | null;
 
   abstract createTask(task: CreateTaskDto): Promise<Task[]>;
 
@@ -22,5 +21,35 @@ export default abstract class TaskStore<T extends TaskContainer> {
 
   abstract toggleTask(taskId: number): Promise<Task[]>;
 
-  abstract sortTasks(tasks: Task[]): void;
+  getTaskById(taskId: number): Task | null {
+    return this.tasks.find(task => task.id === taskId) ?? null;
+  }
+
+  getTasks(): Task[] {
+    return this.tasks;
+  }
+
+  @action
+  setTasks(tasks: Task[]): void {
+    this.tasks = tasks;
+  }
+
+  sortTasks(sortBy: SortBy): void {
+    const sortedTasks = [...this.tasks];
+    switch (sortBy) {
+    case SortBy.NAME:
+      sortedTasks.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case SortBy.URGENCY:
+      sortedTasks.sort((a, b) => Number(b.urgency) - Number(a.urgency));
+      break;
+    case SortBy.IMPORTANCE:
+      sortedTasks.sort((a, b) => Number(b.importance) - Number(a.importance));
+      break;
+    case SortBy.DEADLINE:
+      sortedTasks.sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
+      break;
+    }
+    this.setTasks(sortedTasks);
+  };
 }
