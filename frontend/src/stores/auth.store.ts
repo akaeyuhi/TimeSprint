@@ -2,8 +2,8 @@ import { makePersistable } from 'mobx-persist-store';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Auth } from 'src/services/types';
 import { AuthService } from 'src/services/auth.service';
-import { LoginDto } from 'src/services/dto/auth/login.dto';
-import { RegisterDto } from 'src/services/dto/auth/register.dto';
+import { LoginDto } from 'src/services/dto/login.dto';
+import { RegisterDto } from 'src/services/dto/register.dto';
 
 export class AuthStore {
   auth: Auth = {} as Auth;

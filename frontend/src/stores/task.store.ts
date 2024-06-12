@@ -1,5 +1,5 @@
 import { Task } from 'src/models/task.model';
-import { TaskDto } from 'src/services/dto/task/task.dto';
+import { TaskDto } from 'src/services/dto/task.dto';
 import { TaskContainer } from 'src/models/task-container.model';
 import { SortBy } from 'src/utils/common/sortBy';
 import { action } from 'mobx';

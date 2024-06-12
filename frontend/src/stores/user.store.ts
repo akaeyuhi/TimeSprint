@@ -1,9 +1,9 @@
 import { action, makeObservable, observable, runInAction } from 'mobx';
 import { User } from 'src/models/user.model';
-import { TaskDto } from 'src/services/dto/task/task.dto';
+import { TaskDto } from 'src/services/dto/task.dto';
 import { Task } from 'src/models/task.model';
 import { Team } from 'src/models/team.model';
-import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
+import { CreateTeamDto } from 'src/services/dto/create-team.dto';
 import TaskStore from 'src/stores/task.store';
 import UserService from 'src/services/user.service';
 import TeamService from 'src/services/team.service';

@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
-import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
+import { CreateProjectDto } from 'src/services/dto/create-project.dto';
 import TeamService from 'src/services/team.service';
 import { Project } from 'src/models/project.model';
 

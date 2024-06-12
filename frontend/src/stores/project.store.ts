@@ -1,8 +1,8 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { Project } from 'src/models/project.model';
-import { UpdateProjectDto } from 'src/services/dto/project/update-project.dto';
+import { UpdateProjectDto } from 'src/services/dto/update-project.dto';
 import { Task } from 'src/models/task.model';
-import { TaskDto } from 'src/services/dto/task/task.dto';
+import { TaskDto } from 'src/services/dto/task.dto';
 import TaskStore from 'src/stores/task.store';
 import ProjectService from 'src/services/project.service';
 
