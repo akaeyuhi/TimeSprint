@@ -1,14 +1,15 @@
 import BaseService from './base.service';
-import { ProjectReturn, TeamReturn, UserReturn } from 'src/services/types';
+import { Return } from 'src/services/types';
 import { Team } from 'src/models/team.model';
 import { TeamError } from 'src/services/errors/team.error';
-import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
-import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
+import { CreateTeamDto } from 'src/services/dto/create-team.dto';
+import { CreateProjectDto } from 'src/services/dto/create-project.dto';
 import { Project } from 'src/models/project.model';
 import { User } from 'src/models/user.model';
+import { Task } from 'src/models/task.model';
 
 class TeamService extends BaseService {
-  async getTeam(id: number): Promise<TeamReturn> {
+  async getTeam(id: number): Promise<Return<Team>> {
     try {
       return await this.httpRequest.get<Team>(`/teams/${id}`);
     } catch (error) {
@@ -16,7 +17,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async getAllTeams(): Promise<Team[] | null> {
+  async getAllTeams(): Promise<Return<Team[]>> {
     try {
       return await this.httpRequest.get<Team[]>('/teams');
     } catch (error) {
@@ -24,7 +25,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async createTeam(createTeamDto: CreateTeamDto): Promise<TeamReturn> {
+  async createTeam(createTeamDto: CreateTeamDto): Promise<Return<Team>> {
     try {
       return this.httpRequest.post<Team>('/teams', createTeamDto);
     } catch (error) {
@@ -32,7 +33,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async updateTeam(id: number, team: Partial<CreateTeamDto>): Promise<TeamReturn> {
+  async updateTeam(id: number, team: Partial<CreateTeamDto>): Promise<Return<Team>> {
     try {
       return this.httpRequest.put<Team>(`/teams/${id}`, team);
     } catch (error) {
@@ -40,7 +41,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async deleteTeam(id: number): Promise<void | null> {
+  async deleteTeam(id: number): Promise<Return<void>> {
     try {
       return this.httpRequest.delete<void>(`/teams/${id}`);
     } catch (error) {
@@ -48,7 +49,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async leaveTeam(teamId: number): Promise<void | null> {
+  async leaveTeam(teamId: number): Promise<Return<void>> {
     try {
       return this.httpRequest.put<void>(`/teams/${teamId}/leave`, {});
     } catch (error) {
@@ -56,7 +57,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async joinTeam(teamId: number): Promise<TeamReturn> {
+  async joinTeam(teamId: number): Promise<Return<Team>> {
     try {
       return this.httpRequest.put<Team>(`/users/${teamId}/join`, {});
     } catch (error) {
@@ -64,7 +65,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async addMember(teamId: number, memberId: number): Promise<UserReturn> {
+  async addMember(teamId: number, memberId: number): Promise<Return<User>> {
     try {
       return this.httpRequest.put<User>(`/teams/${teamId}/add-member/${memberId}`, {});
     } catch (error) {
@@ -72,7 +73,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async addAdmin(teamId: number, adminId: number): Promise<UserReturn> {
+  async addAdmin(teamId: number, adminId: number): Promise<Return<User>> {
     try {
       return this.httpRequest.put<User>(`/teams/${teamId}/add-admin/${adminId}`, {});
     } catch (error) {
@@ -80,7 +81,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async deleteMember(teamId: number, memberId: number): Promise<void | null> {
+  async deleteMember(teamId: number, memberId: number): Promise<Return<void>> {
     try {
       return this.httpRequest.delete<void>(`/teams/${teamId}/delete-member/${memberId}`);
     } catch (error) {
@@ -88,7 +89,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async deleteAdmin(teamId: number, adminId: number): Promise<void | null> {
+  async deleteAdmin(teamId: number, adminId: number): Promise<Return<void>> {
     try {
       return this.httpRequest.delete<void>(`/teams/${teamId}/delete-admin/${adminId}`);
     } catch (error) {
@@ -96,7 +97,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async deleteProject(teamId: number, projectId: number): Promise<void | null> {
+  async deleteProject(teamId: number, projectId: number): Promise<Return<void>> {
     try {
       return this.httpRequest.delete<void>(`/teams/${teamId}/projects/${projectId}`);
     } catch (error) {
@@ -104,7 +105,8 @@ class TeamService extends BaseService {
     }
   }
 
-  async createProject(teamId: number, createProjectDto: CreateProjectDto): Promise<ProjectReturn> {
+  async createProject(teamId: number, createProjectDto: CreateProjectDto):
+    Promise<Return<Project>> {
     try {
       return this.httpRequest.post<Project>(`/teams/${teamId}/projects/`, createProjectDto);
     } catch (error) {
@@ -112,7 +114,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async getTeamProjects(teamId: number): Promise<Project[] | null> {
+  async getTeamProjects(teamId: number): Promise<Return<Project[]>> {
     try {
       return this.httpRequest.get<Project[]>(`/teams/${teamId}/projects/`);
     } catch (error) {
