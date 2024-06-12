@@ -17,6 +17,7 @@ import { observer } from 'mobx-react';
 import { Project } from 'src/models/project.model';
 import { UserStore } from 'src/stores/user.store';
 import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
+import { SortBy } from 'src/utils/common/sortBy';
 
 interface TaskListProps {
   isProjectPage: boolean,
@@ -92,8 +93,8 @@ const TaskList: React.FC<TaskListProps> = ({
     }
   }, [isProjectPage, store]);
 
-  const onSort = useCallback((newTasks: Task[]) => {
-    store.sortTasks(newTasks);
+  const onSort = useCallback((sortBy: SortBy) => {
+    store.sortTasks(sortBy);
   }, [store]);
 
   const onEditClick = (task: Task) => {
@@ -104,9 +105,12 @@ const TaskList: React.FC<TaskListProps> = ({
     setDeletedTask(task);
   };
 
+  useEffect(() => console.log('list', store.tasks.map((task) =>
+    [task.name, task.importance, task.urgency].join(', '))), [store.tasks]);
+
   return (
     <Box sx={styles.container}>
-      {store.current.tasks.length === 0 ? (
+      {store.tasks.length === 0 ? (
         <Typography variant="h6" mt={2}>No tasks available</Typography>
       ) : (
         <Grid container spacing={2} mt={2} alignItems="stretch">
@@ -115,11 +119,11 @@ const TaskList: React.FC<TaskListProps> = ({
               isEditable={isEditable}
               isProjectPage={isProjectPage}
               onSort={onSort}
-              tasks={store.current.tasks}
+              tasks={store.tasks}
               handleGetImportantTasks={handleImportantTasks}
             />
           </Grid>
-          {store.current.tasks.map(task => (
+          {store.tasks.map(task => (
             <TaskItem
               key={task.id}
               task={task}
@@ -138,14 +142,14 @@ const TaskList: React.FC<TaskListProps> = ({
           onCancel={createTask.close}
           members={members}
           onSubmit={createTaskHandler}
-          tasks={store.current.tasks}
+          tasks={store.tasks}
         />
       </ModalForm>
       <ModalForm open={editTask.isOpen} handleClose={editTask.close}>
         <EditTaskForm
           task={editedTask}
           members={members}
-          tasks={store.current.tasks}
+          tasks={store.tasks}
           onCancel={editTask.close}
           onSubmit={submitEditHandler}
         />
