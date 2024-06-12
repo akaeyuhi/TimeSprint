@@ -24,9 +24,9 @@ const UserPage: React.FC = () => {
 
   const isOwnPage = userId !== authStore.auth?.user?.id;
   const getWelcomeText = () =>
-    (isOwnPage
-      ? `Welcome, ${store.current && store.current?.username}`
-      : `${store.current && store.current?.username}'s page`);
+    (isOwnPage ?
+      `Welcome, ${store.current && store.current?.username}` :
+      `${store.current && store.current?.username}'s page`);
 
   return (
     <Container>

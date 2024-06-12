@@ -27,7 +27,6 @@ const AddAdminForm: React.FC<AddAdminFormProps> = ({ onSubmit, onClose }) => {
     (user) =>
       user.id !== currentUser && !admins.some((admin) => admin.id !== user.id)
   );
-  const [error, setError] = useState('');
   const [noCandidates, setNoCandidates] = useState(!!adminCandidates.length);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -36,10 +35,7 @@ const AddAdminForm: React.FC<AddAdminFormProps> = ({ onSubmit, onClose }) => {
     if (user) {
       onSubmit(user);
       setUsername('');
-      setError('');
       setNoCandidates(false);
-    } else {
-      setError('Please select a user');
     }
   };
 
