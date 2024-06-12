@@ -20,15 +20,16 @@ export class TaskRepository implements IRepository<Task> {
 
   async update(id: number, updateTaskDto: Partial<Task>): Promise<Task> {
     const task = await this.findById(id);
-    if (!task) {
-      throw new NotFoundException(`Task with ID ${id} not found`);
-    }
+    console.log(task, updateTaskDto);
     await this.repository.update(id, updateTaskDto);
     return { ...task, ...updateTaskDto };
   }
 
   async findById(id: number): Promise<Task> {
-    const task = await this.repository.findOneBy({ id });
+    const task = await this.repository.findOne({
+      where: { id },
+      relations: ['dependencies'],
+    });
     if (!task) {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
