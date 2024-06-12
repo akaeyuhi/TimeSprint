@@ -3,12 +3,9 @@ import { Box, Grid, Typography } from '@mui/material';
 import TaskItem from 'src/components/task/TaskItem';
 import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
-import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
+import { TaskDto } from 'src/services/dto/task/task.dto';
 import { toast } from 'react-toastify';
-import EditTaskForm from 'src/components/task/EditTaskForm';
 import ModalForm from 'src/components/modalForm';
-import CreateTaskForm from 'src/components/task/CreateTaskForm';
-import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { useStores } from 'src/hooks';
 import { styles } from 'src/components/task/TaskList/styles';
 import TaskSort from 'src/components/task/TaskSort';
@@ -18,6 +15,7 @@ import { Project } from 'src/models/project.model';
 import { UserStore } from 'src/stores/user.store';
 import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 import { SortBy } from 'src/utils/common/sortBy';
+import TaskForm from 'src/components/task/TaskForm';
 
 interface TaskListProps {
   isProjectPage: boolean,
@@ -52,7 +50,7 @@ const TaskList: React.FC<TaskListProps> = ({
   const members = (store.current as Project).team?.members;
   const isProjectAdmin = isProjectPage && isAdmin;
 
-  const createTaskHandler = useCallback(async (createTaskDto: CreateTaskDto) => {
+  const createTaskHandler = useCallback(async (createTaskDto: TaskDto) => {
     await store.createTask(createTaskDto);
     if (!store.error && !store.isLoading)  {
       createTask.close();
@@ -60,8 +58,8 @@ const TaskList: React.FC<TaskListProps> = ({
     }
   }, [createTask, store]);
 
-  const submitEditHandler = useCallback(async (taskId: number, updatedTask: UpdateTaskDto) => {
-    await store.updateTask(taskId, updatedTask);
+  const submitEditHandler = useCallback(async (updatedTask: TaskDto, taskId?: number) => {
+    await store.updateTask(taskId!, updatedTask);
     if (!store.error && !store.isLoading)  {
       editTask.close();
       setEditedTask(null);
@@ -105,9 +103,6 @@ const TaskList: React.FC<TaskListProps> = ({
     setDeletedTask(task);
   };
 
-  useEffect(() => console.log('list', store.tasks.map((task) =>
-    [task.name, task.importance, task.urgency].join(', '))), [store.tasks]);
-
   return (
     <Box sx={styles.container}>
       {store.tasks.length === 0 ? (
@@ -138,20 +133,22 @@ const TaskList: React.FC<TaskListProps> = ({
         </Grid>
       )}
       <ModalForm open={createTask.isOpen} handleClose={createTask.close}>
-        <CreateTaskForm
+        <TaskForm
           onCancel={createTask.close}
           members={members}
           onSubmit={createTaskHandler}
           tasks={store.tasks}
+          task={null}
         />
       </ModalForm>
       <ModalForm open={editTask.isOpen} handleClose={editTask.close}>
-        <EditTaskForm
+        <TaskForm
           task={editedTask}
           members={members}
           tasks={store.tasks}
           onCancel={editTask.close}
           onSubmit={submitEditHandler}
+          isEdited={true}
         />
       </ModalForm>
       <ModalForm open={deleteTask.isOpen} handleClose={deleteTask.close}>

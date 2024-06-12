@@ -33,6 +33,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
   isEditable,
 }) => {
 
+  const parsedDependencies = task.dependencies.slice(0, 5).map(task => task.name).join(', ');
+  const checkLength = (length = 0) => task.dependencies.length > length;
+
 
   const toggleTask = () => {
     onToggle(task.id);
@@ -68,9 +71,12 @@ const TaskItem: React.FC<TaskItemProps> = ({
               <Typography variant="body2" sx={{ color: task.importance ? 'red' : 'green' }}>
                 Importance: {task.importance ? 'High' : 'Low'}
               </Typography>
-              {/*<Typography variant="body2">*/}
-              {/*  Dependencies: {task.dependencies.length}*/}
-              {/*</Typography>*/}
+              <Typography variant="body2"
+                sx={{ color: checkLength(3) ? 'red' : 'green' }}>
+                {checkLength() ?
+                  `Dependencies: ${parsedDependencies}${checkLength(5) ? '...' : ''}` :
+                  'No dependencies'}
+              </Typography>
             </Box>
             <Box>
               {task.user && (
