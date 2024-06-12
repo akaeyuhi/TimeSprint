@@ -33,13 +33,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
   onDeleteClick,
   isEditable,
 }) => {
-
   const parsedDependencies = task.dependencies
     .slice(0, 5)
     .map((task) => task.name)
     .join(', ');
   const checkLength = (length = 0) => task.dependencies.length > length;
-
 
   const toggleTask = () => {
     onToggle(task.id);
@@ -88,9 +86,10 @@ const TaskItem: React.FC<TaskItemProps> = ({
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ color: checkLength(3) ? 'red' : 'green' }}>
-                {checkLength()
-                  ? `Dependencies: ${parsedDependencies}${checkLength(5) ? '...' : ''}` :
+                sx={{ color: checkLength(3) ? 'red' : 'green' }}
+              >
+                {checkLength() ?
+                  `Dependencies: ${parsedDependencies}${checkLength(5) ? '...' : ''}` :
                   'No dependencies'}
               </Typography>
             </Box>
