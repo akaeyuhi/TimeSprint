@@ -1,31 +1,40 @@
-import React, { useEffect } from 'react';
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent
+} from '@mui/material';
 import { Task } from 'src/models/task.model';
-import { SortBy, useSorting } from 'src/hooks/use-sorting';
 import { observer } from 'mobx-react';
+import { SortBy } from 'src/utils/common/sortBy';
 
 interface TaskSorterProps {
   tasks: Task[];
-  onSort: (tasks: Task[]) => void;
+  onSort: (sortBy: SortBy) => void;
   isEditable: boolean;
   isProjectPage: boolean;
-  handleGetImportantTasks?: () => void;
+  handleGetImportantTasks?: () => Promise<void>;
 }
 
-const TaskSorter: React.FC<TaskSorterProps> = ({
-  tasks,
+const TaskSort: React.FC<TaskSorterProps> = ({
   onSort,
   isEditable,
   isProjectPage,
   handleGetImportantTasks,
 }) => {
-  const [sortBy, setSorting, sorted] = useSorting(tasks);
+  const [sortBy, setSortBy] = useState(SortBy.EMPTY);
 
   const onChange = (e: SelectChangeEvent) => {
-    setSorting(e.target.value as SortBy);
+    setSortBy(e.target.value as SortBy);
   };
 
-  useEffect(() => onSort(sorted), [sorted]);
+  useEffect(() => {
+    onSort(sortBy);
+  }, [onSort, sortBy]);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -57,4 +66,4 @@ const TaskSorter: React.FC<TaskSorterProps> = ({
   );
 };
 
-export default observer(TaskSorter);
+export default observer(TaskSort);

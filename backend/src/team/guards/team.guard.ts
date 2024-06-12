@@ -1,18 +1,25 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  forwardRef,
+  Inject,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRole } from 'src/user/utils';
+import { TeamRole } from 'src/user/utils';
 import { TeamService } from 'src/team/team.service';
 
 @Injectable()
 export class TeamRolesGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
+    @Inject(forwardRef(() => TeamService))
     private readonly teamService: TeamService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRole = this.reflector.get<UserRole>(
-      'roles',
+    const requiredRole = this.reflector.get<TeamRole>(
+      'role',
       context.getHandler(),
     );
     if (!requiredRole) {
@@ -23,8 +30,11 @@ export class TeamRolesGuard implements CanActivate {
     const userId = request.user.id; // The user object is attached to the request
 
     // Check if the user has the required role in the team associated with the project
-    const projectId = +request.params.projectId;
-    const teamId = await this.teamService.getTeamIdByProject(projectId);
+    let teamId = +request.params.teamId;
+    if (!teamId) {
+      const projectId = +request.params.projectId;
+      teamId = await this.teamService.getTeamIdByProject(projectId);
+    }
     const userRoleInTeam = await this.teamService.getUserRoleInTeam(
       userId,
       teamId,

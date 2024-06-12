@@ -1,157 +1,204 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
-import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
 import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
+import TeamService from 'src/services/team.service';
 import { Project } from 'src/models/project.model';
 
 export class TeamStore {
   error: Error | null = null;
   isLoading = false;
-  currentTeam: Team = {
-    id: 1,
-    name: 'Team 1',
-    description: 'Description for Team 1',
-    admins: [
-      { id: 3, username: 'alice_smith', email: 'alice@example.com' } as User,
-      { id: 4, username: 'bob_jones', email: 'bob@example.com' } as User,
-      { id: 5, username: 'alice_smith', email: 'alice@example.com' } as User,
-      { id: 6, username: 'bob_jones', email: 'bob@example.com' } as User,
-      { id: 7, username: 'alice_smith', email: 'alice@example.com' } as User,
-      { id: 8, username: 'bob_jones', email: 'bob@example.com' } as User,
-    ],
-    members: [
-      { id: 3, username: 'alice_smith', email: 'alice@example.com' } as User,
-      { id: 4, username: 'bob_jones', email: 'bob@example.com' } as User,
-      { id: 5, username: 'alice_smith', email: 'alice@example.com' } as User,
-      { id: 6, username: 'bob_jones', email: 'bob@example.com' } as User,
-      { id: 7, username: 'alice_smith', email: 'alice@example.com' } as User,
-      { id: 8, username: 'bob_jones', email: 'bob@example.com' } as User,
-    ],
-    projects: [
-      {
-        id: 1,
-        name: 'Project 1',
-        description: 'Description for Project 1',
-        startDate: new Date(),
-        endDate: new Date('2024-05-15'),
-        isCompleted: false,
-        tasks: [],
-      },
-      {
-        id: 2,
-        name: 'Project 2',
-        description: 'Description for Project 2',
-        startDate: new Date(),
-        endDate: new Date('2024-06-30'),
-        isCompleted: true,
-        tasks: [],
-      },
-    ],
-  } as Team;
+  current: Team = {} as Team;
 
-  constructor() {
+  constructor(private readonly teamService: TeamService) {
     makeAutoObservable(this);
   }
 
-  isAdmin(user: User) {
-    return !!this.currentTeam.admins.find(admin => admin.id === user.id);
+  isAdmin(user: User | number) {
+    const id = (typeof user === 'object') ? (user as User).id : user;
+    return !!this.current.admins.find(admin => admin.id === id);
   }
 
-  isMember(user: User) {
-    return this.currentTeam.members.find(member => member.id === user.id);
+  isMember(user: User | number) {
+    const id = (typeof user === 'object') ? (user as User).id : user;
+    return !!this.current.members.find(member => member.id === id);
   }
 
   getUserById(id: number) {
-    return this.currentTeam.members.find(member => member.id === id);
+    return this.current.members.find(member => member.id === id);
   }
 
   async fetch(teamId: number) {
-    return this.currentTeam;
+    this.isLoading = true;
+    try {
+      const team = <Team> await this.teamService.getTeam(teamId);
+      runInAction(() => {
+        this.current = team;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
+      });
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
+    return this.current;
   }
 
   getProjects() {
-    return this.currentTeam.projects;
-  }
-
-  async createTeam(teamDto: CreateTeamDto) {
-    this.isLoading = true;
-    this.currentTeam = { ...teamDto } as Team;
-    this.isLoading = false;
-    return this.currentTeam;
+    return this.current.projects;
   }
 
   async createProject(projectDto: CreateProjectDto) {
     this.isLoading = true;
-    this.currentTeam.projects.push({ ...projectDto } as Project);
-    this.isLoading = false;
-    return this.currentTeam.projects;
+    try {
+      const project = <Project> await this.teamService.createProject(
+        this.current.id,
+        projectDto,
+      );
+      runInAction(() => {
+        this.current.projects.push(project);
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
+      });
+
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+
+    }
+    return this.current.projects;
   }
 
   async deleteProject(projectId: number) {
     this.isLoading = true;
-    const newArray = this.currentTeam.projects.filter(project => project.id !== projectId);
-    this.currentTeam.projects = newArray;
-    this.isLoading = false;
-    return newArray;
+    try {
+      await this.teamService.deleteProject(
+        this.current.id,
+        projectId,
+      );
+      runInAction(() => {
+        this.current.projects =
+          this.current.projects.filter(project => project.id !== projectId);
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
+      });
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
+    return this.current.projects;
   }
 
   async addMember(user: User) {
     this.isLoading = true;
-    if (!this.isMember(user)) {
-      this.currentTeam.members.push(user);
-      this.isLoading = false;
-      return user;
-    } else {
-      this.error = new Error('User already in team');
-      this.isLoading = false;
+    try {
+      if (!this.isMember(user)) {
+        const newMember = <User> await this.teamService.addMember(this.current.id, user.id);
+        runInAction(() => {
+          this.current.members.push(newMember);
+        });
+      } else {
+        runInAction(() => {
+          this.error = new Error('User already in team');
+        });
+      }
+    } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
+      });
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
+    return user;
   }
 
   async addAdmin(user: User) {
     this.isLoading = true;
-    if (!this.isAdmin(user)) {
-      this.currentTeam.admins.push(user);
-      this.isLoading = false;
-      return user;
-    } else {
-      this.error = new Error('User already is admin');
-      this.isLoading = false;
+    try {
+      if (!this.isAdmin(user)) {
+        const newMember = <User> await this.teamService.addAdmin(this.current.id, user.id);
+        runInAction(() => {
+          this.current.admins.push(newMember);
+        });
+      } else {
+        runInAction(() => {
+          this.error = new Error('User already admin');
+        });
+      }
+    } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
+      });
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
+    return user;
   }
 
   async deleteUser(userId: number): Promise<void> {
     this.isLoading = true;
-    const user = this.getUserById(userId);
-    if (user && !this.isAdmin(user)) {
-      this.currentTeam.members = this.currentTeam.members.filter(member => member.id !== userId);
-      this.isLoading = false;
-      return;
+    try {
+      const user = this.getUserById(userId);
+      await runInAction(async () => {
+        if (user && !this.isAdmin(user)) {
+          await this.teamService.deleteMember(this.current.id, userId);
+          this.current.members =
+            this.current.members.filter(member => member.id !== userId);
+        } else if (user && this.isAdmin(user)) {
+          this.error = new Error('This user has admin privilege');
+        } else {
+          this.error = new Error('User does not exist');
+        }
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
+      });
+      this.error = error as Error;
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
-    if (user && this.isAdmin(user)) {
-      this.error = new Error('This user has admin privilege');
-      this.isLoading = false;
-    } else {
-      this.error = new Error('User does not exist');
-      this.isLoading = false;
-    }
-
   }
 
   async deleteAdmin(userId: number): Promise<void> {
     this.isLoading = true;
-    const user = this.getUserById(userId);
-    if (user && this.isAdmin(user)) {
-      this.currentTeam.admins = this.currentTeam.admins.filter(admin => admin.id !== userId);
-      this.isLoading = false;
-      return;
-    }
-    if (user && !this.isAdmin(user)) {
-      this.error = new Error('This user has no admin privilege');
-      this.isLoading = false;
-    } else {
-      this.error = new Error('User does not exist');
-      this.isLoading = false;
+    try {
+      const user = this.getUserById(userId);
+      await runInAction(async () => {
+        if (user && this.isAdmin(user)) {
+          await this.teamService.deleteAdmin(this.current.id, userId);
+          this.current.admins =
+            this.current.admins.filter(admin => admin.id !== userId);
+        } else if (user && !this.isAdmin(user)) {
+          this.error = new Error('This user has no admin privilege');
+        } else {
+          this.error = new Error('User does not exist');
+        }
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
+      });
+      this.error = error as Error;
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
   }
 }

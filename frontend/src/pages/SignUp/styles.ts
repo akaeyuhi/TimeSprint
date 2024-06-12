@@ -10,7 +10,6 @@ export const styles = createStyleSheet({
   formContainer: {
     boxShadow: '1',
     width: '50vw',
-    height: '75vh',
     borderRadius: '1.5rem',
     padding: '2rem',
     display: 'flex',
@@ -29,5 +28,18 @@ export const styles = createStyleSheet({
     width: '50%',
     //padding: '0 1.5rem',
     mt: '1.5rem',
+  },
+  container: {
+    width: '50%',
+    padding: '0',
+    '& > *': {
+      mb: '1rem',
+      '& > div': {
+        padding: '0 0.5rem ',
+      },
+    },
+  },
+  form: {
+    mt: '1rem',
   },
 });

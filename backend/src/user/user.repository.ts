@@ -17,11 +17,24 @@ export class UserRepository implements IRepository<User> {
   }
 
   async findById(id: number): Promise<User> {
-    return this.repository.findOneBy({ id });
+    return this.repository.findOne({
+      where: { id },
+      relations: {
+        teams: true,
+        activities: true,
+        tasks: {
+          dependencies: true
+        }
+      },
+    });
   }
 
   async findByEmail(email: string): Promise<User> {
     return this.repository.findOneBy({ email });
+  }
+
+  async findByUsername(username: string): Promise<User> {
+    return this.repository.findOneBy({ username });
   }
 
   async create(userData: Partial<User>): Promise<User> {

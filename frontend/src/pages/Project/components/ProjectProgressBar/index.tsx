@@ -4,7 +4,7 @@ import LinearProgressWithLabel from 'src/components/progressWithLabel';
 import { observer } from 'mobx-react';
 
 interface ProjectProgressBarProps {
-  progress: number,
+  progress: number;
 }
 
 const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({ progress }) => (

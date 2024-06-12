@@ -1,25 +1,31 @@
 import React, { useEffect } from 'react';
 import { Container, Stack, Typography } from '@mui/material';
-import TaskSection from 'src/components/task/components/TaskSection';
+import TaskSection from 'src/components/task/TaskSection';
 import TeamList from 'src/components/team/TeamList';
 import { useStores } from 'src/hooks';
 import { observer } from 'mobx-react';
 import Loader from 'src/components/loader';
+import { useParams } from 'react-router-dom';
+import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 
 const UserPage: React.FC = () => {
-  const { userStore: store, authStore } = useStores();
+  const { userStore: store, authStore, handler } = useStores();
+  const { id } = useParams();
+
+  const userId = id ? parseInt(id) : authStore.auth.user.id;
 
   useEffect(() => {
-    store.fetch(1);
-  }, []);
+    store.fetch(userId);
+  }, [store, userId]);
 
-  if (store.isLoading || !store.current) return <Loader />;
+  if (store.isLoading || isObjectEmpty(store.current)) return <Loader />;
+  if (store.error) handler.handle(store.error.message);
+  if (authStore.error) handler.handle(authStore.error.message);
 
-  const isOwnPage = false && store.current?.id !== authStore.auth?.user?.id;
+  const isOwnPage = userId !== authStore.auth?.user?.id;
   const getWelcomeText = () => (isOwnPage ?
     (`Welcome, ${store.current && store.current?.username}`) :
     (`${store.current && store.current?.username}'s page`));
-
 
   return (
     <Container>

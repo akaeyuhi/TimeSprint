@@ -3,6 +3,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IRepository } from 'src/interfaces/repository.interface';
+import { User } from 'src/user/entities/user.entity';
+import { Project } from 'src/project/entities/project.entity';
 
 @Injectable()
 export class TeamRepository implements IRepository<Team> {
@@ -11,11 +13,16 @@ export class TeamRepository implements IRepository<Team> {
     private readonly repository: Repository<Team>,
   ) {}
   async findAll(): Promise<Team[]> {
-    return this.repository.find({ relations: ['members', 'admins'] });
+    return this.repository.find({
+      relations: ['members', 'admins', 'projects'],
+    });
   }
 
   async findById(id: number): Promise<Team> {
-    return this.repository.findOneBy({ id });
+    return this.repository.findOne({
+      where: { id },
+      relations: ['members', 'admins', 'projects'],
+    });
   }
 
   async create(createTeamDto: Partial<Team>): Promise<Team> {
@@ -29,7 +36,7 @@ export class TeamRepository implements IRepository<Team> {
       throw new NotFoundException('Team not found');
     }
     await this.repository.update(id, updateTeamDto);
-    return team;
+    return { ...team, ...updateTeamDto };
   }
 
   async delete(id: number): Promise<void> {
@@ -56,10 +63,6 @@ export class TeamRepository implements IRepository<Team> {
       .getMany();
   }
 
-  save(entity: Team) {
-    return this.repository.save(entity);
-  }
-
   async getTeamIdByProject(projectId: number): Promise<number> {
     const team = await this.repository
       .createQueryBuilder('team')
@@ -76,22 +79,28 @@ export class TeamRepository implements IRepository<Team> {
     return team.id;
   }
 
-  async getUserRoleInTeam(userId: number, teamId: number): Promise<string> {
-    const team = await this.repository.findOne({
-      where: { id: userId },
-      relations: ['users'],
-    });
+  async addMember(team: Team, user: User): Promise<Team> {
+    team.members.push(user);
+    return await this.repository.save(team);
+  }
 
-    if (!team) {
-      throw new NotFoundException(`Team with ID ${teamId} not found`);
-    }
+  async addAdmin(team: Team, user: User): Promise<Team> {
+    team.admins.push(user);
+    return await this.repository.save(team);
+  }
 
-    const user = team.members.find(user => user.id === userId);
+  async addProjectToTeam(team: Team, project: Project) {
+    team.projects.push(project);
+    return this.repository.save(team);
+  }
 
-    if (!user) {
-      return null; // User is not a member of the team
-    }
+  async deleteAdmin(team: Team, user: User): Promise<Team> {
+    team.admins = team.admins.filter(admin => admin.id !== user.id);
+    return await this.repository.save(team);
+  }
 
-    return user.role;
+  async deleteMember(team: Team, user: User): Promise<Team> {
+    team.members = team.members.filter(member => member.id !== user.id);
+    return await this.repository.save(team);
   }
 }

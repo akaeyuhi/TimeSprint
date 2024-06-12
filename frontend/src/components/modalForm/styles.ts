@@ -23,10 +23,10 @@ export const styles = createStyleSheet({
   },
   container: {
     width: '100%',
-    '& > *': {
+    '& > div': {
       mb: '1rem',
-      '& > div': {
-        padding: '0 0.2rem ',
+      '& > input': {
+        padding: '0 1rem ',
       },
     },
   },

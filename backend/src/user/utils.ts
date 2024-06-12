@@ -1,4 +1,6 @@
-export const passwordRegex = new RegExp('^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$');
+export const passwordRegex = new RegExp(
+  '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?!.* ).{8,}$',
+);
 
 export enum TeamRole {
   COLLABORATOR = 'collaborator',

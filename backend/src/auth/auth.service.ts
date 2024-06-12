@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
@@ -19,12 +20,12 @@ export class AuthService {
   ) {}
 
   async validateUser(
-    username: string,
+    email: string,
     password: string,
     user: User,
   ): Promise<boolean> {
     const passwordCheck = await bcrypt.compare(password, user.password);
-    return user.email === username && passwordCheck;
+    return user.email === email && passwordCheck;
   }
 
   async doesUserExists(checkDto: CreateUserDto | LoginDto): Promise<boolean> {
@@ -32,9 +33,12 @@ export class AuthService {
     return !!user;
   }
 
-  async login(username: string, pass: string): Promise<any> {
-    const user = await this.userService.findUserWithPassword(username);
-    if (!user || !(await this.validateUser(username, pass, user))) {
+  async login(email: string, pass: string): Promise<any> {
+    const user = await this.userService.findUserWithPassword(email);
+    if (!user) {
+      throw new NotFoundException(`User with such email doesn't exist`);
+    }
+    if (!(await this.validateUser(email, pass, user))) {
       throw new UnauthorizedException('Invalid password or email');
     }
     const payload = {
@@ -44,9 +48,9 @@ export class AuthService {
       role: user.role,
       sub: user.id,
     };
-    const tokens = this.getTokens(payload);
+    const tokens = await this.getTokens(payload);
     return {
-      tokens,
+      ...tokens,
       user: {
         id: user.id,
         role: user.role,
@@ -65,6 +69,7 @@ export class AuthService {
     return this.login(createUserDto.email, createUserDto.password);
   }
   async refreshAccessToken(user: JwtPayload) {
+    console.log(user);
     const { accessToken } = await this.getTokens(user);
     return {
       accessToken,

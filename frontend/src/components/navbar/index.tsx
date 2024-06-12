@@ -1,9 +1,11 @@
 import { AppBar, Avatar, Chip, Container, Menu, MenuItem, Toolbar } from '@mui/material';
 import { MouseEvent, useState } from 'react';
 import { styles } from './styles';
+import { useStore } from 'src/hooks';
 
 const Navbar = () => {
-  const [username] = useState('Test');
+  const store = useStore('authStore');
+  const { username } = store.auth.user;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -12,8 +14,7 @@ const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  // TODO: Write store integration to actually logout user
-  const handleLogout = () => alert('Logout!');
+  const handleLogout = () => store.logout();
 
   return (
     <AppBar

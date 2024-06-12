@@ -1,8 +1,16 @@
 import React from 'react';
-import { Avatar, Box, Button, Card, CardActions, CardContent, Grid, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box, Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Typography
+} from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
-import { styles } from 'src/components/task/components/TaskItem/styles';
+import { styles } from 'src/components/task/TaskItem/styles';
 import { observer } from 'mobx-react';
 
 interface TaskItemProps {
@@ -24,6 +32,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
   onDeleteClick,
   isEditable,
 }) => {
+
+  const parsedDependencies = task.dependencies.slice(0, 5).map(task => task.name).join(', ');
+  const checkLength = (length = 0) => task.dependencies.length > length;
 
 
   const toggleTask = () => {
@@ -60,8 +71,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
               <Typography variant="body2" sx={{ color: task.importance ? 'red' : 'green' }}>
                 Importance: {task.importance ? 'High' : 'Low'}
               </Typography>
-              <Typography variant="body2">
-                Dependencies: {task.dependencies.length}
+              <Typography variant="body2"
+                sx={{ color: checkLength(3) ? 'red' : 'green' }}>
+                {checkLength() ?
+                  `Dependencies: ${parsedDependencies}${checkLength(5) ? '...' : ''}` :
+                  'No dependencies'}
               </Typography>
             </Box>
             <Box>

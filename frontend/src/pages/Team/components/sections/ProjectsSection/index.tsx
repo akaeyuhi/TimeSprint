@@ -23,24 +23,30 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   isAdmin = false,
 }) => (
   <>
-    <Stack>
-      <Typography variant="h5" gutterBottom>
-        Projects
-      </Typography>
+    <Stack mt={2}>
       <Box sx={styles.controlsBox}>
-        {isAdmin && <Button variant="outlined" color="primary" onClick={createProject.open}>
-          Create new Project
-        </Button>}
-        {team.projects.length ? <Button variant="outlined"
-          color="primary"
-          onClick={projects.open}>
-          View All Projects
-        </Button> : <></>}
+        <Typography variant="h4" gutterBottom>
+          Projects
+        </Typography>
+        <Box>
+          {isAdmin && <Button
+            variant="outlined"
+            color="primary"
+            sx={{ mr: '1rem' }}
+            onClick={createProject.open}>
+            Create new Project
+          </Button>}
+          {team && team?.projects?.length ? <Button variant="outlined"
+            color="primary"
+            onClick={projects.open}>
+            View All Projects
+          </Button> : <></>}
+        </Box>
       </Box>
       <Stack>
         <ProjectList
           isAdmin={isAdmin}
-          projects={team.projects.slice(0, 5)}
+          projects={team?.projects?.slice(0, 2)}
           onDelete={handleDeleteClick}
         />
       </Stack>
@@ -48,7 +54,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         open={projects.isOpen}
         handleClose={projects.close}
         title="Team projects">
-        <ProjectList isAdmin={isAdmin} projects={team.projects} onDelete={handleDeleteClick} />
+        <ProjectList isAdmin={isAdmin} projects={team?.projects} onDelete={handleDeleteClick} />
       </ModalInfo>
     </Stack>
   </>

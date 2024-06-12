@@ -31,14 +31,14 @@ export class Project {
   @IsDate()
   endDate: Date;
 
-  @Column()
+  @Column({ type: 'boolean' })
   @IsBoolean()
-  isCompleted: boolean;
+  isCompleted = false;
 
-  @ManyToOne(() => Team)
-  @JoinColumn({ name: 'team_id' })
+  @ManyToOne(() => Team, { cascade: ['update'] })
+  @JoinColumn()
   team: Team;
 
-  @OneToMany(() => Task, task => task.project)
+  @OneToMany(() => Task, task => task.project, { cascade: true })
   tasks: Task[];
 }

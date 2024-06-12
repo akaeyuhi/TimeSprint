@@ -1,0 +1,15 @@
+import { User } from 'src/models/user.model';
+import { Task } from 'src/models/task.model';
+import { Team } from 'src/models/team.model';
+import { Project } from 'src/models/project.model';
+
+export type Auth = {
+  refreshToken: string;
+  accessToken: string;
+  user: User;
+};
+
+export type UserReturn = User | null;
+export type TaskReturn = Task | null;
+export type TeamReturn = Team | null;
+export type ProjectReturn = Project | null;

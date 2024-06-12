@@ -7,14 +7,13 @@ import { CreateProjectDto } from 'src/project/dto/create-project.dto';
 import { AddTasksDto } from 'src/project/dto/add-tasks.dto';
 import { CreateTaskDto } from 'src/task/dto/create-task.dto';
 import { TaskService } from 'src/task/task.service';
-import { TeamService } from 'src/team/team.service';
+import { Team } from 'src/team/entities/team.entity';
 
 @Injectable()
 export class ProjectService {
   constructor(
     private readonly projectRepository: ProjectRepository,
     private readonly taskService: TaskService,
-    private readonly teamService: TeamService,
   ) {}
 
   async createProject(projectData: CreateProjectDto): Promise<Project> {
@@ -40,11 +39,7 @@ export class ProjectService {
     return await this.projectRepository.findAll();
   }
 
-  async assignProjectToTeam(id: number, teamId: number): Promise<Project> {
-    const team = await this.teamService.findById(teamId);
-    if (!team) {
-      throw new NotFoundException(`Team with ID ${teamId} not found`);
-    }
+  async assignProjectToTeam(id: number, team: Team): Promise<Project> {
     return await this.projectRepository.assignProjectToTeam(id, team);
   }
 

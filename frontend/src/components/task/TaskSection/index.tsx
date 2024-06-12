@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useModals } from 'src/hooks/use-modals';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { styles } from 'src/pages/Team/styles';
-import TaskList from 'src/components/task/components/TaskList';
+import TaskList from 'src/components/task/TaskList';
 
 interface TaskSectionProps {
   isProjectPage: boolean,
   isEditable?: boolean,
   isAdmin?: boolean,
+  projectId?: number
 }
 
 interface TaskModals {
@@ -20,6 +21,7 @@ const TaskSection: React.FC<TaskSectionProps> = ({
   isProjectPage,
   isEditable = false,
   isAdmin = false,
+  projectId
 }) => {
   const [taskModals, setTaskModals] = useState<TaskModals>({
     createTask: false,
@@ -46,6 +48,7 @@ const TaskSection: React.FC<TaskSectionProps> = ({
           isProjectPage={isProjectPage}
           isEditable={isEditable}
           isAdmin={isAdmin}
+          projectId={projectId}
           {...modalHandlers}
         />
       </Stack>

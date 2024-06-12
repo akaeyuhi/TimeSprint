@@ -14,7 +14,7 @@ export class ProjectRepository implements IRepository<Project> {
   ) {}
 
   async create(projectData: Partial<Project>): Promise<Project> {
-    const project = this.repository.create(projectData);
+    const project = this.repository.create({ ...projectData, tasks: [] });
     return await this.repository.save(project);
   }
 
@@ -24,7 +24,7 @@ export class ProjectRepository implements IRepository<Project> {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
     await this.repository.update(id, projectData);
-    return project;
+    return { ...project, ...projectData };
   }
 
   async delete(id: number): Promise<void> {
@@ -32,11 +32,19 @@ export class ProjectRepository implements IRepository<Project> {
   }
 
   async findById(id: number): Promise<Project> {
-    return await this.repository.findOneBy({ id });
+    return await this.repository.findOne({
+      where: { id },
+      relations: {
+        team: true,
+        tasks: {
+          dependencies: true
+        }
+      },
+    });
   }
 
   async findAll(): Promise<Project[]> {
-    return await this.repository.find();
+    return await this.repository.find({ relations: ['team', 'tasks'] });
   }
 
   async assignProjectToTeam(projectId: number, team: Team): Promise<Project> {

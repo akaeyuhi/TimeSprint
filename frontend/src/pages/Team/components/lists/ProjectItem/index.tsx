@@ -15,7 +15,9 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ project, onDelete, isAdmin = 
     <CardContent>
       <Typography variant="h6">{project.name}</Typography>
       <Typography variant="body1">{project.description}</Typography>
-      <Typography variant="body1">Tasks: {project.tasks.length}</Typography>
+      <Typography variant="body1" sx={{ color: 'red' }}>
+        Due: {project.endDate.toDateString()}
+      </Typography>
     </CardContent>
     <CardActions>
       <Link to={`./projects/${project.id}`} relative="path">
@@ -25,7 +27,7 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ project, onDelete, isAdmin = 
       </Link>
       {isAdmin &&
         <Button variant="contained" color="error" sx={{ mt: 1 }} onClick={() => onDelete(project)}>
-        Delete project
+          Delete project
         </Button>}
     </CardActions>
 

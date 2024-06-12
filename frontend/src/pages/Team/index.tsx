@@ -13,6 +13,7 @@ import { useModals } from 'src/hooks/use-modals';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
 import { toast } from 'react-toastify';
+import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 
 interface TeamModals {
   members: boolean,
@@ -41,112 +42,79 @@ const TeamPage: React.FC = () => {
     deleteAdmin: false,
     leaveTeam: false,
   });
-  const { authStore, userStore, teamStore } = useStores();
+  const { authStore, userStore, teamStore, handler } = useStores();
   const modalHandlers = useModals<TeamModals>(teamModals, setTeamModals);
   const { id } = useParams();
   const navigate = useNavigate();
   const [deleteProject, setDeleteProject] = useState<Project | null>(null);
   const [deleteUser, setDeleteUser] = useState<User | null>(null);
-  const [isCurrentAdmin, setIsCurrentAdmin] = useState(false);
+  const [isCurrentAdmin, setIsCurrentAdmin] = useState(
+    !isObjectEmpty(teamStore.current) ? teamStore.isAdmin(authStore.auth.user.id) : false);
 
   useEffect(() => {
-    teamStore.fetch(Number(id));
-  }, [id, teamStore]);
-
-  useEffect(() => {
-    console.log(authStore.auth);
-    const currentUser = teamStore.getUserById(3);
-    if (!currentUser) {
-      toast.error('Something went wrong');
-      return;
+    if (isObjectEmpty(teamStore.current)) {
+      teamStore.fetch(Number(id)).then(() =>
+        setIsCurrentAdmin(teamStore.isAdmin(authStore.auth.user.id)));
     }
-    setIsCurrentAdmin(teamStore.isAdmin(currentUser));
-  }, [authStore.auth?.user?.id, teamStore]);
+  }, [authStore.auth.user.id, handler, id, teamStore]);
 
   const handleCreateSubmit = useCallback(async (projectDto: CreateProjectDto) => {
-    try {
-      await teamStore.createProject(projectDto);
+    await teamStore.createProject(projectDto);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Created project ${projectDto.name}!`);
-    } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.createProject.close();
     }
   }, [modalHandlers.createProject, teamStore]);
 
-  const handleAddUserSubmit = useCallback(async (username: string) => {
-    try {
-      await userStore.fetchByUsername(username);
-      await teamStore.addMember(userStore.current);
-      toast.success(`Added new member! ${username}!`);
-    } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error ?? userStore.error}!`);
-    } finally {
+  const handleAddUserSubmit = useCallback(async (user: User) => {
+    await teamStore.addMember(user);
+    if (!teamStore.error && !teamStore.isLoading)  {
+      toast.success(`Added new member! ${user.username}!`);
       modalHandlers.addUser.close();
     }
-  }, [modalHandlers.addUser, teamStore, userStore]);
+  }, [modalHandlers.addUser, teamStore]);
 
   const handleAddAdminSubmit = useCallback(async (user: User) => {
-    try {
-      await teamStore.addAdmin(user);
+    await teamStore.addAdmin(user);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Added new admin! ${user.username}!`);
-    } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.addAdmin.close();
     }
   }, [modalHandlers.addAdmin, teamStore]);
 
   const handleDeleteProject = useCallback(async (projectId: number) => {
-    try {
-      await teamStore.deleteProject(projectId);
+    await teamStore.deleteProject(projectId);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Deleted project!`);
-    } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.deleteProject.close();
+      setDeleteUser(null);
     }
   }, [modalHandlers.deleteProject, teamStore]);
 
   const handleLeaveTeam = useCallback(async () => {
-    try {
-      const userId = authStore.auth.user.id ?? 1;
-      await userStore.fetch(userId);
-      await userStore.leaveTeam(teamStore.currentTeam.id);
+    const userId = authStore.auth.user.id;
+    await userStore.fetch(userId);
+    await userStore.leaveTeam(teamStore.current.id);
+    if (!teamStore.error && !teamStore.isLoading)  {
       navigate('/teams');
-      toast.success(`Left team ${teamStore.currentTeam}`);
-    } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
-    } finally {
+      toast.success(`Left team ${teamStore.current}`);
       modalHandlers.leaveTeam.close();
     }
-  }, [
-    modalHandlers.leaveTeam,
-    navigate,
-    teamStore.currentTeam,
-    teamStore.error,
-    userStore,
-  ]);
+  }, [authStore.auth.user.id, modalHandlers.leaveTeam, navigate, teamStore, userStore]);
 
   const handleDeleteUser = useCallback(async (userId: number) => {
-    try {
-      await teamStore.deleteUser(userId);
+    await teamStore.deleteUser(userId);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Deleted user!`);
-    } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.deleteUser.close();
       setDeleteUser(null);
     }
   }, [modalHandlers.deleteUser, teamStore]);
 
   const handleDeleteAdmin = useCallback(async (userId: number) => {
-    try {
-      await teamStore.deleteAdmin(userId);
+    await teamStore.deleteAdmin(userId);
+    if (!teamStore.error && !teamStore.isLoading)  {
       toast.success(`Deleted admin!`);
-    } catch (e) {
-      toast.error(`Error occurred: ${teamStore.error}!`);
-    } finally {
       modalHandlers.deleteAdmin.close();
       setDeleteUser(null);
     }
@@ -167,26 +135,34 @@ const TeamPage: React.FC = () => {
     modalHandlers.deleteAdmin.open();
   };
 
-  if (teamStore.isLoading) return <Loader />;
+  if (teamStore.isLoading || userStore.isLoading || isObjectEmpty(teamStore.current))
+    return <Container><Loader /></Container>;
+  if (teamStore.error) handler.handle(teamStore.error.message);
+  if (userStore.error) handler.handle(userStore.error.message);
 
   return (
     <Container>
       <Box sx={styles.controlsBox}>
-        <Typography variant="h4" gutterBottom>
-          {teamStore.currentTeam.name}
-        </Typography>
+        <Box>
+          <Typography variant="h4" gutterBottom>
+            {teamStore.current.name}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            {teamStore.current.description}
+          </Typography>
+        </Box>
         <Button variant="contained" color="error" onClick={modalHandlers.leaveTeam.open}>
           Leave
         </Button>
       </Box>
       <ProjectsSection
-        team={teamStore.currentTeam}
+        team={teamStore.current}
         handleDeleteClick={handleDeleteClick}
         isAdmin={isCurrentAdmin}
         {...modalHandlers}
       />
       <MembersSection
-        team={teamStore.currentTeam}
+        team={teamStore.current}
         onDeleteUser={handleDeleteUserClick}
         onDeleteAdmin={handleDeleteAdminClick}
         isAdmin={isCurrentAdmin}
@@ -200,7 +176,7 @@ const TeamPage: React.FC = () => {
         handleAddAdminSubmit={handleAddAdminSubmit}
         handleDeleteProject={handleDeleteProject}
         handleLeaveTeam={handleLeaveTeam}
-        team={teamStore.currentTeam}
+        team={teamStore.current}
         deletedProject={deleteProject}
         deletedUser={deleteUser}
         {...modalHandlers} />

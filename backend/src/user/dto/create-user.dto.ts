@@ -1,11 +1,4 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsString,
-  Length,
-  Matches,
-  Min,
-} from 'class-validator';
+import { IsEmail, IsEnum, IsString, Length, Matches } from 'class-validator';
 import { AdminRole, passwordRegex } from 'src/user/utils';
 
 export class CreateUserDto {
@@ -17,10 +10,8 @@ export class CreateUserDto {
   email: string;
   @Matches(passwordRegex)
   @IsString()
-  @Min(8)
+  @Length(8)
   password: string;
-  @Matches('password')
-  confirmPassword: string;
   @IsEnum(AdminRole)
   role: AdminRole = AdminRole.USER;
 }

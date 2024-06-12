@@ -5,12 +5,13 @@ import ModalForm from 'src/components/modalForm';
 import { useParams } from 'react-router-dom';
 import { useModals } from 'src/hooks/use-modals';
 import { UpdateProjectDto } from 'src/services/dto/project/update-project.dto';
-import TaskSection from 'src/components/task/components/TaskSection';
+import TaskSection from 'src/components/task/TaskSection';
 import { toast } from 'react-toastify';
 import ProjectProgressBar from 'src/pages/Project/components/ProjectProgressBar';
 import EditProjectForm from 'src/pages/Project/components/EditProjectForm';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
+import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 
 interface ProjectModals {
   edit: boolean,
@@ -18,7 +19,7 @@ interface ProjectModals {
 
 
 const ProjectPage = () => {
-  const { teamStore, projectStore, authStore } = useStores();
+  const { projectStore, authStore, handler } = useStores();
   const { id } = useParams();
   const [projectModals, setProjectModals] = useState<ProjectModals>({
     edit: false,
@@ -28,35 +29,24 @@ const ProjectPage = () => {
   const modalHandlers = useModals<ProjectModals>(projectModals, setProjectModals);
 
   useEffect(() => {
-    projectStore.fetch(Number(id)).then(() => {
-      teamStore.fetch(Number(projectStore.current.team?.id));
-    });
-  }, [id, projectStore, teamStore]);
-
-  useEffect(() => {
-    console.log(authStore.auth);
-    const currentUser = teamStore.getUserById(3);
-    if (!currentUser) {
-      toast.error('Something went wrong');
-      return;
+    if (id) {
+      projectStore.fetch(Number(id)).then(() => {
+        setIsCurrentAdmin(projectStore.isUserAdmin(authStore.auth.user.id));
+      });
     }
-    setIsCurrentAdmin(teamStore.isAdmin(currentUser));
-  }, [authStore.auth?.user?.id, teamStore]);
+  }, [authStore.auth.user.id, id, projectStore]);
 
 
   const handleEditSubmit = useCallback(async (updateProjectDto: UpdateProjectDto) => {
-    try {
-      await projectStore.editProject(updateProjectDto);
+    await projectStore.editProject(updateProjectDto);
+    if (!projectStore.error && !projectStore.isLoading)  {
       modalHandlers.edit.close();
-      toast.success('Edited project!');
-    } catch (e) {
-      toast.error(`Error occurred: ${projectStore.error}`);
-    } finally {
-      modalHandlers.edit.close();
+      toast.success(`Edited project!`);
     }
   }, [modalHandlers.edit, projectStore]);
 
-  if (projectStore.isLoading) return <Loader />;
+  if (projectStore.isLoading || isObjectEmpty(projectStore.current)) return <Loader />;
+  if (projectStore.error) handler.handle(projectStore.error.message);
 
   return (
     <Container>
@@ -83,12 +73,12 @@ const ProjectPage = () => {
           <EditProjectForm
             project={projectStore.current}
             onSubmit={handleEditSubmit}
-            onCancel={modalHandlers.edit.close}
+            onClose={modalHandlers.edit.close}
           />
         </ModalForm>
       </Stack>
       <ProjectProgressBar progress={projectStore.progress} />
-      <TaskSection isProjectPage isAdmin={isCurrentAdmin} />
+      <TaskSection isProjectPage isAdmin={isCurrentAdmin} projectId={Number(id)} />
     </Container>
   );
 };

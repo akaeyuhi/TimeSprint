@@ -4,8 +4,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  ManyToMany,
-  JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { Project } from 'src/project/entities/project.entity';
 import { IsBoolean, IsDate, Length } from 'class-validator';
@@ -38,19 +37,26 @@ export class Task {
   @IsDate()
   endDate: Date;
 
-  @Column()
+  @Column({ type: 'boolean' })
   @IsBoolean()
-  isCompleted: boolean;
+  isCompleted = false;
 
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'project_id' })
   project: Project;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToMany(() => Task, task => task.dependencies)
-  @JoinTable()
+  @ManyToOne(() => Task, task => task.dependencies, { cascade: ['update'] })
+  @JoinColumn({ name: 'dependent_id' })
+  // eslint-disable-next-line no-use-before-define
+  dependentOn: Task;
+
+  @OneToMany(() => Task, task => task.dependentOn, {
+    cascade: ['update'],
+  })
+  // eslint-disable-next-line no-use-before-define
   dependencies: Task[];
 }

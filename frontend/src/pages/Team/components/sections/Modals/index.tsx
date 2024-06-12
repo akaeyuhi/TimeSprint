@@ -24,7 +24,7 @@ interface ModalsProps {
   deletedProject: Project | null,
   team: Team,
   handleCreateSubmit: (createProjectDto: CreateProjectDto) => void,
-  handleAddUserSubmit: (username: string) => void,
+  handleAddUserSubmit: (user: User) => Promise<void>,
   handleAddAdminSubmit: (user: User) => void,
   handleDeleteProject: (projectId: number) => Promise<void>,
   handleDeleteUser: (userId: number) => Promise<void>,
@@ -88,8 +88,7 @@ const Modals: React.FC<ModalsProps> = ({
     <ModalForm handleClose={addAdmin.close} open={addAdmin.isOpen}>
       <AddAdminForm
         onClose={addAdmin.close}
-        onSubmit={handleAddAdminSubmit}
-        candidates={team.members} />
+        onSubmit={handleAddAdminSubmit} />
     </ModalForm>
     <ModalForm handleClose={leaveTeam.close} open={leaveTeam.isOpen}>
       <LeaveTeamForm onClose={leaveTeam.close} team={team} onLeave={handleLeaveTeam} />

@@ -10,14 +10,14 @@ interface Props {
 const TaskList: React.FC<Props> = ({ tasks }) => (
   <Box>
     <Typography variant="h5" gutterBottom>
-      Urgent Tasks
+      Urgent Tasks:
     </Typography>
     <List sx={{ display: 'flex' }}>
-      {tasks.map(task => (
+      {tasks ? tasks.map(task => (
         <ListItem key={task.id}>
           <TaskItem task={task} />
         </ListItem>
-      ))}
+      )) : <Typography gutterBottom>No tasks for now</Typography>}
     </List>
   </Box>
 );

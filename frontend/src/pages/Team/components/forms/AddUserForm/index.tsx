@@ -4,49 +4,64 @@ import {
   Button,
   FormControl,
   FormHelperText,
-  Input,
+  OutlinedInput,
   InputLabel,
   Stack,
   Typography
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
+import { store } from 'src/stores/root.store';
+import { User } from 'src/models/user.model';
+import { useValidation, ValidationErrors } from 'src/hooks/use-validation';
 
 interface AddUserFormProps {
-  onSubmit: (username: string) => void;
+  onSubmit: (user: User) => Promise<void>;
   onClose: () => void;
 }
 
-const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
-  const [username, setUsername] = useState('');
-  const [error, setError] = useState('');
+const validate = (state: { username: string }): ValidationErrors<{ username: string }> => ({
+  username: !(state.username.length > 8),
+});
 
-  const handleSubmit = (e: React.FormEvent) => {
+const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
+  const [data, setData, errors] = useValidation({ username: '' }, validate);
+  const [userError, setUserError] = useState('');
+  const { userService } = store.services;
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setUserError('');
     // Validate username format
-    const isValidUsername = /^[\w\d]+$/.test(username) && true; // future server validation
-    if (isValidUsername) {
-      onSubmit(username);
-      setUsername('');
-      setError('');
-    } else {
-      setError('Invalid username format');
+    if (!errors.username) {
+      const candidate = await userService.getUserByUsername(data.username);
+      if (candidate) {
+        await onSubmit(candidate);
+        setData('username', '');
+      } else {
+        setUserError('Such user doesn\'t exists');
+      }
     }
   };
 
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
-      <Typography variant="h6" mb={1}>
+      <Typography variant="h6" mb={2}>
         Add new member
       </Typography>
-      <FormControl>
+      <FormControl error={errors.username || !!userError.length}>
         <InputLabel htmlFor="name">Username</InputLabel>
-        <Input
+        <OutlinedInput
           id="name"
           type="text"
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => setData('username', e.target.value)}
           required
-          value={username} />
-        <FormHelperText error={true}>{error}</FormHelperText>
+          label="Username"
+          aria-describedby="username-error"
+          value={data.username} />
+        {(errors.username || !!userError.length) && <FormHelperText error id="username-error">
+          {errors.username ? 'Name should be 8 characters long' :
+            (userError.length ? userError : '')}
+        </ FormHelperText>}
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button type="submit" variant="contained" color="primary">

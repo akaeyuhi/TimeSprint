@@ -24,19 +24,15 @@ export class UserService {
   }
 
   async findById(id: number): Promise<User> {
-    const user = await this.userRepository.findById(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    return user;
+    return await this.userRepository.findById(id);
   }
 
   async findByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findByEmail(email);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    return user;
+    return await this.userRepository.findByEmail(email);
+  }
+
+  async findByUsername(username: string): Promise<User> {
+    return await this.userRepository.findByUsername(username);
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
@@ -95,6 +91,14 @@ export class UserService {
       throw new Error(`User with ID ${userId} not found`);
     }
     return user.activities;
+  }
+
+  async getUserTasks(userId: number): Promise<Task[]> {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new Error(`User with ID ${userId} not found`);
+    }
+    return user.tasks;
   }
 
   async changeUserRole(userId: number, role: AdminRole): Promise<User> {

@@ -1,7 +1,8 @@
 import { Task } from 'src/models/task.model';
-import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
-import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
+import { TaskDto } from 'src/services/dto/task/task.dto';
 import { TaskContainer } from 'src/models/task-container.model';
+import { SortBy } from 'src/utils/common/sortBy';
+import { action } from 'mobx';
 
 export default abstract class TaskStore<T extends TaskContainer> {
   abstract error: Error | null;
@@ -9,19 +10,45 @@ export default abstract class TaskStore<T extends TaskContainer> {
   abstract current: T;
   abstract tasks: Task[];
 
-  abstract fetch(id?: number): Promise<void>;
+  abstract fetch(id?: number): Promise<T>;
 
-  abstract getTasks(): Task[];
+  abstract createTask(task: TaskDto): Promise<Task[]>;
 
-  abstract getTaskById(taskId: number): Task | null;
+  abstract updateTask(taskId: number, taskDto: TaskDto): Promise<Task[]>;
 
-  abstract createTask(task: CreateTaskDto): Promise<Task>;
+  abstract deleteTask(taskId: number): Promise<void>;
 
-  abstract updateTask(taskId: number, taskDto: UpdateTaskDto): Promise<Task | null>;
+  abstract toggleTask(taskId: number): Promise<Task[]>;
 
-  abstract deleteTask(taskId: number): Promise<number>;
+  getTaskById(taskId: number): Task | null {
+    return this.tasks.find(task => task.id === taskId) ?? null;
+  }
 
-  abstract toggleTask(taskId: number): Promise<Task | null>;
+  getTasks(): Task[] {
+    return this.tasks;
+  }
 
-  abstract sortTasks(tasks: Task[]): void;
+  @action
+  setTasks(tasks: Task[]): void {
+    this.tasks = tasks;
+  }
+
+  sortTasks(sortBy: SortBy): void {
+    const sortedTasks = [...this.tasks];
+    switch (sortBy) {
+    case SortBy.NAME:
+      sortedTasks.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case SortBy.URGENCY:
+      sortedTasks.sort((a, b) => Number(b.urgency) - Number(a.urgency));
+      break;
+    case SortBy.IMPORTANCE:
+      sortedTasks.sort((a, b) => Number(b.importance) - Number(a.importance));
+      break;
+    case SortBy.DEADLINE:
+      sortedTasks.sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
+      break;
+    }
+    this.setTasks(sortedTasks);
+  };
 }
