@@ -19,7 +19,13 @@ export class UserRepository implements IRepository<User> {
   async findById(id: number): Promise<User> {
     return this.repository.findOne({
       where: { id },
-      relations: ['activities', 'tasks', 'teams'],
+      relations: {
+        teams: true,
+        activities: true,
+        tasks: {
+          dependencies: true
+        }
+      },
     });
   }
 

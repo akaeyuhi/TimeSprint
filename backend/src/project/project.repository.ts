@@ -34,7 +34,12 @@ export class ProjectRepository implements IRepository<Project> {
   async findById(id: number): Promise<Project> {
     return await this.repository.findOne({
       where: { id },
-      relations: ['team', 'tasks'],
+      relations: {
+        team: true,
+        tasks: {
+          dependencies: true
+        }
+      },
     });
   }
 

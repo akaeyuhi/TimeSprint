@@ -20,9 +20,7 @@ export class TaskRepository implements IRepository<Task> {
 
   async update(id: number, updateTaskDto: Partial<Task>): Promise<Task> {
     const task = await this.findById(id);
-    console.log(task, updateTaskDto);
-    await this.repository.update(id, updateTaskDto);
-    return { ...task, ...updateTaskDto };
+    return await this.repository.save({...task, ...updateTaskDto });
   }
 
   async findById(id: number): Promise<Task> {
