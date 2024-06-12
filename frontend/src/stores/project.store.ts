@@ -1,9 +1,8 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { Project } from 'src/models/project.model';
 import { UpdateProjectDto } from 'src/services/dto/project/update-project.dto';
-import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { Task } from 'src/models/task.model';
-import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
+import { TaskDto } from 'src/services/dto/task/task.dto';
 import TaskStore from 'src/stores/task.store';
 import ProjectService from 'src/services/project.service';
 
@@ -60,7 +59,7 @@ export class ProjectStore extends TaskStore<Project> {
   }
 
   @action
-  async createTask(taskDto: CreateTaskDto): Promise<Task[]> {
+  async createTask(taskDto: TaskDto): Promise<Task[]> {
     this.isLoading = true;
     try {
       const newTask = <Task> await this.projectService.createTask(taskDto, this.current as Project);
@@ -80,7 +79,7 @@ export class ProjectStore extends TaskStore<Project> {
   }
 
   @action
-  async updateTask(taskId: number, taskDto: UpdateTaskDto) {
+  async updateTask(taskId: number, taskDto: TaskDto) {
     this.isLoading = true;
     try {
       const updatedTask = <Task> await this.projectService.updateTask(taskDto, taskId);

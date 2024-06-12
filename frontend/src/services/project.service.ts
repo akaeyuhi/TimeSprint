@@ -6,8 +6,7 @@ import { ITaskService } from 'src/services/interfaces/task.service';
 import { Project } from 'src/models/project.model';
 import { Task } from 'src/models/task.model';
 import { TaskError } from 'src/services/errors/task.error';
-import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
-import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
+import { TaskDto } from 'src/services/dto/task/task.dto';
 import { UpdateProjectDto } from 'src/services/dto/project/update-project.dto';
 
 class ProjectService extends BaseService implements ITaskService<Project> {
@@ -59,7 +58,7 @@ class ProjectService extends BaseService implements ITaskService<Project> {
     }
   }
 
-  async createTask(dto: CreateTaskDto, item: Project): Promise<TaskReturn> {
+  async createTask(dto: TaskDto, item: Project): Promise<TaskReturn> {
     try {
       return this.httpRequest.post<Task>(`/projects/${item.id}/tasks`, dto);
     } catch (error) {
@@ -75,7 +74,7 @@ class ProjectService extends BaseService implements ITaskService<Project> {
     }
   }
 
-  async updateTask(dto: UpdateTaskDto, taskId: number): Promise<TaskReturn> {
+  async updateTask(dto: TaskDto, taskId: number): Promise<TaskReturn> {
     try {
       return this.httpRequest.patch<Task>(`/tasks/${taskId}`, dto);
     } catch (error) {

@@ -1,9 +1,8 @@
 import { action, makeObservable, observable, runInAction } from 'mobx';
 import { User } from 'src/models/user.model';
-import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
+import { TaskDto } from 'src/services/dto/task/task.dto';
 import { Task } from 'src/models/task.model';
 import { Team } from 'src/models/team.model';
-import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
 import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
 import TaskStore from 'src/stores/task.store';
 import UserService from 'src/services/user.service';
@@ -65,7 +64,7 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async createTask(task: CreateTaskDto): Promise<Task[]> {
+  async createTask(task: TaskDto): Promise<Task[]> {
     this.isLoading = true;
     try {
       const newTask = <Task> await this.userService.createTask(task, this.current as User);
@@ -85,7 +84,7 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async updateTask(taskId: number, taskDto: UpdateTaskDto): Promise<Task[]> {
+  async updateTask(taskId: number, taskDto: TaskDto): Promise<Task[]> {
     this.isLoading = true;
     try {
       const updatedTask = <Task> await this.userService.updateTask(taskDto, taskId);

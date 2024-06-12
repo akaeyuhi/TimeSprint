@@ -1,6 +1,5 @@
 import { Task } from 'src/models/task.model';
-import { CreateTaskDto } from 'src/services/dto/task/create-task.dto';
-import { UpdateTaskDto } from 'src/services/dto/task/update-task.dto';
+import { TaskDto } from 'src/services/dto/task/task.dto';
 import { TaskContainer } from 'src/models/task-container.model';
 import { SortBy } from 'src/utils/common/sortBy';
 import { action } from 'mobx';
@@ -13,9 +12,9 @@ export default abstract class TaskStore<T extends TaskContainer> {
 
   abstract fetch(id?: number): Promise<T>;
 
-  abstract createTask(task: CreateTaskDto): Promise<Task[]>;
+  abstract createTask(task: TaskDto): Promise<Task[]>;
 
-  abstract updateTask(taskId: number, taskDto: UpdateTaskDto): Promise<Task[]>;
+  abstract updateTask(taskId: number, taskDto: TaskDto): Promise<Task[]>;
 
   abstract deleteTask(taskId: number): Promise<void>;
 
