@@ -121,7 +121,9 @@ export class ProjectController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
-  async deleteProject(@Param('projectId', ParseIntPipe) id: number): Promise<void> {
+  async deleteProject(
+    @Param('projectId', ParseIntPipe) id: number,
+  ): Promise<void> {
     await this.projectService.deleteProject(id);
   }
   @Post(':projectId/tasks')
