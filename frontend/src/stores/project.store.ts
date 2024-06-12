@@ -11,6 +11,7 @@ export class ProjectStore extends TaskStore<Project> {
   @observable error: Error | null = null;
   @observable isLoading = false;
   @observable.deep current: Project = {} as Project;
+  @observable.deep tasks: Task[] = [] as Task[];
 
   constructor(private readonly projectService: ProjectService) {
     super();
@@ -25,10 +26,6 @@ export class ProjectStore extends TaskStore<Project> {
     return (completedTasks / totalTasks) * 100;
   }
 
-  getTasks() {
-    return this.current?.tasks || [];
-  }
-
   @action
   async fetch(projectId: number) {
     this.isLoading = true;
@@ -36,6 +33,7 @@ export class ProjectStore extends TaskStore<Project> {
       const project = <Project> await this.projectService.getProject(projectId);
       runInAction(() => {
         this.current = project;
+        this.tasks = this.current.tasks;
       });
     } catch (error) {
       runInAction(() => {
@@ -47,10 +45,6 @@ export class ProjectStore extends TaskStore<Project> {
       });
     }
     return this.current;
-  }
-
-  getTaskById(taskId: number): Task | null {
-    return this.current?.tasks.find(task => task.id === taskId) ?? null;
   }
 
   isUserMember(userId: number) {
@@ -71,7 +65,7 @@ export class ProjectStore extends TaskStore<Project> {
     try {
       const newTask = <Task> await this.projectService.createTask(taskDto, this.current as Project);
       runInAction(() => {
-        this.current.tasks.push(newTask);
+        this.tasks.push(newTask);
       });
     } catch (error) {
       runInAction(() => {
@@ -82,7 +76,7 @@ export class ProjectStore extends TaskStore<Project> {
         this.isLoading = false;
       });
     }
-    return this.current.tasks;
+    return this.tasks;
   }
 
   @action
@@ -91,9 +85,9 @@ export class ProjectStore extends TaskStore<Project> {
     try {
       const updatedTask = <Task> await this.projectService.updateTask(taskDto, taskId);
       runInAction(() => {
-        const taskIndex = this.current.tasks.findIndex(task => task.id === taskId);
+        const taskIndex = this.tasks.findIndex(task => task.id === taskId);
         if (taskIndex >= 0) {
-          this.current.tasks[taskIndex] = updatedTask;
+          this.tasks[taskIndex] = updatedTask;
         }
       });
     } catch (error) {
@@ -105,7 +99,7 @@ export class ProjectStore extends TaskStore<Project> {
         this.isLoading = false;
       });
     }
-    return this.current.tasks;
+    return this.tasks;
   }
 
   @action
@@ -116,7 +110,7 @@ export class ProjectStore extends TaskStore<Project> {
       await this.projectService.deleteTask(taskId, this.current);
       runInAction(() => {
         if (this.current) {
-          this.current.tasks = this.current.tasks.filter(task => task.id !== taskId);
+          this.tasks = this.tasks.filter(task => task.id !== taskId);
         }
       });
     } catch (error) {
@@ -160,9 +154,9 @@ export class ProjectStore extends TaskStore<Project> {
       if (!task) throw new Error('Task not found');
       const toggledTask = <Task> await this.projectService.toggleTask(task);
       runInAction(() => {
-        const index = this.current.tasks.findIndex(t => t.id === taskId);
+        const index = this.tasks.findIndex(t => t.id === taskId);
         if (index !== -1) {
-          this.current.tasks[index] = toggledTask;
+          this.tasks[index] = toggledTask;
         }
       });
     } catch (error) {
@@ -170,12 +164,6 @@ export class ProjectStore extends TaskStore<Project> {
         this.error = error as Error;
       });
     }
-    return this.current.tasks;
-  }
-
-  @action
-  sortTasks(sorted: Task[]) {
-    this.current.tasks = sorted;
-    console.log('set');
+    return this.tasks;
   }
 }

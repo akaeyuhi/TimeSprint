@@ -8,12 +8,12 @@ import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
 import TaskStore from 'src/stores/task.store';
 import UserService from 'src/services/user.service';
 import TeamService from 'src/services/team.service';
-import { Project } from 'src/models/project.model';
 
 export class UserStore extends TaskStore<User> {
   @observable error: Error | null = null;
   @observable isLoading = false;
   @observable.deep current: User = {} as User;
+  @observable.deep tasks: Task[] = [] as Task[];
 
   constructor(
     private readonly userService: UserService,
@@ -30,6 +30,7 @@ export class UserStore extends TaskStore<User> {
       const user = <User> await this.userService.getUser(userId);
       runInAction(() => {
         this.current = user;
+        this.tasks = this.current.tasks;
       });
     } catch (error) {
       runInAction(() => {
@@ -51,6 +52,7 @@ export class UserStore extends TaskStore<User> {
       if (user) {
         runInAction(() => {
           this.current = user;
+          this.tasks = this.current.tasks;
           this.isLoading = false;
         });
       }
@@ -68,7 +70,7 @@ export class UserStore extends TaskStore<User> {
     try {
       const newTask = <Task> await this.userService.createTask(task, this.current as User);
       runInAction(() => {
-        this.current.tasks.push(newTask);
+        this.tasks.push(newTask);
       });
     } catch (error) {
       runInAction(() => {
@@ -79,7 +81,7 @@ export class UserStore extends TaskStore<User> {
         this.isLoading = false;
       });
     }
-    return this.current.tasks;
+    return this.tasks;
   }
 
   @action
@@ -88,8 +90,8 @@ export class UserStore extends TaskStore<User> {
     try {
       const updatedTask = <Task> await this.userService.updateTask(taskDto, taskId);
       runInAction(() => {
-        const index = this.current.tasks.findIndex(task => task.id === taskId);
-        if (index !== -1) this.current.tasks[index] = updatedTask;
+        const index = this.tasks.findIndex(task => task.id === taskId);
+        if (index !== -1) this.tasks[index] = updatedTask;
       });
     } catch (error) {
       runInAction(() => {
@@ -100,7 +102,7 @@ export class UserStore extends TaskStore<User> {
         this.isLoading = false;
       });
     }
-    return this.current.tasks;
+    return this.tasks;
   }
 
   @action
@@ -109,7 +111,7 @@ export class UserStore extends TaskStore<User> {
     try {
       await this.userService.deleteTask(taskId, this.current as User);
       runInAction(() => {
-        this.current.tasks = this.current.tasks.filter(task => task.id !== taskId);
+        this.tasks = this.tasks.filter(task => task.id !== taskId);
       });
     } catch (error) {
       runInAction(() => {
@@ -131,8 +133,8 @@ export class UserStore extends TaskStore<User> {
       if (!task) throw new Error('Task not found');
       const toggledTask = <Task> await this.userService.toggleTask(task);
       runInAction(() => {
-        const index = this.current.tasks.findIndex(t => t.id === taskId);
-        if (index !== -1) this.current.tasks[index] = toggledTask;
+        const index = this.tasks.findIndex(t => t.id === taskId);
+        if (index !== -1) this.tasks[index] = toggledTask;
       });
     } catch (error) {
       runInAction(() => {
@@ -144,11 +146,7 @@ export class UserStore extends TaskStore<User> {
         this.isLoading = false;
       });
     }
-    return this.current.tasks;
-  }
-
-  getTaskById(taskId: number): Task | null {
-    return this.current.tasks.find(task => task.id === taskId) ?? null;
+    return this.tasks;
   }
 
   getUserTeamById(teamId: number): Team | null {
@@ -245,7 +243,7 @@ export class UserStore extends TaskStore<User> {
     try {
       const newTasks = <Task[]> await this.userService.getImportantUserTasks(this.current.id);
       runInAction(() => {
-        this.sortTasks(newTasks);
+        this.setTasks(newTasks);
       });
       return newTasks;
     } catch (error) {
@@ -258,14 +256,5 @@ export class UserStore extends TaskStore<User> {
         this.isLoading = false;
       });
     }
-  }
-
-  @action
-  sortTasks(sorted: Task[]): void {
-    this.current.tasks = sorted;
-  }
-
-  getTasks(): Task[] {
-    return this.current.tasks;
   }
 }
