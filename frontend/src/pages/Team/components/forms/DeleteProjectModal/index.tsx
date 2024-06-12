@@ -9,15 +9,14 @@ interface DeleteProjectModalProps {
   onClose: () => void;
 }
 
-const DeleteProjectModal: React.FC<DeleteProjectModalProps> = ({ project, onDelete, onClose }) => (
-  <DeleteModal<Project>
-    item={project}
-    onDelete={onDelete}
-    onClose={onClose}
-  >
+const DeleteProjectModal: React.FC<DeleteProjectModalProps> = ({
+  project,
+  onDelete,
+  onClose,
+}) => (
+  <DeleteModal<Project> item={project} onDelete={onDelete} onClose={onClose}>
     <Typography variant="body1">
-      Are you sure you want to delete this project?
-      This action is irreversible.
+      Are you sure you want to delete this project? This action is irreversible.
     </Typography>
   </DeleteModal>
 );

@@ -1,7 +1,12 @@
 import { List, Stack } from '@mui/material';
 import Logo from '../logo';
 import { Link } from 'react-router-dom';
-import { AssignmentRounded, GridView, Groups2Rounded, PersonRounded } from '@mui/icons-material';
+import {
+  AssignmentRounded,
+  GridView,
+  Groups2Rounded,
+  PersonRounded,
+} from '@mui/icons-material';
 import SidebarItem from './components/sidebar-item';
 import { styles } from './styles';
 

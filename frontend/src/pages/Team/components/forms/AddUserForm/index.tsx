@@ -4,10 +4,10 @@ import {
   Button,
   FormControl,
   FormHelperText,
-  OutlinedInput,
   InputLabel,
+  OutlinedInput,
   Stack,
-  Typography
+  Typography,
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
 import { store } from 'src/stores/root.store';
@@ -19,7 +19,9 @@ interface AddUserFormProps {
   onClose: () => void;
 }
 
-const validate = (state: { username: string }): ValidationErrors<{ username: string }> => ({
+const validate = (state: {
+  username: string;
+}): ValidationErrors<{ username: string }> => ({
   username: !(state.username.length > 8),
 });
 
@@ -38,7 +40,7 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
         await onSubmit(candidate);
         setData('username', '');
       } else {
-        setUserError('Such user doesn\'t exists');
+        setUserError("Such user doesn't exists");
       }
     }
   };
@@ -57,17 +59,28 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
           required
           label="Username"
           aria-describedby="username-error"
-          value={data.username} />
-        {(errors.username || !!userError.length) && <FormHelperText error id="username-error">
-          {errors.username ? 'Name should be 8 characters long' :
-            (userError.length ? userError : '')}
-        </ FormHelperText>}
+          value={data.username}
+        />
+        {(errors.username || !!userError.length) && (
+          <FormHelperText error id="username-error">
+            {errors.username ?
+              'Name should be 8 characters long' :
+              userError.length ?
+                userError :
+                ''}
+          </FormHelperText>
+        )}
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button type="submit" variant="contained" color="primary">
           Add user
         </Button>
-        <Button variant="outlined" color="secondary" onClick={onClose} sx={{ ml: 2 }}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={onClose}
+          sx={{ ml: 2 }}
+        >
           Cancel
         </Button>
       </Box>

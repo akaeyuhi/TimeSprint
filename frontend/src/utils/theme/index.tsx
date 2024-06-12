@@ -1,4 +1,9 @@
-import { createTheme, CssBaseline, ThemeOptions, ThemeProvider } from '@mui/material';
+import {
+  createTheme,
+  CssBaseline,
+  ThemeOptions,
+  ThemeProvider,
+} from '@mui/material';
 import { useMemo } from 'react';
 import { palette } from './palette';
 import { typography } from './typography';
@@ -16,7 +21,7 @@ const ThemeConfig = ({ children }: ThemeConfigProps) => {
       palette,
       components: overrides,
     }),
-    [],
+    []
   );
 
   const theme = createTheme(themeOptions);

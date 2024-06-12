@@ -5,7 +5,6 @@ import TaskList from 'src/pages/Home/components/TaskList';
 import { useStores } from 'src/hooks';
 import Loader from 'src/components/loader';
 
-
 const HomePage: React.FC = () => {
   const currentDate = new Date();
   const { authStore, userStore, handler } = useStores();

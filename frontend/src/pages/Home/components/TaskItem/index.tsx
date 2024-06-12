@@ -1,5 +1,11 @@
 import React from 'react';
-import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+} from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { styles } from 'src/pages/Home/components/TaskItem/styles';
 
@@ -15,10 +21,16 @@ const TaskItem: React.FC<Props> = ({ task }) => (
       <Typography variant="body2" sx={{ color: 'red' }}>
         Due: {task.endDate.toDateString()}
       </Typography>
-      <Typography variant="body2" sx={{ color: task.urgency ? 'red' : 'green' }}>
+      <Typography
+        variant="body2"
+        sx={{ color: task.urgency ? 'red' : 'green' }}
+      >
         Urgency: {task.urgency ? 'High' : 'Low'}
       </Typography>
-      <Typography variant="body2" sx={{ color: task.importance ? 'red' : 'green' }}>
+      <Typography
+        variant="body2"
+        sx={{ color: task.importance ? 'red' : 'green' }}
+      >
         Importance: {task.importance ? 'High' : 'Low'}
       </Typography>
     </CardContent>

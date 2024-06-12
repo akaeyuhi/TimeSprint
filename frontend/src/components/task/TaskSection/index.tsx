@@ -5,23 +5,23 @@ import { styles } from 'src/pages/Team/styles';
 import TaskList from 'src/components/task/TaskList';
 
 interface TaskSectionProps {
-  isProjectPage: boolean,
-  isEditable?: boolean,
-  isAdmin?: boolean,
-  projectId?: number
+  isProjectPage: boolean;
+  isEditable?: boolean;
+  isAdmin?: boolean;
+  projectId?: number;
 }
 
 interface TaskModals {
-  createTask: boolean,
-  editTask: boolean,
-  deleteTask: boolean,
+  createTask: boolean;
+  editTask: boolean;
+  deleteTask: boolean;
 }
 
 const TaskSection: React.FC<TaskSectionProps> = ({
   isProjectPage,
   isEditable = false,
   isAdmin = false,
-  projectId
+  projectId,
 }) => {
   const [taskModals, setTaskModals] = useState<TaskModals>({
     createTask: false,
@@ -38,11 +38,17 @@ const TaskSection: React.FC<TaskSectionProps> = ({
       <Typography variant="h4" gutterBottom>
         Tasks
       </Typography>
-      {(isEditable || isProjectAdmin) && <Box sx={styles.controlsBox}>
-        <Button variant="contained" color="primary" onClick={modalHandlers.createTask.open}>
-          Create new task
-        </Button>
-      </Box>}
+      {(isEditable || isProjectAdmin) && (
+        <Box sx={styles.controlsBox}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={modalHandlers.createTask.open}
+          >
+            Create new task
+          </Button>
+        </Box>
+      )}
       <Stack>
         <TaskList
           isProjectPage={isProjectPage}

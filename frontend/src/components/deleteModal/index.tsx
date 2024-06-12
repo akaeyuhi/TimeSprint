@@ -11,7 +11,7 @@ interface DeleteModalProps<T extends Item> {
   children: React.ReactNode;
 }
 
-const DeleteModal = <T extends Item, >({
+const DeleteModal = <T extends Item>({
   item,
   onDelete,
   onClose,
@@ -25,10 +25,10 @@ const DeleteModal = <T extends Item, >({
 
   return (
     <Stack component="form" sx={styles.container}>
-      <Typography variant="h6" mb={1}>Confirm Deletion</Typography>
-      <Box>
-        {children}
-      </Box>
+      <Typography variant="h6" mb={1}>
+        Confirm Deletion
+      </Typography>
+      <Box>{children}</Box>
       <Box sx={styles.buttonContainer}>
         <Button onClick={handleDelete} variant="contained" color="error">
           Delete

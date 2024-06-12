@@ -13,11 +13,15 @@ const TaskList: React.FC<Props> = ({ tasks }) => (
       Urgent Tasks:
     </Typography>
     <List sx={{ display: 'flex' }}>
-      {tasks ? tasks.map(task => (
-        <ListItem key={task.id}>
-          <TaskItem task={task} />
-        </ListItem>
-      )) : <Typography gutterBottom>No tasks for now</Typography>}
+      {tasks ? (
+        tasks.map((task) => (
+          <ListItem key={task.id}>
+            <TaskItem task={task} />
+          </ListItem>
+        ))
+      ) : (
+        <Typography gutterBottom>No tasks for now</Typography>
+      )}
     </List>
   </Box>
 );

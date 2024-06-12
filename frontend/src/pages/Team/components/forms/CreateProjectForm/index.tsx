@@ -2,7 +2,8 @@ import React from 'react';
 import {
   Box,
   Button,
-  FormControl, FormHelperText,
+  FormControl,
+  FormHelperText,
   InputLabel,
   OutlinedInput,
   Stack,
@@ -19,25 +20,37 @@ interface CreateProjectFormProps {
   onClose: () => void;
 }
 
-
-const validate = (state: CreateProjectDto): ValidationErrors<CreateProjectDto> => ({
+const validate = (
+  state: CreateProjectDto
+): ValidationErrors<CreateProjectDto> => ({
   name: !(state.name.length > 8),
   description: !(state.description.length > 20),
   startDate: !(state.startDate < state.endDate),
   endDate: !(state.startDate < state.endDate),
 });
 
-const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose }) => {
-  const [formData, setFormData, errors] = useValidation<CreateProjectDto>({
-    name: '',
-    description: '',
-    startDate: new Date(),
-    endDate: new Date(Date.now() + 1),
-  }, validate);
+const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
+  onSubmit,
+  onClose,
+}) => {
+  const [formData, setFormData, errors] = useValidation<CreateProjectDto>(
+    {
+      name: '',
+      description: '',
+      startDate: new Date(),
+      endDate: new Date(Date.now() + 1),
+    },
+    validate
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!errors.name && !errors.description && !errors.startDate && !errors.endDate)
+    if (
+      !errors.name &&
+      !errors.description &&
+      !errors.startDate &&
+      !errors.endDate
+    )
       onSubmit({
         ...formData,
       });
@@ -57,26 +70,31 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose
           required
           aria-describedby="name-error"
           label="Project name"
-          value={formData.name} />
-        {errors.name && <FormHelperText error id="name-error">
-          Name should be 8 characters long
-        </ FormHelperText>}
+          value={formData.name}
+        />
+        {errors.name && (
+          <FormHelperText error id="name-error">
+            Name should be 8 characters long
+          </FormHelperText>
+        )}
       </FormControl>
       <FormControl error={errors.description}>
         <InputLabel htmlFor="description">Project description</InputLabel>
         <OutlinedInput
           id="description"
           type="text"
-          onChange={(e) =>
-            setFormData('description', e.target.value)}
+          onChange={(e) => setFormData('description', e.target.value)}
           rows={4}
           required
           aria-describedby="desc-error"
           label="Project description"
-          value={formData.description} />
-        {errors.description && <FormHelperText error id="desc-error">
-          Description should be 20 characters long
-        </ FormHelperText>}
+          value={formData.description}
+        />
+        {errors.description && (
+          <FormHelperText error id="desc-error">
+            Description should be 20 characters long
+          </FormHelperText>
+        )}
       </FormControl>
       <FormControl error={errors.startDate}>
         <DatePicker
@@ -85,12 +103,16 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose
           slotProps={{
             textField: {
               error: errors.startDate,
-              helperText: errors.startDate ? 'Start date should be before end' : '',
+              helperText: errors.startDate ?
+                'Start date should be before end' :
+                '',
             },
           }}
           onChange={(newValue) =>
-            setFormData('startDate', newValue?.toDate() ?? new Date())}
-          value={dayjs(formData.startDate)} />
+            setFormData('startDate', newValue?.toDate() ?? new Date())
+          }
+          value={dayjs(formData.startDate)}
+        />
       </FormControl>
       <FormControl error={errors.endDate}>
         <DatePicker
@@ -99,18 +121,27 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ onSubmit, onClose
           slotProps={{
             textField: {
               error: errors.endDate,
-              helperText: errors.endDate ? 'End date should be later than start' : '',
+              helperText: errors.endDate ?
+                'End date should be later than start' :
+                '',
             },
           }}
           onChange={(newValue) =>
-            setFormData('endDate', newValue?.toDate() ?? new Date())}
-          value={dayjs(formData.endDate)} />
+            setFormData('endDate', newValue?.toDate() ?? new Date())
+          }
+          value={dayjs(formData.endDate)}
+        />
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button type="submit" variant="contained" color="primary">
           Create Project
         </Button>
-        <Button variant="outlined" color="secondary" onClick={onClose} sx={{ ml: 2 }}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={onClose}
+          sx={{ ml: 2 }}
+        >
           Cancel
         </Button>
       </Box>

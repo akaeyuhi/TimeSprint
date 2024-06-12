@@ -25,7 +25,10 @@ class ProjectService extends TaskService<Project> {
     }
   }
 
-  async updateProjects(id: number, projectDto: UpdateProjectDto): Promise<Return<Project>> {
+  async updateProjects(
+    id: number,
+    projectDto: UpdateProjectDto
+  ): Promise<Return<Project>> {
     try {
       return this.httpRequest.put<Project>(`/projects/${id}`, projectDto);
     } catch (error) {

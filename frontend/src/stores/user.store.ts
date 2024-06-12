@@ -16,7 +16,7 @@ export class UserStore extends TaskStore<User> {
 
   constructor(
     private readonly userService: UserService,
-    private readonly teamService: TeamService,
+    private readonly teamService: TeamService
   ) {
     super();
     makeObservable(this);
@@ -26,7 +26,7 @@ export class UserStore extends TaskStore<User> {
   async fetch(userId: number): Promise<User> {
     this.isLoading = true;
     try {
-      const user = <User> await this.userService.getUser(userId);
+      const user = <User>await this.userService.getUser(userId);
       runInAction(() => {
         this.current = user;
         this.tasks = this.current.tasks;
@@ -67,7 +67,9 @@ export class UserStore extends TaskStore<User> {
   async createTask(task: TaskDto): Promise<Task[]> {
     this.isLoading = true;
     try {
-      const newTask = <Task> await this.userService.createTask(task, this.current as User);
+      const newTask = <Task>(
+        await this.userService.createTask(task, this.current as User)
+      );
       runInAction(() => {
         this.tasks.push(newTask);
       });
@@ -87,9 +89,11 @@ export class UserStore extends TaskStore<User> {
   async updateTask(taskId: number, taskDto: TaskDto): Promise<Task[]> {
     this.isLoading = true;
     try {
-      const updatedTask = <Task> await this.userService.updateTask(taskDto, taskId);
+      const updatedTask = <Task>(
+        await this.userService.updateTask(taskDto, taskId)
+      );
       runInAction(() => {
-        const index = this.tasks.findIndex(task => task.id === taskId);
+        const index = this.tasks.findIndex((task) => task.id === taskId);
         if (index !== -1) this.tasks[index] = updatedTask;
       });
     } catch (error) {
@@ -110,7 +114,7 @@ export class UserStore extends TaskStore<User> {
     try {
       await this.userService.deleteTask(taskId, this.current as User);
       runInAction(() => {
-        this.tasks = this.tasks.filter(task => task.id !== taskId);
+        this.tasks = this.tasks.filter((task) => task.id !== taskId);
       });
     } catch (error) {
       runInAction(() => {
@@ -130,9 +134,9 @@ export class UserStore extends TaskStore<User> {
     try {
       const task = this.getTaskById(taskId);
       if (!task) throw new Error('Task not found');
-      const toggledTask = <Task> await this.userService.toggleTask(task);
+      const toggledTask = <Task>await this.userService.toggleTask(task);
       runInAction(() => {
-        const index = this.tasks.findIndex(t => t.id === taskId);
+        const index = this.tasks.findIndex((t) => t.id === taskId);
         if (index !== -1) this.tasks[index] = toggledTask;
       });
     } catch (error) {
@@ -149,14 +153,14 @@ export class UserStore extends TaskStore<User> {
   }
 
   getUserTeamById(teamId: number): Team | null {
-    return this.current?.teams.find(team => team.id === teamId) ?? null;
+    return this.current?.teams.find((team) => team.id === teamId) ?? null;
   }
 
   @action
   async joinTeam(teamId: number): Promise<Team[]> {
     this.isLoading = true;
     try {
-      const newTeam = <Team> await this.teamService.joinTeam(teamId);
+      const newTeam = <Team>await this.teamService.joinTeam(teamId);
       runInAction(() => {
         this.current?.teams.push(newTeam);
       });
@@ -179,7 +183,9 @@ export class UserStore extends TaskStore<User> {
       await this.teamService.leaveTeam(teamId);
       runInAction(() => {
         if (this.current) {
-          this.current.teams = this.current?.teams.filter(team => team.id !== teamId);
+          this.current.teams = this.current?.teams.filter(
+            (team) => team.id !== teamId
+          );
         }
       });
     } catch (error) {
@@ -198,7 +204,7 @@ export class UserStore extends TaskStore<User> {
   async createTeam(teamDto: CreateTeamDto): Promise<Team> {
     this.isLoading = true;
     try {
-      const newTeam = <Team> await this.teamService.createTeam(teamDto);
+      const newTeam = <Team>await this.teamService.createTeam(teamDto);
       runInAction(() => {
         this.current?.teams.push(newTeam);
       });
@@ -219,7 +225,9 @@ export class UserStore extends TaskStore<User> {
   async update(id: number, updateDto: Partial<User>): Promise<User> {
     this.isLoading = true;
     try {
-      const updatedUser = <User> await this.userService.updateUser(id, updateDto);
+      const updatedUser = <User>(
+        await this.userService.updateUser(id, updateDto)
+      );
       runInAction(() => {
         this.current = updatedUser;
       });
@@ -240,7 +248,9 @@ export class UserStore extends TaskStore<User> {
   async loadImportantTasks() {
     this.isLoading = true;
     try {
-      const newTasks = <Task[]> await this.userService.getImportantUserTasks(this.current.id);
+      const newTasks = <Task[]>(
+        await this.userService.getImportantUserTasks(this.current.id)
+      );
       runInAction(() => {
         this.setTasks(newTasks);
       });

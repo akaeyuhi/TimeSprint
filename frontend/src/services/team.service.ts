@@ -6,7 +6,6 @@ import { CreateTeamDto } from 'src/services/dto/create-team.dto';
 import { CreateProjectDto } from 'src/services/dto/create-project.dto';
 import { Project } from 'src/models/project.model';
 import { User } from 'src/models/user.model';
-import { Task } from 'src/models/task.model';
 
 class TeamService extends BaseService {
   async getTeam(id: number): Promise<Return<Team>> {
@@ -33,7 +32,10 @@ class TeamService extends BaseService {
     }
   }
 
-  async updateTeam(id: number, team: Partial<CreateTeamDto>): Promise<Return<Team>> {
+  async updateTeam(
+    id: number,
+    team: Partial<CreateTeamDto>
+  ): Promise<Return<Team>> {
     try {
       return this.httpRequest.put<Team>(`/teams/${id}`, team);
     } catch (error) {
@@ -67,7 +69,10 @@ class TeamService extends BaseService {
 
   async addMember(teamId: number, memberId: number): Promise<Return<User>> {
     try {
-      return this.httpRequest.put<User>(`/teams/${teamId}/add-member/${memberId}`, {});
+      return this.httpRequest.put<User>(
+        `/teams/${teamId}/add-member/${memberId}`,
+        {}
+      );
     } catch (error) {
       throw new TeamError('Error adding team member');
     }
@@ -75,7 +80,10 @@ class TeamService extends BaseService {
 
   async addAdmin(teamId: number, adminId: number): Promise<Return<User>> {
     try {
-      return this.httpRequest.put<User>(`/teams/${teamId}/add-admin/${adminId}`, {});
+      return this.httpRequest.put<User>(
+        `/teams/${teamId}/add-admin/${adminId}`,
+        {}
+      );
     } catch (error) {
       throw new TeamError('Error adding team admin');
     }
@@ -83,7 +91,9 @@ class TeamService extends BaseService {
 
   async deleteMember(teamId: number, memberId: number): Promise<Return<void>> {
     try {
-      return this.httpRequest.delete<void>(`/teams/${teamId}/delete-member/${memberId}`);
+      return this.httpRequest.delete<void>(
+        `/teams/${teamId}/delete-member/${memberId}`
+      );
     } catch (error) {
       throw new TeamError('Error deleting team member');
     }
@@ -91,24 +101,36 @@ class TeamService extends BaseService {
 
   async deleteAdmin(teamId: number, adminId: number): Promise<Return<void>> {
     try {
-      return this.httpRequest.delete<void>(`/teams/${teamId}/delete-admin/${adminId}`);
+      return this.httpRequest.delete<void>(
+        `/teams/${teamId}/delete-admin/${adminId}`
+      );
     } catch (error) {
       throw new TeamError('Error deleting team admin');
     }
   }
 
-  async deleteProject(teamId: number, projectId: number): Promise<Return<void>> {
+  async deleteProject(
+    teamId: number,
+    projectId: number
+  ): Promise<Return<void>> {
     try {
-      return this.httpRequest.delete<void>(`/teams/${teamId}/projects/${projectId}`);
+      return this.httpRequest.delete<void>(
+        `/teams/${teamId}/projects/${projectId}`
+      );
     } catch (error) {
       throw new TeamError('Error deleting team project');
     }
   }
 
-  async createProject(teamId: number, createProjectDto: CreateProjectDto):
-    Promise<Return<Project>> {
+  async createProject(
+    teamId: number,
+    createProjectDto: CreateProjectDto
+  ): Promise<Return<Project>> {
     try {
-      return this.httpRequest.post<Project>(`/teams/${teamId}/projects/`, createProjectDto);
+      return this.httpRequest.post<Project>(
+        `/teams/${teamId}/projects/`,
+        createProjectDto
+      );
     } catch (error) {
       throw new TeamError('Error creating team project');
     }

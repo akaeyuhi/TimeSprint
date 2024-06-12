@@ -19,8 +19,8 @@ interface CreateTeamFormProps {
 }
 
 interface FormData {
-  name: string,
-  description: string,
+  name: string;
+  description: string;
 }
 
 const validate = (state: FormData): ValidationErrors<FormData> => ({
@@ -28,11 +28,17 @@ const validate = (state: FormData): ValidationErrors<FormData> => ({
   description: !(state.description.length > 20),
 });
 
-const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) => {
-  const [data, setData, errors] = useValidation<FormData>({
-    name: '',
-    description: '',
-  }, validate);
+const CreateTeamForm: React.FC<CreateTeamFormProps> = ({
+  onSubmit,
+  onCancel,
+}) => {
+  const [data, setData, errors] = useValidation<FormData>(
+    {
+      name: '',
+      description: '',
+    },
+    validate
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,10 +63,13 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
           required
           label="Team name"
           aria-describedby="name-error"
-          value={data.name} />
-        {errors.name && <FormHelperText error id="name-error">
-          Name should be at least 8 characters
-        </ FormHelperText>}
+          value={data.name}
+        />
+        {errors.name && (
+          <FormHelperText error id="name-error">
+            Name should be at least 8 characters
+          </FormHelperText>
+        )}
       </FormControl>
       <FormControl error={errors.description}>
         <InputLabel htmlFor="description">Team description</InputLabel>
@@ -71,16 +80,24 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = ({ onSubmit, onCancel }) =
           onChange={(e) => setData('description', e.target.value)}
           required
           label="Team description"
-          value={data.description} />
-        {errors.description && <FormHelperText error id="desc-error">
-          Description should be at least 20 characters
-        </ FormHelperText>}
+          value={data.description}
+        />
+        {errors.description && (
+          <FormHelperText error id="desc-error">
+            Description should be at least 20 characters
+          </FormHelperText>
+        )}
       </FormControl>
       <Box sx={styles.buttonContainer}>
         <Button variant="contained" color="primary" type="submit">
           Create
         </Button>
-        <Button variant="outlined" color="secondary" onClick={onCancel} sx={{ ml: 2 }}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={onCancel}
+          sx={{ ml: 2 }}
+        >
           Cancel
         </Button>
       </Box>

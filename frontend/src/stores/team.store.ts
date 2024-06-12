@@ -15,23 +15,23 @@ export class TeamStore {
   }
 
   isAdmin(user: User | number) {
-    const id = (typeof user === 'object') ? (user as User).id : user;
-    return !!this.current.admins.find(admin => admin.id === id);
+    const id = typeof user === 'object' ? (user as User).id : user;
+    return !!this.current.admins.find((admin) => admin.id === id);
   }
 
   isMember(user: User | number) {
-    const id = (typeof user === 'object') ? (user as User).id : user;
-    return !!this.current.members.find(member => member.id === id);
+    const id = typeof user === 'object' ? (user as User).id : user;
+    return !!this.current.members.find((member) => member.id === id);
   }
 
   getUserById(id: number) {
-    return this.current.members.find(member => member.id === id);
+    return this.current.members.find((member) => member.id === id);
   }
 
   async fetch(teamId: number) {
     this.isLoading = true;
     try {
-      const team = <Team> await this.teamService.getTeam(teamId);
+      const team = <Team>await this.teamService.getTeam(teamId);
       runInAction(() => {
         this.current = team;
       });
@@ -54,9 +54,8 @@ export class TeamStore {
   async createProject(projectDto: CreateProjectDto) {
     this.isLoading = true;
     try {
-      const project = <Project> await this.teamService.createProject(
-        this.current.id,
-        projectDto,
+      const project = <Project>(
+        await this.teamService.createProject(this.current.id, projectDto)
       );
       runInAction(() => {
         this.current.projects.push(project);
@@ -65,12 +64,10 @@ export class TeamStore {
       runInAction(() => {
         this.error = error as Error;
       });
-
     } finally {
       runInAction(() => {
         this.isLoading = false;
       });
-
     }
     return this.current.projects;
   }
@@ -78,13 +75,11 @@ export class TeamStore {
   async deleteProject(projectId: number) {
     this.isLoading = true;
     try {
-      await this.teamService.deleteProject(
-        this.current.id,
-        projectId,
-      );
+      await this.teamService.deleteProject(this.current.id, projectId);
       runInAction(() => {
-        this.current.projects =
-          this.current.projects.filter(project => project.id !== projectId);
+        this.current.projects = this.current.projects.filter(
+          (project) => project.id !== projectId
+        );
       });
     } catch (error) {
       runInAction(() => {
@@ -102,7 +97,9 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isMember(user)) {
-        const newMember = <User> await this.teamService.addMember(this.current.id, user.id);
+        const newMember = <User>(
+          await this.teamService.addMember(this.current.id, user.id)
+        );
         runInAction(() => {
           this.current.members.push(newMember);
         });
@@ -127,7 +124,9 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isAdmin(user)) {
-        const newMember = <User> await this.teamService.addAdmin(this.current.id, user.id);
+        const newMember = <User>(
+          await this.teamService.addAdmin(this.current.id, user.id)
+        );
         runInAction(() => {
           this.current.admins.push(newMember);
         });
@@ -155,8 +154,9 @@ export class TeamStore {
       await runInAction(async () => {
         if (user && !this.isAdmin(user)) {
           await this.teamService.deleteMember(this.current.id, userId);
-          this.current.members =
-            this.current.members.filter(member => member.id !== userId);
+          this.current.members = this.current.members.filter(
+            (member) => member.id !== userId
+          );
         } else if (user && this.isAdmin(user)) {
           this.error = new Error('This user has admin privilege');
         } else {
@@ -182,8 +182,9 @@ export class TeamStore {
       await runInAction(async () => {
         if (user && this.isAdmin(user)) {
           await this.teamService.deleteAdmin(this.current.id, userId);
-          this.current.admins =
-            this.current.admins.filter(admin => admin.id !== userId);
+          this.current.admins = this.current.admins.filter(
+            (admin) => admin.id !== userId
+          );
         } else if (user && !this.isAdmin(user)) {
           this.error = new Error('This user has no admin privilege');
         } else {

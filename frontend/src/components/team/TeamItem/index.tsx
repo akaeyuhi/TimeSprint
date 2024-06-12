@@ -1,4 +1,10 @@
-import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+} from '@mui/material';
 import { styles } from 'src/components/team/TeamItem/styles';
 import { Team } from 'src/models/team.model';
 import { Link } from 'react-router-dom';

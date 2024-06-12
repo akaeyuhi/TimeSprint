@@ -30,7 +30,9 @@ export abstract class TaskService<T extends TaskContainer> extends BaseService {
 
   async toggleTask(task: Task): Promise<Return<Task>> {
     try {
-      return this.httpRequest.patch<Task>(`/tasks/${task.id}`, { isCompleted: !task.isCompleted });
+      return this.httpRequest.patch<Task>(`/tasks/${task.id}`, {
+        isCompleted: !task.isCompleted,
+      });
     } catch (error) {
       throw new TaskError('Error toggling user task');
     }

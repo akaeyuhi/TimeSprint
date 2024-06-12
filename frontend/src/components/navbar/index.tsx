@@ -1,4 +1,12 @@
-import { AppBar, Avatar, Chip, Container, Menu, MenuItem, Toolbar } from '@mui/material';
+import {
+  AppBar,
+  Avatar,
+  Chip,
+  Container,
+  Menu,
+  MenuItem,
+  Toolbar,
+} from '@mui/material';
 import { MouseEvent, useState } from 'react';
 import { styles } from './styles';
 import { useStore } from 'src/hooks';

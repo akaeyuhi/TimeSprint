@@ -13,25 +13,24 @@ import { CreateProjectDto } from 'src/services/dto/create-project.dto';
 import DeleteUserModal from 'src/pages/Team/components/forms/DeleteUserModal';
 
 interface ModalsProps {
-  createProject: ModalHandler,
-  deleteProject: ModalHandler,
-  addUser: ModalHandler,
-  addAdmin: ModalHandler,
-  leaveTeam: ModalHandler,
-  deleteAdmin: ModalHandler,
-  deleteUser: ModalHandler,
-  deletedUser: User | null,
-  deletedProject: Project | null,
-  team: Team,
-  handleCreateSubmit: (createProjectDto: CreateProjectDto) => void,
-  handleAddUserSubmit: (user: User) => Promise<void>,
-  handleAddAdminSubmit: (user: User) => void,
-  handleDeleteProject: (projectId: number) => Promise<void>,
-  handleDeleteUser: (userId: number) => Promise<void>,
-  handleDeleteAdmin: (userId: number) => Promise<void>,
-  handleLeaveTeam: () => void,
+  createProject: ModalHandler;
+  deleteProject: ModalHandler;
+  addUser: ModalHandler;
+  addAdmin: ModalHandler;
+  leaveTeam: ModalHandler;
+  deleteAdmin: ModalHandler;
+  deleteUser: ModalHandler;
+  deletedUser: User | null;
+  deletedProject: Project | null;
+  team: Team;
+  handleCreateSubmit: (createProjectDto: CreateProjectDto) => void;
+  handleAddUserSubmit: (user: User) => Promise<void>;
+  handleAddAdminSubmit: (user: User) => void;
+  handleDeleteProject: (projectId: number) => Promise<void>;
+  handleDeleteUser: (userId: number) => Promise<void>;
+  handleDeleteAdmin: (userId: number) => Promise<void>;
+  handleLeaveTeam: () => void;
 }
-
 
 const Modals: React.FC<ModalsProps> = ({
   createProject,
@@ -54,44 +53,53 @@ const Modals: React.FC<ModalsProps> = ({
 }) => (
   <>
     <ModalForm open={createProject.isOpen} handleClose={createProject.close}>
-      <CreateProjectForm onSubmit={handleCreateSubmit} onClose={createProject.close} />
+      <CreateProjectForm
+        onSubmit={handleCreateSubmit}
+        onClose={createProject.close}
+      />
     </ModalForm>
     <ModalForm handleClose={deleteProject.close} open={deleteProject.isOpen}>
       <DeleteProjectForm
         project={deletedProject}
         onClose={deleteProject.close}
-        onDelete={handleDeleteProject} />
+        onDelete={handleDeleteProject}
+      />
     </ModalForm>
     <ModalForm handleClose={deleteUser.close} open={deleteUser.isOpen}>
       <DeleteUserModal
         user={deletedUser}
         isAdmin={false}
         onClose={deleteUser.close}
-        onDelete={handleDeleteUser} />
+        onDelete={handleDeleteUser}
+      />
     </ModalForm>
     <ModalForm handleClose={deleteAdmin.close} open={deleteAdmin.isOpen}>
       <DeleteUserModal
         user={deletedUser}
         isAdmin={true}
         onClose={deleteUser.close}
-        onDelete={handleDeleteAdmin} />
+        onDelete={handleDeleteAdmin}
+      />
     </ModalForm>
     <ModalForm handleClose={deleteProject.close} open={deleteProject.isOpen}>
       <DeleteProjectForm
         project={deletedProject}
         onClose={deleteProject.close}
-        onDelete={handleDeleteProject} />
+        onDelete={handleDeleteProject}
+      />
     </ModalForm>
     <ModalForm handleClose={addUser.close} open={addUser.isOpen}>
       <AddUserForm onClose={addUser.close} onSubmit={handleAddUserSubmit} />
     </ModalForm>
     <ModalForm handleClose={addAdmin.close} open={addAdmin.isOpen}>
-      <AddAdminForm
-        onClose={addAdmin.close}
-        onSubmit={handleAddAdminSubmit} />
+      <AddAdminForm onClose={addAdmin.close} onSubmit={handleAddAdminSubmit} />
     </ModalForm>
     <ModalForm handleClose={leaveTeam.close} open={leaveTeam.isOpen}>
-      <LeaveTeamForm onClose={leaveTeam.close} team={team} onLeave={handleLeaveTeam} />
+      <LeaveTeamForm
+        onClose={leaveTeam.close}
+        team={team}
+        onLeave={handleLeaveTeam}
+      />
     </ModalForm>
   </>
 );

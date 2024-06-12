@@ -10,7 +10,11 @@ interface MemberListProps {
   onDelete: (user: User) => void;
 }
 
-export const MemberList: React.FC<MemberListProps> = ({ members, onDelete, isAdmin = false }) => {
+export const MemberList: React.FC<MemberListProps> = ({
+  members,
+  onDelete,
+  isAdmin = false,
+}) => {
   const { id } = useStore('authStore').auth.user;
 
   const handleDelete = (user: User) => {
@@ -19,15 +23,17 @@ export const MemberList: React.FC<MemberListProps> = ({ members, onDelete, isAdm
 
   return (
     <Grid container spacing={2}>
-      {members.map(member => (
+      {members.map((member) => (
         <Grid item key={member.id} xs={8} md={4}>
           <Box sx={styles.avatarBox}>
             <Avatar alt={member.username} src="#" sx={styles.modalAvatar} />
-            {(isAdmin && member.id !== id) && <Box className="deleteButton"
+            {isAdmin && member.id !== id && (
               sx={styles.deleteButton}
-              onClick={() => handleDelete(member)}>
-              X
-            </Box>}
+                onClick={() => handleDelete(member)}
+              >
+                X
+              </Box>
+            )}
           </Box>
           <Typography align="center">{member.username}</Typography>
         </Grid>

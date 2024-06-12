@@ -3,7 +3,6 @@ import { Container } from '@mui/material';
 import TaskSection from 'src/components/task/TaskSection';
 import { observer } from 'mobx-react';
 
-
 const TaskPage = () => (
   <Container>
     <TaskSection isProjectPage={false} isEditable />

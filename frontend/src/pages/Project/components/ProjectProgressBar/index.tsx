@@ -7,7 +7,9 @@ interface ProjectProgressBarProps {
   progress: number;
 }
 
-const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({ progress }) => (
+const ProjectProgressBar: React.FC<ProjectProgressBarProps> = ({
+  progress,
+}) => (
   <Box mt={1}>
     <Typography variant="h6">Completion:</Typography>
     <LinearProgressWithLabel value={progress} />

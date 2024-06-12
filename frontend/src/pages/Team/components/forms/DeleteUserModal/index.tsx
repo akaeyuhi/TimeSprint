@@ -23,8 +23,8 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
     onClose={onClose}
   >
     <Typography variant="body1">
-      Are you sure you want to delete this {isAdmin ? 'admin' : 'user'}?
-      This action is irreversible.
+      Are you sure you want to delete this {isAdmin ? 'admin' : 'user'}? action
+      is irreversible.
     </Typography>
   </DeleteModal>
 );

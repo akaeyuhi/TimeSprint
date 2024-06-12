@@ -23,15 +23,14 @@ const UserPage: React.FC = () => {
   if (authStore.error) handler.handle(authStore.error.message);
 
   const isOwnPage = userId !== authStore.auth?.user?.id;
-  const getWelcomeText = () => (isOwnPage ?
-    (`Welcome, ${store.current && store.current?.username}`) :
-    (`${store.current && store.current?.username}'s page`));
+  const getWelcomeText = () =>
+    (isOwnPage
+      ? `Welcome, ${store.current && store.current?.username}`
+      : `${store.current && store.current?.username}'s page`);
 
   return (
     <Container>
-      <Typography variant="h4">
-        {getWelcomeText()}
-      </Typography>
+      <Typography variant="h4">{getWelcomeText()}</Typography>
       <TaskSection isEditable={isOwnPage} isProjectPage={false} />
       <Stack mt={4}>
         <Typography variant="h5">Teams</Typography>

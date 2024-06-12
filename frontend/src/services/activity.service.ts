@@ -12,15 +12,17 @@ export class ActivityService extends BaseService {
     } catch (error) {
       throw new ActivityError('Error getting activities');
     }
-  };
+  }
 
-  async createActivity(dto: LeisureActivityDto): Promise<Return<LeisureActivity>> {
+  async createActivity(
+    dto: LeisureActivityDto
+  ): Promise<Return<LeisureActivity>> {
     try {
       return this.httpRequest.post<LeisureActivity>(`/activities/`, dto);
     } catch (error) {
       throw new ActivityError('Error creating activity');
     }
-  };
+  }
 
   async deleteActivity(id: number): Promise<Return<LeisureActivity>> {
     try {
@@ -28,7 +30,7 @@ export class ActivityService extends BaseService {
     } catch (error) {
       throw new ActivityError('Error deleting activity');
     }
-  };
+  }
 
   async getActivityById(id: number): Promise<Return<LeisureActivity>> {
     try {
@@ -38,10 +40,15 @@ export class ActivityService extends BaseService {
     }
   }
 
-  async updateActivity(dto: LeisureActivityDto, activityId: number):
-    Promise<Return<LeisureActivity>> {
+  async updateActivity(
+    dto: LeisureActivityDto,
+    activityId: number
+  ): Promise<Return<LeisureActivity>> {
     try {
-      return this.httpRequest.patch<LeisureActivity>(`/activities/${activityId}`, dto);
+      return this.httpRequest.patch<LeisureActivity>(
+        `/activities/${activityId}`,
+        dto
+      );
     } catch (error) {
       throw new TaskError('Error updating user task');
     }

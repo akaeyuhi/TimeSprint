@@ -6,7 +6,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent
+  SelectChangeEvent,
 } from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { observer } from 'mobx-react';
@@ -48,7 +48,6 @@ const TaskSort: React.FC<TaskSorterProps> = ({
           onChange={onChange}
           sx={{ width: 150 }}
         >
-
           <MenuItem value={SortBy.NAME}>Name</MenuItem>
           <MenuItem value={SortBy.URGENCY}>Urgency</MenuItem>
           <MenuItem value={SortBy.IMPORTANCE}>Importance</MenuItem>
@@ -56,7 +55,7 @@ const TaskSort: React.FC<TaskSorterProps> = ({
         </Select>
       </FormControl>
       <Box>
-        {(isEditable && !isProjectPage) && (
+        {isEditable && !isProjectPage && (
           <Button variant="contained" onClick={handleGetImportantTasks}>
             Get Important Tasks
           </Button>

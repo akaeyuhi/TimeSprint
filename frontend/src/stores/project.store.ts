@@ -1,4 +1,10 @@
-import { action, computed, makeObservable, observable, runInAction } from 'mobx';
+import {
+  action,
+  computed,
+  makeObservable,
+  observable,
+  runInAction,
+} from 'mobx';
 import { Project } from 'src/models/project.model';
 import { UpdateProjectDto } from 'src/services/dto/update-project.dto';
 import { Task } from 'src/models/task.model';
@@ -21,7 +27,9 @@ export class ProjectStore extends TaskStore<Project> {
   get progress(): number {
     const totalTasks = this.current.tasks.length;
     if (totalTasks === 0) return 100; // Avoid division by zero
-    const completedTasks = this.current.tasks.filter(task => task.isCompleted).length;
+    const completedTasks = this.current.tasks.filter(
+      (task) => task.isCompleted
+    ).length;
     return (completedTasks / totalTasks) * 100;
   }
 
@@ -29,7 +37,7 @@ export class ProjectStore extends TaskStore<Project> {
   async fetch(projectId: number) {
     this.isLoading = true;
     try {
-      const project = <Project> await this.projectService.getProject(projectId);
+      const project = <Project>await this.projectService.getProject(projectId);
       runInAction(() => {
         this.current = project;
         this.tasks = this.current.tasks;
@@ -62,7 +70,9 @@ export class ProjectStore extends TaskStore<Project> {
   async createTask(taskDto: TaskDto): Promise<Task[]> {
     this.isLoading = true;
     try {
-      const newTask = <Task> await this.projectService.createTask(taskDto, this.current as Project);
+      const newTask = <Task>(
+        await this.projectService.createTask(taskDto, this.current as Project)
+      );
       runInAction(() => {
         this.tasks.push(newTask);
       });
@@ -82,9 +92,11 @@ export class ProjectStore extends TaskStore<Project> {
   async updateTask(taskId: number, taskDto: TaskDto) {
     this.isLoading = true;
     try {
-      const updatedTask = <Task> await this.projectService.updateTask(taskDto, taskId);
+      const updatedTask = <Task>(
+        await this.projectService.updateTask(taskDto, taskId)
+      );
       runInAction(() => {
-        const taskIndex = this.tasks.findIndex(task => task.id === taskId);
+        const taskIndex = this.tasks.findIndex((task) => task.id === taskId);
         if (taskIndex >= 0) {
           this.tasks[taskIndex] = updatedTask;
         }
@@ -109,7 +121,7 @@ export class ProjectStore extends TaskStore<Project> {
       await this.projectService.deleteTask(taskId, this.current);
       runInAction(() => {
         if (this.current) {
-          this.tasks = this.tasks.filter(task => task.id !== taskId);
+          this.tasks = this.tasks.filter((task) => task.id !== taskId);
         }
       });
     } catch (error) {
@@ -127,9 +139,8 @@ export class ProjectStore extends TaskStore<Project> {
   async editProject(projectDto: UpdateProjectDto) {
     this.isLoading = true;
     try {
-      const updatedProject = <Project> await this.projectService.updateProjects(
-        this.current.id,
-        projectDto,
+      const updatedProject = <Project>(
+        await this.projectService.updateProjects(this.current.id, projectDto)
       );
       runInAction(() => {
         this.current = updatedProject;
@@ -151,9 +162,9 @@ export class ProjectStore extends TaskStore<Project> {
     try {
       const task = this.getTaskById(taskId);
       if (!task) throw new Error('Task not found');
-      const toggledTask = <Task> await this.projectService.toggleTask(task);
+      const toggledTask = <Task>await this.projectService.toggleTask(task);
       runInAction(() => {
-        const index = this.tasks.findIndex(t => t.id === taskId);
+        const index = this.tasks.findIndex((t) => t.id === taskId);
         if (index !== -1) {
           this.tasks[index] = toggledTask;
         }

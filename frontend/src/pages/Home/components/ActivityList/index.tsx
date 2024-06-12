@@ -13,7 +13,7 @@ const LeisureActivityList: React.FC<Props> = ({ leisureActivities }) => (
       Leisure Activities to do today
     </Typography>
     <List sx={{ display: 'flex' }}>
-      {leisureActivities.map(activity => (
+      {leisureActivities.map((activity) => (
         <ListItem key={activity.id}>
           <ActivityItem activity={activity} />
         </ListItem>

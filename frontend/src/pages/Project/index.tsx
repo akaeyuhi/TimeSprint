@@ -14,9 +14,8 @@ import { observer } from 'mobx-react';
 import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 
 interface ProjectModals {
-  edit: boolean,
+  edit: boolean;
 }
-
 
 const ProjectPage = () => {
   const { projectStore, authStore, handler } = useStores();
@@ -26,7 +25,10 @@ const ProjectPage = () => {
   });
   const [isCurrentAdmin, setIsCurrentAdmin] = useState(false);
 
-  const modalHandlers = useModals<ProjectModals>(projectModals, setProjectModals);
+  const modalHandlers = useModals<ProjectModals>(
+    projectModals,
+    setProjectModals
+  );
 
   useEffect(() => {
     if (id) {
@@ -36,22 +38,31 @@ const ProjectPage = () => {
     }
   }, [authStore.auth.user.id, id, projectStore]);
 
+  const handleEditSubmit = useCallback(
+    async (updateProjectDto: UpdateProjectDto) => {
+      await projectStore.editProject(updateProjectDto);
+      if (!projectStore.error && !projectStore.isLoading) {
+        modalHandlers.edit.close();
+        toast.success(`Edited project!`);
+      }
+    },
+    [modalHandlers.edit, projectStore]
+  );
 
-  const handleEditSubmit = useCallback(async (updateProjectDto: UpdateProjectDto) => {
-    await projectStore.editProject(updateProjectDto);
-    if (!projectStore.error && !projectStore.isLoading)  {
-      modalHandlers.edit.close();
-      toast.success(`Edited project!`);
-    }
-  }, [modalHandlers.edit, projectStore]);
-
-  if (projectStore.isLoading || isObjectEmpty(projectStore.current)) return <Loader />;
+  if (projectStore.isLoading || isObjectEmpty(projectStore.current))
+    return <Loader />;
   if (projectStore.error) handler.handle(projectStore.error.message);
 
   return (
     <Container>
       <Stack>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Box>
             <Typography variant="h4">{projectStore.current.name}</Typography>
             <Typography variant="body1" mt={1}>
@@ -65,11 +76,17 @@ const ProjectPage = () => {
             </Typography>
           </Box>
           <Box>
-            {isCurrentAdmin &&
-              <Button variant="outlined" onClick={modalHandlers.edit.open}>Edit</Button>}
+            {isCurrentAdmin && (
+              <Button variant="outlined" onClick={modalHandlers.edit.open}>
+                Edit
+              </Button>
+            )}
           </Box>
         </Box>
-        <ModalForm open={projectModals.edit} handleClose={modalHandlers.edit.close}>
+        <ModalForm
+          open={projectModals.edit}
+          handleClose={modalHandlers.edit.close}
+        >
           <EditProjectForm
             project={projectStore.current}
             onSubmit={handleEditSubmit}
@@ -78,7 +95,11 @@ const ProjectPage = () => {
         </ModalForm>
       </Stack>
       <ProjectProgressBar progress={projectStore.progress} />
-      <TaskSection isProjectPage isAdmin={isCurrentAdmin} projectId={Number(id)} />
+      <TaskSection
+        isProjectPage
+        isAdmin={isCurrentAdmin}
+        projectId={Number(id)}
+      />
     </Container>
   );
 };

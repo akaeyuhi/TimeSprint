@@ -21,7 +21,7 @@ export default abstract class TaskStore<T extends TaskContainer> {
   abstract toggleTask(taskId: number): Promise<Task[]>;
 
   getTaskById(taskId: number): Task | null {
-    return this.tasks.find(task => task.id === taskId) ?? null;
+    return this.tasks.find((task) => task.id === taskId) ?? null;
   }
 
   getTasks(): Task[] {
@@ -50,5 +50,5 @@ export default abstract class TaskStore<T extends TaskContainer> {
       break;
     }
     this.setTasks(sortedTasks);
-  };
+  }
 }

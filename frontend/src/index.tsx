@@ -8,16 +8,17 @@ import { DevSupport } from '@react-buddy/ide-toolbox';
 import { ComponentPreviews, useInitial } from './dev';
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
+  document.getElementById('root') as HTMLElement
 );
 root.render(
   <AppConfig>
-    <DevSupport ComponentPreviews={ComponentPreviews}
+    <DevSupport
+      ComponentPreviews={ComponentPreviews}
       useInitialHook={useInitial}
     >
       <App />
     </DevSupport>
-  </AppConfig>,
+  </AppConfig>
 );
 
 // If you want to start measuring performance in your app, pass a function

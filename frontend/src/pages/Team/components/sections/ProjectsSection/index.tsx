@@ -8,10 +8,10 @@ import ProjectList from 'src/pages/Team/components/lists/ProjectList';
 import { Project } from 'src/models/project.model';
 
 interface ProjectsSectionProps {
-  createProject: ModalHandler,
-  projects: ModalHandler,
-  team: Team,
-  handleDeleteClick: (project: Project) => void,
+  createProject: ModalHandler;
+  projects: ModalHandler;
+  team: Team;
+  handleDeleteClick: (project: Project) => void;
   isAdmin?: boolean;
 }
 
@@ -29,18 +29,23 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           Projects
         </Typography>
         <Box>
-          {isAdmin && <Button
-            variant="outlined"
-            color="primary"
-            sx={{ mr: '1rem' }}
-            onClick={createProject.open}>
-            Create new Project
-          </Button>}
-          {team && team?.projects?.length ? <Button variant="outlined"
-            color="primary"
-            onClick={projects.open}>
-            View All Projects
-          </Button> : <></>}
+          {isAdmin && (
+            <Button
+              variant="outlined"
+              color="primary"
+              sx={{ mr: '1rem' }}
+              onClick={createProject.open}
+            >
+              Create new Project
+            </Button>
+          )}
+          {team && team?.projects?.length ? (
+            <Button variant="outlined" color="primary" onClick={projects.open}>
+              View All Projects
+            </Button>
+          ) : (
+            <></>
+          )}
         </Box>
       </Box>
       <Stack>
@@ -53,8 +58,13 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       <ModalInfo
         open={projects.isOpen}
         handleClose={projects.close}
-        title="Team projects">
-        <ProjectList isAdmin={isAdmin} projects={team?.projects} onDelete={handleDeleteClick} />
+        title="Team projects"
+      >
+        <ProjectList
+          isAdmin={isAdmin}
+          projects={team?.projects}
+          onDelete={handleDeleteClick}
+        />
       </ModalInfo>
     </Stack>
   </>

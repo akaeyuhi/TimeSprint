@@ -37,7 +37,6 @@ const WelcomePage: React.FC = () => (
       </Box>
     </Container>
   </>
-
 );
 
 export default WelcomePage;

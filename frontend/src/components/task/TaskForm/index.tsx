@@ -5,14 +5,14 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  OutlinedInput,
+  FormHelperText,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   SelectChangeEvent,
   Stack,
   Typography,
-  FormHelperText,
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
 import { TaskDto } from 'src/services/dto/task.dto';
@@ -26,10 +26,10 @@ import CustomDatePicker from 'src/components/customDatePicker';
 interface CreateTaskFormProps {
   onSubmit: (newTask: TaskDto, id?: number) => void;
   onCancel: () => void;
-  isEdited?: boolean
-  tasks: Task[],
-  task: Task | null,
-  members?: User[],
+  isEdited?: boolean;
+  tasks: Task[];
+  task: Task | null;
+  members?: User[];
 }
 
 const validate = (state: TaskDto): ValidationErrors<TaskDto> => ({
@@ -37,8 +37,16 @@ const validate = (state: TaskDto): ValidationErrors<TaskDto> => ({
   description: !(state.description && state.description.length > 20),
   urgency: true,
   importance: true,
-  startDate: !(state.endDate && state.startDate && state.startDate < state.endDate),
-  endDate: !(state.endDate && state.startDate && state.startDate < state.endDate),
+  startDate: !(
+    state.endDate &&
+    state.startDate &&
+    state.startDate < state.endDate
+  ),
+  endDate: !(
+    state.endDate &&
+    state.startDate &&
+    state.startDate < state.endDate
+  ),
   dependencies: !!state.dependencies,
 });
 
@@ -55,39 +63,52 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
   onCancel,
   isEdited = false,
 }) => {
-  const [formData, setFormData, errors] = useValidation<TaskDto>({
-    name: task?.name ?? '',
-    description: task?.description ?? '',
-    urgency: task?.urgency ?? false,
-    importance: task?.importance ?? false,
-    startDate: task?.startDate ?? new Date(),
-    endDate: task?.endDate ?? new Date(),
-    dependencies: task?.dependencies ?? [],
-    user: task?.user,
-  }, validate);
+  const [formData, setFormData, errors] = useValidation<TaskDto>(
+    {
+      name: task?.name ?? '',
+      description: task?.description ?? '',
+      urgency: task?.urgency ?? false,
+      importance: task?.importance ?? false,
+      startDate: task?.startDate ?? new Date(),
+      endDate: task?.endDate ?? new Date(),
+      dependencies: task?.dependencies ?? [],
+      user: task?.user,
+    },
+    validate
+  );
 
-  const isValid = !(errors.name && errors.description && errors.endDate && errors.startDate);
+  const isValid = !(
+    errors.name &&
+    errors.description &&
+    errors.endDate &&
+    errors.startDate
+  );
   const isEditable = isEdited && !!task;
-  const tasksToAdd = task ? tasks.filter(item => item.id !== task.id) : tasks;
+  const tasksToAdd = task ? tasks.filter((item) => item.id !== task.id) : tasks;
 
   const handleDependencyChange = async (event: SelectChangeEvent<Task[]>) => {
     const { target: value } = event;
-    const dependencies = [...value.value as Task[]];
+    const dependencies = [...(value.value as Task[])];
     setFormData('dependencies', dependencies);
   };
 
   const handleUserChange = async (event: SelectChangeEvent) => {
     if (!members) return;
-    const user = members.find(member => member.username === event.target.value);
+    const user = members.find(
+      (member) => member.username === event.target.value
+    );
     if (user) setFormData('user', user);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isValid)
-      onSubmit({
-        ...formData,
-      }, task?.id);
+      onSubmit(
+        {
+          ...formData,
+        },
+        task?.id
+      );
   };
 
   return (
@@ -106,9 +127,11 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
           aria-describedby="name-error"
           value={formData.name}
         />
-        {errors.name && <FormHelperText error id="name-error">
-          Name should be 8 characters long
-        </ FormHelperText>}
+        {errors.name && (
+          <FormHelperText error id="name-error">
+            Name should be 8 characters long
+          </FormHelperText>
+        )}
       </FormControl>
       <FormControl error={errors.description}>
         <InputLabel htmlFor="description">Task description</InputLabel>
@@ -121,37 +144,51 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
           required
           value={formData.description}
         />
-        {errors.description && <FormHelperText error id="desc-error">
-          Description should be 20 characters long
-        </ FormHelperText>}
+        {errors.description && (
+          <FormHelperText error id="desc-error">
+            Description should be 20 characters long
+          </FormHelperText>
+        )}
       </FormControl>
       <FormControl>
-        <FormControlLabel control={<Checkbox
-          id="urgency"
-          onChange={(e) => setFormData('urgency', e.target.checked)}
-          checked={formData.urgency}
-        />} label="Urgency" />
+        <FormControlLabel
+          control={
+            <Checkbox
+              id="urgency"
+              onChange={(e) => setFormData('urgency', e.target.checked)}
+              checked={formData.urgency}
+            />
+          }
+          label="Urgency"
+        />
       </FormControl>
       <FormControl>
-        <FormControlLabel control={<Checkbox
-          id="importance"
-          onChange={(e) => setFormData('importance', e.target.checked)}
-          checked={formData.importance}
-        />} label="Importance" />
+        <FormControlLabel
+          control={
+            <Checkbox
+              id="importance"
+              onChange={(e) => setFormData('importance', e.target.checked)}
+              checked={formData.importance}
+            />
+          }
+          label="Importance"
+        />
       </FormControl>
       <FormControl>
         <CustomDatePicker
           formData={formData}
           setFormData={setFormData}
           errors={errors}
-          type="startDate"/>
+          type="startDate"
+        />
       </FormControl>
       <FormControl>
         <CustomDatePicker
           formData={formData}
           setFormData={setFormData}
           errors={errors}
-          type="endDate"/>
+          type="endDate"
+        />
       </FormControl>
       <FormControl>
         <InputLabel id="dependencies-label">Dependencies</InputLabel>
@@ -160,36 +197,42 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
           formData={formData}
           handleChange={handleDependencyChange}
           handleDependencyDelete={(task: Task) =>
-            setFormData('dependencies', formData.dependencies.filter((item) =>
-              item.id !== task.id))
+            setFormData(
+              'dependencies',
+              formData.dependencies.filter((item) => item.id !== task.id)
+            )
           }
         />
       </FormControl>
-      {members && members.length ? <FormControl>
-        <InputLabel id="users-label">Assigned User</InputLabel>
-        <Select
-          labelId="users-label"
-          label="Assigned User"
-          id="assigned-users"
-          value={formData.user?.username ?? ``}
-          onChange={handleUserChange}
-          input={<OutlinedInput label="Assigned User"/>}
-          MenuProps={{
-            PaperProps: {
-              style: selectStyle,
-            },
-          }}
-        >
-          <MenuItem disabled value="">
-            Assigned User
-          </MenuItem>
-          {members.map((user) => (
-            <MenuItem key={user.id} value={user.username}>
-              {user.username}
+      {members && members.length ? (
+        <FormControl>
+          <InputLabel id="users-label">Assigned User</InputLabel>
+          <Select
+            labelId="users-label"
+            label="Assigned User"
+            id="assigned-users"
+            value={formData.user?.username ?? ``}
+            onChange={handleUserChange}
+            input={<OutlinedInput label="Assigned User" />}
+            MenuProps={{
+              PaperProps: {
+                style: selectStyle,
+              },
+            }}
+          >
+            <MenuItem disabled value="">
+              Assigned User
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl> : <></>}
+            {members.map((user) => (
+              <MenuItem key={user.id} value={user.username}>
+                {user.username}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ) : (
+        <></>
+      )}
       <Box sx={styles.buttonContainer}>
         <Button variant="contained" color="primary" type="submit">
           {isEditable ? 'Edit' : 'Create'}

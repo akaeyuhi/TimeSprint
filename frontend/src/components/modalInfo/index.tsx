@@ -9,8 +9,14 @@ interface ModalInfoProps {
   title: string;
 }
 
-const ModalInfo: React.FC<ModalInfoProps> = ({ open, handleClose, title, children }) => (
-  <Modal open={open}
+const ModalInfo: React.FC<ModalInfoProps> = ({
+  open,
+  handleClose,
+  title,
+  children,
+}) => (
+  <Modal
+    open={open}
     onClose={handleClose}
     closeAfterTransition
     slots={{ backdrop: Backdrop }}
@@ -18,10 +24,13 @@ const ModalInfo: React.FC<ModalInfoProps> = ({ open, handleClose, title, childre
       backdrop: {
         timeout: 500,
       },
-    }}>
+    }}
+  >
     <Fade in={open}>
       <Box sx={styles.box}>
-        <Typography variant="h5" gutterBottom>{title}</Typography>
+        <Typography variant="h5" gutterBottom>
+          {title}
+        </Typography>
         {children}
       </Box>
     </Fade>

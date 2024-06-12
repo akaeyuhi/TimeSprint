@@ -7,4 +7,3 @@ export type Auth = {
 };
 
 export type Return<T> = T | null;
-

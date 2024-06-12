@@ -28,15 +28,19 @@ const TeamsPage: React.FC = () => {
 
   const modalHandlers = useModals<TeamModals>(modal, setModal);
 
-  const handleCreateTeamSubmit = useCallback(async (teamDto: CreateTeamDto) => {
-    await userStore.createTeam(teamDto);
-    if (!userStore.error && !userStore.isLoading)  {
-      toast.success(`Created team: ${teamDto.name}`);
-      modalHandlers.createTeam.close();
-    }
-  }, [modalHandlers.createTeam, userStore]);
+  const handleCreateTeamSubmit = useCallback(
+    async (teamDto: CreateTeamDto) => {
+      await userStore.createTeam(teamDto);
+      if (!userStore.error && !userStore.isLoading) {
+        toast.success(`Created team: ${teamDto.name}`);
+        modalHandlers.createTeam.close();
+      }
+    },
+    [modalHandlers.createTeam, userStore]
+  );
 
-  if (userStore.isLoading || isObjectEmpty(userStore.current)) return <Loader />;
+  if (userStore.isLoading || isObjectEmpty(userStore.current))
+    return <Loader />;
   if (userStore.error) handler.handle(userStore.error.message);
 
   return (
@@ -51,7 +55,8 @@ const TeamsPage: React.FC = () => {
           variant="contained"
           color="primary"
           onClick={modalHandlers.createTeam.open}
-          sx={styles.createButton}>
+          sx={styles.createButton}
+        >
           Create Team
         </Button>
       </Box>

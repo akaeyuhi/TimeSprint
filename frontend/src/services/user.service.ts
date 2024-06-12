@@ -40,7 +40,10 @@ class UserService extends TaskService<User> {
     }
   }
 
-  async updateUser(id: number, user: Partial<RegisterDto>): Promise<Return<User>> {
+  async updateUser(
+    id: number,
+    user: Partial<RegisterDto>
+  ): Promise<Return<User>> {
     try {
       return this.httpRequest.put<User>(`/users/${id}`, user);
     } catch (error) {

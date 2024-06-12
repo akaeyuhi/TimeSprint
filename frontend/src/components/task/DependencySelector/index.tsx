@@ -4,7 +4,8 @@ import {
   OutlinedInput,
   MenuItem,
   Select,
-  Chip, SelectChangeEvent,
+  Chip,
+  SelectChangeEvent,
 } from '@mui/material';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Task } from 'src/models/task.model';
@@ -12,10 +13,10 @@ import { observer } from 'mobx-react';
 import { TaskDto } from 'src/services/dto/task.dto';
 
 interface DependencySelectorProps {
-  tasks: Task[],
-  formData: TaskDto,
-  handleChange: (event: SelectChangeEvent<Task[]>) => Promise<void>,
-  handleDependencyDelete: (task: Task) => void,
+  tasks: Task[];
+  formData: TaskDto;
+  handleChange: (event: SelectChangeEvent<Task[]>) => Promise<void>;
+  handleDependencyDelete: (task: Task) => void;
 }
 
 const selectStyle = {
@@ -27,7 +28,7 @@ const DependencySelector: React.FC<DependencySelectorProps> = ({
   tasks,
   formData,
   handleChange,
-  handleDependencyDelete
+  handleDependencyDelete,
 }) => (
   <Select
     labelId="dependencies-label"
@@ -35,16 +36,16 @@ const DependencySelector: React.FC<DependencySelectorProps> = ({
     multiple
     value={formData.dependencies}
     onChange={handleChange}
-    input={<OutlinedInput label="Dependencies"/>}
+    input={<OutlinedInput label="Dependencies" />}
     renderValue={(selected) => (
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
         {selected.map((task) => (
-          <Chip key={task.id} label={task.name}
+          <Chip
+            key={task.id}
+            label={task.name}
             onDelete={() => handleDependencyDelete(task)}
             deleteIcon={
-              <CancelIcon
-                onMouseDown={(event) => event.stopPropagation()}
-              />
+              <CancelIcon onMouseDown={(event) => event.stopPropagation()} />
             }
           />
         ))}
@@ -57,7 +58,7 @@ const DependencySelector: React.FC<DependencySelectorProps> = ({
     }}
   >
     <MenuItem disabled value="">
-            Dependency
+      Dependency
     </MenuItem>
     {tasks.map((task) => (
       <MenuItem key={task.id} value={task as unknown as string}>

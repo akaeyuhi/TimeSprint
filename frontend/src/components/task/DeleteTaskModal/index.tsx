@@ -9,15 +9,14 @@ interface DeleteTaskModal {
   onClose: () => void;
 }
 
-const DeleteTaskModal: React.FC<DeleteTaskModal> = ({ task, onDelete, onClose }) => (
-  <DeleteModal<Task>
-    item={task}
-    onDelete={onDelete}
-    onClose={onClose}
-  >
+const DeleteTaskModal: React.FC<DeleteTaskModal> = ({
+  task,
+  onDelete,
+  onClose,
+}) => (
+  <DeleteModal<Task> item={task} onDelete={onDelete} onClose={onClose}>
     <Typography variant="body1">
-      Are you sure you want to delete this task?
-      This action is irreversible.
+      Are you sure you want to delete this task? This action is irreversible.
     </Typography>
   </DeleteModal>
 );
