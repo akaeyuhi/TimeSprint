@@ -12,6 +12,7 @@ export class TeamRepository implements IRepository<Team> {
     @InjectRepository(Team)
     private readonly repository: Repository<Team>,
   ) {}
+
   async findAll(): Promise<Team[]> {
     return this.repository.find({
       relations: ['members', 'admins', 'projects'],

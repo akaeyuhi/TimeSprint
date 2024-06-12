@@ -61,14 +61,6 @@ export class TeamService {
     return await this.deleteMember(userId, teamId);
   }
 
-  private isMember(user: User, team: Team) {
-    return team.members.find(member => member.id === user.id);
-  }
-
-  private isAdmin(user: User, team: Team) {
-    return team.admins.find(admin => admin.id === user.id);
-  }
-
   async addMember(teamId: number, memberId: number): Promise<User> {
     const team = await this.teamRepository.findById(teamId);
     if (!team) {
@@ -217,5 +209,13 @@ export class TeamService {
       await this.teamRepository.deleteAdmin(team, member);
     }
     await this.teamRepository.deleteMember(team, member);
+  }
+
+  private isMember(user: User, team: Team) {
+    return team.members.find(member => member.id === user.id);
+  }
+
+  private isAdmin(user: User, team: Team) {
+    return team.admins.find(admin => admin.id === user.id);
   }
 }

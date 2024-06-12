@@ -1,16 +1,16 @@
 import {
-  Controller,
-  Post,
   Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
   Param,
-  Put,
   ParseIntPipe,
   Patch,
-  Get,
-  Delete,
-  UseGuards,
-  HttpStatus,
+  Post,
+  Put,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateTeamDto } from 'src/team/dto/create-team.dto';
@@ -244,6 +244,7 @@ export class TeamController {
   async getTeam(@Param('teamId', ParseIntPipe) teamId: number): Promise<Team> {
     return await this.teamService.findById(teamId);
   }
+
   @Patch(':teamId')
   @ApiOperation({
     summary: 'Updates team info. Team admin rights required.',

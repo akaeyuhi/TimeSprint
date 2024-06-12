@@ -37,8 +37,8 @@ export class ProjectRepository implements IRepository<Project> {
       relations: {
         team: true,
         tasks: {
-          dependencies: true
-        }
+          dependencies: true,
+        },
       },
     });
   }

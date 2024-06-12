@@ -1,10 +1,10 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  Entity,
   JoinTable,
+  ManyToMany,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Length } from 'class-validator';

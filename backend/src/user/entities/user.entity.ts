@@ -1,11 +1,11 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
   BeforeInsert,
-  ManyToMany,
   BeforeUpdate,
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Team } from 'src/team/entities/team.entity';
 import { Task } from 'src/task/entities/task.entity';

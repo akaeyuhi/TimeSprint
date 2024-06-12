@@ -1,4 +1,4 @@
-import { Strategy, ExtractJwt } from 'passport-jwt';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
@@ -10,6 +10,7 @@ export type JwtPayload = {
   email: string;
   role: AdminRole;
 };
+
 @Injectable()
 export class AuthStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private authService: AuthService) {

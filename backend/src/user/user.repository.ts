@@ -23,8 +23,8 @@ export class UserRepository implements IRepository<User> {
         teams: true,
         activities: true,
         tasks: {
-          dependencies: true
-        }
+          dependencies: true,
+        },
       },
     });
   }

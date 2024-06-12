@@ -7,10 +7,9 @@ module.exports = {
   },
   plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
   extends: [
-    'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
-    'prettier',
   ],
   root: true,
   env: {

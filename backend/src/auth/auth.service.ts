@@ -68,6 +68,7 @@ export class AuthService {
     await this.userService.createUser(createUserDto);
     return this.login(createUserDto.email, createUserDto.password);
   }
+
   async refreshAccessToken(user: JwtPayload) {
     console.log(user);
     const { accessToken } = await this.getTokens(user);

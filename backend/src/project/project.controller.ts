@@ -1,14 +1,14 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
   Post,
   Put,
-  Delete,
-  Param,
-  Body,
-  ParseIntPipe,
   UseGuards,
-  HttpStatus,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { Project } from './entities/project.entity';
@@ -126,6 +126,7 @@ export class ProjectController {
   ): Promise<void> {
     await this.projectService.deleteProject(id);
   }
+
   @Post(':projectId/tasks')
   @ApiOperation({
     summary: 'Creates new task in project. Team admin rights required.',
