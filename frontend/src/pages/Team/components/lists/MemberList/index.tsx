@@ -27,13 +27,12 @@ export const MemberList: React.FC<MemberListProps> = ({
         <Grid item key={member.id} xs={8} md={4}>
           <Box sx={styles.avatarBox}>
             <Avatar alt={member.username} src="#" sx={styles.modalAvatar} />
-            {isAdmin && member.id !== id && (
+            {isAdmin && (member.id !== id) && <Box className="deleteButton"
               sx={styles.deleteButton}
                 onClick={() => handleDelete(member)}
               >
                 X
-              </Box>
-            )}
+              </Box>}
           </Box>
           <Typography align="center">{member.username}</Typography>
         </Grid>

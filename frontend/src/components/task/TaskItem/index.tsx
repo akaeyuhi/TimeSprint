@@ -90,7 +90,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
                 variant="body2"
                 sx={{ color: checkLength(3) ? 'red' : 'green' }}>
                 {checkLength()
-                  ? `Dependencies: ${parsedDependencies}${checkLength(5) ? '...' : ''}`
+                  ? `Dependencies: ${parsedDependencies}${checkLength(5) ? '...' : ''}` :
                   'No dependencies'}
               </Typography>
             </Box>
