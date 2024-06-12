@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
+import { CreateProjectDto } from 'src/services/dto/create-project.dto';
 import { DatePicker } from '@mui/x-date-pickers';
 import { styles } from 'src/components/modalForm/styles';
 import dayjs from 'dayjs';

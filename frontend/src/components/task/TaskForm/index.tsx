@@ -15,7 +15,7 @@ import {
   FormHelperText,
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
-import { TaskDto } from 'src/services/dto/task/task.dto';
+import { TaskDto } from 'src/services/dto/task.dto';
 import { Task } from 'src/models/task.model';
 import { User } from 'src/models/user.model';
 import { observer } from 'mobx-react';

@@ -13,7 +13,7 @@ import { styles } from 'src/components/modalForm/styles';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { Project } from 'src/models/project.model';
-import { UpdateProjectDto } from 'src/services/dto/project/update-project.dto';
+import { UpdateProjectDto } from 'src/services/dto/update-project.dto';
 import { observer } from 'mobx-react';
 import { useValidation, ValidationErrors } from 'src/hooks/use-validation';
 

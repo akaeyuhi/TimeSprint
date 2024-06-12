@@ -9,7 +9,7 @@ import {
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Task } from 'src/models/task.model';
 import { observer } from 'mobx-react';
-import { TaskDto } from 'src/services/dto/task/task.dto';
+import { TaskDto } from 'src/services/dto/task.dto';
 
 interface DependencySelectorProps {
   tasks: Task[],

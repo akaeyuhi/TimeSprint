@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
+import { CreateTeamDto } from 'src/services/dto/create-team.dto';
 import { styles } from 'src/components/modalForm/styles';
 import { useValidation, ValidationErrors } from 'src/hooks/use-validation';
 

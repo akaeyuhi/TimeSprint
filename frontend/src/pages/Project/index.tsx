@@ -4,7 +4,7 @@ import { useStores } from 'src/hooks';
 import ModalForm from 'src/components/modalForm';
 import { useParams } from 'react-router-dom';
 import { useModals } from 'src/hooks/use-modals';
-import { UpdateProjectDto } from 'src/services/dto/project/update-project.dto';
+import { UpdateProjectDto } from 'src/services/dto/update-project.dto';
 import TaskSection from 'src/components/task/TaskSection';
 import { toast } from 'react-toastify';
 import ProjectProgressBar from 'src/pages/Project/components/ProjectProgressBar';

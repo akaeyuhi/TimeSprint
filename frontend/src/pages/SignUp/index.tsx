@@ -14,7 +14,7 @@ import { styles } from './styles';
 import Logo from 'src/components/logo';
 import { useStore } from 'src/hooks';
 import Loader from 'src/components/loader';
-import { RegisterDto } from 'src/services/dto/auth/register.dto';
+import { RegisterDto } from 'src/services/dto/register.dto';
 import { observer } from 'mobx-react';
 import { useValidation, ValidationErrors } from 'src/hooks/use-validation';
 

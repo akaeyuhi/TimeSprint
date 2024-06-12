@@ -12,7 +12,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { styles } from './styles';
 import Logo from 'src/components/logo';
-import { LoginDto } from 'src/services/dto/auth/login.dto';
+import { LoginDto } from 'src/services/dto/login.dto';
 import { useStore } from 'src/hooks';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';

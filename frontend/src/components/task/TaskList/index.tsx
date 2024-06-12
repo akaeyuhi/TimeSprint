@@ -3,7 +3,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import TaskItem from 'src/components/task/TaskItem';
 import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
-import { TaskDto } from 'src/services/dto/task/task.dto';
+import { TaskDto } from 'src/services/dto/task.dto';
 import { toast } from 'react-toastify';
 import ModalForm from 'src/components/modalForm';
 import { useStores } from 'src/hooks';

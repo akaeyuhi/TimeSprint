@@ -9,7 +9,7 @@ import { ModalHandler } from 'src/hooks/use-modals';
 import { Project } from 'src/models/project.model';
 import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
-import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
+import { CreateProjectDto } from 'src/services/dto/create-project.dto';
 import DeleteUserModal from 'src/pages/Team/components/forms/DeleteUserModal';
 
 interface ModalsProps {

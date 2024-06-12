@@ -3,7 +3,7 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import { useStores } from 'src/hooks/use-stores';
 import ModalForm from 'src/components/modalForm';
 import CreateTeamForm from 'src/pages/Teams/components/CreateTeamForm';
-import { CreateTeamDto } from 'src/services/dto/team/create-team.dto';
+import { CreateTeamDto } from 'src/services/dto/create-team.dto';
 import { styles } from 'src/pages/Teams/styles';
 import TeamList from 'src/components/team/TeamList';
 import { useModals } from 'src/hooks/use-modals';
