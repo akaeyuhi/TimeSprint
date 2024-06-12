@@ -147,7 +147,8 @@ class CustomHttpClient implements IHttpClient {
   }
 
   private async refreshToken(): Promise<string> {
-    const response = await this.axios.post('/auth/refresh', {
+    const link = process.env.REACT_APP_API_URL ?? 'http://localhost:3001';
+    const response = await this.axios.post(link + '/auth/refresh', {
       refreshToken: this.authStore?.auth.refreshToken,
     });
     const newToken = response.data.accessToken;
