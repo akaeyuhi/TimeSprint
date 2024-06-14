@@ -4,7 +4,7 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from 'src/task/entities/task.entity';
 import { IRepository } from 'src/interfaces/repository.interface';
-import { LeisureActivity } from "src/leisure-activity/entities/leisure-activity.entity";
+import { LeisureActivity } from 'src/leisure-activity/entities/leisure-activity.entity';
 
 @Injectable()
 export class UserRepository implements IRepository<User> {
@@ -17,7 +17,7 @@ export class UserRepository implements IRepository<User> {
     return this.repository.find();
   }
 
-  async findById(id: number): Promise<User> {
+  async findById(id: string): Promise<User> {
     return this.repository.findOne({
       where: { id },
       relations: {
@@ -43,7 +43,7 @@ export class UserRepository implements IRepository<User> {
     return this.repository.save(newUser);
   }
 
-  async update(id: number, userData: Partial<User>): Promise<User> {
+  async update(id: string, userData: Partial<User>): Promise<User> {
     const user = await this.findById(id);
     if (!user) {
       throw new NotFoundException('Team not found');
@@ -52,7 +52,7 @@ export class UserRepository implements IRepository<User> {
     return user;
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.repository.delete(id);
   }
 
@@ -81,8 +81,13 @@ export class UserRepository implements IRepository<User> {
     return task;
   }
 
-  async deleteActivityFromUser(user: User, activity: LeisureActivity): Promise<LeisureActivity> {
-    user.activities = user.activities.filter(userActivity => userActivity.id !== activity.id);
+  async deleteActivityFromUser(
+    user: User,
+    activity: LeisureActivity,
+  ): Promise<LeisureActivity> {
+    user.activities = user.activities.filter(
+      userActivity => userActivity.id !== activity.id,
+    );
     await this.repository.save(user);
     return activity;
   }

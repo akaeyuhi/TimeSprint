@@ -12,8 +12,8 @@ import { IsBoolean, IsDate, Length } from 'class-validator';
 
 @Entity()
 export class Project {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @Length(8, 20)

@@ -5,7 +5,7 @@ import DeadlineForm from 'src/components/deadlineForm';
 import { LeisureActivity } from 'src/models/activity.model';
 
 interface ActivityFormProps {
-  onSubmit: (newActivity: LeisureActivityDto, id?: number) => void;
+  onSubmit: (newActivity: LeisureActivityDto, id?: string) => void;
   onCancel: () => void;
   isEdited?: boolean;
   activity: LeisureActivity | null;
@@ -14,7 +14,7 @@ interface ActivityFormProps {
 const validate = (
   state: LeisureActivityDto
 ): ValidationErrors<LeisureActivityDto> => ({
-  name: !(state.name && state.name.length > 8),
+  name: !(state.name && state.name.length > 8 && state.name.length < 20),
   description: !(state.description && state.description.length > 20),
   startDate: !(
     state.endDate &&

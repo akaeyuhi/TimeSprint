@@ -15,7 +15,7 @@ const UserPage: React.FC = () => {
   const [user, setUser] = useState({} as User);
   const { id } = useParams();
 
-  const userId = id ? parseInt(id) : authStore.auth.user.id;
+  const userId = id ? id : authStore.auth.user.id;
   const isOwnPage = userId === authStore.auth?.user?.id;
 
   useEffect(() => {

@@ -13,6 +13,7 @@ import {
 import { User } from 'src/models/user.model';
 import { styles } from 'src/components/modalForm/styles';
 import { useStore } from 'src/hooks';
+import { observer } from 'mobx-react';
 
 interface AddAdminFormProps {
   onSubmit: (member: User) => void;
@@ -25,7 +26,7 @@ const AddAdminForm: React.FC<AddAdminFormProps> = ({ onSubmit, onClose }) => {
   const { id: currentUser } = useStore('authStore').auth.user;
   const adminCandidates = members.filter(
     (user) =>
-      user.id !== currentUser && !admins.some((admin) => admin.id !== user.id)
+      user.id !== currentUser && !admins.some((admin) => admin.id === user.id)
   );
   const [noCandidates, setNoCandidates] = useState(!!adminCandidates.length);
 
@@ -90,4 +91,4 @@ const AddAdminForm: React.FC<AddAdminFormProps> = ({ onSubmit, onClose }) => {
   );
 };
 
-export default AddAdminForm;
+export default observer(AddAdminForm);

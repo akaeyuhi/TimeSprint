@@ -35,10 +35,10 @@ const HomePage: React.FC = () => {
         <Typography variant="h6" sx={styles.date}>
           Today is {formattedDate}.
         </Typography>
-        <Box>
+        <Box mt={2}>
           <TaskList tasks={store.current.tasks.slice(0, 3)} />
         </Box>
-        <Box>
+        <Box mt={2}>
           <LeisureActivityList
             leisureActivities={store.current.activities.slice(0, 3)}
           />

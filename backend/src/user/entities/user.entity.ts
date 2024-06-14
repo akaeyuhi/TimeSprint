@@ -16,8 +16,8 @@ import { hash } from 'bcrypt';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @Length(8, 20)

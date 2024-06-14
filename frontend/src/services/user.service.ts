@@ -11,7 +11,7 @@ import { LeisureActivity } from 'src/models/activity.model';
 import { ActivityError } from 'src/services/errors/activity.error';
 
 class UserService extends TaskService<User> {
-  async getUser(id: number): Promise<Return<User>> {
+  async getUser(id: string): Promise<Return<User>> {
     try {
       return await this.httpRequest.get<User>(`/users/${id}`);
     } catch (error) {
@@ -44,7 +44,7 @@ class UserService extends TaskService<User> {
   }
 
   async updateUser(
-    id: number,
+    id: string,
     user: Partial<RegisterDto>
   ): Promise<Return<User>> {
     try {
@@ -54,7 +54,7 @@ class UserService extends TaskService<User> {
     }
   }
 
-  async deleteUser(id: number): Promise<Return<User>> {
+  async deleteUser(id: string): Promise<Return<User>> {
     try {
       return this.httpRequest.delete<User>(`/users/${id}`);
     } catch (error) {
@@ -62,7 +62,7 @@ class UserService extends TaskService<User> {
     }
   }
 
-  async getImportantUserTasks(id: number): Promise<Return<Task[]>> {
+  async getImportantUserTasks(id: string): Promise<Return<Task[]>> {
     try {
       return this.httpRequest.get<Task[]>(`/users/${id}/prioritized`);
     } catch (error) {
@@ -86,7 +86,7 @@ class UserService extends TaskService<User> {
     }
   }
 
-  async deleteTask(id: number, item: User): Promise<Return<Task>> {
+  async deleteTask(id: string, item: User): Promise<Return<Task>> {
     try {
       return this.httpRequest.delete<Task>(`/users/${item.id}/tasks/${id}`);
     } catch (error) {
@@ -109,7 +109,7 @@ class UserService extends TaskService<User> {
   }
 
   async deleteActivity(
-    id: number,
+    id: string,
     item: User
   ): Promise<Return<LeisureActivity>> {
     try {

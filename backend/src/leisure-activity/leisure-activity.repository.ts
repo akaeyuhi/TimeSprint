@@ -17,7 +17,7 @@ export class LeisureActivityRepository implements IRepository<LeisureActivity> {
   }
 
   async update(
-    id: number,
+    id: string,
     data: Partial<LeisureActivity>,
   ): Promise<LeisureActivity> {
     const activity = await this.findById(id);
@@ -27,11 +27,11 @@ export class LeisureActivityRepository implements IRepository<LeisureActivity> {
     return await this.repository.save({ ...activity, ...data });
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.repository.delete(id);
   }
 
-  async findById(id: number): Promise<LeisureActivity> {
+  async findById(id: string): Promise<LeisureActivity> {
     return await this.repository.findOneBy({ id });
   }
 

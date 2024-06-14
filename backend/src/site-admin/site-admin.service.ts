@@ -11,7 +11,7 @@ export class SiteAdminService {
     return await this.siteAdminRepository.create(user);
   }
 
-  async removeSiteAdmin(userId: number): Promise<void> {
+  async removeSiteAdmin(userId: string): Promise<void> {
     const siteAdmin = await this.siteAdminRepository.findByUserId(userId);
     if (!siteAdmin) {
       throw new NotFoundException(
@@ -25,7 +25,7 @@ export class SiteAdminService {
     return await this.siteAdminRepository.findAll();
   }
 
-  async isUserSiteAdmin(userId: number): Promise<boolean> {
+  async isUserSiteAdmin(userId: string): Promise<boolean> {
     const siteAdmin = await this.siteAdminRepository.findByUserId(userId);
     return !!siteAdmin;
   }

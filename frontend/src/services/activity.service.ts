@@ -13,7 +13,7 @@ export class ActivityService extends BaseService {
     }
   }
 
-  async getActivityById(id: number): Promise<Return<LeisureActivity>> {
+  async getActivityById(id: string): Promise<Return<LeisureActivity>> {
     try {
       return this.httpRequest.get<LeisureActivity>(`/activities/${id}`);
     } catch (error) {
@@ -23,7 +23,7 @@ export class ActivityService extends BaseService {
 
   async updateActivity(
     dto: LeisureActivityDto,
-    activityId: number
+    activityId: string
   ): Promise<Return<LeisureActivity>> {
     try {
       return this.httpRequest.patch<LeisureActivity>(

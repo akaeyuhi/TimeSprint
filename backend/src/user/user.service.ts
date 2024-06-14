@@ -23,7 +23,7 @@ export class UserService {
     return this.userRepository.findAll();
   }
 
-  async findById(id: number): Promise<User> {
+  async findById(id: string): Promise<User> {
     return await this.userRepository.findById(id);
   }
 
@@ -39,13 +39,13 @@ export class UserService {
     return this.userRepository.create(createUserDto);
   }
 
-  async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     const existingUser = await this.findById(id);
     const updatedUser = { ...existingUser, ...updateUserDto };
     return this.userRepository.update(id, updatedUser);
   }
 
-  async deleteUser(id: number): Promise<void> {
+  async deleteUser(id: string): Promise<void> {
     const existingUser = await this.findById(id);
     await this.userRepository.delete(existingUser.id);
   }
@@ -54,7 +54,7 @@ export class UserService {
     return this.userRepository.getUserWithPassword(email);
   }
 
-  async createUserTask(taskDTO: CreateTaskDto, userId: number): Promise<Task> {
+  async createUserTask(taskDTO: CreateTaskDto, userId: string): Promise<Task> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
@@ -63,7 +63,7 @@ export class UserService {
     return await this.userRepository.assignTaskToUser(user, newTask);
   }
 
-  async deleteUserTask(userId: number, taskId: number): Promise<Task> {
+  async deleteUserTask(userId: string, taskId: string): Promise<Task> {
     const user = await this.userRepository.findById(userId);
     const task = await this.taskService.findById(taskId);
     await this.taskService.deleteTask(taskId);
@@ -71,17 +71,18 @@ export class UserService {
   }
 
   async deleteUserActivity(
-    userId: number,
-    activityId: number,
+    userId: string,
+    activityId: string,
   ): Promise<LeisureActivity> {
     const user = await this.userRepository.findById(userId);
-    const activity = await this.leisureActivityService.findLeisureActivityById(activityId);
+    const activity =
+      await this.leisureActivityService.findLeisureActivityById(activityId);
     await this.leisureActivityService.deleteLeisureActivity(activityId);
     return await this.userRepository.deleteActivityFromUser(user, activity);
   }
 
   async addLeisureActivityToUser(
-    userId: number,
+    userId: string,
     activityDto: CreateLeisureActivityDto,
   ): Promise<LeisureActivity> {
     const user = await this.userRepository.findById(userId);
@@ -95,7 +96,7 @@ export class UserService {
   }
 
   async getLeisureActivitiesForUser(
-    userId: number,
+    userId: string,
   ): Promise<LeisureActivity[]> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
@@ -104,7 +105,7 @@ export class UserService {
     return user.activities;
   }
 
-  async getUserTasks(userId: number): Promise<Task[]> {
+  async getUserTasks(userId: string): Promise<Task[]> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new Error(`User with ID ${userId} not found`);
@@ -112,7 +113,7 @@ export class UserService {
     return user.tasks;
   }
 
-  async changeUserRole(userId: number, role: AdminRole): Promise<User> {
+  async changeUserRole(userId: string, role: AdminRole): Promise<User> {
     const user = await this.findById(userId);
     if (!user) {
       throw new Error(`User with ID ${userId} not found`);
@@ -121,7 +122,7 @@ export class UserService {
     return user;
   }
 
-  async getSortedUserTasks(userId: number): Promise<Task[]> {
+  async getSortedUserTasks(userId: string): Promise<Task[]> {
     const user = await this.findById(userId);
     // Sort tasks by calculated priority in descending order
 

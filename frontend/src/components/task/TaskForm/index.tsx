@@ -18,7 +18,7 @@ import DependencySelector from 'src/components/task/DependencySelector';
 import DeadlineForm from 'src/components/deadlineForm';
 
 interface CreateTaskFormProps {
-  onSubmit: (newTask: TaskDto, id?: number) => void;
+  onSubmit: (newTask: TaskDto, id?: string) => void;
   onCancel: () => void;
   isEdited?: boolean;
   tasks: Task[];
@@ -27,10 +27,10 @@ interface CreateTaskFormProps {
 }
 
 const validate = (state: TaskDto): ValidationErrors<TaskDto> => ({
-  name: !(state.name && state.name.length > 8),
+  name: !(state.name && state.name.length > 8 && state.name.length < 20),
   description: !(state.description && state.description.length > 20),
-  urgency: true,
-  importance: true,
+  urgency: false,
+  importance: false,
   startDate: !(
     state.endDate &&
     state.startDate &&
@@ -41,7 +41,7 @@ const validate = (state: TaskDto): ValidationErrors<TaskDto> => ({
     state.startDate &&
     state.startDate < state.endDate
   ),
-  dependencies: !!state.dependencies,
+  dependencies: false,
 });
 
 const selectStyle = {

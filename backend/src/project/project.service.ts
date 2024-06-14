@@ -21,17 +21,17 @@ export class ProjectService {
   }
 
   async updateProject(
-    id: number,
+    id: string,
     projectDto: UpdateProjectDto,
   ): Promise<Project> {
     return await this.projectRepository.update(id, projectDto);
   }
 
-  async deleteProject(id: number): Promise<void> {
+  async deleteProject(id: string): Promise<void> {
     await this.projectRepository.delete(id);
   }
 
-  async findProjectById(id: number): Promise<Project> {
+  async findProjectById(id: string): Promise<Project> {
     return await this.projectRepository.findById(id);
   }
 
@@ -39,16 +39,16 @@ export class ProjectService {
     return await this.projectRepository.findAll();
   }
 
-  async assignProjectToTeam(id: number, team: Team): Promise<Project> {
+  async assignProjectToTeam(id: string, team: Team): Promise<Project> {
     return await this.projectRepository.assignProjectToTeam(id, team);
   }
 
-  async findProjectsByTeam(teamId: number): Promise<Project[]> {
+  async findProjectsByTeam(teamId: string): Promise<Project[]> {
     return await this.projectRepository.findProjectsByTeam(teamId);
   }
 
   async addTaskToProject(
-    projectId: number,
+    projectId: string,
     addTasksDto: AddTasksDto,
   ): Promise<Task[]> {
     const tasksToAdd = [];
@@ -64,7 +64,7 @@ export class ProjectService {
   }
 
   async createTaskInProject(
-    projectId: number,
+    projectId: string,
     createTaskDto: CreateTaskDto,
   ): Promise<Task> {
     const project = await this.findProjectById(projectId);
@@ -75,14 +75,14 @@ export class ProjectService {
   }
 
   async removeTaskFromProject(
-    projectId: number,
-    taskId: number,
+    projectId: string,
+    taskId: string,
   ): Promise<void> {
     await this.projectRepository.removeTaskFromProject(projectId, taskId);
     await this.taskService.deleteTask(taskId);
   }
 
-  async findTasksByProject(projectId: number): Promise<Task[]> {
+  async findTasksByProject(projectId: string): Promise<Task[]> {
     return await this.projectRepository.findTasksByProject(projectId);
   }
 }

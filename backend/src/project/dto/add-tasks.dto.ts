@@ -1,3 +1,3 @@
 export class AddTasksDto {
-  ids: number[];
+  ids: string[];
 }

@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 
 interface DeleteTaskModal {
   task: Task | null;
-  onDelete: (id: number) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
   onClose: () => void;
 }
 

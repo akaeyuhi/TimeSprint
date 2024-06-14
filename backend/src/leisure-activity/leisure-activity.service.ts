@@ -17,17 +17,17 @@ export class LeisureActivityService {
   }
 
   async updateLeisureActivity(
-    id: number,
+    id: string,
     data: UpdateLeisureActivityDto,
   ): Promise<LeisureActivity> {
     return await this.leisureActivityRepository.update(id, data);
   }
 
-  async deleteLeisureActivity(id: number): Promise<void> {
+  async deleteLeisureActivity(id: string): Promise<void> {
     await this.leisureActivityRepository.delete(id);
   }
 
-  async findLeisureActivityById(id: number): Promise<LeisureActivity> {
+  async findLeisureActivityById(id: string): Promise<LeisureActivity> {
     return await this.leisureActivityRepository.findById(id);
   }
 

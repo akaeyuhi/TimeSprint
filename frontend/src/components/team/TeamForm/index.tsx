@@ -12,7 +12,7 @@ interface TeamFormProps {
 }
 
 const validate = (state: TeamDto): ValidationErrors<TeamDto> => ({
-  name: !(state.name.length > 8),
+  name: !(state.name.length > 8 && state.name.length < 20),
   description: !(state.description.length > 20),
 });
 

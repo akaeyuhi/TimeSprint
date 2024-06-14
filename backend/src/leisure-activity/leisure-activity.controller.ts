@@ -67,7 +67,7 @@ export class LeisureActivityController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async updateLeisureActivity(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateLeisureActivityDto: UpdateLeisureActivityDto,
   ): Promise<LeisureActivity> {
     return await this.leisureActivityService.updateLeisureActivity(
@@ -93,9 +93,7 @@ export class LeisureActivityController {
     description: 'Activity not found',
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async deleteLeisureActivity(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<void> {
+  async deleteLeisureActivity(@Param('id') id: string): Promise<void> {
     await this.leisureActivityService.deleteLeisureActivity(id);
   }
 
@@ -113,7 +111,7 @@ export class LeisureActivityController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findLeisureActivityById(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
   ): Promise<LeisureActivity> {
     return await this.leisureActivityService.findLeisureActivityById(id);
   }

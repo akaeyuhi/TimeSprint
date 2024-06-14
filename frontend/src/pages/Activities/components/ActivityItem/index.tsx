@@ -19,7 +19,7 @@ interface ActivityItemProps {
   deleteActivity: ModalHandler;
   onEditClick: (activity: LeisureActivity) => void;
   onDeleteClick: (activity: LeisureActivity) => void;
-  onToggle: (activityId: number) => void;
+  onToggle: (activityId: string) => void;
 }
 
 const ActivityItem: React.FC<ActivityItemProps> = ({

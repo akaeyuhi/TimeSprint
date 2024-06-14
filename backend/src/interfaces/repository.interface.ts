@@ -1,11 +1,11 @@
 export interface IRepository<T> {
   create(data: Partial<T>): Promise<T>;
 
-  update(id: number, data: Partial<T>): Promise<T>;
+  update(id: string, data: Partial<T>): Promise<T>;
 
-  delete(id: number): Promise<void>;
+  delete(id: string): Promise<void>;
 
-  findById(id: number): Promise<T>;
+  findById(id: string): Promise<T>;
 
   findAll(): Promise<T[]>;
 }

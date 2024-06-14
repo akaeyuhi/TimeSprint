@@ -27,7 +27,7 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async fetch(userId: number): Promise<User> {
+  async fetch(userId: string): Promise<User> {
     this.isLoading = true;
     try {
       const user = <User>await this.userService.getUser(userId);
@@ -47,7 +47,8 @@ export class UserStore extends TaskStore<User> {
     return this.current;
   }
 
-  async getUser(userId: number): Promise<User | null> {
+  @action
+  async getUser(userId: string): Promise<User | null> {
     this.isLoading = true;
     try {
       return <User>await this.userService.getUser(userId);
@@ -106,8 +107,7 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async updateTask(taskId: number, taskDto: TaskDto): Promise<Task[]> {
-    this.isLoading = true;
+  async updateTask(taskId: string, taskDto: TaskDto): Promise<Task[]> {
     try {
       const updatedTask = <Task>(
         await this.userService.updateTask(taskDto, taskId)
@@ -120,17 +120,12 @@ export class UserStore extends TaskStore<User> {
       runInAction(() => {
         this.error = error as Error;
       });
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
     }
     return this.tasks;
   }
 
   @action
-  async deleteTask(taskId: number): Promise<void> {
-    this.isLoading = true;
+  async deleteTask(taskId: string): Promise<void> {
     try {
       await this.userService.deleteTask(taskId, this.current as User);
       runInAction(() => {
@@ -141,16 +136,11 @@ export class UserStore extends TaskStore<User> {
         this.error = error as Error;
       });
       throw error;
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
     }
   }
 
   @action
-  async toggleTask(taskId: number): Promise<Task[]> {
-    this.isLoading = true;
+  async toggleTask(taskId: string): Promise<Task[]> {
     try {
       const task = this.getTaskById(taskId);
       if (!task) throw new Error('Task not found');
@@ -162,11 +152,6 @@ export class UserStore extends TaskStore<User> {
     } catch (error) {
       runInAction(() => {
         this.error = error as Error;
-      });
-      throw error;
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
       });
     }
     return this.tasks;
@@ -197,7 +182,7 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async joinTeam(teamId: number): Promise<Team[]> {
+  async joinTeam(teamId: string): Promise<Team[]> {
     this.isLoading = true;
     try {
       const newTeam = <Team>await this.teamService.joinTeam(teamId);
@@ -217,7 +202,7 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async leaveTeam(teamId: number): Promise<number> {
+  async leaveTeam(teamId: string): Promise<string> {
     this.isLoading = true;
     try {
       await this.teamService.leaveTeam(teamId);
@@ -262,7 +247,7 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async update(id: number, updateDto: Partial<User>): Promise<User> {
+  async update(id: string, updateDto: Partial<User>): Promise<User> {
     this.isLoading = true;
     try {
       const updatedUser = <User>(
@@ -271,20 +256,19 @@ export class UserStore extends TaskStore<User> {
       runInAction(() => {
         this.current = updatedUser;
       });
-      return updatedUser;
     } catch (error) {
       runInAction(() => {
         this.error = <Error>error;
       });
-      throw error;
     } finally {
       runInAction(() => {
         this.isLoading = false;
       });
     }
+    return this.current;
   }
 
-  getActivityById(id: number) {
+  getActivityById(id: string) {
     return this.current.activities.find((activity) => activity.id === id);
   }
 
@@ -313,10 +297,9 @@ export class UserStore extends TaskStore<User> {
   }
 
   async updateActivity(
-    id: number,
+    id: string,
     activityDto: LeisureActivityDto
   ): Promise<LeisureActivity[]> {
-    this.isLoading = true;
     try {
       const updatedActivity = <LeisureActivity>(
         await this.activityService.updateActivity(activityDto, id)
@@ -331,15 +314,11 @@ export class UserStore extends TaskStore<User> {
       runInAction(() => {
         this.error = <Error>error;
       });
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
     }
     return this.current.activities;
   }
 
-  async toggleActivity(taskId: number): Promise<LeisureActivity[]> {
+  async toggleActivity(taskId: string): Promise<LeisureActivity[]> {
     try {
       const activity = this.getActivityById(taskId);
       if (!activity) throw new Error('Activity not found');
@@ -358,8 +337,7 @@ export class UserStore extends TaskStore<User> {
     return this.current.activities;
   }
 
-  async deleteActivity(id: number): Promise<LeisureActivity[]> {
-    this.isLoading = true;
+  async deleteActivity(id: string): Promise<LeisureActivity[]> {
     try {
       await this.userService.deleteActivity(id, this.current);
       runInAction(() => {
@@ -370,10 +348,6 @@ export class UserStore extends TaskStore<User> {
     } catch (error) {
       runInAction(() => {
         this.error = <Error>error;
-      });
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
       });
     }
     return this.current.activities;

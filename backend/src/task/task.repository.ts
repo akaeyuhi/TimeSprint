@@ -18,12 +18,12 @@ export class TaskRepository implements IRepository<Task> {
     return await this.repository.save(task);
   }
 
-  async update(id: number, updateTaskDto: Partial<Task>): Promise<Task> {
+  async update(id: string, updateTaskDto: Partial<Task>): Promise<Task> {
     const task = await this.findById(id);
     return await this.repository.save({ ...task, ...updateTaskDto });
   }
 
-  async findById(id: number): Promise<Task> {
+  async findById(id: string): Promise<Task> {
     const task = await this.repository.findOne({
       where: { id },
       relations: ['dependencies'],
@@ -34,7 +34,7 @@ export class TaskRepository implements IRepository<Task> {
     return task;
   }
 
-  async delete(taskId: number): Promise<void> {
+  async delete(taskId: string): Promise<void> {
     const result = await this.repository.delete(taskId);
 
     if (result.affected === 0) {
@@ -50,7 +50,7 @@ export class TaskRepository implements IRepository<Task> {
     return await this.repository.find({ relations: ['dependencies'] });
   }
 
-  async findTaskDependencies(taskId: number): Promise<Task[]> {
+  async findTaskDependencies(taskId: string): Promise<Task[]> {
     return (await this.findById(taskId)).dependencies;
   }
 }

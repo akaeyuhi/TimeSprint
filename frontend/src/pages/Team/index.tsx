@@ -56,7 +56,7 @@ const TeamPage: React.FC = () => {
   useEffect(() => {
     if (isObjectEmpty(teamStore.current)) {
       teamStore
-        .fetch(Number(id))
+        .fetch(id ?? '')
         .then(() =>
           setIsCurrentAdmin(teamStore.isAdmin(authStore.auth.user.id))
         );
@@ -97,7 +97,7 @@ const TeamPage: React.FC = () => {
   );
 
   const handleDeleteProject = useCallback(
-    async (projectId: number) => {
+    async (projectId: string) => {
       await teamStore.deleteProject(projectId);
       if (!teamStore.error && !teamStore.isLoading) {
         toast.success(`Deleted project!`);
@@ -126,7 +126,7 @@ const TeamPage: React.FC = () => {
   ]);
 
   const handleDeleteUser = useCallback(
-    async (userId: number) => {
+    async (userId: string) => {
       await teamStore.deleteUser(userId);
       if (!teamStore.error && !teamStore.isLoading) {
         toast.success(`Deleted user!`);
@@ -138,7 +138,7 @@ const TeamPage: React.FC = () => {
   );
 
   const handleDeleteAdmin = useCallback(
-    async (userId: number) => {
+    async (userId: string) => {
       await teamStore.deleteAdmin(userId);
       if (!teamStore.error && !teamStore.isLoading) {
         toast.success(`Deleted admin!`);

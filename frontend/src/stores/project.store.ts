@@ -34,7 +34,7 @@ export class ProjectStore extends TaskStore<Project> {
   }
 
   @action
-  async fetch(projectId: number) {
+  async fetch(projectId: string) {
     this.isLoading = true;
     try {
       const project = <Project>await this.projectService.getProject(projectId);
@@ -54,13 +54,13 @@ export class ProjectStore extends TaskStore<Project> {
     return this.current;
   }
 
-  isUserMember(userId: number) {
+  isUserMember(userId: string) {
     if (this.current.team) {
       return this.current.team.members.some((user) => user.id === userId);
     } else return false;
   }
 
-  isUserAdmin(userId: number) {
+  isUserAdmin(userId: string) {
     if (this.current.team && this.isUserMember(userId)) {
       return this.current.team.admins.some((user) => user.id === userId);
     } else return false;
@@ -89,8 +89,7 @@ export class ProjectStore extends TaskStore<Project> {
   }
 
   @action
-  async updateTask(taskId: number, taskDto: TaskDto) {
-    this.isLoading = true;
+  async updateTask(taskId: string, taskDto: TaskDto) {
     try {
       const updatedTask = <Task>(
         await this.projectService.updateTask(taskDto, taskId)
@@ -105,18 +104,13 @@ export class ProjectStore extends TaskStore<Project> {
       runInAction(() => {
         this.error = error as Error;
       });
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
     }
     return this.tasks;
   }
 
   @action
-  async deleteTask(taskId: number) {
+  async deleteTask(taskId: string) {
     if (!this.current) return;
-    this.isLoading = true;
     try {
       await this.projectService.deleteTask(taskId, this.current);
       runInAction(() => {
@@ -127,10 +121,6 @@ export class ProjectStore extends TaskStore<Project> {
     } catch (error) {
       runInAction(() => {
         this.error = error as Error;
-      });
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
       });
     }
   }
@@ -158,7 +148,7 @@ export class ProjectStore extends TaskStore<Project> {
   }
 
   @action
-  async toggleTask(taskId: number): Promise<Task[]> {
+  async toggleTask(taskId: string): Promise<Task[]> {
     try {
       const task = this.getTaskById(taskId);
       if (!task) throw new Error('Task not found');

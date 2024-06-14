@@ -12,8 +12,8 @@ import { Project } from 'src/project/entities/project.entity';
 
 @Entity()
 export class Team {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @Length(8, 20)

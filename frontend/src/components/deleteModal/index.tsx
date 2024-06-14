@@ -6,7 +6,7 @@ import { Item } from 'src/models/item.model';
 
 interface DeleteModalProps<T extends Item> {
   item: T | null;
-  onDelete: (id: number) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
   onClose: () => void;
   children: React.ReactNode;
 }

@@ -10,17 +10,17 @@ export default abstract class TaskStore<T extends TaskContainer> {
   abstract current: T;
   abstract tasks: Task[];
 
-  abstract fetch(id?: number): Promise<T>;
+  abstract fetch(id?: string): Promise<T>;
 
   abstract createTask(task: TaskDto): Promise<Task[]>;
 
-  abstract updateTask(taskId: number, taskDto: TaskDto): Promise<Task[]>;
+  abstract updateTask(taskId: string, taskDto: TaskDto): Promise<Task[]>;
 
-  abstract deleteTask(taskId: number): Promise<void>;
+  abstract deleteTask(taskId: string): Promise<void>;
 
-  abstract toggleTask(taskId: number): Promise<Task[]>;
+  abstract toggleTask(taskId: string): Promise<Task[]>;
 
-  getTaskById(taskId: number): Task | null {
+  getTaskById(taskId: string): Task | null {
     return this.tasks.find((task) => task.id === taskId) ?? null;
   }
 

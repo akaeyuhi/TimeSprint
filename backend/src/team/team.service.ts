@@ -27,7 +27,7 @@ export class TeamService {
 
   async createTeam(
     createTeamDto: CreateTeamDto,
-    userId: number,
+    userId: string,
   ): Promise<Team> {
     const admins = [];
     const members = [];
@@ -49,19 +49,19 @@ export class TeamService {
     });
   }
 
-  async findById(id: number): Promise<Team> {
+  async findById(id: string): Promise<Team> {
     return this.teamRepository.findById(id);
   }
 
-  async joinTeam(userId: number, teamId: number): Promise<User> {
+  async joinTeam(userId: string, teamId: string): Promise<User> {
     return await this.addMember(teamId, userId);
   }
 
-  async leaveTeam(userId: number, teamId: number): Promise<void> {
+  async leaveTeam(userId: string, teamId: string): Promise<void> {
     return await this.deleteMember(userId, teamId);
   }
 
-  async addMember(teamId: number, memberId: number): Promise<User> {
+  async addMember(teamId: string, memberId: string): Promise<User> {
     const team = await this.teamRepository.findById(teamId);
     if (!team) {
       throw new NotFoundException('Team not found');
@@ -81,7 +81,7 @@ export class TeamService {
     return this.teamRepository.addProjectToTeam(team, project);
   }
 
-  async addAdmin(teamId: number, adminId: number): Promise<User> {
+  async addAdmin(teamId: string, adminId: string): Promise<User> {
     const team = await this.teamRepository.findById(teamId);
     if (!team) {
       throw new NotFoundException('Team not found');
@@ -102,11 +102,11 @@ export class TeamService {
     return admin;
   }
 
-  async getTeamIdByProject(projectId: number): Promise<number> {
+  async getTeamIdByProject(projectId: string): Promise<string> {
     return await this.teamRepository.getTeamIdByProject(projectId);
   }
 
-  async getUserRoleInTeam(userId: number, teamId: number): Promise<TeamRole> {
+  async getUserRoleInTeam(userId: string, teamId: string): Promise<TeamRole> {
     const team = await this.teamRepository.findById(teamId);
 
     if (!team) {
@@ -122,7 +122,7 @@ export class TeamService {
     return this.isAdmin(user, team) ? TeamRole.ADMIN : TeamRole.COLLABORATOR;
   }
 
-  async deleteTeam(teamId: number): Promise<void> {
+  async deleteTeam(teamId: string): Promise<void> {
     await this.teamRepository.delete(teamId);
   }
 
@@ -130,12 +130,12 @@ export class TeamService {
     return await this.teamRepository.findAll();
   }
 
-  async getTeamProjects(teamId: number): Promise<Project[]> {
+  async getTeamProjects(teamId: string): Promise<Project[]> {
     return (await this.findById(teamId)).projects;
   }
 
   async updateTeam(
-    teamId: number,
+    teamId: string,
     updateTeamDto: UpdateTeamDto,
   ): Promise<Team> {
     const team = await this.teamRepository.findById(teamId);
@@ -145,16 +145,16 @@ export class TeamService {
     return await this.teamRepository.update(teamId, updateTeamDto);
   }
 
-  async findTeamsByAdminId(adminId: number): Promise<Team[]> {
+  async findTeamsByAdminId(adminId: string): Promise<Team[]> {
     return await this.teamRepository.findByAdmin(adminId);
   }
 
-  async findTeamsByMemberId(memberId: number): Promise<Team[]> {
+  async findTeamsByMemberId(memberId: string): Promise<Team[]> {
     return await this.teamRepository.findByMember(memberId);
   }
 
   async createTeamProject(
-    teamId: number,
+    teamId: string,
     createProjectDto: CreateProjectDto,
   ): Promise<Project> {
     const team = await this.findById(teamId);
@@ -167,7 +167,7 @@ export class TeamService {
     return newProject;
   }
 
-  async deleteTeamProject(teamId: number, projectId: number): Promise<void> {
+  async deleteTeamProject(teamId: string, projectId: string): Promise<void> {
     try {
       return await this.projectService.deleteProject(projectId);
     } catch (e) {
@@ -175,7 +175,7 @@ export class TeamService {
     }
   }
 
-  async deleteAdmin(teamId: number, adminId: number): Promise<void> {
+  async deleteAdmin(teamId: string, adminId: string): Promise<void> {
     const team = await this.teamRepository.findById(teamId);
     if (!team) {
       throw new NotFoundException('Team not found');
@@ -193,7 +193,7 @@ export class TeamService {
     await this.teamRepository.addAdmin(team, admin);
   }
 
-  async deleteMember(teamId: number, memberId: number): Promise<void> {
+  async deleteMember(teamId: string, memberId: string): Promise<void> {
     const team = await this.teamRepository.findById(teamId);
     if (!team) {
       throw new NotFoundException('Team not found');

@@ -15,7 +15,7 @@ import { ItemDto } from 'src/services/dto/item.dto';
 import { Item } from 'src/models/item.model';
 
 interface ItemFormProps<T extends ItemDto, K extends Item> {
-  onSubmit: (newItem: T, id?: number) => void;
+  onSubmit: (newItem: T, id?: string) => void;
   onCancel: () => void;
   formData: T;
   setFormData: (key: keyof T, value: any) => void;
@@ -64,7 +64,7 @@ const ItemForm = <T extends ItemDto, K extends Item>({
         />
         {validation.errors.name && (
           <FormHelperText error id="name-error">
-            Name should be 8 characters long
+            Name should be more than 8 and shorter than 20 characters long
           </FormHelperText>
         )}
       </FormControl>

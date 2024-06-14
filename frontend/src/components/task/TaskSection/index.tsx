@@ -8,7 +8,7 @@ interface TaskSectionProps {
   isProjectPage: boolean;
   isEditable?: boolean;
   isAdmin?: boolean;
-  projectId?: number;
+  projectId?: string;
 }
 
 interface TaskModals {

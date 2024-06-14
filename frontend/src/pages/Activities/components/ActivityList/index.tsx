@@ -45,7 +45,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
   );
 
   const editHandler = useCallback(
-    async (updatedActivity: LeisureActivityDto, activityId?: number) => {
+    async (updatedActivity: LeisureActivityDto, activityId?: string) => {
       await store.updateActivity(activityId!, updatedActivity);
       if (!store.error && !store.isLoading) {
         editActivity.close();
@@ -57,7 +57,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
   );
 
   const deleteHandler = useCallback(
-    async (activityId: number) => {
+    async (activityId: string) => {
       await store.deleteActivity(activityId);
       if (!store.error && !store.isLoading) {
         deleteActivity.close();
@@ -69,7 +69,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
   );
 
   const onToggle = useCallback(
-    async (activityId: number) => {
+    async (activityId: string) => {
       await store.toggleActivity(activityId);
       if (!store.error && !store.isLoading) {
         toast.success(`Toggled activity!`);

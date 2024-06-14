@@ -22,7 +22,7 @@ interface TaskListProps {
   isProjectPage: boolean;
   isEditable: boolean;
   isAdmin?: boolean;
-  projectId?: number;
+  projectId?: string;
   createTask: ModalHandler;
   editTask: ModalHandler;
   deleteTask: ModalHandler;
@@ -63,7 +63,7 @@ const TaskList: React.FC<TaskListProps> = ({
   );
 
   const submitEditHandler = useCallback(
-    async (updatedTask: TaskDto, taskId?: number) => {
+    async (updatedTask: TaskDto, taskId?: string) => {
       await store.updateTask(taskId!, updatedTask);
       if (!store.error && !store.isLoading) {
         editTask.close();
@@ -75,7 +75,7 @@ const TaskList: React.FC<TaskListProps> = ({
   );
 
   const deleteTaskHandler = useCallback(
-    async (taskId: number) => {
+    async (taskId: string) => {
       await store.deleteTask(taskId);
       if (!store.error && !store.isLoading) {
         deleteTask.close();
@@ -87,7 +87,7 @@ const TaskList: React.FC<TaskListProps> = ({
   );
 
   const onToggle = useCallback(
-    async (taskId: number) => {
+    async (taskId: string) => {
       await store.toggleTask(taskId);
       if (!store.error && !store.isLoading) {
         deleteTask.close();

@@ -10,9 +10,9 @@ export abstract class TaskService<T extends TaskContainer> extends BaseService {
 
   abstract createTask(dto: TaskDto, item: T): Promise<Return<Task>>;
 
-  abstract deleteTask(taskId: number, item: T): Promise<Return<Task>>;
+  abstract deleteTask(taskId: string, item: T): Promise<Return<Task>>;
 
-  async getTaskById(id: number): Promise<Return<Task>> {
+  async getTaskById(id: string): Promise<Return<Task>> {
     try {
       return this.httpRequest.get<Task>(`/tasks/${id}`);
     } catch (error) {
@@ -20,7 +20,7 @@ export abstract class TaskService<T extends TaskContainer> extends BaseService {
     }
   }
 
-  async updateTask(dto: TaskDto, taskId: number): Promise<Return<Task>> {
+  async updateTask(dto: TaskDto, taskId: string): Promise<Return<Task>> {
     try {
       return this.httpRequest.patch<Task>(`/tasks/${taskId}`, dto);
     } catch (error) {

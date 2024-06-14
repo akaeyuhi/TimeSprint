@@ -60,9 +60,7 @@ export class ProjectController {
     description: 'Project not found',
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async getProjectById(
-    @Param('projectId', ParseIntPipe) id: number,
-  ): Promise<Project> {
+  async getProjectById(@Param('projectId') id: string): Promise<Project> {
     return await this.projectService.findProjectById(id);
   }
 
@@ -98,7 +96,7 @@ export class ProjectController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async updateProject(
-    @Param('projectId', ParseIntPipe) id: number,
+    @Param('projectId') id: string,
     @Body() updateProjectDto: UpdateProjectDto,
   ): Promise<Project> {
     return await this.projectService.updateProject(id, updateProjectDto);
@@ -121,9 +119,7 @@ export class ProjectController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
-  async deleteProject(
-    @Param('projectId', ParseIntPipe) id: number,
-  ): Promise<void> {
+  async deleteProject(@Param('projectId') id: string): Promise<void> {
     await this.projectService.deleteProject(id);
   }
 
@@ -145,7 +141,7 @@ export class ProjectController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async addTaskToProject(
-    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('projectId') projectId: string,
     @Body() createTaskDto: CreateTaskDto,
   ): Promise<Task> {
     return await this.projectService.createTaskInProject(
@@ -181,8 +177,8 @@ export class ProjectController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async removeTaskFromProject(
-    @Param('projectId', ParseIntPipe) projectId: number,
-    @Param('taskId', ParseIntPipe) taskId: number,
+    @Param('projectId') projectId: string,
+    @Param('taskId') taskId: string,
   ): Promise<void> {
     await this.projectService.removeTaskFromProject(projectId, taskId);
   }
@@ -203,7 +199,7 @@ export class ProjectController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findProjectsByTeam(
-    @Param('teamId', ParseIntPipe) teamId: number,
+    @Param('teamId') teamId: string,
   ): Promise<Project[]> {
     return await this.projectService.findProjectsByTeam(teamId);
   }
@@ -224,7 +220,7 @@ export class ProjectController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findTasksInProject(
-    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('projectId') projectId: string,
   ): Promise<Task[]> {
     return await this.projectService.findTasksByProject(projectId);
   }

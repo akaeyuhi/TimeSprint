@@ -9,7 +9,7 @@ import { TaskService } from 'src/services/task.service';
 import { ProjectDto } from 'src/services/dto/project.dto';
 
 class ProjectService extends TaskService<Project> {
-  async getProject(id: number): Promise<Return<Project>> {
+  async getProject(id: string): Promise<Return<Project>> {
     try {
       return await this.httpRequest.get<Project>(`/projects/${id}`);
     } catch (error) {
@@ -26,7 +26,7 @@ class ProjectService extends TaskService<Project> {
   }
 
   async updateProjects(
-    id: number,
+    id: string,
     projectDto: ProjectDto
   ): Promise<Return<Project>> {
     try {
@@ -36,7 +36,7 @@ class ProjectService extends TaskService<Project> {
     }
   }
 
-  async deleteProject(id: number): Promise<Return<Project>> {
+  async deleteProject(id: string): Promise<Return<Project>> {
     try {
       return this.httpRequest.delete<Project>(`/projects/${id}`);
     } catch (error) {
@@ -60,7 +60,7 @@ class ProjectService extends TaskService<Project> {
     }
   }
 
-  async deleteTask(id: number, item: Project): Promise<Return<Task>> {
+  async deleteTask(id: string, item: Project): Promise<Return<Task>> {
     try {
       return this.httpRequest.delete<Task>(`/projects/${item.id}/tasks/${id}`);
     } catch (error) {

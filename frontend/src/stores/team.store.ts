@@ -14,21 +14,21 @@ export class TeamStore {
     makeAutoObservable(this);
   }
 
-  isAdmin(user: User | number) {
+  isAdmin(user: User | string) {
     const id = typeof user === 'object' ? (user as User).id : user;
     return !!this.current.admins.find((admin) => admin.id === id);
   }
 
-  isMember(user: User | number) {
+  isMember(user: User | string) {
     const id = typeof user === 'object' ? (user as User).id : user;
     return !!this.current.members.find((member) => member.id === id);
   }
 
-  getUserById(id: number) {
+  getUserById(id: string) {
     return this.current.members.find((member) => member.id === id);
   }
 
-  async fetch(teamId: number) {
+  async fetch(teamId: string) {
     this.isLoading = true;
     try {
       const team = <Team>await this.teamService.getTeam(teamId);
@@ -72,7 +72,7 @@ export class TeamStore {
     return this.current.projects;
   }
 
-  async deleteProject(projectId: number) {
+  async deleteProject(projectId: string) {
     this.isLoading = true;
     try {
       await this.teamService.deleteProject(this.current.id, projectId);
@@ -147,7 +147,7 @@ export class TeamStore {
     return user;
   }
 
-  async deleteUser(userId: number): Promise<void> {
+  async deleteUser(userId: string): Promise<void> {
     this.isLoading = true;
     try {
       const user = this.getUserById(userId);
@@ -175,7 +175,7 @@ export class TeamStore {
     }
   }
 
-  async deleteAdmin(userId: number): Promise<void> {
+  async deleteAdmin(userId: string): Promise<void> {
     this.isLoading = true;
     try {
       const user = this.getUserById(userId);

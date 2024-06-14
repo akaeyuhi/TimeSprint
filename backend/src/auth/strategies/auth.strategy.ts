@@ -5,7 +5,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { AdminRole } from 'src/user/utils';
 
 export type JwtPayload = {
-  id: number;
+  id: string;
   username: string;
   email: string;
   role: AdminRole;

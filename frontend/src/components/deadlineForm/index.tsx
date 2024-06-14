@@ -8,7 +8,7 @@ import { ItemDto } from 'src/services/dto/item.dto';
 import { Item } from 'src/models/item.model';
 
 interface DeadlineFormProps<T extends DeadlineItem & ItemDto, K extends Item> {
-  onSubmit: (newItem: T, id?: number) => void;
+  onSubmit: (newItem: T, id?: string) => void;
   onCancel: () => void;
   formData: T;
   setFormData: (key: keyof T, value: any) => void;

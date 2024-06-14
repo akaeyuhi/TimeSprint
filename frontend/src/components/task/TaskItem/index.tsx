@@ -19,7 +19,7 @@ interface TaskItemProps {
   editTask: ModalHandler;
   onEditClick: (task: Task) => void;
   onDeleteClick: (task: Task) => void;
-  onToggle: (taskId: number) => void;
+  onToggle: (taskId: string) => void;
   deleteTask: ModalHandler;
   isOwnPage: boolean;
   isProjectAdmin: boolean;

@@ -32,7 +32,7 @@ const ProjectPage = () => {
 
   useEffect(() => {
     if (id) {
-      projectStore.fetch(Number(id)).then(() => {
+      projectStore.fetch(id ?? '').then(() => {
         setIsCurrentAdmin(projectStore.isUserAdmin(authStore.auth.user.id));
       });
     }
@@ -96,11 +96,7 @@ const ProjectPage = () => {
         </ModalForm>
       </Stack>
       <ProjectProgressBar progress={projectStore.progress} />
-      <TaskSection
-        isProjectPage
-        isAdmin={isCurrentAdmin}
-        projectId={Number(id)}
-      />
+      <TaskSection isProjectPage isAdmin={isCurrentAdmin} projectId={id} />
     </Container>
   );
 };

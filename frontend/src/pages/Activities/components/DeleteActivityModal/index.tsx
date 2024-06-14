@@ -5,7 +5,7 @@ import { LeisureActivity } from 'src/models/activity.model';
 
 interface DeleteActivityModalProps {
   activity: LeisureActivity | null;
-  onDelete: (id: number) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
   onClose: () => void;
 }
 

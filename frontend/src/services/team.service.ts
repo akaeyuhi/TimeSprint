@@ -8,7 +8,7 @@ import { Project } from 'src/models/project.model';
 import { User } from 'src/models/user.model';
 
 class TeamService extends BaseService {
-  async getTeam(id: number): Promise<Return<Team>> {
+  async getTeam(id: string): Promise<Return<Team>> {
     try {
       return await this.httpRequest.get<Team>(`/teams/${id}`);
     } catch (error) {
@@ -32,7 +32,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async updateTeam(id: number, team: Partial<TeamDto>): Promise<Return<Team>> {
+  async updateTeam(id: string, team: Partial<TeamDto>): Promise<Return<Team>> {
     try {
       return this.httpRequest.put<Team>(`/teams/${id}`, team);
     } catch (error) {
@@ -40,7 +40,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async deleteTeam(id: number): Promise<Return<void>> {
+  async deleteTeam(id: string): Promise<Return<void>> {
     try {
       return this.httpRequest.delete<void>(`/teams/${id}`);
     } catch (error) {
@@ -48,7 +48,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async leaveTeam(teamId: number): Promise<Return<void>> {
+  async leaveTeam(teamId: string): Promise<Return<void>> {
     try {
       return this.httpRequest.put<void>(`/teams/${teamId}/leave`, {});
     } catch (error) {
@@ -56,7 +56,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async joinTeam(teamId: number): Promise<Return<Team>> {
+  async joinTeam(teamId: string): Promise<Return<Team>> {
     try {
       return this.httpRequest.put<Team>(`/users/${teamId}/join`, {});
     } catch (error) {
@@ -64,7 +64,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async addMember(teamId: number, memberId: number): Promise<Return<User>> {
+  async addMember(teamId: string, memberId: string): Promise<Return<User>> {
     try {
       return this.httpRequest.put<User>(
         `/teams/${teamId}/add-member/${memberId}`,
@@ -75,7 +75,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async addAdmin(teamId: number, adminId: number): Promise<Return<User>> {
+  async addAdmin(teamId: string, adminId: string): Promise<Return<User>> {
     try {
       return this.httpRequest.put<User>(
         `/teams/${teamId}/add-admin/${adminId}`,
@@ -86,7 +86,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async deleteMember(teamId: number, memberId: number): Promise<Return<void>> {
+  async deleteMember(teamId: string, memberId: string): Promise<Return<void>> {
     try {
       return this.httpRequest.delete<void>(
         `/teams/${teamId}/delete-member/${memberId}`
@@ -96,7 +96,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async deleteAdmin(teamId: number, adminId: number): Promise<Return<void>> {
+  async deleteAdmin(teamId: string, adminId: string): Promise<Return<void>> {
     try {
       return this.httpRequest.delete<void>(
         `/teams/${teamId}/delete-admin/${adminId}`
@@ -107,8 +107,8 @@ class TeamService extends BaseService {
   }
 
   async deleteProject(
-    teamId: number,
-    projectId: number
+    teamId: string,
+    projectId: string
   ): Promise<Return<void>> {
     try {
       return this.httpRequest.delete<void>(
@@ -120,7 +120,7 @@ class TeamService extends BaseService {
   }
 
   async createProject(
-    teamId: number,
+    teamId: string,
     createProjectDto: ProjectDto
   ): Promise<Return<Project>> {
     try {
@@ -133,7 +133,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async getTeamProjects(teamId: number): Promise<Return<Project[]>> {
+  async getTeamProjects(teamId: string): Promise<Return<Project[]>> {
     try {
       return this.httpRequest.get<Project[]>(`/teams/${teamId}/projects/`);
     } catch (error) {

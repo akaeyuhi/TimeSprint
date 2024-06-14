@@ -3,8 +3,8 @@ import { User } from 'src/user/entities/user.entity';
 
 @Entity()
 export class SiteAdmin {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @OneToOne(() => User)
   @JoinColumn()

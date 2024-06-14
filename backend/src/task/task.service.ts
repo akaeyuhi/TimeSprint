@@ -22,18 +22,18 @@ export class TaskService {
     return await this.taskRepository.create(createTaskDto);
   }
 
-  async findById(taskId: number): Promise<Task> {
+  async findById(taskId: string): Promise<Task> {
     return await this.taskRepository.findById(taskId);
   }
 
   async updateTask(
-    taskId: number,
+    taskId: string,
     updateTaskDto: Partial<UpdateTaskDto>,
   ): Promise<Task> {
     return await this.taskRepository.update(taskId, updateTaskDto);
   }
 
-  async deleteTask(taskId: number): Promise<void> {
+  async deleteTask(taskId: string): Promise<void> {
     return await this.taskRepository.delete(taskId);
   }
 
@@ -41,7 +41,7 @@ export class TaskService {
     return await this.taskRepository.findAllTaskWithDependencies();
   }
 
-  async findTaskDependencies(taskId: number): Promise<Task[]> {
+  async findTaskDependencies(taskId: string): Promise<Task[]> {
     return await this.taskRepository.findTaskDependencies(taskId);
   }
 

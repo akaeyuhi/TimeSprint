@@ -5,7 +5,6 @@ import {
   Get,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   UseGuards,
@@ -36,7 +35,7 @@ export class TaskController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Task not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async getTaskById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
+  async getTaskById(@Param('id') id: string): Promise<Task> {
     return await this.taskService.findById(id);
   }
 
@@ -55,7 +54,7 @@ export class TaskController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Task not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async updateTask(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateTaskDto: UpdateTaskDto,
   ): Promise<Task> {
     return await this.taskService.updateTask(id, updateTaskDto);
@@ -67,7 +66,7 @@ export class TaskController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Task not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async deleteTask(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  async deleteTask(@Param('id') id: string): Promise<void> {
     await this.taskService.deleteTask(id);
   }
 
@@ -85,9 +84,7 @@ export class TaskController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Task not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async getTaskDependencies(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Task[]> {
+  async getTaskDependencies(@Param('id') id: string): Promise<Task[]> {
     return await this.taskService.findTaskDependencies(id);
   }
 }

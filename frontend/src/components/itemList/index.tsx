@@ -1,7 +1,9 @@
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Item } from 'src/models/item.model';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { styles } from './styles';
 
 interface ItemListProps<T extends Item> {
   items: T[];
@@ -18,11 +20,14 @@ const ItemList = <T extends Item>({
 }: ItemListProps<T>) => (
   <>
     {!items || items?.length === 0 ? (
-      <Typography variant="h5" sx={{ mt: '1rem' }}>
-        No items available
-      </Typography>
+      <Box sx={styles.mockBox}>
+        <AccessTimeIcon color="primary" sx={styles.icon} />
+        <Typography variant="h5" sx={{ mt: '1rem' }}>
+          No items available. Maybe you should create one?
+        </Typography>
+      </Box>
     ) : (
-      <Grid container spacing={2} mt={2} alignItems="stretch">
+      <Grid container spacing={2} mt={1} alignItems="stretch">
         {children}
         {items.map((item) => (
           <ItemComponent key={item.id} item={item} {...itemComponentProps} />

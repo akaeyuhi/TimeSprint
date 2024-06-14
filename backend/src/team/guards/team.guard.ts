@@ -30,9 +30,9 @@ export class TeamRolesGuard implements CanActivate {
     const userId = request.user.id; // The user object is attached to the request
 
     // Check if the user has the required role in the team associated with the project
-    let teamId = +request.params.teamId;
+    let teamId = request.params.teamId;
     if (!teamId) {
-      const projectId = +request.params.projectId;
+      const projectId = request.params.projectId;
       teamId = await this.teamService.getTeamIdByProject(projectId);
     }
     const userRoleInTeam = await this.teamService.getUserRoleInTeam(

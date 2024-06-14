@@ -5,7 +5,6 @@ import {
   Get,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -56,7 +55,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async joinTeam(
-    @Param('teamId') teamId: number,
+    @Param('teamId') teamId: string,
     @Req() req: any,
   ): Promise<User> {
     return this.teamService.joinTeam(req.user.id, teamId);
@@ -69,7 +68,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async leaveTeam(
-    @Param('teamId') teamId: number,
+    @Param('teamId') teamId: string,
     @Req() req: any,
   ): Promise<void> {
     return this.teamService.leaveTeam(req.user.id, teamId);
@@ -88,8 +87,8 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async addMember(
-    @Param('teamId') teamId: number,
-    @Param('memberId') memberId: number,
+    @Param('teamId') teamId: string,
+    @Param('memberId') memberId: string,
   ): Promise<User> {
     return this.teamService.addMember(teamId, memberId);
   }
@@ -107,8 +106,8 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async addAdmin(
-    @Param('teamId') teamId: number,
-    @Param('adminId') adminId: number,
+    @Param('teamId') teamId: string,
+    @Param('adminId') adminId: string,
   ): Promise<User> {
     return this.teamService.addAdmin(teamId, adminId);
   }
@@ -130,8 +129,8 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async deleteMember(
-    @Param('teamId') teamId: number,
-    @Param('memberId') memberId: number,
+    @Param('teamId') teamId: string,
+    @Param('memberId') memberId: string,
   ): Promise<void> {
     return await this.teamService.deleteMember(teamId, memberId);
   }
@@ -153,8 +152,8 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async deleteAdmin(
-    @Param('teamId') teamId: number,
-    @Param('adminId') adminId: number,
+    @Param('teamId') teamId: string,
+    @Param('adminId') adminId: string,
   ): Promise<void> {
     return await this.teamService.deleteAdmin(teamId, adminId);
   }
@@ -170,7 +169,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async createTeamProject(
-    @Param('teamId') teamId: number,
+    @Param('teamId') teamId: string,
     @Body() createProjectDto: CreateProjectDto,
   ): Promise<Project> {
     return await this.teamService.createTeamProject(teamId, createProjectDto);
@@ -186,7 +185,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
-  async getTeamProjects(@Param('teamId') teamId: number): Promise<Project[]> {
+  async getTeamProjects(@Param('teamId') teamId: string): Promise<Project[]> {
     return await this.teamService.getTeamProjects(teamId);
   }
 
@@ -206,8 +205,8 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async deleteTeamProject(
-    @Param('teamId') teamId: number,
-    @Param('projectId') projectId: number,
+    @Param('teamId') teamId: string,
+    @Param('projectId') projectId: string,
   ): Promise<void> {
     return await this.teamService.deleteTeamProject(teamId, projectId);
   }
@@ -222,9 +221,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
-  async deleteTeam(
-    @Param('teamId', ParseIntPipe) teamId: number,
-  ): Promise<void> {
+  async deleteTeam(@Param('teamId') teamId: string): Promise<void> {
     await this.teamService.deleteTeam(teamId);
   }
 
@@ -241,7 +238,7 @@ export class TeamController {
   @ApiParam({ name: 'teamId', required: true, description: 'Team identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async getTeam(@Param('teamId', ParseIntPipe) teamId: number): Promise<Team> {
+  async getTeam(@Param('teamId') teamId: string): Promise<Team> {
     return await this.teamService.findById(teamId);
   }
 
@@ -256,7 +253,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
   async updateTeam(
-    @Param('teamId', ParseIntPipe) teamId: number,
+    @Param('teamId') teamId: string,
     @Body() updateTeamDto: UpdateTeamDto,
   ): Promise<Team> {
     return await this.teamService.updateTeam(teamId, updateTeamDto);
@@ -274,9 +271,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Admin not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async findTeamsByAdminId(
-    @Param('adminId', ParseIntPipe) adminId: number,
-  ): Promise<Team[]> {
+  async findTeamsByAdminId(@Param('adminId') adminId: string): Promise<Team[]> {
     return await this.teamService.findTeamsByAdminId(adminId);
   }
 
@@ -293,7 +288,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async findTeamsByMemberId(
-    @Param('memberId', ParseIntPipe) memberId: number,
+    @Param('memberId') memberId: string,
   ): Promise<Team[]> {
     return await this.teamService.findTeamsByMemberId(memberId);
   }

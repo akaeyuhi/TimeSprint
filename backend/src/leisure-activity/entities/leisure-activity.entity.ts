@@ -4,8 +4,8 @@ import { IsBoolean, IsDate, Length } from 'class-validator';
 
 @Entity()
 export class LeisureActivity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @Length(8, 20)

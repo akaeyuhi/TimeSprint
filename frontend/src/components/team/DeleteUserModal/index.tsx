@@ -7,7 +7,7 @@ import { Item } from 'src/models/item.model';
 interface DeleteUserModalProps {
   user: User | null;
   isAdmin: boolean;
-  onDelete: (id: number) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
   onClose: () => void;
 }
 

@@ -5,7 +5,7 @@ import { Project } from 'src/models/project.model';
 
 interface DeleteProjectModalProps {
   project: Project | null;
-  onDelete: (id: number) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
   onClose: () => void;
 }
 
