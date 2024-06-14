@@ -18,10 +18,12 @@ const CustomDatePicker = <T extends DeadlineItem>({
   type,
 }: CustomDatePickerProps<T>) => {
   const label = type === 'startDate' ? 'Start date' : 'End date';
-  const errorText =
-    type === 'startDate' ?
-      'Start date should be before end' :
-      'End date should be later than start';
+  let errorText: string;
+  if (type === 'startDate') {
+    errorText = 'Start date should be before end';
+  } else {
+    errorText = 'End date should be later than start';
+  }
 
   return (
     <DatePicker
