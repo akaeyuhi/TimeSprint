@@ -37,9 +37,13 @@ export class Task {
   @IsDate()
   endDate: Date;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   @IsBoolean()
   isCompleted = false;
+
+  @Column({ type: 'boolean', default: true })
+  @IsBoolean()
+  isOwnTask = true;
 
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'project_id' })
