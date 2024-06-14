@@ -36,18 +36,18 @@ export default abstract class TaskStore<T extends TaskContainer> {
   sortTasks(sortBy: SortBy): void {
     const sortedTasks = [...this.tasks];
     switch (sortBy) {
-    case SortBy.NAME:
-      sortedTasks.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case SortBy.URGENCY:
-      sortedTasks.sort((a, b) => Number(b.urgency) - Number(a.urgency));
-      break;
-    case SortBy.IMPORTANCE:
-      sortedTasks.sort((a, b) => Number(b.importance) - Number(a.importance));
-      break;
-    case SortBy.DEADLINE:
-      sortedTasks.sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
-      break;
+      case SortBy.NAME:
+        sortedTasks.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case SortBy.URGENCY:
+        sortedTasks.sort((a, b) => Number(b.urgency) - Number(a.urgency));
+        break;
+      case SortBy.IMPORTANCE:
+        sortedTasks.sort((a, b) => Number(b.importance) - Number(a.importance));
+        break;
+      case SortBy.DEADLINE:
+        sortedTasks.sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
+        break;
     }
     this.setTasks(sortedTasks);
   }
