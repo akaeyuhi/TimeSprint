@@ -14,7 +14,10 @@ export class TaskService {
     project?: Project,
   ): Promise<Task> {
     if (project) {
-      return await this.taskRepository.create(createTaskDto, project);
+      return await this.taskRepository.create(
+        { ...createTaskDto, isOwnTask: false },
+        project,
+      );
     }
     return await this.taskRepository.create(createTaskDto);
   }
@@ -45,6 +48,10 @@ export class TaskService {
   calculateTaskPriority(task: Task): number {
     let priority = 0;
 
+    if (task.isCompleted) {
+      return -1;
+    }
+
     // Work-related tasks have higher priority than leisure tasks
     if (task.project) {
       priority += 2; // Adjust priority as needed
@@ -52,11 +59,22 @@ export class TaskService {
 
     // Tasks with approaching deadlines have higher priority
     const currentDate = new Date();
-    if (task.endDate && task.endDate.getTime() < currentDate.getTime()) {
+    if (task.endDate) {
       const timeDifference = task.endDate.getTime() - currentDate.getTime();
       const daysUntilDeadline = Math.ceil(timeDifference / (1000 * 3600 * 24));
+      console.log(daysUntilDeadline);
       // Adjust priority based on days until deadline
-      priority += daysUntilDeadline;
+      if (daysUntilDeadline < 3) {
+        priority += 1;
+      } else if (daysUntilDeadline < 2) {
+        priority += 2;
+      } else if (daysUntilDeadline < 1) {
+        priority += 3;
+      }
+    }
+
+    if (task.dependencies.length > 0) {
+      priority += task.dependencies.length;
     }
 
     // Urgent and important tasks have higher priority
