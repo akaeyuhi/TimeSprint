@@ -122,7 +122,6 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
           label="Importance"
         />
       </FormControl>
-
       <FormControl>
         <InputLabel id="dependencies-label">Dependencies</InputLabel>
         <DependencySelector

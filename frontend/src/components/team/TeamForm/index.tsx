@@ -16,7 +16,7 @@ const validate = (state: TeamDto): ValidationErrors<TeamDto> => ({
   description: !(state.description.length > 20),
 });
 
-const CreateTeamForm: React.FC<TeamFormProps> = ({
+const TeamForm: React.FC<TeamFormProps> = ({
   team,
   onSubmit,
   onCancel,
@@ -43,4 +43,4 @@ const CreateTeamForm: React.FC<TeamFormProps> = ({
   );
 };
 
-export default CreateTeamForm;
+export default TeamForm;
