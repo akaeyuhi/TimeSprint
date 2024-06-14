@@ -4,14 +4,14 @@ import { useStores } from 'src/hooks';
 import ModalForm from 'src/components/modalForm';
 import { useParams } from 'react-router-dom';
 import { useModals } from 'src/hooks/use-modals';
-import { UpdateProjectDto } from 'src/services/dto/update-project.dto';
 import TaskSection from 'src/components/task/TaskSection';
 import { toast } from 'react-toastify';
 import ProjectProgressBar from 'src/components/project/ProjectProgressBar';
-import EditProjectForm from 'src/components/project/ProjectForm';
+import ProjectForm from 'src/components/project/ProjectForm';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
 import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
+import { ProjectDto } from 'src/services/dto/project.dto';
 
 interface ProjectModals {
   edit: boolean;
@@ -39,7 +39,7 @@ const ProjectPage = () => {
   }, [authStore.auth.user.id, id, projectStore]);
 
   const handleEditSubmit = useCallback(
-    async (updateProjectDto: UpdateProjectDto) => {
+    async (updateProjectDto: ProjectDto) => {
       await projectStore.editProject(updateProjectDto);
       if (!projectStore.error && !projectStore.isLoading) {
         modalHandlers.edit.close();
@@ -87,10 +87,11 @@ const ProjectPage = () => {
           open={projectModals.edit}
           handleClose={modalHandlers.edit.close}
         >
-          <EditProjectForm
+          <ProjectForm
             project={projectStore.current}
             onSubmit={handleEditSubmit}
-            onClose={modalHandlers.edit.close}
+            onCancel={modalHandlers.edit.close}
+            isEdited={true}
           />
         </ModalForm>
       </Stack>
@@ -103,5 +104,4 @@ const ProjectPage = () => {
     </Container>
   );
 };
-
 export default observer(ProjectPage);

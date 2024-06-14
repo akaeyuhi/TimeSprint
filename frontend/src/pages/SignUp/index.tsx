@@ -36,7 +36,7 @@ const SignUpPage = () => {
   const handler = useStore('handler');
   const navigate = useNavigate();
   const { error, isLoading } = store;
-  const [data, setData, errors] = useValidation<RegisterDto>(
+  const [data, setData, validation] = useValidation<RegisterDto>(
     {
       email: '',
       username: '',
@@ -48,14 +48,7 @@ const SignUpPage = () => {
 
   const handleSubmit = async (event: React.MouseEvent) => {
     event.preventDefault();
-    if (
-      !(
-        errors.email &&
-        errors.username &&
-        errors.password &&
-        errors.confirmPassword
-      )
-    ) {
+    if (validation.validate()) {
       await store.register(data);
       if (!error && store.auth) navigate('/home');
     }
@@ -79,7 +72,7 @@ const SignUpPage = () => {
           </Typography>
         </Stack>
         <Stack component="form" sx={styles.container}>
-          <FormControl sx={styles.form} error={errors.email}>
+          <FormControl sx={styles.form} error={validation.errors.email}>
             <InputLabel htmlFor="email">Email</InputLabel>
             <OutlinedInput
               id="email"
@@ -90,13 +83,13 @@ const SignUpPage = () => {
               label="Email"
               onChange={(e) => setData('email', e.target.value)}
             />
-            {errors.email && (
+            {validation.errors.email && (
               <FormHelperText error id="email-error">
                 Must be email
               </FormHelperText>
             )}
           </FormControl>
-          <FormControl sx={styles.form} error={errors.username}>
+          <FormControl sx={styles.form} error={validation.errors.username}>
             <InputLabel htmlFor="username">Username</InputLabel>
             <OutlinedInput
               id="username"
@@ -107,32 +100,32 @@ const SignUpPage = () => {
               label="Username"
               onChange={(e) => setData('username', e.target.value)}
             />
-            {errors.username && (
+            {validation.errors.username && (
               <FormHelperText error id="username-error">
                 Username must be 8 characters or longer
               </FormHelperText>
             )}
           </FormControl>
-          <FormControl sx={styles.form} error={errors.password}>
+          <FormControl sx={styles.form} error={validation.errors.password}>
             <InputLabel htmlFor="password">Password</InputLabel>
             <OutlinedInput
               id="password"
               type="password"
               required
-              error={errors.password}
+              error={validation.errors.password}
               aria-describedby="password-error"
               value={data.password}
               label="Password"
               onChange={(e) => setData('password', e.target.value)}
             />
-            {errors.password && (
+            {validation.errors.password && (
               <FormHelperText error id="password-error">
                 Password mush have 8 characters, 1 number, 1 uppercase and
                 lowercase character and 1 special character
               </FormHelperText>
             )}
           </FormControl>
-          <FormControl sx={styles.form} error={errors.confirmPassword}>
+          <FormControl sx={styles.form} error={validation.errors.confirmPassword}>
             <InputLabel htmlFor="confirm">Confirm password</InputLabel>
             <OutlinedInput
               id="confirm"
@@ -142,7 +135,7 @@ const SignUpPage = () => {
               label="Confirm password"
               onChange={(e) => setData('confirmPassword', e.target.value)}
             />
-            {errors.confirmPassword && (
+            {validation.errors.confirmPassword && (
               <FormHelperText error id="confirm-error">
                 Passwords do not match
               </FormHelperText>

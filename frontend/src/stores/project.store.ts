@@ -6,11 +6,11 @@ import {
   runInAction,
 } from 'mobx';
 import { Project } from 'src/models/project.model';
-import { UpdateProjectDto } from 'src/services/dto/update-project.dto';
 import { Task } from 'src/models/task.model';
 import { TaskDto } from 'src/services/dto/task.dto';
 import TaskStore from 'src/stores/task.store';
 import ProjectService from 'src/services/project.service';
+import { ProjectDto } from 'src/services/dto/project.dto';
 
 export class ProjectStore extends TaskStore<Project> {
   @observable error: Error | null = null;
@@ -136,7 +136,7 @@ export class ProjectStore extends TaskStore<Project> {
   }
 
   @action
-  async editProject(projectDto: UpdateProjectDto) {
+  async editProject(projectDto: ProjectDto) {
     this.isLoading = true;
     try {
       const updatedProject = <Project>(

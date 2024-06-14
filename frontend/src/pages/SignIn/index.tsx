@@ -32,7 +32,7 @@ const SignInPage = () => {
   const handler = useStore('handler');
   const navigate = useNavigate();
   const { error, isLoading } = store;
-  const [data, setData, errors] = useValidation(
+  const [data, setData, validation] = useValidation(
     {
       email: '',
       password: '',
@@ -42,7 +42,7 @@ const SignInPage = () => {
 
   const handleSubmit = async (event: React.MouseEvent) => {
     event.preventDefault();
-    if (!(errors.email && errors.password)) {
+    if (validation.validate()) {
       await store.login(data);
       if (!error && store.auth && store.isAuthenticated) navigate('/home');
     }
@@ -66,7 +66,7 @@ const SignInPage = () => {
           </Typography>
         </Stack>
         <Stack component="form" sx={styles.container}>
-          <FormControl sx={styles.form} error={errors.email}>
+          <FormControl sx={styles.form} error={validation.errors.email}>
             <InputLabel htmlFor="email">Email</InputLabel>
             <OutlinedInput
               id="email"
@@ -76,13 +76,13 @@ const SignInPage = () => {
               label="Email"
               onChange={(e) => setData('email', e.target.value)}
             />
-            {errors.email && (
+            {validation.errors.email && (
               <FormHelperText error id="email-error">
                 Must be email
               </FormHelperText>
             )}
           </FormControl>
-          <FormControl sx={styles.form} error={errors.password}>
+          <FormControl sx={styles.form} error={validation.errors.password}>
             <InputLabel htmlFor="password">Password</InputLabel>
             <OutlinedInput
               id="password"
@@ -92,7 +92,7 @@ const SignInPage = () => {
               label="Password"
               onChange={(e) => setData('password', e.target.value)}
             />
-            {errors.password && (
+            {validation.errors.password && (
               <FormHelperText error id="password-error">
                 Password mush have 8 characters, 1 number, 1 uppercase and
                 lowercase character and 1 special character
