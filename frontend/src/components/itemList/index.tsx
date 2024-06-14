@@ -23,7 +23,7 @@ const ItemList = <T extends Item>({
       <Grid container spacing={2} sx={{ mt: '1rem' }}>
         {items.map((item) => (
           <Grid item xs={12} key={item.id}>
-            <ItemComponent item={item} {...itemComponentProps}/>
+            <ItemComponent item={item} {...itemComponentProps} />
           </Grid>
         ))}
       </Grid>
