@@ -47,7 +47,7 @@ const ItemForm = <T extends ItemDto, K extends Item>({
   };
 
   return (
-    <Stack component="form" onSubmit={handleSubmit}>
+    <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
       <Typography variant="h6" gutterBottom mb={2}>
         {isEdited ? 'Edit' : 'Create'} Item
       </Typography>
