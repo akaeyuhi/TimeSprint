@@ -6,6 +6,9 @@ import { TaskDto } from 'src/services/dto/task.dto';
 import { Return } from 'src/services/types';
 import { TaskError } from 'src/services/errors/task.error';
 import { TaskService } from 'src/services/task.service';
+import { LeisureActivityDto } from 'src/services/dto/activity.dto';
+import { LeisureActivity } from 'src/models/activity.model';
+import { ActivityError } from 'src/services/errors/activity.error';
 
 class UserService extends TaskService<User> {
   async getUser(id: number): Promise<Return<User>> {
@@ -88,6 +91,33 @@ class UserService extends TaskService<User> {
       return this.httpRequest.delete<Task>(`/users/${item.id}/tasks/${id}`);
     } catch (error) {
       throw new TaskError('Error deleting user task');
+    }
+  }
+
+  async createActivity(
+    dto: LeisureActivityDto,
+    item: User
+  ): Promise<Return<LeisureActivity>> {
+    try {
+      return this.httpRequest.post<LeisureActivity>(
+        `/users/${item.id}/activities/`,
+        dto
+      );
+    } catch (error) {
+      throw new ActivityError('Error creating activity');
+    }
+  }
+
+  async deleteActivity(
+    id: number,
+    item: User
+  ): Promise<Return<LeisureActivity>> {
+    try {
+      return this.httpRequest.delete<LeisureActivity>(
+        `/users/${item.id}/activities/${id}`
+      );
+    } catch (error) {
+      throw new ActivityError('Error deleting activity');
     }
   }
 }
