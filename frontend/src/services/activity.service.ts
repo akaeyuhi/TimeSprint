@@ -13,24 +13,6 @@ export class ActivityService extends BaseService {
     }
   }
 
-  async createActivity(
-    dto: LeisureActivityDto
-  ): Promise<Return<LeisureActivity>> {
-    try {
-      return this.httpRequest.post<LeisureActivity>(`/activities/`, dto);
-    } catch (error) {
-      throw new ActivityError('Error creating activity');
-    }
-  }
-
-  async deleteActivity(id: number): Promise<Return<LeisureActivity>> {
-    try {
-      return this.httpRequest.delete<LeisureActivity>(`/activities/${id}`);
-    } catch (error) {
-      throw new ActivityError('Error deleting activity');
-    }
-  }
-
   async getActivityById(id: number): Promise<Return<LeisureActivity>> {
     try {
       return this.httpRequest.get<LeisureActivity>(`/activities/${id}`);

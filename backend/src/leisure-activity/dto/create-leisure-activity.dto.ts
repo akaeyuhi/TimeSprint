@@ -1,4 +1,4 @@
-import { IsDate, IsString, Length } from 'class-validator';
+import { IsBoolean, IsDateString, IsString, Length } from "class-validator";
 import { User } from 'src/user/entities/user.entity';
 
 export class CreateLeisureActivityDto {
@@ -10,11 +10,14 @@ export class CreateLeisureActivityDto {
   @IsString()
   description: string;
 
-  @IsDate()
+  @IsDateString()
   startDate: Date;
 
-  @IsDate()
+  @IsDateString()
   endDate: Date;
+
+  @IsBoolean()
+  isCompleted = false;
 
   user?: User = null;
 }
