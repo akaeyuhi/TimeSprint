@@ -113,10 +113,11 @@ export class UserService {
   async getSortedUserTasks(userId: number): Promise<Task[]> {
     const user = await this.findById(userId);
     // Sort tasks by calculated priority in descending order
+
     return user.tasks.sort(
       (a, b) =>
-        this.taskService.calculateTaskPriority(a) -
-        this.taskService.calculateTaskPriority(b),
+        this.taskService.calculateTaskPriority(b) -
+        this.taskService.calculateTaskPriority(a),
     );
   }
 }
