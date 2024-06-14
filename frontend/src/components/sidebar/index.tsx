@@ -3,6 +3,7 @@ import Logo from '../logo';
 import { Link } from 'react-router-dom';
 import {
   AssignmentRounded,
+  DirectionsRunRounded,
   GridView,
   Groups2Rounded,
   PersonRounded,
@@ -15,7 +16,7 @@ const Sidebar = () => {
     { path: '/home', title: 'Home', icon: GridView },
     { path: '/teams', title: 'Teams', icon: Groups2Rounded },
     { path: '/tasks', title: 'Tasks', icon: AssignmentRounded },
-    // { path: '/activities', title: 'Activities', icon: DirectionsRunRounded },
+    { path: '/activities', title: 'Activities', icon: DirectionsRunRounded },
     { path: '/user', title: 'User', icon: PersonRounded },
     //{ path: '/admin', title: 'Admin panel', icon: LockPersonRounded },
   ];

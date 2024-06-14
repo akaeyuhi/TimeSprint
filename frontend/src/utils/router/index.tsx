@@ -10,6 +10,7 @@ import TaskPage from 'src/pages/Tasks';
 import UserPage from 'src/pages/User';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from 'src/utils/router/PublicLaylout';
+import ActivityPage from 'src/pages/Activities';
 
 const Router = () => (
   <Routes>
@@ -19,6 +20,7 @@ const Router = () => (
       <Route path="teams/:id" element={<TeamPage />} />
       <Route path="teams/:id/projects/:id" element={<ProjectPage />} />
       <Route path="tasks" element={<TaskPage />} />
+      <Route path="activities" element={<ActivityPage />} />
       <Route path="user" element={<UserPage />} />
       <Route path="user/:id" element={<UserPage />} />
     </Route>
