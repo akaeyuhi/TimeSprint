@@ -7,24 +7,25 @@ interface ItemListProps<T extends Item> {
   items: T[];
   ItemComponent: React.ComponentType<{ item: T } & any>;
   itemComponentProps?: Omit<any, 'item'>; // Props for the ItemComponent excluding 'item'
+  children?: React.ReactNode;
 }
 
 const ItemList = <T extends Item>({
   items,
   ItemComponent,
   itemComponentProps,
+  children,
 }: ItemListProps<T>) => (
   <>
-    {!items || items.length === 0 ? (
+    {!items || items?.length === 0 ? (
       <Typography variant="h5" sx={{ mt: '1rem' }}>
         No items available
       </Typography>
     ) : (
-      <Grid container spacing={2} sx={{ mt: '1rem' }}>
+      <Grid container spacing={2} mt={2} alignItems="stretch">
+        {children}
         {items.map((item) => (
-          <Grid item xs={12} key={item.id}>
-            <ItemComponent item={item} {...itemComponentProps} />
-          </Grid>
+          <ItemComponent key={item.id} item={item} {...itemComponentProps} />
         ))}
       </Grid>
     )}

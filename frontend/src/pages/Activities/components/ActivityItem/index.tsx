@@ -23,7 +23,7 @@ interface ActivityItemProps {
 }
 
 const ActivityItem: React.FC<ActivityItemProps> = ({
-  item,
+  item: activity,
   editActivity,
   deleteActivity,
   onEditClick,
@@ -31,17 +31,17 @@ const ActivityItem: React.FC<ActivityItemProps> = ({
   onDeleteClick,
 }) => {
   const toggle = () => {
-    onToggle(item.id);
+    onToggle(activity.id);
   };
 
   const handleEdit = () => {
     editActivity.open();
-    onEditClick(item);
+    onEditClick(activity);
   };
 
   const handleDelete = () => {
     deleteActivity.open();
-    onDeleteClick(item);
+    onDeleteClick(activity);
   };
 
   return (
@@ -49,19 +49,19 @@ const ActivityItem: React.FC<ActivityItemProps> = ({
       <Card
         sx={{
           ...styles.card,
-          ...(item.isCompleted && { textDecoration: 'line-through' }),
+          ...(activity.isCompleted && { textDecoration: 'line-through' }),
         }}
       >
         <CardContent>
           <Box sx={styles.descriptionContainer}>
             <Box>
-              <Typography variant="h6">{item.name}</Typography>
-              <Typography variant="body2">{item.description}</Typography>
+              <Typography variant="h6">{activity.name}</Typography>
+              <Typography variant="body2">{activity.description}</Typography>
               <Typography variant="body2" sx={{ color: 'green' }}>
-                Started: {item.startDate.toDateString()}
+                Started: {activity.startDate.toDateString()}
               </Typography>
               <Typography variant="body2" sx={{ color: 'red' }}>
-                Due: {item.endDate.toDateString()}
+                Due: {activity.endDate.toDateString()}
               </Typography>
             </Box>
           </Box>
@@ -71,11 +71,11 @@ const ActivityItem: React.FC<ActivityItemProps> = ({
             Edit
           </Button>
           <Button
-            variant={item.isCompleted ? 'outlined' : 'contained'}
+            variant={activity.isCompleted ? 'outlined' : 'contained'}
             color="secondary"
             onClick={toggle}
           >
-            {item.isCompleted ? 'Uncompleted' : 'Completed'}
+            {activity.isCompleted ? 'Uncompleted' : 'Completed'}
           </Button>
           <Button variant="contained" color="error" onClick={handleDelete}>
             Delete

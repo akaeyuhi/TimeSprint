@@ -1,7 +1,7 @@
 import React from 'react';
-import { Grid, Typography } from '@mui/material';
 import { Project } from 'src/models/project.model';
 import ProjectItem from 'src/components/project/ProjectItem';
+import ItemList from 'src/components/itemList';
 
 interface ProjectListProps {
   projects: Project[];
@@ -14,25 +14,11 @@ const ProjectList: React.FC<ProjectListProps> = ({
   onDelete,
   isAdmin = false,
 }) => (
-  <>
-    {projects && projects?.length !== 0 ? (
-      <Grid container spacing={2} mt={1}>
-        {projects.map((project) => (
-          <Grid item key={project.id} xs={12}>
-            <ProjectItem
-              project={project}
-              onDelete={onDelete}
-              isAdmin={isAdmin}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    ) : (
-      <Typography variant="h5" mt={2}>
-        There is no projects yet.
-      </Typography>
-    )}
-  </>
+  <ItemList<Project>
+    items={projects}
+    ItemComponent={ProjectItem}
+    itemComponentProps={{ onDelete, isAdmin }}
+  />
 );
 
 export default ProjectList;

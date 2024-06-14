@@ -15,7 +15,7 @@ import { styles } from 'src/components/task/TaskItem/styles';
 import { observer } from 'mobx-react';
 
 interface TaskItemProps {
-  task: Task;
+  item: Task;
   editTask: ModalHandler;
   onEditClick: (task: Task) => void;
   onDeleteClick: (task: Task) => void;
@@ -26,7 +26,7 @@ interface TaskItemProps {
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
-  task,
+  item: task,
   editTask,
   onEditClick,
   onToggle,

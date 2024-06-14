@@ -1,9 +1,10 @@
 import React from 'react';
 import { Avatar, Box, Grid, Typography } from '@mui/material';
-import { styles } from 'src/pages/Team/styles';
+import { styles } from 'src/components/team/MemberList/styles';
 import { User } from 'src/models/user.model';
 import { useStore } from 'src/hooks';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { Link } from 'react-router-dom';
 
 interface MemberListProps {
   members: User[];
@@ -38,7 +39,9 @@ export const MemberList: React.FC<MemberListProps> = ({
               </Box>
             )}
           </Box>
-          <Typography align="center">{member.username}</Typography>
+          <Link to={`/user/${member.id}`} style={{ textDecoration: 'none' }}>
+            <Typography align="center">{member.username}</Typography>
+          </Link>
         </Grid>
       ))}
     </Grid>

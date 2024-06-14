@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import TaskItem from 'src/components/task/TaskItem';
 import { Task } from 'src/models/task.model';
 import { ModalHandler } from 'src/hooks/use-modals';
@@ -16,6 +16,7 @@ import { UserStore } from 'src/stores/user.store';
 import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 import { SortBy } from 'src/utils/common/sortBy';
 import TaskForm from 'src/components/task/TaskForm';
+import ItemList from 'src/components/itemList';
 
 interface TaskListProps {
   isProjectPage: boolean;
@@ -85,7 +86,7 @@ const TaskList: React.FC<TaskListProps> = ({
     [deleteTask, deletedTask?.name, store]
   );
 
-  const toggleTaskHandler = useCallback(
+  const onToggle = useCallback(
     async (taskId: number) => {
       await store.toggleTask(taskId);
       if (!store.error && !store.isLoading) {
@@ -120,36 +121,29 @@ const TaskList: React.FC<TaskListProps> = ({
 
   return (
     <Box sx={styles.container}>
-      {store.tasks.length === 0 ? (
-        <Typography variant="h6" mt={2}>
-          No tasks available
-        </Typography>
-      ) : (
-        <Grid container spacing={2} mt={2} alignItems="stretch">
-          <Grid item xs={12}>
-            <TaskSort
-              isEditable={isEditable}
-              isProjectPage={isProjectPage}
-              onSort={onSort}
-              tasks={store.tasks}
-              handleGetImportantTasks={handleImportantTasks}
-            />
-          </Grid>
-          {store.tasks.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              editTask={editTask}
-              onEditClick={onEditClick}
-              deleteTask={deleteTask}
-              onDeleteClick={onDeleteClick}
-              onToggle={toggleTaskHandler}
-              isOwnPage={isEditable}
-              isProjectAdmin={isProjectAdmin}
-            />
-          ))}
+      <ItemList<Task>
+        items={store.tasks}
+        ItemComponent={TaskItem}
+        itemComponentProps={{
+          editTask,
+          onEditClick,
+          deleteTask,
+          onDeleteClick,
+          onToggle,
+          isOwnPage: isEditable,
+          isProjectAdmin,
+        }}
+      >
+        <Grid item xs={12}>
+          <TaskSort
+            isEditable={isEditable}
+            isProjectPage={isProjectPage}
+            onSort={onSort}
+            tasks={store.tasks}
+            handleGetImportantTasks={handleImportantTasks}
+          />
         </Grid>
-      )}
+      </ItemList>
       <ModalForm open={createTask.isOpen} handleClose={createTask.close}>
         <TaskForm
           onCancel={createTask.close}
