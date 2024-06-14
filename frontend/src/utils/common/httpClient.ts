@@ -69,9 +69,10 @@ class CustomHttpClient implements IHttpClient {
       const error = err as AxiosError;
       const data = error.response?.data as BackendError;
       const errorMsg =
-        data && data.message instanceof Array ?
-          'Error: ' + data.message.join(', ') :
-          String(data.message);
+        data && data.message instanceof Array
+          ? 'Error: ' + data.message.join(', ')
+          : String(data.message);
+      console.log(errorMsg);
       this.errorHandler.handle(errorMsg);
     }
     return null;
@@ -156,9 +157,7 @@ class CustomHttpClient implements IHttpClient {
 
   private async refreshToken(): Promise<string> {
     const link = process.env.REACT_APP_API_URL ?? 'http://localhost:3001';
-    const response = await this.axios.post(link + '/auth/refresh', {
-      refreshToken: this.authStore?.auth.refreshToken,
-    });
+    const response = await this.axios.get(link + '/auth/refresh');
     const newToken = response.data.accessToken;
     this.authStore?.setAccessToken(newToken);
     return newToken;
