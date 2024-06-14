@@ -23,7 +23,9 @@ const TeamsPage: React.FC = () => {
   });
 
   useEffect(() => {
-    userStore.fetch(authStore.auth.user.id);
+    if (isObjectEmpty(userStore.current)) {
+      userStore.fetch(authStore.auth.user.id);
+    }
   }, [authStore.auth.user.id, userStore]);
 
   const modalHandlers = useModals<TeamModals>(modal, setModal);
