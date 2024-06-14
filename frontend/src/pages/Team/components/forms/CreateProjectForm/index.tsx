@@ -103,9 +103,9 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
           slotProps={{
             textField: {
               error: errors.startDate,
-              helperText: errors.startDate ?
-                'Start date should be before end' :
-                '',
+              helperText: errors.startDate
+                ? 'Start date should be before end'
+                : '',
             },
           }}
           onChange={(newValue) =>
@@ -121,9 +121,9 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
           slotProps={{
             textField: {
               error: errors.endDate,
-              helperText: errors.endDate ?
-                'End date should be later than start' :
-                '',
+              helperText: errors.endDate
+                ? 'End date should be later than start'
+                : '',
             },
           }}
           onChange={(newValue) =>

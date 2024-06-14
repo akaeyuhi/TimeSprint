@@ -48,9 +48,9 @@ const TeamPage: React.FC = () => {
   const [deleteProject, setDeleteProject] = useState<Project | null>(null);
   const [deleteUser, setDeleteUser] = useState<User | null>(null);
   const [isCurrentAdmin, setIsCurrentAdmin] = useState(
-    !isObjectEmpty(teamStore.current) ?
-      teamStore.isAdmin(authStore.auth.user.id) :
-      false
+    !isObjectEmpty(teamStore.current)
+      ? teamStore.isAdmin(authStore.auth.user.id)
+      : false
   );
 
   useEffect(() => {

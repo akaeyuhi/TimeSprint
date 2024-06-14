@@ -40,7 +40,7 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
         await onSubmit(candidate);
         setData('username', '');
       } else {
-        setUserError("Such user doesn't exists");
+        setUserError(`Such user doesn't exists`);
       }
     }
   };
@@ -63,11 +63,11 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
         />
         {(errors.username || !!userError.length) && (
           <FormHelperText error id="username-error">
-            {errors.username ?
-              'Name should be 8 characters long' :
-              userError.length ?
-                userError :
-                ''}
+            {errors.username
+              ? 'Name should be 8 characters long'
+              : userError.length
+                ? userError
+                : ''}
           </FormHelperText>
         )}
       </FormControl>
