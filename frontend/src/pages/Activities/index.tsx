@@ -40,10 +40,10 @@ const ActivityPage = () => {
   return (
     <Container>
       <Stack mt={2}>
-        <Typography variant="h4" gutterBottom>
-          Tasks
-        </Typography>
         <Box sx={styles.controlsBox}>
+          <Typography variant="h4" gutterBottom>
+            Activities
+          </Typography>
           <Button
             variant="contained"
             color="primary"

@@ -35,11 +35,11 @@ const TaskSection: React.FC<TaskSectionProps> = ({
 
   return (
     <Stack mt={2}>
-      <Typography variant="h4" gutterBottom>
-        Tasks
-      </Typography>
-      {(isEditable || isProjectAdmin) && (
-        <Box sx={styles.controlsBox}>
+      <Box sx={styles.controlsBox}>
+        <Typography variant="h4" gutterBottom>
+          Tasks
+        </Typography>
+        {(isEditable || isProjectAdmin) && (
           <Button
             variant="contained"
             color="primary"
@@ -47,8 +47,9 @@ const TaskSection: React.FC<TaskSectionProps> = ({
           >
             Create new task
           </Button>
-        </Box>
-      )}
+        )}
+      </Box>
+
       <Stack>
         <TaskList
           isProjectPage={isProjectPage}
