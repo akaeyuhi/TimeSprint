@@ -12,7 +12,6 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
-  Typography,
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
 import { TaskDto } from 'src/services/dto/task.dto';
