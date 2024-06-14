@@ -15,6 +15,7 @@ export const styles = createStyleSheet({
   avatar: {
     width: 150,
     height: 150,
+    fontSize: '4rem',
   },
   teamStack: {
     outline: '0.05rem solid',
