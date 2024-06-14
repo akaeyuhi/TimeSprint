@@ -66,7 +66,18 @@ export class UserService {
   async deleteUserTask(userId: number, taskId: number): Promise<Task> {
     const user = await this.userRepository.findById(userId);
     const task = await this.taskService.findById(taskId);
+    await this.taskService.deleteTask(taskId);
     return await this.userRepository.deleteTaskFromUser(user, task);
+  }
+
+  async deleteUserActivity(
+    userId: number,
+    activityId: number,
+  ): Promise<LeisureActivity> {
+    const user = await this.userRepository.findById(userId);
+    const activity = await this.leisureActivityService.findLeisureActivityById(activityId);
+    await this.leisureActivityService.deleteLeisureActivity(activityId);
+    return await this.userRepository.deleteActivityFromUser(user, activity);
   }
 
   async addLeisureActivityToUser(

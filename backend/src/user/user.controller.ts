@@ -172,6 +172,21 @@ export class UserController {
     return await this.userService.getLeisureActivitiesForUser(userId);
   }
 
+  @Delete(':userId/activities/:activityId')
+  @ApiOperation({ summary: 'Deletes activity from user account.' })
+  @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
+  @ApiParam({ name: 'activityId', required: true, description: 'Activity identifier' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: LeisureActivity })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Activity not found' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  async deleteUserActivity(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('taskId', ParseIntPipe) taskId: number,
+  ): Promise<LeisureActivity> {
+    return await this.userService.deleteUserActivity(userId, taskId);
+  }
+
   @Get(':userId/prioritized')
   @ApiOperation({ summary: 'Gets sorted by priority user tasks' })
   @ApiParam({ name: 'userId', required: true, description: 'User identifier' })

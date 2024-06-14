@@ -4,6 +4,7 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from 'src/task/entities/task.entity';
 import { IRepository } from 'src/interfaces/repository.interface';
+import { LeisureActivity } from "src/leisure-activity/entities/leisure-activity.entity";
 
 @Injectable()
 export class UserRepository implements IRepository<User> {
@@ -78,5 +79,11 @@ export class UserRepository implements IRepository<User> {
     user.tasks = user.tasks.filter(userTask => userTask.id !== task.id);
     await this.repository.save(user);
     return task;
+  }
+
+  async deleteActivityFromUser(user: User, activity: LeisureActivity): Promise<LeisureActivity> {
+    user.activities = user.activities.filter(userActivity => userActivity.id !== activity.id);
+    await this.repository.save(user);
+    return activity;
   }
 }
