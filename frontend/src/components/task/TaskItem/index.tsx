@@ -21,7 +21,8 @@ interface TaskItemProps {
   onDeleteClick: (task: Task) => void;
   onToggle: (taskId: number) => void;
   deleteTask: ModalHandler;
-  isEditable: boolean;
+  isOwnPage: boolean;
+  isProjectAdmin: boolean;
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
@@ -31,7 +32,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
   onToggle,
   deleteTask,
   onDeleteClick,
-  isEditable,
+  isOwnPage,
+  isProjectAdmin,
 }) => {
   const parsedDependencies = task.dependencies
     .slice(0, 5)
@@ -52,6 +54,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
     deleteTask.open();
     onDeleteClick(task);
   };
+
+  const isEditable = (isOwnPage && task.isOwnTask) || isProjectAdmin;
 
   return (
     <Grid item xs={6} md={4}>
@@ -88,8 +92,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
                 variant="body2"
                 sx={{ color: checkLength(3) ? 'red' : 'green' }}
               >
-                {checkLength() ?
-                  `Dependencies: ${parsedDependencies}${checkLength(5) ? '...' : ''}`
+                {checkLength()
+                  ? `Dependencies: ${parsedDependencies}`
                   : 'No dependencies'}
               </Typography>
             </Box>
@@ -109,23 +113,26 @@ const TaskItem: React.FC<TaskItemProps> = ({
             </Box>
           </Box>
         </CardContent>
-        {isEditable && (
-          <CardActions>
+
+        <CardActions>
+          {isEditable && (
             <Button variant="contained" color="primary" onClick={handleEdit}>
               Edit
             </Button>
-            <Button
-              variant={task.isCompleted ? 'outlined' : 'contained'}
-              color="secondary"
-              onClick={toggleTask}
-            >
-              {task.isCompleted ? 'Uncompleted' : 'Completed'}
-            </Button>
+          )}
+          <Button
+            variant={task.isCompleted ? 'outlined' : 'contained'}
+            color="secondary"
+            onClick={toggleTask}
+          >
+            {task.isCompleted ? 'Uncompleted' : 'Completed'}
+          </Button>
+          {isEditable && (
             <Button variant="contained" color="error" onClick={handleDelete}>
               Delete
             </Button>
-          </CardActions>
-        )}
+          )}
+        </CardActions>
       </Card>
     </Grid>
   );

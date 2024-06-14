@@ -63,26 +63,21 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
   onCancel,
   isEdited = false,
 }) => {
-  const [formData, setFormData, errors] = useValidation<TaskDto>(
+  const [formData, setFormData, validation] = useValidation<TaskDto>(
     {
       name: task?.name ?? '',
       description: task?.description ?? '',
       urgency: task?.urgency ?? false,
       importance: task?.importance ?? false,
       startDate: task?.startDate ?? new Date(),
-      endDate: task?.endDate ?? new Date(),
+      endDate: task?.endDate ?? new Date(Date.now() + 1),
       dependencies: task?.dependencies ?? [],
       user: task?.user,
     },
     validate
   );
+  const { errors } = validation;
 
-  const isValid = !(
-    errors.name &&
-    errors.description &&
-    errors.endDate &&
-    errors.startDate
-  );
   const isEditable = isEdited && !!task;
   const tasksToAdd = task ? tasks.filter((item) => item.id !== task.id) : tasks;
 
@@ -102,7 +97,7 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isValid)
+    if (validation.validate())
       onSubmit(
         {
           ...formData,
@@ -113,9 +108,6 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
 
   return (
     <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
-      <Typography variant="h6" gutterBottom mb={2}>
-        {isEditable ? 'Edit' : 'Create'} Task
-      </Typography>
       <FormControl error={errors.name}>
         <InputLabel htmlFor="name">Task name</InputLabel>
         <OutlinedInput

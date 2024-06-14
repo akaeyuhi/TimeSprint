@@ -144,7 +144,8 @@ const TaskList: React.FC<TaskListProps> = ({
               deleteTask={deleteTask}
               onDeleteClick={onDeleteClick}
               onToggle={toggleTaskHandler}
-              isEditable={isEditable || isProjectAdmin}
+              isOwnPage={isEditable}
+              isProjectAdmin={isProjectAdmin}
             />
           ))}
         </Grid>
