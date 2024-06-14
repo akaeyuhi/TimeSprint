@@ -3,6 +3,7 @@ import { Avatar, Box, Grid, Typography } from '@mui/material';
 import { styles } from 'src/pages/Team/styles';
 import { User } from 'src/models/user.model';
 import { useStore } from 'src/hooks';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 interface MemberListProps {
   members: User[];
@@ -33,7 +34,7 @@ export const MemberList: React.FC<MemberListProps> = ({
                 sx={styles.deleteButton}
                 onClick={() => handleDelete(member)}
               >
-                X
+                <CancelIcon onMouseDown={(event) => event.stopPropagation()} />
               </Box>
             )}
           </Box>
