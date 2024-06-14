@@ -1,6 +1,5 @@
 import { Return } from 'src/services/types';
 import BaseService from './base.service';
-import { TaskError } from 'src/services/errors/task.error';
 import { ActivityError } from './errors/activity.error';
 import { LeisureActivity } from 'src/models/activity.model';
 import { LeisureActivityDto } from 'src/services/dto/activity.dto';
@@ -36,7 +35,7 @@ export class ActivityService extends BaseService {
     try {
       return this.httpRequest.get<LeisureActivity>(`/activities/${id}`);
     } catch (error) {
-      throw new ActivityError('Error getting task');
+      throw new ActivityError('Error getting activity');
     }
   }
 
@@ -50,7 +49,22 @@ export class ActivityService extends BaseService {
         dto
       );
     } catch (error) {
-      throw new TaskError('Error updating user task');
+      throw new ActivityError('Error updating user activity');
+    }
+  }
+
+  async toggleActivity(
+    activity: LeisureActivity
+  ): Promise<Return<LeisureActivity>> {
+    try {
+      return this.httpRequest.patch<LeisureActivity>(
+        `/activities/${activity.id}`,
+        {
+          isCompleted: !activity.isCompleted,
+        }
+      );
+    } catch (error) {
+      throw new ActivityError('Error toggling user activity');
     }
   }
 }

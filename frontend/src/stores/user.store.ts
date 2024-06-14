@@ -7,6 +7,9 @@ import { CreateTeamDto } from 'src/services/dto/create-team.dto';
 import TaskStore from 'src/stores/task.store';
 import UserService from 'src/services/user.service';
 import TeamService from 'src/services/team.service';
+import { LeisureActivityDto } from 'src/services/dto/activity.dto';
+import { LeisureActivity } from 'src/models/activity.model';
+import { ActivityService } from 'src/services/activity.service';
 
 export class UserStore extends TaskStore<User> {
   @observable error: Error | null = null;
@@ -16,7 +19,8 @@ export class UserStore extends TaskStore<User> {
 
   constructor(
     private readonly userService: UserService,
-    private readonly teamService: TeamService
+    private readonly teamService: TeamService,
+    private readonly activityService: ActivityService
   ) {
     super();
     makeObservable(this);
@@ -41,6 +45,22 @@ export class UserStore extends TaskStore<User> {
       });
     }
     return this.current;
+  }
+
+  async getUser(userId: number): Promise<User | null> {
+    this.isLoading = true;
+    try {
+      return <User>await this.userService.getUser(userId);
+    } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
+      });
+      return null;
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
   }
 
   @action
@@ -152,8 +172,28 @@ export class UserStore extends TaskStore<User> {
     return this.tasks;
   }
 
-  getUserTeamById(teamId: number): Team | null {
-    return this.current?.teams.find((team) => team.id === teamId) ?? null;
+  @action
+  async loadImportantTasks() {
+    this.isLoading = true;
+    try {
+      const newTasks = <Task[]>(
+        await this.userService.getImportantUserTasks(this.current.id)
+      );
+      console.log(newTasks);
+      runInAction(() => {
+        this.setTasks(newTasks);
+      });
+      return newTasks;
+    } catch (error) {
+      runInAction(() => {
+        this.error = <Error>error;
+      });
+      throw error;
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
   }
 
   @action
@@ -244,20 +284,76 @@ export class UserStore extends TaskStore<User> {
     }
   }
 
+  getActivityById(id: number) {
+    return this.current.activities.find((activity) => activity.id === id);
+  }
+
   @action
-  async loadImportantTasks() {
+  async createActivity(
+    activityDto: LeisureActivityDto
+  ): Promise<LeisureActivity[]> {
     this.isLoading = true;
     try {
-      const newTasks = <Task[]>(
-        await this.userService.getImportantUserTasks(this.current.id)
+      const newActivity = <LeisureActivity>(
+        await this.activityService.createActivity(activityDto)
       );
       runInAction(() => {
-        this.setTasks(newTasks);
+        this.current?.activities.push(newActivity);
       });
-      return newTasks;
     } catch (error) {
       runInAction(() => {
         this.error = <Error>error;
+      });
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
+    return this.current.activities;
+  }
+
+  async updateActivity(
+    id: number,
+    activityDto: LeisureActivityDto
+  ): Promise<LeisureActivity[]> {
+    this.isLoading = true;
+    try {
+      const updatedActivity = <LeisureActivity>(
+        await this.activityService.updateActivity(activityDto, id)
+      );
+      runInAction(() => {
+        const index = this.current.activities.findIndex(
+          (activity) => activity.id === id
+        );
+        if (index !== -1) this.current.activities[index] = updatedActivity;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = <Error>error;
+      });
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
+    return this.current.activities;
+  }
+
+  async toggleActivity(taskId: number): Promise<LeisureActivity[]> {
+    this.isLoading = true;
+    try {
+      const activity = this.getActivityById(taskId);
+      if (!activity) throw new Error('Activity not found');
+      const toggledActivity = <LeisureActivity>(
+        await this.activityService.toggleActivity(activity)
+      );
+      runInAction(() => {
+        const index = this.current.activities.findIndex((t) => t.id === taskId);
+        if (index !== -1) this.current.activities[index] = toggledActivity;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error as Error;
       });
       throw error;
     } finally {
@@ -265,5 +361,27 @@ export class UserStore extends TaskStore<User> {
         this.isLoading = false;
       });
     }
+    return this.current.activities;
+  }
+
+  async deleteActivity(id: number): Promise<LeisureActivity[]> {
+    this.isLoading = true;
+    try {
+      await this.activityService.deleteActivity(id);
+      runInAction(() => {
+        this.current.activities = this.current.activities.filter(
+          (activity) => activity.id !== id
+        );
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = <Error>error;
+      });
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
+    return this.current.activities;
   }
 }
