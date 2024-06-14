@@ -5,8 +5,8 @@ import { Project } from 'src/models/project.model';
 import { Task } from 'src/models/task.model';
 import { TaskError } from 'src/services/errors/task.error';
 import { TaskDto } from 'src/services/dto/task.dto';
-import { UpdateProjectDto } from 'src/services/dto/update-project.dto';
 import { TaskService } from 'src/services/task.service';
+import { ProjectDto } from 'src/services/dto/project.dto';
 
 class ProjectService extends TaskService<Project> {
   async getProject(id: number): Promise<Return<Project>> {
@@ -27,7 +27,7 @@ class ProjectService extends TaskService<Project> {
 
   async updateProjects(
     id: number,
-    projectDto: UpdateProjectDto
+    projectDto: ProjectDto
   ): Promise<Return<Project>> {
     try {
       return this.httpRequest.put<Project>(`/projects/${id}`, projectDto);

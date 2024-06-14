@@ -125,7 +125,10 @@ const SignUpPage = () => {
               </FormHelperText>
             )}
           </FormControl>
-          <FormControl sx={styles.form} error={validation.errors.confirmPassword}>
+          <FormControl
+            sx={styles.form}
+            error={validation.errors.confirmPassword}
+          >
             <InputLabel htmlFor="confirm">Confirm password</InputLabel>
             <OutlinedInput
               id="confirm"

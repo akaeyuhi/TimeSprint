@@ -1,26 +1,21 @@
 import React from 'react';
 import {
-  Box,
-  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
-  FormHelperText,
   InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
   SelectChangeEvent,
-  Stack,
 } from '@mui/material';
-import { styles } from 'src/components/modalForm/styles';
 import { TaskDto } from 'src/services/dto/task.dto';
 import { Task } from 'src/models/task.model';
 import { User } from 'src/models/user.model';
 import { observer } from 'mobx-react';
 import { useValidation, ValidationErrors } from 'src/hooks/use-validation';
 import DependencySelector from 'src/components/task/DependencySelector';
-import CustomDatePicker from 'src/components/customDatePicker';
+import DeadlineForm from 'src/components/deadlineForm';
 
 interface CreateTaskFormProps {
   onSubmit: (newTask: TaskDto, id?: number) => void;
@@ -75,7 +70,6 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
     },
     validate
   );
-  const { errors } = validation;
 
   const isEditable = isEdited && !!task;
   const tasksToAdd = task ? tasks.filter((item) => item.id !== task.id) : tasks;
@@ -94,53 +88,16 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
     if (user) setFormData('user', user);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validation.validate())
-      onSubmit(
-        {
-          ...formData,
-        },
-        task?.id
-      );
-  };
-
   return (
-    <Stack component="form" onSubmit={handleSubmit} sx={styles.container}>
-      <FormControl error={errors.name}>
-        <InputLabel htmlFor="name">Task name</InputLabel>
-        <OutlinedInput
-          id="name"
-          type="text"
-          label="Task name"
-          onChange={(e) => setFormData('name', e.target.value)}
-          required
-          aria-describedby="name-error"
-          value={formData.name}
-        />
-        {errors.name && (
-          <FormHelperText error id="name-error">
-            Name should be 8 characters long
-          </FormHelperText>
-        )}
-      </FormControl>
-      <FormControl error={errors.description}>
-        <InputLabel htmlFor="description">Task description</InputLabel>
-        <OutlinedInput
-          id="description"
-          type="text"
-          label="Task description"
-          aria-describedby="desc-error"
-          onChange={(e) => setFormData('description', e.target.value)}
-          required
-          value={formData.description}
-        />
-        {errors.description && (
-          <FormHelperText error id="desc-error">
-            Description should be 20 characters long
-          </FormHelperText>
-        )}
-      </FormControl>
+    <DeadlineForm<TaskDto, Task>
+      formData={formData}
+      item={task}
+      onCancel={onCancel}
+      onSubmit={onSubmit}
+      setFormData={setFormData}
+      validation={validation}
+      isEdited={isEditable}
+    >
       <FormControl>
         <FormControlLabel
           control={
@@ -165,22 +122,7 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
           label="Importance"
         />
       </FormControl>
-      <FormControl>
-        <CustomDatePicker
-          formData={formData}
-          setFormData={setFormData}
-          errors={errors}
-          type="startDate"
-        />
-      </FormControl>
-      <FormControl>
-        <CustomDatePicker
-          formData={formData}
-          setFormData={setFormData}
-          errors={errors}
-          type="endDate"
-        />
-      </FormControl>
+
       <FormControl>
         <InputLabel id="dependencies-label">Dependencies</InputLabel>
         <DependencySelector
@@ -224,15 +166,7 @@ const TaskForm: React.FC<CreateTaskFormProps> = ({
       ) : (
         <></>
       )}
-      <Box sx={styles.buttonContainer}>
-        <Button variant="contained" color="primary" type="submit">
-          {isEditable ? 'Edit' : 'Create'}
-        </Button>
-        <Button variant="outlined" color="secondary" onClick={onCancel}>
-          Cancel
-        </Button>
-      </Box>
-    </Stack>
+    </DeadlineForm>
   );
 };
 
