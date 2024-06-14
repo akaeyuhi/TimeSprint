@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Stack, Typography } from '@mui/material';
-import TaskSection from 'src/components/task/TaskSection';
+import { Avatar, Box, Container, Stack, Typography } from '@mui/material';
 import TeamList from 'src/components/team/TeamList';
 import { useStores } from 'src/hooks';
 import { observer } from 'mobx-react';
@@ -8,6 +7,8 @@ import Loader from 'src/components/loader';
 import { useParams } from 'react-router-dom';
 import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 import { User } from 'src/models/user.model';
+import { stringAvatar } from 'src/utils/common/stringAvatar';
+import { styles } from 'src/pages/User/style';
 
 const UserPage: React.FC = () => {
   const { userStore: store, authStore, handler } = useStores();
@@ -41,12 +42,22 @@ const UserPage: React.FC = () => {
   return (
     <Container>
       <Typography variant="h4">{getWelcomeText}</Typography>
-      <TaskSection isEditable={isOwnPage} isProjectPage={false} />
-      <Stack mt={4}>
-        <Typography variant="h5">Teams</Typography>
-      </Stack>
-      <Stack>
-        <TeamList teams={user.teams} />
+      <Box sx={styles.description}>
+        <Box>
+          <Avatar {...stringAvatar(user.username)} sx={styles.avatar} />
+        </Box>
+        <Box ml={5}>
+          <Typography variant="h5">{user.username}&apos;s stats:</Typography>
+          <Typography variant="h6">Total teams: {user.teams.length}</Typography>
+          <Typography variant="h6">Total tasks: {user.tasks.length}</Typography>
+          <Typography variant="h6">
+            Total activities: {user.activities.length}
+          </Typography>
+        </Box>
+      </Box>
+      <Stack sx={styles.teamStack} mt={2}>
+        <Typography variant="h5">Teams this user is a part of:</Typography>
+        <TeamList teams={user.teams.slice(0, 2)} />
       </Stack>
     </Container>
   );
