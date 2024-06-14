@@ -1,4 +1,3 @@
-export interface CreateTeamDto {
-  name: string;
-  description: string;
-}
+import { ItemDto } from 'src/services/dto/item.dto';
+
+export type CreateTeamDto = ItemDto;

@@ -1,6 +1,6 @@
-export interface RegisterDto {
+import { LoginDto } from 'src/services/dto/login.dto';
+
+export interface RegisterDto extends LoginDto {
   username: string;
-  email: string;
-  password: string;
   confirmPassword: string;
 }
