@@ -5,12 +5,14 @@ import UserService from 'src/services/user.service';
 import ProjectService from 'src/services/project.service';
 import TeamService from 'src/services/team.service';
 import { AuthStore } from 'src/stores/auth.store';
+import { ActivityService } from 'src/services/activity.service';
 
 export class RootService {
   authService: AuthService;
   userService: UserService;
   projectService: ProjectService;
   teamService: TeamService;
+  activityService: ActivityService;
 
   constructor(authStore: AuthStore) {
     const httpClient = new CustomHttpClient({
@@ -23,5 +25,6 @@ export class RootService {
     this.userService = new UserService(httpRequest);
     this.projectService = new ProjectService(httpRequest);
     this.teamService = new TeamService(httpRequest);
+    this.activityService = new ActivityService(httpRequest);
   }
 }
