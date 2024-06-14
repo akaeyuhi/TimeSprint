@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { Task } from 'src/models/task.model';
 import { styles } from 'src/pages/Home/components/TaskItem/styles';
+import { Link } from 'react-router-dom';
 
 interface Props {
   task: Task;
@@ -18,6 +19,9 @@ const TaskItem: React.FC<Props> = ({ task }) => (
     <CardContent>
       <Typography variant="h6">{task.name}</Typography>
       <Typography variant="body2">{task.description}</Typography>
+      <Typography variant="body2" sx={{ color: 'green' }}>
+        Started: {task.startDate.toDateString()}
+      </Typography>
       <Typography variant="body2" sx={{ color: 'red' }}>
         Due: {task.endDate.toDateString()}
       </Typography>
@@ -35,9 +39,11 @@ const TaskItem: React.FC<Props> = ({ task }) => (
       </Typography>
     </CardContent>
     <CardActions>
-      <Button variant="contained" color="primary">
-        To Tasks
-      </Button>
+      <Link to="/tasks">
+        <Button variant="contained" color="primary">
+          To Tasks
+        </Button>
+      </Link>
     </CardActions>
   </Card>
 );
