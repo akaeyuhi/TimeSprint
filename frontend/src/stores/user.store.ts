@@ -334,7 +334,7 @@ export class UserStore extends TaskStore<User> {
   async toggleActivity(taskId: string): Promise<LeisureActivity[]> {
     try {
       const activity = this.getActivityById(taskId);
-      if (!activity) throw new Error('Activity not found');
+      if (!activity) return this.current.activities;
       const toggledActivity = <LeisureActivity>(
         await this.activityService.toggleActivity(activity)
       );
