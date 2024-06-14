@@ -26,7 +26,7 @@ const validate = (state: {
 });
 
 const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
-  const [data, setData, errors] = useValidation({ username: '' }, validate);
+  const [data, setData, validation] = useValidation({ username: '' }, validate);
   const [userError, setUserError] = useState('');
   const { userService } = store.services;
 
@@ -34,7 +34,7 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
     e.preventDefault();
     setUserError('');
     // Validate username format
-    if (!errors.username) {
+    if (validation.validate()) {
       const candidate = await userService.getUserByUsername(data.username);
       if (candidate) {
         await onSubmit(candidate);
@@ -50,7 +50,7 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
       <Typography variant="h6" mb={2}>
         Add new member
       </Typography>
-      <FormControl error={errors.username || !!userError.length}>
+      <FormControl error={validation.errors.username || !!userError.length}>
         <InputLabel htmlFor="name">Username</InputLabel>
         <OutlinedInput
           id="name"
@@ -61,9 +61,9 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
           aria-describedby="username-error"
           value={data.username}
         />
-        {(errors.username || !!userError.length) && (
+        {(validation.errors.username || !!userError.length) && (
           <FormHelperText error id="username-error">
-            {errors.username
+            {validation.errors.username
               ? 'Name should be 8 characters long'
               : userError.length
                 ? userError

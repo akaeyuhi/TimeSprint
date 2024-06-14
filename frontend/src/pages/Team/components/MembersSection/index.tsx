@@ -12,7 +12,7 @@ import {
 import { styles } from 'src/pages/Team/styles';
 import { stringAvatar } from 'src/utils/common/stringAvatar';
 import ModalInfo from 'src/components/modalInfo';
-import { MemberList } from 'src/pages/Team/components/lists/MemberList';
+import { MemberList } from 'src/components/team/MemberList';
 import { User } from 'src/models/user.model';
 
 interface MembersSectionProps {

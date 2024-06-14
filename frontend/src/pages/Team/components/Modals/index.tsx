@@ -1,16 +1,16 @@
 import React from 'react';
 import ModalForm from 'src/components/modalForm';
-import CreateProjectForm from 'src/pages/Team/components/forms/CreateProjectForm';
-import DeleteProjectForm from 'src/pages/Team/components/forms/DeleteProjectModal';
-import AddUserForm from 'src/pages/Team/components/forms/AddUserForm';
-import AddAdminForm from 'src/pages/Team/components/forms/AddAdminForm';
-import LeaveTeamForm from 'src/pages/Team/components/forms/LeaveTeamForm';
+import DeleteProjectForm from 'src/components/project/DeleteProjectModal';
+import AddUserForm from 'src/components/team/AddUserForm';
+import AddAdminForm from 'src/components/team/AddAdminForm';
+import LeaveTeamForm from 'src/components/team/LeaveTeamForm';
 import { ModalHandler } from 'src/hooks/use-modals';
 import { Project } from 'src/models/project.model';
 import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
-import { CreateProjectDto } from 'src/services/dto/create-project.dto';
-import DeleteUserModal from 'src/pages/Team/components/forms/DeleteUserModal';
+import { ProjectDto } from 'src/services/dto/project.dto';
+import DeleteUserModal from 'src/components/team/DeleteUserModal';
+import ProjectForm from 'src/components/project/ProjectForm';
 
 interface ModalsProps {
   createProject: ModalHandler;
@@ -23,7 +23,7 @@ interface ModalsProps {
   deletedUser: User | null;
   deletedProject: Project | null;
   team: Team;
-  handleCreateSubmit: (createProjectDto: CreateProjectDto) => void;
+  handleCreateSubmit: (createProjectDto: ProjectDto) => void;
   handleAddUserSubmit: (user: User) => Promise<void>;
   handleAddAdminSubmit: (user: User) => void;
   handleDeleteProject: (projectId: number) => Promise<void>;
@@ -53,9 +53,10 @@ const Modals: React.FC<ModalsProps> = ({
 }) => (
   <>
     <ModalForm open={createProject.isOpen} handleClose={createProject.close}>
-      <CreateProjectForm
+      <ProjectForm
         onSubmit={handleCreateSubmit}
-        onClose={createProject.close}
+        onCancel={createProject.close}
+        project={null}
       />
     </ModalForm>
     <ModalForm handleClose={deleteProject.close} open={deleteProject.isOpen}>

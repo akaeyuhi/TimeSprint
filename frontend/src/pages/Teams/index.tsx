@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useStores } from 'src/hooks/use-stores';
 import ModalForm from 'src/components/modalForm';
-import CreateTeamForm from 'src/pages/Teams/components/CreateTeamForm';
-import { CreateTeamDto } from 'src/services/dto/create-team.dto';
+import { TeamDto } from 'src/services/dto/team.dto';
 import { styles } from 'src/pages/Teams/styles';
 import TeamList from 'src/components/team/TeamList';
 import { useModals } from 'src/hooks/use-modals';
@@ -11,6 +10,7 @@ import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
 import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 import { toast } from 'react-toastify';
+import TeamForm from 'src/components/team/TeamForm';
 
 interface TeamModals {
   createTeam: boolean;
@@ -31,7 +31,7 @@ const TeamsPage: React.FC = () => {
   const modalHandlers = useModals<TeamModals>(modal, setModal);
 
   const handleCreateTeamSubmit = useCallback(
-    async (teamDto: CreateTeamDto) => {
+    async (teamDto: TeamDto) => {
       await userStore.createTeam(teamDto);
       if (!userStore.error && !userStore.isLoading) {
         toast.success(`Created team: ${teamDto.name}`);
@@ -67,7 +67,8 @@ const TeamsPage: React.FC = () => {
         open={modalHandlers.createTeam.isOpen}
         handleClose={modalHandlers.createTeam.close}
       >
-        <CreateTeamForm
+        <TeamForm
+          team={null}
           onSubmit={handleCreateTeamSubmit}
           onCancel={modalHandlers.createTeam.close}
         />

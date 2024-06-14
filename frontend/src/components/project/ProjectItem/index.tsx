@@ -6,7 +6,7 @@ import {
   CardContent,
   Typography,
 } from '@mui/material';
-import { styles } from 'src/pages/Team/components/lists/ProjectItem/styles';
+import { styles } from 'src/components/project/ProjectItem/styles';
 import { Project } from 'src/models/project.model';
 import { Link } from 'react-router-dom';
 

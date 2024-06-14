@@ -22,7 +22,7 @@ interface ItemFormProps<T extends ItemDto, K extends Item> {
   isEdited?: boolean;
   item: K | null;
   validation: FormValidation<T>;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const ItemForm = <T extends ItemDto, K extends Item>({

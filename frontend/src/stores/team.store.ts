@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
-import { CreateProjectDto } from 'src/services/dto/create-project.dto';
+import { ProjectDto } from 'src/services/dto/project.dto';
 import TeamService from 'src/services/team.service';
 import { Project } from 'src/models/project.model';
 
@@ -51,7 +51,7 @@ export class TeamStore {
     return this.current.projects;
   }
 
-  async createProject(projectDto: CreateProjectDto) {
+  async createProject(projectDto: ProjectDto) {
     this.isLoading = true;
     try {
       const project = <Project>(

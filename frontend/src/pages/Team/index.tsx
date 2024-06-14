@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useStores } from 'src/hooks';
 import { styles } from 'src/pages/Team/styles';
-import { CreateProjectDto } from 'src/services/dto/create-project.dto';
+import { ProjectDto } from 'src/services/dto/project.dto';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User } from 'src/models/user.model';
 import { Project } from 'src/models/project.model';
-import Modals from 'src/pages/Team/components/sections/Modals';
-import MembersSection from 'src/pages/Team/components/sections/MembersSection';
-import ProjectsSection from 'src/pages/Team/components/sections/ProjectsSection';
+import Modals from 'src/pages/Team/components/Modals';
+import MembersSection from 'src/pages/Team/components/MembersSection';
+import ProjectsSection from 'src/pages/Team/components/ProjectsSection';
 import { useModals } from 'src/hooks/use-modals';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
@@ -64,7 +64,7 @@ const TeamPage: React.FC = () => {
   }, [authStore.auth.user.id, handler, id, teamStore]);
 
   const handleCreateSubmit = useCallback(
-    async (projectDto: CreateProjectDto) => {
+    async (projectDto: ProjectDto) => {
       await teamStore.createProject(projectDto);
       if (!teamStore.error && !teamStore.isLoading) {
         toast.success(`Created project ${projectDto.name}!`);

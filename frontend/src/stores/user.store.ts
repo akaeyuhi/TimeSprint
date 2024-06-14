@@ -3,7 +3,7 @@ import { User } from 'src/models/user.model';
 import { TaskDto } from 'src/services/dto/task.dto';
 import { Task } from 'src/models/task.model';
 import { Team } from 'src/models/team.model';
-import { CreateTeamDto } from 'src/services/dto/create-team.dto';
+import { TeamDto } from 'src/services/dto/team.dto';
 import TaskStore from 'src/stores/task.store';
 import UserService from 'src/services/user.service';
 import TeamService from 'src/services/team.service';
@@ -241,7 +241,7 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async createTeam(teamDto: CreateTeamDto): Promise<Team> {
+  async createTeam(teamDto: TeamDto): Promise<Team> {
     this.isLoading = true;
     try {
       const newTeam = <Team>await this.teamService.createTeam(teamDto);

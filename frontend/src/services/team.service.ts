@@ -2,8 +2,8 @@ import BaseService from './base.service';
 import { Return } from 'src/services/types';
 import { Team } from 'src/models/team.model';
 import { TeamError } from 'src/services/errors/team.error';
-import { CreateTeamDto } from 'src/services/dto/create-team.dto';
-import { CreateProjectDto } from 'src/services/dto/create-project.dto';
+import { TeamDto } from 'src/services/dto/team.dto';
+import { ProjectDto } from 'src/services/dto/project.dto';
 import { Project } from 'src/models/project.model';
 import { User } from 'src/models/user.model';
 
@@ -24,7 +24,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async createTeam(createTeamDto: CreateTeamDto): Promise<Return<Team>> {
+  async createTeam(createTeamDto: TeamDto): Promise<Return<Team>> {
     try {
       return this.httpRequest.post<Team>('/teams', createTeamDto);
     } catch (error) {
@@ -32,10 +32,7 @@ class TeamService extends BaseService {
     }
   }
 
-  async updateTeam(
-    id: number,
-    team: Partial<CreateTeamDto>
-  ): Promise<Return<Team>> {
+  async updateTeam(id: number, team: Partial<TeamDto>): Promise<Return<Team>> {
     try {
       return this.httpRequest.put<Team>(`/teams/${id}`, team);
     } catch (error) {
@@ -124,7 +121,7 @@ class TeamService extends BaseService {
 
   async createProject(
     teamId: number,
-    createProjectDto: CreateProjectDto
+    createProjectDto: ProjectDto
   ): Promise<Return<Project>> {
     try {
       return this.httpRequest.post<Project>(
