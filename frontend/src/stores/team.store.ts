@@ -32,6 +32,7 @@ export class TeamStore {
     this.isLoading = true;
     try {
       const team = <Team>await this.teamService.getTeam(teamId);
+      if (!team) return this.current;
       runInAction(() => {
         this.current = team;
       });
@@ -57,6 +58,7 @@ export class TeamStore {
       const project = <Project>(
         await this.teamService.createProject(this.current.id, projectDto)
       );
+      if (!project) return this.current.projects;
       runInAction(() => {
         this.current.projects.push(project);
       });
@@ -75,7 +77,11 @@ export class TeamStore {
   async deleteProject(projectId: string) {
     this.isLoading = true;
     try {
-      await this.teamService.deleteProject(this.current.id, projectId);
+      const result = await this.teamService.deleteProject(
+        this.current.id,
+        projectId
+      );
+      if (!result) return this.current.projects;
       runInAction(() => {
         this.current.projects = this.current.projects.filter(
           (project) => project.id !== projectId
@@ -100,6 +106,7 @@ export class TeamStore {
         const newMember = <User>(
           await this.teamService.addMember(this.current.id, user.id)
         );
+        if (!newMember) return user;
         runInAction(() => {
           this.current.members.push(newMember);
         });
@@ -124,11 +131,12 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isAdmin(user)) {
-        const newMember = <User>(
+        const newAdmin = <User>(
           await this.teamService.addAdmin(this.current.id, user.id)
         );
+        if (!newAdmin) return user;
         runInAction(() => {
-          this.current.admins.push(newMember);
+          this.current.admins.push(newAdmin);
         });
       } else {
         runInAction(() => {
@@ -153,7 +161,11 @@ export class TeamStore {
       const user = this.getUserById(userId);
       await runInAction(async () => {
         if (user && !this.isAdmin(user)) {
-          await this.teamService.deleteMember(this.current.id, userId);
+          const result = await this.teamService.deleteMember(
+            this.current.id,
+            userId
+          );
+          if (result === null) return;
           this.current.members = this.current.members.filter(
             (member) => member.id !== userId
           );
@@ -181,7 +193,11 @@ export class TeamStore {
       const user = this.getUserById(userId);
       await runInAction(async () => {
         if (user && this.isAdmin(user)) {
-          await this.teamService.deleteAdmin(this.current.id, userId);
+          const result = await this.teamService.deleteAdmin(
+            this.current.id,
+            userId
+          );
+          if (result === null) return;
           this.current.admins = this.current.admins.filter(
             (admin) => admin.id !== userId
           );

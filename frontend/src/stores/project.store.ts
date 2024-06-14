@@ -37,7 +37,8 @@ export class ProjectStore extends TaskStore<Project> {
   async fetch(projectId: string) {
     this.isLoading = true;
     try {
-      const project = <Project>await this.projectService.getProject(projectId);
+      const project = await this.projectService.getProject(projectId);
+      if (!project) return this.current;
       runInAction(() => {
         this.current = project;
         this.tasks = this.current.tasks;
@@ -73,6 +74,7 @@ export class ProjectStore extends TaskStore<Project> {
       const newTask = <Task>(
         await this.projectService.createTask(taskDto, this.current as Project)
       );
+      if (!newTask) return this.tasks;
       runInAction(() => {
         this.tasks.push(newTask);
       });
@@ -91,9 +93,8 @@ export class ProjectStore extends TaskStore<Project> {
   @action
   async updateTask(taskId: string, taskDto: TaskDto) {
     try {
-      const updatedTask = <Task>(
-        await this.projectService.updateTask(taskDto, taskId)
-      );
+      const updatedTask = await this.projectService.updateTask(taskDto, taskId);
+      if (!updatedTask) return this.tasks;
       runInAction(() => {
         const taskIndex = this.tasks.findIndex((task) => task.id === taskId);
         if (taskIndex >= 0) {
@@ -112,7 +113,8 @@ export class ProjectStore extends TaskStore<Project> {
   async deleteTask(taskId: string) {
     if (!this.current) return;
     try {
-      await this.projectService.deleteTask(taskId, this.current);
+      const result = await this.projectService.deleteTask(taskId, this.current);
+      if (!result) return;
       runInAction(() => {
         if (this.current) {
           this.tasks = this.tasks.filter((task) => task.id !== taskId);
@@ -132,6 +134,7 @@ export class ProjectStore extends TaskStore<Project> {
       const updatedProject = <Project>(
         await this.projectService.updateProjects(this.current.id, projectDto)
       );
+      if (!updatedProject) return this.current;
       runInAction(() => {
         this.current = updatedProject;
       });
@@ -151,8 +154,9 @@ export class ProjectStore extends TaskStore<Project> {
   async toggleTask(taskId: string): Promise<Task[]> {
     try {
       const task = this.getTaskById(taskId);
-      if (!task) throw new Error('Task not found');
+      if (!task) return this.tasks;
       const toggledTask = <Task>await this.projectService.toggleTask(task);
+      if (!toggledTask) return this.tasks;
       runInAction(() => {
         const index = this.tasks.findIndex((t) => t.id === taskId);
         if (index !== -1) {

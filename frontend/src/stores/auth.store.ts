@@ -43,6 +43,7 @@ export class AuthStore {
     this.isLoading = true;
     try {
       const auth = await this.authService.login(authDto);
+      if (!auth) return;
       runInAction(() => {
         this.auth = auth as Auth;
         this.error = null;
@@ -65,6 +66,7 @@ export class AuthStore {
     this.isLoading = true;
     try {
       const auth = await this.authService.register(registerDto);
+      if (!auth) return;
       runInAction(() => {
         this.auth = auth as Auth;
         this.error = null;
@@ -87,6 +89,7 @@ export class AuthStore {
     this.isLoading = true;
     try {
       const updatedAuth = await this.authService.refreshToken(refreshToken);
+      if (!updatedAuth) return;
       runInAction(() => {
         Object.assign(this.auth, updatedAuth);
         this.error = null;

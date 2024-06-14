@@ -31,6 +31,7 @@ export class UserStore extends TaskStore<User> {
     this.isLoading = true;
     try {
       const user = <User>await this.userService.getUser(userId);
+      if (!user) return this.current;
       runInAction(() => {
         this.current = user;
         this.tasks = this.current.tasks;
@@ -65,10 +66,11 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async fetchByUsername(username: string): Promise<void> {
+  async fetchByUsername(username: string): Promise<User> {
     this.isLoading = true;
     try {
       const user = await this.userService.getUserByUsername(username);
+      if (!user) return this.current;
       if (user) {
         runInAction(() => {
           this.current = user;
@@ -82,15 +84,18 @@ export class UserStore extends TaskStore<User> {
         this.isLoading = false;
       });
     }
+    return this.current;
   }
 
   @action
   async createTask(task: TaskDto): Promise<Task[]> {
     this.isLoading = true;
     try {
-      const newTask = <Task>(
-        await this.userService.createTask(task, this.current as User)
+      const newTask = await this.userService.createTask(
+        task,
+        this.current as User
       );
+      if (!newTask) return this.tasks;
       runInAction(() => {
         this.tasks.push(newTask);
       });
@@ -109,9 +114,8 @@ export class UserStore extends TaskStore<User> {
   @action
   async updateTask(taskId: string, taskDto: TaskDto): Promise<Task[]> {
     try {
-      const updatedTask = <Task>(
-        await this.userService.updateTask(taskDto, taskId)
-      );
+      const updatedTask = await this.userService.updateTask(taskDto, taskId);
+      if (!updatedTask) return this.tasks;
       runInAction(() => {
         const index = this.tasks.findIndex((task) => task.id === taskId);
         if (index !== -1) this.tasks[index] = updatedTask;
@@ -127,7 +131,11 @@ export class UserStore extends TaskStore<User> {
   @action
   async deleteTask(taskId: string): Promise<void> {
     try {
-      await this.userService.deleteTask(taskId, this.current as User);
+      const result = await this.userService.deleteTask(
+        taskId,
+        this.current as User
+      );
+      if (!result) return;
       runInAction(() => {
         this.tasks = this.tasks.filter((task) => task.id !== taskId);
       });
@@ -135,7 +143,6 @@ export class UserStore extends TaskStore<User> {
       runInAction(() => {
         this.error = error as Error;
       });
-      throw error;
     }
   }
 
@@ -143,8 +150,9 @@ export class UserStore extends TaskStore<User> {
   async toggleTask(taskId: string): Promise<Task[]> {
     try {
       const task = this.getTaskById(taskId);
-      if (!task) throw new Error('Task not found');
-      const toggledTask = <Task>await this.userService.toggleTask(task);
+      if (!task) return this.tasks;
+      const toggledTask = await this.userService.toggleTask(task);
+      if (!toggledTask) return this.tasks;
       runInAction(() => {
         const index = this.tasks.findIndex((t) => t.id === taskId);
         if (index !== -1) this.tasks[index] = toggledTask;
@@ -161,10 +169,10 @@ export class UserStore extends TaskStore<User> {
   async loadImportantTasks() {
     this.isLoading = true;
     try {
-      const newTasks = <Task[]>(
-        await this.userService.getImportantUserTasks(this.current.id)
+      const newTasks = await this.userService.getImportantUserTasks(
+        this.current.id
       );
-      console.log(newTasks);
+      if (!newTasks) return this.tasks;
       runInAction(() => {
         this.setTasks(newTasks);
       });
@@ -185,7 +193,8 @@ export class UserStore extends TaskStore<User> {
   async joinTeam(teamId: string): Promise<Team[]> {
     this.isLoading = true;
     try {
-      const newTeam = <Team>await this.teamService.joinTeam(teamId);
+      const newTeam = await this.teamService.joinTeam(teamId);
+      if (!newTeam) return this.current.teams;
       runInAction(() => {
         this.current?.teams.push(newTeam);
       });
@@ -202,10 +211,11 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async leaveTeam(teamId: string): Promise<string> {
+  async leaveTeam(teamId: string): Promise<string | null> {
     this.isLoading = true;
     try {
-      await this.teamService.leaveTeam(teamId);
+      const result = await this.teamService.leaveTeam(teamId);
+      if (!result) return null;
       runInAction(() => {
         if (this.current) {
           this.current.teams = this.current?.teams.filter(
@@ -226,24 +236,24 @@ export class UserStore extends TaskStore<User> {
   }
 
   @action
-  async createTeam(teamDto: TeamDto): Promise<Team> {
+  async createTeam(teamDto: TeamDto): Promise<Team[]> {
     this.isLoading = true;
     try {
-      const newTeam = <Team>await this.teamService.createTeam(teamDto);
+      const newTeam = await this.teamService.createTeam(teamDto);
+      if (!newTeam) return this.current.teams;
       runInAction(() => {
         this.current?.teams.push(newTeam);
       });
-      return newTeam;
     } catch (error) {
       runInAction(() => {
         this.error = <Error>error;
       });
-      throw error;
     } finally {
       runInAction(() => {
         this.isLoading = false;
       });
     }
+    return this.current.teams;
   }
 
   @action
@@ -253,6 +263,7 @@ export class UserStore extends TaskStore<User> {
       const updatedUser = <User>(
         await this.userService.updateUser(id, updateDto)
       );
+      if (!updatedUser) return this.current;
       runInAction(() => {
         this.current = updatedUser;
       });
@@ -281,6 +292,7 @@ export class UserStore extends TaskStore<User> {
       const newActivity = <LeisureActivity>(
         await this.userService.createActivity(activityDto, this.current)
       );
+      if (!newActivity) return this.current.activities;
       runInAction(() => {
         this.current?.activities.push(newActivity);
       });
@@ -304,6 +316,7 @@ export class UserStore extends TaskStore<User> {
       const updatedActivity = <LeisureActivity>(
         await this.activityService.updateActivity(activityDto, id)
       );
+      if (!updatedActivity) return this.current.activities;
       runInAction(() => {
         const index = this.current.activities.findIndex(
           (activity) => activity.id === id
@@ -325,6 +338,7 @@ export class UserStore extends TaskStore<User> {
       const toggledActivity = <LeisureActivity>(
         await this.activityService.toggleActivity(activity)
       );
+      if (!toggledActivity) return this.current.activities;
       runInAction(() => {
         const index = this.current.activities.findIndex((t) => t.id === taskId);
         if (index !== -1) this.current.activities[index] = toggledActivity;
@@ -339,7 +353,8 @@ export class UserStore extends TaskStore<User> {
 
   async deleteActivity(id: string): Promise<LeisureActivity[]> {
     try {
-      await this.userService.deleteActivity(id, this.current);
+      const result = await this.userService.deleteActivity(id, this.current);
+      if (!result) return this.current.activities;
       runInAction(() => {
         this.current.activities = this.current.activities.filter(
           (activity) => activity.id !== id
