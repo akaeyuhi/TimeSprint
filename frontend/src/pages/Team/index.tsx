@@ -169,11 +169,7 @@ const TeamPage: React.FC = () => {
     userStore.isLoading ||
     isObjectEmpty(teamStore.current)
   )
-    return (
-      <Container>
-        <Loader />
-      </Container>
-    );
+    return <Loader />;
   if (teamStore.error) handler.handle(teamStore.error.message);
   if (userStore.error) handler.handle(userStore.error.message);
 
