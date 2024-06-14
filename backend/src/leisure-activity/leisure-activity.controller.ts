@@ -27,7 +27,7 @@ import { Task } from 'src/task/entities/task.entity';
 @ApiTags('LeisureActivities')
 @ApiBearerAuth('JWT')
 @UseGuards(JwtAuthGuard)
-@Controller('leisure-activities')
+@Controller('activities')
 export class LeisureActivityController {
   constructor(
     private readonly leisureActivityService: LeisureActivityService,

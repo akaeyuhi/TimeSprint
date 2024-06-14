@@ -23,9 +23,9 @@ export class LeisureActivity {
   @IsDate()
   endDate: Date;
 
-  @Column()
+  @Column({ type: 'boolean', default: false })
   @IsBoolean()
-  isCompleted: boolean;
+  isCompleted = false;
 
   @ManyToOne(() => User)
   user: User;

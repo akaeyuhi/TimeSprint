@@ -24,8 +24,7 @@ export class LeisureActivityRepository implements IRepository<LeisureActivity> {
     if (!activity) {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
-    await this.repository.update(id, data);
-    return activity;
+    return await this.repository.save({ ...activity, ...data });
   }
 
   async delete(id: number): Promise<void> {
