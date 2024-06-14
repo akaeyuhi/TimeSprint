@@ -20,7 +20,8 @@ export class RootStore {
     this.projectStore = new ProjectStore(this.rootService.projectService);
     this.userStore = new UserStore(
       this.rootService.userService,
-      this.rootService.teamService
+      this.rootService.teamService,
+      this.rootService.activityService
     );
   }
 
