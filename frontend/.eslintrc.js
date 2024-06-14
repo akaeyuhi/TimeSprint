@@ -8,8 +8,8 @@ module.exports = {
   plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
   extends: [
     'plugin:react/recommended',
-    'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
   ],
   root: true,
   env: {
@@ -30,7 +30,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
     'import/no-extraneous-dependencies': 'off',
-    'indent': ['error', 2, {"ignoredNodes": ["PropertyDefinition"] }],
     'linebreak-style': ['error', 'unix'],
     'quotes': [
       'error',
@@ -69,18 +68,6 @@ module.exports = {
         'mode': 'minimum',
       },
     ],
-    'keyword-spacing': [
-      'error',
-      {
-        'before': true,
-        'after': true,
-        'overrides': {
-          'function': {
-            'after': false,
-          },
-        },
-      },
-    ],
     'max-len': [
       'error',
       {
@@ -109,7 +96,6 @@ module.exports = {
     'no-whitespace-before-property': ['error'],
     'object-curly-spacing': ['error', 'always'],
     'operator-assignment': ['error', 'always'],
-    'operator-linebreak': ['error', 'after'],
     'semi-spacing': [
       'error',
       {
