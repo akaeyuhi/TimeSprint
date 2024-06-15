@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConnectionConfiguration } from 'ormconfig';
 import { UserModule } from './user/user.module';
@@ -10,9 +8,14 @@ import { ProjectModule } from './project/project.module';
 import { TaskModule } from './task/task.module';
 import { LeisureActivityModule } from './leisure-activity/leisure-activity.module';
 import { SiteAdminModule } from './site-admin/site-admin.module';
+import { join } from 'path';
+import { ServeStaticModule } from "@nestjs/serve-static";
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '../../../client', 'build'),
+    }),
     TypeOrmModule.forRoot(DatabaseConnectionConfiguration),
     UserModule,
     TeamModule,
@@ -22,7 +25,5 @@ import { SiteAdminModule } from './site-admin/site-admin.module';
     LeisureActivityModule,
     SiteAdminModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
