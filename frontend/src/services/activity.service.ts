@@ -7,7 +7,7 @@ import { LeisureActivityDto } from 'src/services/dto/activity.dto';
 export class ActivityService extends BaseService {
   async getActivities(): Promise<Return<LeisureActivity[]>> {
     try {
-      return this.httpRequest.get<LeisureActivity[]>(`/activities/}`);
+      return this.httpRequest.get<LeisureActivity[]>(`/activities/`);
     } catch (error) {
       throw new ActivityError('Error getting activities');
     }
@@ -22,8 +22,8 @@ export class ActivityService extends BaseService {
   }
 
   async updateActivity(
-    dto: LeisureActivityDto,
-    activityId: string
+    activityId: string,
+    dto: LeisureActivityDto
   ): Promise<Return<LeisureActivity>> {
     try {
       return this.httpRequest.patch<LeisureActivity>(
@@ -31,7 +31,15 @@ export class ActivityService extends BaseService {
         dto
       );
     } catch (error) {
-      throw new ActivityError('Error updating user activity');
+      throw new ActivityError('Error updating activity');
+    }
+  }
+
+  async deleteActivity(activityId: string): Promise<Return<void>> {
+    try {
+      return this.httpRequest.delete<void>(`/activities/${activityId}`);
+    } catch (error) {
+      throw new ActivityError('Error deleting activity');
     }
   }
 
@@ -46,7 +54,7 @@ export class ActivityService extends BaseService {
         }
       );
     } catch (error) {
-      throw new ActivityError('Error toggling user activity');
+      throw new ActivityError('Error toggling activity');
     }
   }
 }

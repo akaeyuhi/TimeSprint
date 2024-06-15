@@ -4,7 +4,7 @@ import { TaskContainer } from 'src/models/task-container.model';
 import { Return } from 'src/services/types';
 import BaseService from './base.service';
 import { TaskError } from 'src/services/errors/task.error';
-import { ActivityError } from "src/services/errors/activity.error";
+import { ActivityError } from 'src/services/errors/activity.error';
 
 export abstract class TaskService<T extends TaskContainer> extends BaseService {
   abstract createTask(dto: TaskDto, item: T): Promise<Return<Task>>;

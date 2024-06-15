@@ -34,6 +34,7 @@ export class AuthStore {
 
   logout() {
     this.auth = {} as Auth;
+    window.location.reload();
   }
 
   async login(authDto: LoginDto) {
