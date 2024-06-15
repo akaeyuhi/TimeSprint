@@ -147,12 +147,6 @@ module.exports = {
     //'arrow-parens': ['error', 'as-needed'],
     'arrow-body-style': ['error', 'as-needed'],
     'arrow-spacing': ['error'],
-    'no-confusing-arrow': [
-      'error',
-      {
-        'allowParens': true,
-      },
-    ],
     'no-useless-computed-key': ['error'],
     'no-useless-rename': ['error'],
     'no-var': ['error'],
