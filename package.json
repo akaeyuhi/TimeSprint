@@ -9,8 +9,7 @@
     "lint": "eslint ./backend/ --fix --ext .ts  && eslint ./backend/src --fix",
     "build": "npm run --prefix /frontend build && npm run --prefix /backend build",
     "start": "npm run --prefix /frontend build && npm run --prefix /backend start",
-    "start:dev": "npm run --prefix /backend start:dev",
-    "prepare": "husky install"
+    "start:dev": "npm run --prefix /backend start:dev"
   },
   "repository": {
     "type": "git",
@@ -30,5 +29,5 @@
   "bugs": {
     "url": "https://github.com/akaeyuhi/TimeSprint/issues"
   },
-  "homepage": "https://github.com/akaeyuhi/TimeSprint#readme"
+  "homepage": "https://github.com/akaeyuhi/TimeSprint#readme",
 }

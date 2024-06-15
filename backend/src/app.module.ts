@@ -9,7 +9,7 @@ import { TaskModule } from './task/task.module';
 import { LeisureActivityModule } from './leisure-activity/leisure-activity.module';
 import { SiteAdminModule } from './site-admin/site-admin.module';
 import { join } from 'path';
-import { ServeStaticModule } from "@nestjs/serve-static";
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
