@@ -215,7 +215,6 @@ export class UserController {
   }
 
   @Post(':userId/grant-admin')
-  @IsUserRole(AdminRole.ADMIN)
   @ApiOperation({ summary: 'Grants user admin status. Admin rights required' })
   @ApiParam({ name: 'userId', required: true, description: 'User identifier' })
   @ApiResponse({

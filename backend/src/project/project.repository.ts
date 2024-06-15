@@ -23,8 +23,7 @@ export class ProjectRepository implements IRepository<Project> {
     if (!project) {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
-    await this.repository.update(id, projectData);
-    return { ...project, ...projectData };
+    return await this.repository.save({ ...project, ...projectData });
   }
 
   async delete(id: string): Promise<void> {

@@ -112,6 +112,22 @@ class UserService extends TaskService<User> {
       throw new ActivityError('Error deleting activity');
     }
   }
+
+  async grantAdmin(id: string): Promise<Return<User>> {
+    try {
+      return this.httpRequest.post<User>(`/users/${id}/grant-admin`);
+    } catch (error) {
+      throw new UserError('Error granting admin privilege');
+    }
+  }
+
+  async revokeAdmin(id: string): Promise<Return<User>> {
+    try {
+      return this.httpRequest.post<User>(`/users/${id}/revoke-admin`);
+    } catch (error) {
+      throw new UserError('Error revoking admin privilege ');
+    }
+  }
 }
 
 export default UserService;

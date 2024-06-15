@@ -54,10 +54,9 @@ export class UserRepository implements IRepository<User> {
   async update(id: string, userData: Partial<User>): Promise<User> {
     const user = await this.findById(id);
     if (!user) {
-      throw new NotFoundException('Team not found');
+      throw new NotFoundException('User not found');
     }
-    await this.repository.update(id, userData);
-    return user;
+    return await this.repository.save({ ...user, ...userData });
   }
 
   async delete(id: string): Promise<void> {

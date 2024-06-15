@@ -118,8 +118,7 @@ export class UserService {
     if (!user) {
       throw new Error(`User with ID ${userId} not found`);
     }
-    await this.updateUser(userId, { role });
-    return user;
+    return await this.updateUser(userId, { role });
   }
 
   async getSortedUserTasks(userId: string): Promise<Task[]> {
