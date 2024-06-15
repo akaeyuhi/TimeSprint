@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run test",
     "installDependencies": "npm install --prefix ./backend && npm install --prefix ./frontend",
-    "lint": "eslint ./backend/src --fix  && eslint ./frontent/src --fix",
+    "lint": "eslint ./backend/src --fix  && eslint ./frontend/src --fix",
     "build": "npm run --prefix ./frontend build && npm run --prefix ./backend build",
     "start": "npm run --prefix ./frontend build && npm run --prefix ./backend start",
     "start:dev": "npm run --prefix ./backend start:dev"
