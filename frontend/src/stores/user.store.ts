@@ -114,7 +114,7 @@ export class UserStore extends TaskStore<User> {
   @action
   async updateTask(taskId: string, taskDto: TaskDto): Promise<Task[]> {
     try {
-      const updatedTask = await this.userService.updateTask(taskDto, taskId);
+      const updatedTask = await this.userService.updateTask(taskId, taskDto);
       if (!updatedTask) return this.tasks;
       runInAction(() => {
         const index = this.tasks.findIndex((task) => task.id === taskId);
@@ -314,7 +314,7 @@ export class UserStore extends TaskStore<User> {
   ): Promise<LeisureActivity[]> {
     try {
       const updatedActivity = <LeisureActivity>(
-        await this.activityService.updateActivity(activityDto, id)
+        await this.activityService.updateActivity(id, activityDto)
       );
       if (!updatedActivity) return this.current.activities;
       runInAction(() => {

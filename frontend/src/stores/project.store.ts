@@ -93,7 +93,7 @@ export class ProjectStore extends TaskStore<Project> {
   @action
   async updateTask(taskId: string, taskDto: TaskDto) {
     try {
-      const updatedTask = await this.projectService.updateTask(taskDto, taskId);
+      const updatedTask = await this.projectService.updateTask(taskId, taskDto);
       if (!updatedTask) return this.tasks;
       runInAction(() => {
         const taskIndex = this.tasks.findIndex((task) => task.id === taskId);
@@ -132,7 +132,7 @@ export class ProjectStore extends TaskStore<Project> {
     this.isLoading = true;
     try {
       const updatedProject = <Project>(
-        await this.projectService.updateProjects(this.current.id, projectDto)
+        await this.projectService.updateProject(this.current.id, projectDto)
       );
       if (!updatedProject) return this.current;
       runInAction(() => {

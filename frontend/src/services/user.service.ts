@@ -70,14 +70,6 @@ class UserService extends TaskService<User> {
     }
   }
 
-  async getTasks(item: User): Promise<Return<Task[]>> {
-    try {
-      return this.httpRequest.get<Task[]>(`/users/${item.id}/tasks`);
-    } catch (error) {
-      throw new TaskError('Error getting user tasks');
-    }
-  }
-
   async createTask(dto: TaskDto, item: User): Promise<Return<Task>> {
     try {
       return this.httpRequest.post<Task>(`/users/${item.id}/tasks`, dto);

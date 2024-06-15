@@ -25,7 +25,7 @@ class ProjectService extends TaskService<Project> {
     }
   }
 
-  async updateProjects(
+  async updateProject(
     id: string,
     projectDto: ProjectDto
   ): Promise<Return<Project>> {
@@ -41,14 +41,6 @@ class ProjectService extends TaskService<Project> {
       return this.httpRequest.delete<Project>(`/projects/${id}`);
     } catch (error) {
       throw new TeamError('Error deleting project data');
-    }
-  }
-
-  async getTasks(item: Project): Promise<Return<Task[]>> {
-    try {
-      return this.httpRequest.get<Task[]>(`/projects/${item.id}/tasks`);
-    } catch (error) {
-      throw new TaskError('Error getting user tasks');
     }
   }
 
