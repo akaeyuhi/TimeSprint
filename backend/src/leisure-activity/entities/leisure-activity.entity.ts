@@ -27,6 +27,6 @@ export class LeisureActivity {
   @IsBoolean()
   isCompleted = false;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   user: User;
 }

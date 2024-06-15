@@ -17,7 +17,7 @@ import { Team } from 'src/team/entities/team.entity';
 import { UpdateTeamDto } from 'src/team/dto/update-team.dto';
 import { TeamRolesGuard } from 'src/team/guards/team.guard';
 import { TeamRoles } from 'src/team/decorators/team.decorator';
-import { TeamRole } from 'src/user/utils';
+import { AdminRole, TeamRole } from 'src/user/utils';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -29,11 +29,13 @@ import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 import { CreateProjectDto } from 'src/project/dto/create-project.dto';
 import { Project } from 'src/project/entities/project.entity';
 import { User } from 'src/user/entities/user.entity';
+import { SiteAdminGuard } from 'src/site-admin/guards/site-admin.guard';
+import { IsUserRole } from 'src/site-admin/decorators/site-admin.decorator';
 
 @ApiTags('Teams')
 @ApiBearerAuth('JWT')
 @Controller('teams')
-@UseGuards(JwtAuthGuard, TeamRolesGuard)
+@UseGuards(JwtAuthGuard, TeamRolesGuard, SiteAdminGuard)
 export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
@@ -51,7 +53,7 @@ export class TeamController {
   @Put(':teamId/join')
   @ApiOperation({ summary: 'Joins to the team by id.' })
   @ApiParam({ name: 'teamId', required: true, description: 'Team identifier' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async joinTeam(
@@ -64,7 +66,7 @@ export class TeamController {
   @Put(':teamId/leave')
   @ApiOperation({ summary: 'Leaves the team by id.' })
   @ApiParam({ name: 'teamId', required: true, description: 'Team identifier' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: null })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async leaveTeam(
@@ -80,7 +82,7 @@ export class TeamController {
   })
   @ApiParam({ name: 'teamId', required: true, description: 'Team identifier' })
   @ApiParam({ name: 'memberId', required: true, description: 'New member id' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
@@ -99,7 +101,7 @@ export class TeamController {
   })
   @ApiParam({ name: 'teamId', required: true, description: 'Team identifier' })
   @ApiParam({ name: 'adminId', required: true, description: 'New admin id' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
@@ -122,7 +124,7 @@ export class TeamController {
     required: true,
     description: 'Deleted member id',
   })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: null })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
@@ -145,7 +147,7 @@ export class TeamController {
     required: true,
     description: 'Deleted admin id',
   })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: null })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
@@ -199,7 +201,7 @@ export class TeamController {
     required: true,
     description: 'Project identifier',
   })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Project })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: null })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Team not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
@@ -221,6 +223,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden' })
   @TeamRoles(TeamRole.ADMIN)
+  @IsUserRole(AdminRole.ADMIN)
   async deleteTeam(@Param('teamId') teamId: string): Promise<void> {
     await this.teamService.deleteTeam(teamId);
   }
@@ -229,6 +232,7 @@ export class TeamController {
   @ApiOperation({ summary: 'Gets all teams' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @IsUserRole(AdminRole.ADMIN)
   async getAllTeams(): Promise<Team[]> {
     return await this.teamService.getAllTeams();
   }
@@ -271,6 +275,7 @@ export class TeamController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Team })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Admin not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @IsUserRole(AdminRole.ADMIN)
   async findTeamsByAdminId(@Param('adminId') adminId: string): Promise<Team[]> {
     return await this.teamService.findTeamsByAdminId(adminId);
   }

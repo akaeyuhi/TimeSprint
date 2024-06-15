@@ -21,10 +21,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
+import { SiteAdminGuard } from 'src/site-admin/guards/site-admin.guard';
+import { IsUserRole } from 'src/site-admin/decorators/site-admin.decorator';
+import { AdminRole } from 'src/user/utils';
 
 @ApiTags('Tasks')
 @ApiBearerAuth('JWT')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, SiteAdminGuard)
 @Controller('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
@@ -43,6 +46,7 @@ export class TaskController {
   @ApiOperation({ summary: 'Creates new task.' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @IsUserRole(AdminRole.ADMIN)
   async createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     return await this.taskService.createTask(createTaskDto);
   }
@@ -66,16 +70,18 @@ export class TaskController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Task not found' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @IsUserRole(AdminRole.ADMIN)
   async deleteTask(@Param('id') id: string): Promise<void> {
     await this.taskService.deleteTask(id);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Gets all tasks with dependencies' })
+  @ApiOperation({ summary: 'Gets all tasks' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Task })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @IsUserRole(AdminRole.ADMIN)
   async findAllTasksWithDependencies(): Promise<Task[]> {
-    return await this.taskService.findAllTaskWithDependencies();
+    return await this.taskService.findAll();
   }
 
   @Get(':id')

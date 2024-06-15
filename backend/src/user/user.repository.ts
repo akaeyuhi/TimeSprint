@@ -14,7 +14,15 @@ export class UserRepository implements IRepository<User> {
   ) {}
 
   async findAll(): Promise<User[]> {
-    return this.repository.find();
+    return this.repository.find({
+      relations: {
+        teams: true,
+        activities: true,
+        tasks: {
+          dependencies: true,
+        },
+      },
+    });
   }
 
   async findById(id: string): Promise<User> {

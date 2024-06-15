@@ -5,7 +5,6 @@ import {
   Get,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Post,
   Put,
   UseGuards,
@@ -16,7 +15,7 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 import { Task } from 'src/task/entities/task.entity';
-import { TeamRole } from 'src/user/utils';
+import { AdminRole, TeamRole } from 'src/user/utils';
 import { TeamRolesGuard } from 'src/team/guards/team.guard';
 import { TeamRoles } from 'src/team/decorators/team.decorator';
 import { CreateTaskDto } from 'src/task/dto/create-task.dto';
@@ -27,11 +26,13 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { IsUserRole } from 'src/site-admin/decorators/site-admin.decorator';
+import { SiteAdminGuard } from 'src/site-admin/guards/site-admin.guard';
 
 @ApiTags('Projects')
 @ApiBearerAuth('JWT')
 @Controller('projects')
-@UseGuards(JwtAuthGuard, TeamRolesGuard)
+@UseGuards(JwtAuthGuard, TeamRolesGuard, SiteAdminGuard)
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
@@ -41,6 +42,7 @@ export class ProjectController {
   })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Project })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @IsUserRole(AdminRole.ADMIN)
   async getAllProjects(): Promise<Project[]> {
     return await this.projectService.findAllProjects();
   }

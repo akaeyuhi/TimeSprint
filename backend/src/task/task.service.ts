@@ -41,6 +41,10 @@ export class TaskService {
     return await this.taskRepository.findAllTaskWithDependencies();
   }
 
+  async findAll(): Promise<Task[]> {
+    return await this.taskRepository.findAll();
+  }
+
   async findTaskDependencies(taskId: string): Promise<Task[]> {
     return await this.taskRepository.findTaskDependencies(taskId);
   }
