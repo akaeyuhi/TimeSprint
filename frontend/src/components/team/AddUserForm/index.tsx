@@ -10,9 +10,9 @@ import {
   Typography,
 } from '@mui/material';
 import { styles } from 'src/components/modalForm/styles';
-import { store } from 'src/stores/root.store';
 import { User } from 'src/models/user.model';
 import { useValidation, ValidationErrors } from 'src/hooks/use-validation';
+import { useService } from 'src/hooks';
 
 interface AddUserFormProps {
   onSubmit: (user: User) => Promise<void>;
@@ -28,7 +28,7 @@ const validate = (state: {
 const AddUserForm: React.FC<AddUserFormProps> = ({ onSubmit, onClose }) => {
   const [data, setData, validation] = useValidation({ username: '' }, validate);
   const [userError, setUserError] = useState('');
-  const { userService } = store.services;
+  const userService = useService('userService');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
