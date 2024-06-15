@@ -45,6 +45,7 @@ export class UserController {
   @ApiOperation({ summary: 'Gets all users' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @IsUserRole(AdminRole.ADMIN)
   async findAll(): Promise<User[]> {
     return this.userService.findAll();
   }

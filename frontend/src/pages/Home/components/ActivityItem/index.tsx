@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { LeisureActivity } from 'src/models/activity.model';
 import { styles } from 'src/pages/Home/components/TaskItem/styles';
+import { Link } from 'react-router-dom';
 
 interface Props {
   activity: LeisureActivity;
@@ -23,9 +24,11 @@ const ActivityItem: React.FC<Props> = ({ activity }) => (
       </Typography>
     </CardContent>
     <CardActions>
-      <Button variant="contained" color="primary">
-        To Activity
-      </Button>
+      <Link to="/activities">
+        <Button variant="contained" color="primary">
+          To activity
+        </Button>
+      </Link>
     </CardActions>
   </Card>
 );
