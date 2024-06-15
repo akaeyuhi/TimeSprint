@@ -1,6 +1,7 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { SiteAdminService } from '../site-admin.service';
+import { AdminRole } from 'src/user/utils';
 
 @Injectable()
 export class SiteAdminGuard implements CanActivate {
@@ -10,8 +11,8 @@ export class SiteAdminGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isSiteAdmin = this.reflector.get<boolean>(
-      'isSiteAdmin',
+    const isSiteAdmin = this.reflector.get<AdminRole>(
+      'adminRole',
       context.getHandler(),
     );
     if (!isSiteAdmin) {

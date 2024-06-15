@@ -1,10 +1,10 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Project } from 'src/project/entities/project.entity';
 import { IsBoolean, IsDate, Length } from 'class-validator';
@@ -12,8 +12,8 @@ import { User } from 'src/user/entities/user.entity';
 
 @Entity()
 export class Task {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @Length(8, 20)
@@ -37,9 +37,13 @@ export class Task {
   @IsDate()
   endDate: Date;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   @IsBoolean()
   isCompleted = false;
+
+  @Column({ type: 'boolean', default: true })
+  @IsBoolean()
+  isOwnTask = true;
 
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'project_id' })

@@ -4,6 +4,7 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from 'src/task/entities/task.entity';
 import { IRepository } from 'src/interfaces/repository.interface';
+import { LeisureActivity } from 'src/leisure-activity/entities/leisure-activity.entity';
 
 @Injectable()
 export class UserRepository implements IRepository<User> {
@@ -13,18 +14,26 @@ export class UserRepository implements IRepository<User> {
   ) {}
 
   async findAll(): Promise<User[]> {
-    return this.repository.find();
+    return this.repository.find({
+      relations: {
+        teams: true,
+        activities: true,
+        tasks: {
+          dependencies: true,
+        },
+      },
+    });
   }
 
-  async findById(id: number): Promise<User> {
+  async findById(id: string): Promise<User> {
     return this.repository.findOne({
       where: { id },
       relations: {
         teams: true,
         activities: true,
         tasks: {
-          dependencies: true
-        }
+          dependencies: true,
+        },
       },
     });
   }
@@ -42,16 +51,15 @@ export class UserRepository implements IRepository<User> {
     return this.repository.save(newUser);
   }
 
-  async update(id: number, userData: Partial<User>): Promise<User> {
+  async update(id: string, userData: Partial<User>): Promise<User> {
     const user = await this.findById(id);
     if (!user) {
-      throw new NotFoundException('Team not found');
+      throw new NotFoundException('User not found');
     }
-    await this.repository.update(id, userData);
-    return user;
+    return await this.repository.save({ ...user, ...userData });
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.repository.delete(id);
   }
 
@@ -78,5 +86,16 @@ export class UserRepository implements IRepository<User> {
     user.tasks = user.tasks.filter(userTask => userTask.id !== task.id);
     await this.repository.save(user);
     return task;
+  }
+
+  async deleteActivityFromUser(
+    user: User,
+    activity: LeisureActivity,
+  ): Promise<LeisureActivity> {
+    user.activities = user.activities.filter(
+      userActivity => userActivity.id !== activity.id,
+    );
+    await this.repository.save(user);
+    return activity;
   }
 }

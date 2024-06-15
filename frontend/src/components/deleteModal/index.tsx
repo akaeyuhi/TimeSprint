@@ -6,12 +6,12 @@ import { Item } from 'src/models/item.model';
 
 interface DeleteModalProps<T extends Item> {
   item: T | null;
-  onDelete: (id: number) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
   onClose: () => void;
   children: React.ReactNode;
 }
 
-const DeleteModal = <T extends Item, >({
+const DeleteModal = <T extends Item>({
   item,
   onDelete,
   onClose,
@@ -25,10 +25,10 @@ const DeleteModal = <T extends Item, >({
 
   return (
     <Stack component="form" sx={styles.container}>
-      <Typography variant="h6" mb={1}>Confirm Deletion</Typography>
-      <Box>
-        {children}
-      </Box>
+      <Typography variant="h6" mb={1}>
+        Confirm Deletion
+      </Typography>
+      <Box>{children}</Box>
       <Box sx={styles.buttonContainer}>
         <Button onClick={handleDelete} variant="contained" color="error">
           Delete

@@ -8,19 +8,24 @@ interface ModalFormProps {
   children: React.ReactNode;
 }
 
-const ModalForm: React.FC<ModalFormProps> = ({ open, handleClose, children }) => (
-  <Modal open={open} onClose={handleClose} closeAfterTransition slots={{ backdrop: Backdrop }}
+const ModalForm: React.FC<ModalFormProps> = ({
+  open,
+  handleClose,
+  children,
+}) => (
+  <Modal
+    open={open}
+    onClose={handleClose}
+    closeAfterTransition
+    slots={{ backdrop: Backdrop }}
     slotProps={{
       backdrop: {
         timeout: 500,
       },
-    }}>
+    }}
+  >
     <Fade in={open}>
-      <Box
-        sx={styles.box}
-      >
-        {children}
-      </Box>
+      <Box sx={styles.box}>{children}</Box>
     </Fade>
   </Modal>
 );

@@ -4,12 +4,14 @@ import { styles } from 'src/pages/Home/styles';
 import TaskList from 'src/pages/Home/components/TaskList';
 import { useStores } from 'src/hooks';
 import Loader from 'src/components/loader';
-
+import LeisureActivityList from 'src/pages/Home/components/ActivityList';
+import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
+import { observer } from 'mobx-react';
 
 const HomePage: React.FC = () => {
   const currentDate = new Date();
-  const { authStore, userStore, handler } = useStores();
-  const { username } = authStore.auth.user;
+  const { authStore, userStore: store, handler } = useStores();
+  const { username, id } = authStore.auth.user;
   const formattedDate = currentDate.toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
@@ -18,11 +20,11 @@ const HomePage: React.FC = () => {
   });
 
   useEffect(() => {
-    userStore.fetch(authStore.auth.user.id);
-  }, [authStore.auth.user.id, userStore]);
+    if (isObjectEmpty(store.current)) store.fetch(id);
+  }, [id, store]);
 
-  if (userStore.isLoading) return <Loader />;
-  if (userStore.error) handler.handle(userStore.error.message);
+  if (store.isLoading || isObjectEmpty(store.current)) return <Loader />;
+  if (store.error) handler.handle(store.error.message);
 
   return (
     <Container maxWidth="lg" sx={styles.container}>
@@ -33,15 +35,17 @@ const HomePage: React.FC = () => {
         <Typography variant="h6" sx={styles.date}>
           Today is {formattedDate}.
         </Typography>
-        <Box>
-          <TaskList tasks={userStore.current.tasks} />
+        <Box mt={2}>
+          <TaskList tasks={store.current.tasks.slice(0, 3)} />
         </Box>
-        {/*<Box>*/}
-        {/*  <LeisureActivityList leisureActivities={leisureActivities}/>*/}
-        {/*</Box>*/}
+        <Box mt={2}>
+          <LeisureActivityList
+            leisureActivities={store.current.activities.slice(0, 3)}
+          />
+        </Box>
       </Box>
     </Container>
   );
 };
 
-export default HomePage;
+export default observer(HomePage);

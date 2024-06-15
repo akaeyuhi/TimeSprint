@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useStores } from 'src/hooks';
 import { styles } from 'src/pages/Team/styles';
-import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
+import { ProjectDto } from 'src/services/dto/project.dto';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User } from 'src/models/user.model';
 import { Project } from 'src/models/project.model';
-import Modals from 'src/pages/Team/components/sections/Modals';
-import MembersSection from 'src/pages/Team/components/sections/MembersSection';
-import ProjectsSection from 'src/pages/Team/components/sections/ProjectsSection';
+import Modals from 'src/pages/Team/components/Modals';
+import MembersSection from 'src/pages/Team/components/MembersSection';
+import ProjectsSection from 'src/pages/Team/components/ProjectsSection';
 import { useModals } from 'src/hooks/use-modals';
 import Loader from 'src/components/loader';
 import { observer } from 'mobx-react';
@@ -16,18 +16,17 @@ import { toast } from 'react-toastify';
 import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
 
 interface TeamModals {
-  members: boolean,
-  admins: boolean,
-  projects: boolean,
-  createProject: boolean,
-  deleteProject: boolean,
-  addUser: boolean,
-  addAdmin: boolean,
-  deleteUser: false,
-  deleteAdmin: false,
-  leaveTeam: boolean,
+  members: boolean;
+  admins: boolean;
+  projects: boolean;
+  createProject: boolean;
+  deleteProject: boolean;
+  addUser: boolean;
+  addAdmin: boolean;
+  deleteUser: false;
+  deleteAdmin: false;
+  leaveTeam: boolean;
 }
-
 
 const TeamPage: React.FC = () => {
   const [teamModals, setTeamModals] = useState<TeamModals>({
@@ -49,76 +48,106 @@ const TeamPage: React.FC = () => {
   const [deleteProject, setDeleteProject] = useState<Project | null>(null);
   const [deleteUser, setDeleteUser] = useState<User | null>(null);
   const [isCurrentAdmin, setIsCurrentAdmin] = useState(
-    !isObjectEmpty(teamStore.current) ? teamStore.isAdmin(authStore.auth.user.id) : false);
+    !isObjectEmpty(teamStore.current)
+      ? teamStore.isAdmin(authStore.auth.user.id)
+      : false
+  );
 
   useEffect(() => {
     if (isObjectEmpty(teamStore.current)) {
-      teamStore.fetch(Number(id)).then(() =>
-        setIsCurrentAdmin(teamStore.isAdmin(authStore.auth.user.id)));
+      teamStore
+        .fetch(id ?? '')
+        .then(() =>
+          setIsCurrentAdmin(teamStore.isAdmin(authStore.auth.user.id))
+        );
     }
   }, [authStore.auth.user.id, handler, id, teamStore]);
 
-  const handleCreateSubmit = useCallback(async (projectDto: CreateProjectDto) => {
-    await teamStore.createProject(projectDto);
-    if (!teamStore.error && !teamStore.isLoading)  {
-      toast.success(`Created project ${projectDto.name}!`);
-      modalHandlers.createProject.close();
-    }
-  }, [modalHandlers.createProject, teamStore]);
+  const handleCreateSubmit = useCallback(
+    async (projectDto: ProjectDto) => {
+      await teamStore.createProject(projectDto);
+      if (!teamStore.error && !teamStore.isLoading) {
+        toast.success(`Created project ${projectDto.name}!`);
+        modalHandlers.createProject.close();
+      }
+    },
+    [modalHandlers.createProject, teamStore]
+  );
 
-  const handleAddUserSubmit = useCallback(async (user: User) => {
-    await teamStore.addMember(user);
-    if (!teamStore.error && !teamStore.isLoading)  {
-      toast.success(`Added new member! ${user.username}!`);
-      modalHandlers.addUser.close();
-    }
-  }, [modalHandlers.addUser, teamStore]);
+  const handleAddUserSubmit = useCallback(
+    async (user: User) => {
+      await teamStore.addMember(user);
+      if (!teamStore.error && !teamStore.isLoading) {
+        toast.success(`Added new member! ${user.username}!`);
+        modalHandlers.addUser.close();
+      }
+    },
+    [modalHandlers.addUser, teamStore]
+  );
 
-  const handleAddAdminSubmit = useCallback(async (user: User) => {
-    await teamStore.addAdmin(user);
-    if (!teamStore.error && !teamStore.isLoading)  {
-      toast.success(`Added new admin! ${user.username}!`);
-      modalHandlers.addAdmin.close();
-    }
-  }, [modalHandlers.addAdmin, teamStore]);
+  const handleAddAdminSubmit = useCallback(
+    async (user: User) => {
+      await teamStore.addAdmin(user);
+      if (!teamStore.error && !teamStore.isLoading) {
+        toast.success(`Added new admin! ${user.username}!`);
+        modalHandlers.addAdmin.close();
+      }
+    },
+    [modalHandlers.addAdmin, teamStore]
+  );
 
-  const handleDeleteProject = useCallback(async (projectId: number) => {
-    await teamStore.deleteProject(projectId);
-    if (!teamStore.error && !teamStore.isLoading)  {
-      toast.success(`Deleted project!`);
-      modalHandlers.deleteProject.close();
-      setDeleteUser(null);
-    }
-  }, [modalHandlers.deleteProject, teamStore]);
+  const handleDeleteProject = useCallback(
+    async (projectId: string) => {
+      await teamStore.deleteProject(projectId);
+      if (!teamStore.error && !teamStore.isLoading) {
+        toast.success(`Deleted project!`);
+        modalHandlers.deleteProject.close();
+        setDeleteUser(null);
+      }
+    },
+    [modalHandlers.deleteProject, teamStore]
+  );
 
   const handleLeaveTeam = useCallback(async () => {
     const userId = authStore.auth.user.id;
     await userStore.fetch(userId);
     await userStore.leaveTeam(teamStore.current.id);
-    if (!teamStore.error && !teamStore.isLoading)  {
+    if (!teamStore.error && !teamStore.isLoading) {
       navigate('/teams');
       toast.success(`Left team ${teamStore.current}`);
       modalHandlers.leaveTeam.close();
     }
-  }, [authStore.auth.user.id, modalHandlers.leaveTeam, navigate, teamStore, userStore]);
+  }, [
+    authStore.auth.user.id,
+    modalHandlers.leaveTeam,
+    navigate,
+    teamStore,
+    userStore,
+  ]);
 
-  const handleDeleteUser = useCallback(async (userId: number) => {
-    await teamStore.deleteUser(userId);
-    if (!teamStore.error && !teamStore.isLoading)  {
-      toast.success(`Deleted user!`);
-      modalHandlers.deleteUser.close();
-      setDeleteUser(null);
-    }
-  }, [modalHandlers.deleteUser, teamStore]);
+  const handleDeleteUser = useCallback(
+    async (userId: string) => {
+      await teamStore.deleteUser(userId);
+      if (!teamStore.error && !teamStore.isLoading) {
+        toast.success(`Deleted user!`);
+        modalHandlers.deleteUser.close();
+        setDeleteUser(null);
+      }
+    },
+    [modalHandlers.deleteUser, teamStore]
+  );
 
-  const handleDeleteAdmin = useCallback(async (userId: number) => {
-    await teamStore.deleteAdmin(userId);
-    if (!teamStore.error && !teamStore.isLoading)  {
-      toast.success(`Deleted admin!`);
-      modalHandlers.deleteAdmin.close();
-      setDeleteUser(null);
-    }
-  }, [modalHandlers.deleteAdmin, teamStore]);
+  const handleDeleteAdmin = useCallback(
+    async (userId: string) => {
+      await teamStore.deleteAdmin(userId);
+      if (!teamStore.error && !teamStore.isLoading) {
+        toast.success(`Deleted admin!`);
+        modalHandlers.deleteAdmin.close();
+        setDeleteUser(null);
+      }
+    },
+    [modalHandlers.deleteAdmin, teamStore]
+  );
 
   const handleDeleteClick = (project: Project) => {
     setDeleteProject(project);
@@ -135,8 +164,12 @@ const TeamPage: React.FC = () => {
     modalHandlers.deleteAdmin.open();
   };
 
-  if (teamStore.isLoading || userStore.isLoading || isObjectEmpty(teamStore.current))
-    return <Container><Loader /></Container>;
+  if (
+    teamStore.isLoading ||
+    userStore.isLoading ||
+    isObjectEmpty(teamStore.current)
+  )
+    return <Loader />;
   if (teamStore.error) handler.handle(teamStore.error.message);
   if (userStore.error) handler.handle(userStore.error.message);
 
@@ -151,7 +184,11 @@ const TeamPage: React.FC = () => {
             {teamStore.current.description}
           </Typography>
         </Box>
-        <Button variant="contained" color="error" onClick={modalHandlers.leaveTeam.open}>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={modalHandlers.leaveTeam.open}
+        >
           Leave
         </Button>
       </Box>
@@ -179,7 +216,8 @@ const TeamPage: React.FC = () => {
         team={teamStore.current}
         deletedProject={deleteProject}
         deletedUser={deleteUser}
-        {...modalHandlers} />
+        {...modalHandlers}
+      />
     </Container>
   );
 };

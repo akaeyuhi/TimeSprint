@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
-import { CreateProjectDto } from 'src/services/dto/project/create-project.dto';
+import { ProjectDto } from 'src/services/dto/project.dto';
 import TeamService from 'src/services/team.service';
 import { Project } from 'src/models/project.model';
 
@@ -14,24 +14,25 @@ export class TeamStore {
     makeAutoObservable(this);
   }
 
-  isAdmin(user: User | number) {
-    const id = (typeof user === 'object') ? (user as User).id : user;
-    return !!this.current.admins.find(admin => admin.id === id);
+  isAdmin(user: User | string) {
+    const id = typeof user === 'object' ? (user as User).id : user;
+    return !!this.current.admins.find((admin) => admin.id === id);
   }
 
-  isMember(user: User | number) {
-    const id = (typeof user === 'object') ? (user as User).id : user;
-    return !!this.current.members.find(member => member.id === id);
+  isMember(user: User | string) {
+    const id = typeof user === 'object' ? (user as User).id : user;
+    return !!this.current.members.find((member) => member.id === id);
   }
 
-  getUserById(id: number) {
-    return this.current.members.find(member => member.id === id);
+  getUserById(id: string) {
+    return this.current.members.find((member) => member.id === id);
   }
 
-  async fetch(teamId: number) {
+  async fetch(teamId: string) {
     this.isLoading = true;
     try {
-      const team = <Team> await this.teamService.getTeam(teamId);
+      const team = <Team>await this.teamService.getTeam(teamId);
+      if (!team) return this.current;
       runInAction(() => {
         this.current = team;
       });
@@ -51,13 +52,13 @@ export class TeamStore {
     return this.current.projects;
   }
 
-  async createProject(projectDto: CreateProjectDto) {
+  async createProject(projectDto: ProjectDto) {
     this.isLoading = true;
     try {
-      const project = <Project> await this.teamService.createProject(
-        this.current.id,
-        projectDto,
+      const project = <Project>(
+        await this.teamService.createProject(this.current.id, projectDto)
       );
+      if (!project) return this.current.projects;
       runInAction(() => {
         this.current.projects.push(project);
       });
@@ -65,26 +66,26 @@ export class TeamStore {
       runInAction(() => {
         this.error = error as Error;
       });
-
     } finally {
       runInAction(() => {
         this.isLoading = false;
       });
-
     }
     return this.current.projects;
   }
 
-  async deleteProject(projectId: number) {
+  async deleteProject(projectId: string) {
     this.isLoading = true;
     try {
-      await this.teamService.deleteProject(
+      const result = await this.teamService.deleteProject(
         this.current.id,
-        projectId,
+        projectId
       );
+      if (!result) return this.current.projects;
       runInAction(() => {
-        this.current.projects =
-          this.current.projects.filter(project => project.id !== projectId);
+        this.current.projects = this.current.projects.filter(
+          (project) => project.id !== projectId
+        );
       });
     } catch (error) {
       runInAction(() => {
@@ -102,7 +103,10 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isMember(user)) {
-        const newMember = <User> await this.teamService.addMember(this.current.id, user.id);
+        const newMember = <User>(
+          await this.teamService.addMember(this.current.id, user.id)
+        );
+        if (!newMember) return user;
         runInAction(() => {
           this.current.members.push(newMember);
         });
@@ -127,9 +131,12 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isAdmin(user)) {
-        const newMember = <User> await this.teamService.addAdmin(this.current.id, user.id);
+        const newAdmin = <User>(
+          await this.teamService.addAdmin(this.current.id, user.id)
+        );
+        if (!newAdmin) return user;
         runInAction(() => {
-          this.current.admins.push(newMember);
+          this.current.admins.push(newAdmin);
         });
       } else {
         runInAction(() => {
@@ -148,15 +155,20 @@ export class TeamStore {
     return user;
   }
 
-  async deleteUser(userId: number): Promise<void> {
+  async deleteUser(userId: string): Promise<void> {
     this.isLoading = true;
     try {
       const user = this.getUserById(userId);
       await runInAction(async () => {
         if (user && !this.isAdmin(user)) {
-          await this.teamService.deleteMember(this.current.id, userId);
-          this.current.members =
-            this.current.members.filter(member => member.id !== userId);
+          const result = await this.teamService.deleteMember(
+            this.current.id,
+            userId
+          );
+          if (result === null) return;
+          this.current.members = this.current.members.filter(
+            (member) => member.id !== userId
+          );
         } else if (user && this.isAdmin(user)) {
           this.error = new Error('This user has admin privilege');
         } else {
@@ -175,15 +187,20 @@ export class TeamStore {
     }
   }
 
-  async deleteAdmin(userId: number): Promise<void> {
+  async deleteAdmin(userId: string): Promise<void> {
     this.isLoading = true;
     try {
       const user = this.getUserById(userId);
       await runInAction(async () => {
         if (user && this.isAdmin(user)) {
-          await this.teamService.deleteAdmin(this.current.id, userId);
-          this.current.admins =
-            this.current.admins.filter(admin => admin.id !== userId);
+          const result = await this.teamService.deleteAdmin(
+            this.current.id,
+            userId
+          );
+          if (result === null) return;
+          this.current.admins = this.current.admins.filter(
+            (admin) => admin.id !== userId
+          );
         } else if (user && !this.isAdmin(user)) {
           this.error = new Error('This user has no admin privilege');
         } else {

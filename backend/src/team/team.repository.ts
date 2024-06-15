@@ -12,13 +12,14 @@ export class TeamRepository implements IRepository<Team> {
     @InjectRepository(Team)
     private readonly repository: Repository<Team>,
   ) {}
+
   async findAll(): Promise<Team[]> {
     return this.repository.find({
       relations: ['members', 'admins', 'projects'],
     });
   }
 
-  async findById(id: number): Promise<Team> {
+  async findById(id: string): Promise<Team> {
     return this.repository.findOne({
       where: { id },
       relations: ['members', 'admins', 'projects'],
@@ -30,16 +31,15 @@ export class TeamRepository implements IRepository<Team> {
     return this.repository.save(team);
   }
 
-  async update(id: number, updateTeamDto: Partial<Team>): Promise<Team> {
+  async update(id: string, updateTeamDto: Partial<Team>): Promise<Team> {
     const team = await this.findById(id);
     if (!team) {
       throw new NotFoundException('Team not found');
     }
-    await this.repository.update(id, updateTeamDto);
-    return { ...team, ...updateTeamDto };
+    return await this.repository.save({ ...team, ...updateTeamDto });
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     const team = await this.findById(id);
     if (!team) {
       throw new NotFoundException('Team not found');
@@ -47,7 +47,7 @@ export class TeamRepository implements IRepository<Team> {
     await this.repository.remove(team);
   }
 
-  async findByAdmin(adminId: number): Promise<Team[]> {
+  async findByAdmin(adminId: string): Promise<Team[]> {
     return this.repository
       .createQueryBuilder('team')
       .leftJoinAndSelect('team.admins', 'admin')
@@ -55,7 +55,7 @@ export class TeamRepository implements IRepository<Team> {
       .getMany();
   }
 
-  async findByMember(memberId: number): Promise<Team[]> {
+  async findByMember(memberId: string): Promise<Team[]> {
     return this.repository
       .createQueryBuilder('team')
       .leftJoinAndSelect('team.members', 'member')
@@ -63,7 +63,7 @@ export class TeamRepository implements IRepository<Team> {
       .getMany();
   }
 
-  async getTeamIdByProject(projectId: number): Promise<number> {
+  async getTeamIdByProject(projectId: string): Promise<string> {
     const team = await this.repository
       .createQueryBuilder('team')
       .innerJoin('team.projects', 'project')

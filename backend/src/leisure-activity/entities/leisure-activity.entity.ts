@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { IsBoolean, IsDate, Length } from 'class-validator';
 
 @Entity()
 export class LeisureActivity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @Length(8, 20)
@@ -23,10 +23,10 @@ export class LeisureActivity {
   @IsDate()
   endDate: Date;
 
-  @Column()
+  @Column({ type: 'boolean', default: false })
   @IsBoolean()
-  isCompleted: boolean;
+  isCompleted = false;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   user: User;
 }

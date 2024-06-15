@@ -1,0 +1,33 @@
+{
+  "name": "timesprint",
+  "version": "0.5.3",
+  "description": "Simple web-app for organizing free time",
+  "main": "./backend/src/main.ts",
+  "scripts": {
+    "test": "npm run test",
+    "installDependencies": "npm install --prefix /backend && npm install --prefix /frontend",
+    "lint": "eslint ./backend/ --fix --ext .ts  && eslint ./backend/src --fix",
+    "build": "npm run --prefix /frontend build && npm run --prefix /backend build",
+    "start": "npm run --prefix /frontend build && npm run --prefix /backend start",
+    "start:dev": "npm run --prefix /backend start:dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akaeyuhi/TimeSprint.git"
+  },
+  "keywords": [
+    "backelors",
+    "web",
+    "react",
+    "node",
+    "nestjs",
+    "typescript",
+    "postgresql"
+  ],
+  "author": "AkaeYuhi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/akaeyuhi/TimeSprint/issues"
+  },
+  "homepage": "https://github.com/akaeyuhi/TimeSprint#readme",
+}

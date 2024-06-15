@@ -28,12 +28,13 @@ type CustomHttpClientArgs = {
 };
 
 type BackendError = {
-  message: string | string[],
-  error: string,
-  statusCode: number,
-}
+  message: string | string[];
+  error: string;
+  statusCode: number;
+};
 
-const ISODateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?(?:[-+]\d{2}:?\d{2}|Z)?$/;
+const ISODateFormat =
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?(?:[-+]\d{2}:?\d{2}|Z)?$/;
 
 const isIsoDateString = (value: unknown): value is string =>
   typeof value === 'string' && ISODateFormat.test(value);
@@ -67,8 +68,11 @@ class CustomHttpClient implements IHttpClient {
     } catch (err) {
       const error = err as AxiosError;
       const data = error.response?.data as BackendError;
-      const errorMsg = (data && data.message instanceof Array ?
-        'Error: ' + data.message.join(', ') : String(data.message));
+      const errorMsg =
+        data && data.message instanceof Array
+          ? 'Error: ' + data.message.join(', ')
+          : String(data.message);
+      console.log(errorMsg);
       this.errorHandler.handle(errorMsg);
     }
     return null;
@@ -76,7 +80,8 @@ class CustomHttpClient implements IHttpClient {
 
   private handleDates(data: unknown) {
     if (isIsoDateString(data)) return parseISO(data);
-    if (data === null || data === undefined || typeof data !== 'object') return data;
+    if (data === null || data === undefined || typeof data !== 'object')
+      return data;
 
     for (const [key, val] of Object.entries(data)) {
       // @ts-expect-error this is a hack to make the type checker happy
@@ -85,37 +90,41 @@ class CustomHttpClient implements IHttpClient {
     }
 
     return data;
-  };
+  }
 
   private initializeTokenInterceptor() {
     this.axios.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         if (this.authStore?.isAuthenticated) {
-          config.headers['Authorization'] = `Bearer ${this.authStore?.auth.accessToken}`;
+          config.headers['Authorization'] =
+            `Bearer ${this.authStore?.auth.accessToken}`;
         }
         return config;
       },
-      (error) => Promise.reject(error),
+      (error) => Promise.reject(error)
     );
   }
 
   private initializeDateInterceptor() {
-    this.axios.interceptors.response.use(
-      (response: AxiosResponse) => {
-        this.handleDates(response.data);
-        return response;
-      }
-    );
+    this.axios.interceptors.response.use((response: AxiosResponse) => {
+      this.handleDates(response.data);
+      return response;
+    });
   }
 
   private initializeRefreshInterceptor() {
     this.axios.interceptors.response.use(
       (response: AxiosResponse) => response,
       async (error: AxiosError) => {
-        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+        const originalRequest = error.config as InternalAxiosRequestConfig & {
+          _retry?: boolean;
+        };
 
-        if (error.response?.status === 401 && !originalRequest?._retry &&
-          (error.response?.data as any).message !== 'Invalid password or email') {
+        if (
+          error.response?.status === 401 &&
+          !originalRequest?._retry &&
+          (error.response?.data as any).message !== 'Invalid password or email'
+        ) {
           if (this.isRefreshing) {
             return new Promise((resolve) => {
               this.refreshSubscribers.push((token: string) => {
@@ -142,15 +151,13 @@ class CustomHttpClient implements IHttpClient {
         }
 
         return Promise.reject(error);
-      },
+      }
     );
   }
 
   private async refreshToken(): Promise<string> {
     const link = process.env.REACT_APP_API_URL ?? 'http://localhost:3001';
-    const response = await this.axios.post(link + '/auth/refresh', {
-      refreshToken: this.authStore?.auth.refreshToken,
-    });
+    const response = await this.axios.get(link + '/auth/refresh');
     const newToken = response.data.accessToken;
     this.authStore?.setAccessToken(newToken);
     return newToken;

@@ -18,7 +18,7 @@ export class HttpRequest {
   post<T>(
     url: string,
     data?: HttpClientRequestConfig['data'],
-    isAuth?: boolean,
+    isAuth?: boolean
   ) {
     return this.httpClient.request<T>({ url, method: 'POST', data, isAuth });
   }
@@ -26,7 +26,7 @@ export class HttpRequest {
   patch<T>(
     url: string,
     data: HttpClientRequestConfig['data'],
-    isAuth?: boolean,
+    isAuth?: boolean
   ) {
     return this.httpClient.request<T>({ url, method: 'PATCH', data, isAuth });
   }

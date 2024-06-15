@@ -14,10 +14,11 @@ export class SiteAdminRepository implements IRepository<SiteAdmin> {
 
   async create(user: User): Promise<SiteAdmin> {
     const admin = this.repository.create({ user });
+    console.log(admin);
     return await this.repository.save(admin);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.repository.delete(id);
   }
 
@@ -25,15 +26,15 @@ export class SiteAdminRepository implements IRepository<SiteAdmin> {
     return await this.repository.find();
   }
 
-  async findById(id: number): Promise<SiteAdmin> {
+  async findById(id: string): Promise<SiteAdmin> {
     return await this.repository.findOneBy({ id });
   }
 
-  async findByUserId(userId: number): Promise<SiteAdmin | undefined> {
+  async findByUserId(userId: string): Promise<SiteAdmin | undefined> {
     return await this.repository.findOne({ where: { user: { id: userId } } });
   }
 
-  async update(id: number, data: Partial<SiteAdmin>): Promise<SiteAdmin> {
+  async update(id: string, data: Partial<SiteAdmin>): Promise<SiteAdmin> {
     const admin = await this.findById(id);
     if (!admin) {
       throw new NotFoundException(`Task with ID ${id} not found`);

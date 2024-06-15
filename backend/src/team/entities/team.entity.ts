@@ -1,10 +1,10 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  Entity,
   JoinTable,
+  ManyToMany,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Length } from 'class-validator';
@@ -12,8 +12,8 @@ import { Project } from 'src/project/entities/project.entity';
 
 @Entity()
 export class Team {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @Length(8, 20)

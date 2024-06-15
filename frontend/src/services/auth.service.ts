@@ -1,16 +1,16 @@
 import BaseService from './base.service';
 import HttpRequest from 'src/utils/common/httpRequest';
-import { LoginDto } from 'src/services/dto/auth/login.dto';
-import { Auth } from 'src/services/types';
+import { LoginDto } from 'src/services/dto/login.dto';
+import { Auth, Return } from 'src/services/types';
 import { AuthError } from 'src/services/errors/auth.error';
-import { RegisterDto } from 'src/services/dto/auth/register.dto';
+import { RegisterDto } from 'src/services/dto/register.dto';
 
 export class AuthService extends BaseService {
   constructor(httpRequest: HttpRequest) {
     super(httpRequest);
   }
 
-  async login(auth: LoginDto): Promise<Auth | null> {
+  async login(auth: LoginDto): Promise<Return<Auth>> {
     try {
       return await this.httpRequest.post<Auth>('/auth/login', auth);
     } catch (error) {
@@ -18,7 +18,7 @@ export class AuthService extends BaseService {
     }
   }
 
-  async register(dto: RegisterDto): Promise<Auth | null> {
+  async register(dto: RegisterDto): Promise<Return<Auth>> {
     try {
       return await this.httpRequest.post<Auth>('/auth/register', dto);
     } catch (error) {
@@ -26,7 +26,7 @@ export class AuthService extends BaseService {
     }
   }
 
-  async refreshToken(refreshToken: string): Promise<Partial<Auth> | null> {
+  async refreshToken(refreshToken: string): Promise<Partial<Return<Auth>>> {
     try {
       return await this.httpRequest.post('/auth/refresh', { refreshToken });
     } catch (error) {

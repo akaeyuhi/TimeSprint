@@ -7,6 +7,7 @@ import { TeamRepository } from 'src/team/team.repository';
 import { UserModule } from 'src/user/user.module';
 import { TaskModule } from 'src/task/task.module';
 import { ProjectModule } from 'src/project/project.module';
+import { SiteAdminModule } from 'src/site-admin/site-admin.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ProjectModule } from 'src/project/project.module';
     forwardRef(() => ProjectModule),
     TaskModule,
     TypeOrmModule.forFeature([Team]),
+    SiteAdminModule,
   ],
   controllers: [TeamController],
   providers: [TeamService, TeamRepository],

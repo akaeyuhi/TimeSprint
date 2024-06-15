@@ -2,8 +2,8 @@ import { makePersistable } from 'mobx-persist-store';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Auth } from 'src/services/types';
 import { AuthService } from 'src/services/auth.service';
-import { LoginDto } from 'src/services/dto/auth/login.dto';
-import { RegisterDto } from 'src/services/dto/auth/register.dto';
+import { LoginDto } from 'src/services/dto/login.dto';
+import { RegisterDto } from 'src/services/dto/register.dto';
 
 export class AuthStore {
   auth: Auth = {} as Auth;
@@ -34,6 +34,7 @@ export class AuthStore {
 
   logout() {
     this.auth = {} as Auth;
+    window.location.reload();
   }
 
   async login(authDto: LoginDto) {
@@ -43,6 +44,7 @@ export class AuthStore {
     this.isLoading = true;
     try {
       const auth = await this.authService.login(authDto);
+      if (!auth) return;
       runInAction(() => {
         this.auth = auth as Auth;
         this.error = null;
@@ -65,6 +67,7 @@ export class AuthStore {
     this.isLoading = true;
     try {
       const auth = await this.authService.register(registerDto);
+      if (!auth) return;
       runInAction(() => {
         this.auth = auth as Auth;
         this.error = null;
@@ -87,6 +90,7 @@ export class AuthStore {
     this.isLoading = true;
     try {
       const updatedAuth = await this.authService.refreshToken(refreshToken);
+      if (!updatedAuth) return;
       runInAction(() => {
         Object.assign(this.auth, updatedAuth);
         this.error = null;

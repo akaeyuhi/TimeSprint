@@ -14,23 +14,26 @@ export class TaskService {
     project?: Project,
   ): Promise<Task> {
     if (project) {
-      return await this.taskRepository.create(createTaskDto, project);
+      return await this.taskRepository.create(
+        { ...createTaskDto, isOwnTask: false },
+        project,
+      );
     }
     return await this.taskRepository.create(createTaskDto);
   }
 
-  async findById(taskId: number): Promise<Task> {
+  async findById(taskId: string): Promise<Task> {
     return await this.taskRepository.findById(taskId);
   }
 
   async updateTask(
-    taskId: number,
+    taskId: string,
     updateTaskDto: Partial<UpdateTaskDto>,
   ): Promise<Task> {
     return await this.taskRepository.update(taskId, updateTaskDto);
   }
 
-  async deleteTask(taskId: number): Promise<void> {
+  async deleteTask(taskId: string): Promise<void> {
     return await this.taskRepository.delete(taskId);
   }
 
@@ -38,12 +41,20 @@ export class TaskService {
     return await this.taskRepository.findAllTaskWithDependencies();
   }
 
-  async findTaskDependencies(taskId: number): Promise<Task[]> {
+  async findAll(): Promise<Task[]> {
+    return await this.taskRepository.findAll();
+  }
+
+  async findTaskDependencies(taskId: string): Promise<Task[]> {
     return await this.taskRepository.findTaskDependencies(taskId);
   }
 
   calculateTaskPriority(task: Task): number {
     let priority = 0;
+
+    if (task.isCompleted) {
+      return -1;
+    }
 
     // Work-related tasks have higher priority than leisure tasks
     if (task.project) {
@@ -52,11 +63,22 @@ export class TaskService {
 
     // Tasks with approaching deadlines have higher priority
     const currentDate = new Date();
-    if (task.endDate && task.endDate.getTime() < currentDate.getTime()) {
+    if (task.endDate) {
       const timeDifference = task.endDate.getTime() - currentDate.getTime();
       const daysUntilDeadline = Math.ceil(timeDifference / (1000 * 3600 * 24));
+      console.log(daysUntilDeadline);
       // Adjust priority based on days until deadline
-      priority += daysUntilDeadline;
+      if (daysUntilDeadline < 3) {
+        priority += 1;
+      } else if (daysUntilDeadline < 2) {
+        priority += 2;
+      } else if (daysUntilDeadline < 1) {
+        priority += 3;
+      }
+    }
+
+    if (task.dependencies.length > 0) {
+      priority += task.dependencies.length;
     }
 
     // Urgent and important tasks have higher priority

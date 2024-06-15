@@ -18,27 +18,26 @@ export class ProjectRepository implements IRepository<Project> {
     return await this.repository.save(project);
   }
 
-  async update(id: number, projectData: Partial<Project>): Promise<Project> {
+  async update(id: string, projectData: Partial<Project>): Promise<Project> {
     const project = await this.findById(id);
     if (!project) {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
-    await this.repository.update(id, projectData);
-    return { ...project, ...projectData };
+    return await this.repository.save({ ...project, ...projectData });
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.repository.delete(id);
   }
 
-  async findById(id: number): Promise<Project> {
+  async findById(id: string): Promise<Project> {
     return await this.repository.findOne({
       where: { id },
       relations: {
         team: true,
         tasks: {
-          dependencies: true
-        }
+          dependencies: true,
+        },
       },
     });
   }
@@ -47,29 +46,29 @@ export class ProjectRepository implements IRepository<Project> {
     return await this.repository.find({ relations: ['team', 'tasks'] });
   }
 
-  async assignProjectToTeam(projectId: number, team: Team): Promise<Project> {
+  async assignProjectToTeam(projectId: string, team: Team): Promise<Project> {
     const project = await this.findById(projectId);
     project.team = team;
     return await this.repository.save(project);
   }
 
-  async findProjectsByTeam(teamId: number): Promise<Project[]> {
+  async findProjectsByTeam(teamId: string): Promise<Project[]> {
     return await this.repository.find({ where: { team: { id: teamId } } });
   }
 
-  async addTaskToProject(id: number, ...tasks: Task[]): Promise<void> {
+  async addTaskToProject(id: string, ...tasks: Task[]): Promise<void> {
     const project = await this.findById(id);
     project.tasks.push(...tasks);
     await this.repository.save(project);
   }
 
-  async removeTaskFromProject(id: number, taskId: number): Promise<void> {
+  async removeTaskFromProject(id: string, taskId: string): Promise<void> {
     const project = await this.findById(id);
     project.tasks = project.tasks.filter(task => task.id !== taskId);
     await this.repository.save(project);
   }
 
-  async findTasksByProject(id: number): Promise<Task[]> {
+  async findTasksByProject(id: string): Promise<Task[]> {
     const project = await this.repository.findOne({
       where: { id },
       relations: ['tasks'],
