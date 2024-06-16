@@ -4,7 +4,6 @@
   "description": "Simple web-app for organizing free time",
   "main": "./backend/src/main.ts",
   "scripts": {
-    "test": "npm run test",
     "installDependencies": "npm install --prefix ./backend && npm install --prefix ./frontend",
     "lint": "npm run --prefix ./frontend lint && npm run --prefix ./backend lint",
     "build": "npm run --prefix ./frontend build && npm run --prefix ./backend build",
