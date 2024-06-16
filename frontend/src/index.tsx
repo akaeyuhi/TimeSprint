@@ -10,16 +10,20 @@ import { ComponentPreviews, useInitial } from './dev';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
-  <AppConfig>
+
+const app =
+  process.env.REACT_APP_IS_PRODUCTION === 'true' ? (
+    <App />
+  ) : (
     <DevSupport
       ComponentPreviews={ComponentPreviews}
       useInitialHook={useInitial}
     >
       <App />
     </DevSupport>
-  </AppConfig>
-);
+  );
+
+root.render(<AppConfig>{app}</AppConfig>);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
