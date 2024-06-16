@@ -3,7 +3,6 @@ import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
 import { ProjectDto } from 'src/services/dto/project.dto';
 import TeamService from 'src/services/team.service';
-import { Project } from 'src/models/project.model';
 
 export class TeamStore {
   error: Error | null = null;
@@ -31,7 +30,7 @@ export class TeamStore {
   async fetch(teamId: string) {
     this.isLoading = true;
     try {
-      const team = <Team>await this.teamService.getTeam(teamId);
+      const team = await this.teamService.getTeam(teamId);
       if (!team) return this.current;
       runInAction(() => {
         this.current = team;
@@ -55,8 +54,9 @@ export class TeamStore {
   async createProject(projectDto: ProjectDto) {
     this.isLoading = true;
     try {
-      const project = <Project>(
-        await this.teamService.createProject(this.current.id, projectDto)
+      const project = await this.teamService.createProject(
+        this.current.id,
+        projectDto
       );
       if (!project) return this.current.projects;
       runInAction(() => {
@@ -103,8 +103,9 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isMember(user)) {
-        const newMember = <User>(
-          await this.teamService.addMember(this.current.id, user.id)
+        const newMember = await this.teamService.addMember(
+          this.current.id,
+          user.id
         );
         if (!newMember) return user;
         runInAction(() => {
@@ -131,8 +132,9 @@ export class TeamStore {
     this.isLoading = true;
     try {
       if (!this.isAdmin(user)) {
-        const newAdmin = <User>(
-          await this.teamService.addAdmin(this.current.id, user.id)
+        const newAdmin = await this.teamService.addAdmin(
+          this.current.id,
+          user.id
         );
         if (!newAdmin) return user;
         runInAction(() => {

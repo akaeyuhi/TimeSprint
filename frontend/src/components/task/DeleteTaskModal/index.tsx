@@ -3,13 +3,13 @@ import DeleteModal from 'src/components/deleteModal';
 import { Task } from 'src/models/task.model';
 import { Typography } from '@mui/material';
 
-interface DeleteTaskModal {
+interface DeleteTaskModalProps {
   task: Task | null;
   onDelete: (id: string) => Promise<void>;
   onClose: () => void;
 }
 
-const DeleteTaskModal: React.FC<DeleteTaskModal> = ({
+const DeleteTaskModal: React.FC<DeleteTaskModalProps> = ({
   task,
   onDelete,
   onClose,

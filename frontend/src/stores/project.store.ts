@@ -71,8 +71,9 @@ export class ProjectStore extends TaskStore<Project> {
   async createTask(taskDto: TaskDto): Promise<Task[]> {
     this.isLoading = true;
     try {
-      const newTask = <Task>(
-        await this.projectService.createTask(taskDto, this.current as Project)
+      const newTask = await this.projectService.createTask(
+        taskDto,
+        this.current as Project
       );
       if (!newTask) return this.tasks;
       runInAction(() => {
@@ -131,8 +132,9 @@ export class ProjectStore extends TaskStore<Project> {
   async editProject(projectDto: ProjectDto) {
     this.isLoading = true;
     try {
-      const updatedProject = <Project>(
-        await this.projectService.updateProject(this.current.id, projectDto)
+      const updatedProject = await this.projectService.updateProject(
+        this.current.id,
+        projectDto
       );
       if (!updatedProject) return this.current;
       runInAction(() => {
@@ -155,7 +157,7 @@ export class ProjectStore extends TaskStore<Project> {
     try {
       const task = this.getTaskById(taskId);
       if (!task) return this.tasks;
-      const toggledTask = <Task>await this.projectService.toggleTask(task);
+      const toggledTask = await this.projectService.toggleTask(task);
       if (!toggledTask) return this.tasks;
       runInAction(() => {
         const index = this.tasks.findIndex((t) => t.id === taskId);

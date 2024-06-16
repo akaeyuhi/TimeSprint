@@ -30,7 +30,7 @@ export class UserStore extends TaskStore<User> {
   async fetch(userId: string): Promise<User> {
     this.isLoading = true;
     try {
-      const user = <User>await this.userService.getUser(userId);
+      const user = await this.userService.getUser(userId);
       if (!user) return this.current;
       runInAction(() => {
         this.current = user;
@@ -52,7 +52,7 @@ export class UserStore extends TaskStore<User> {
   async getUser(userId: string): Promise<User | null> {
     this.isLoading = true;
     try {
-      return <User>await this.userService.getUser(userId);
+      return await this.userService.getUser(userId);
     } catch (error) {
       runInAction(() => {
         this.error = error as Error;
@@ -179,7 +179,7 @@ export class UserStore extends TaskStore<User> {
       return newTasks;
     } catch (error) {
       runInAction(() => {
-        this.error = <Error>error;
+        this.error = error as Error;
       });
       throw error;
     } finally {
@@ -225,7 +225,7 @@ export class UserStore extends TaskStore<User> {
       });
     } catch (error) {
       runInAction(() => {
-        this.error = <Error>error;
+        this.error = error as Error;
       });
     } finally {
       runInAction(() => {
@@ -246,7 +246,7 @@ export class UserStore extends TaskStore<User> {
       });
     } catch (error) {
       runInAction(() => {
-        this.error = <Error>error;
+        this.error = error as Error;
       });
     } finally {
       runInAction(() => {
@@ -260,16 +260,14 @@ export class UserStore extends TaskStore<User> {
   async update(id: string, updateDto: Partial<User>): Promise<User> {
     this.isLoading = true;
     try {
-      const updatedUser = <User>(
-        await this.userService.updateUser(id, updateDto)
-      );
+      const updatedUser = await this.userService.updateUser(id, updateDto);
       if (!updatedUser) return this.current;
       runInAction(() => {
         this.current = updatedUser;
       });
     } catch (error) {
       runInAction(() => {
-        this.error = <Error>error;
+        this.error = error as Error;
       });
     } finally {
       runInAction(() => {
@@ -289,8 +287,9 @@ export class UserStore extends TaskStore<User> {
   ): Promise<LeisureActivity[]> {
     this.isLoading = true;
     try {
-      const newActivity = <LeisureActivity>(
-        await this.userService.createActivity(activityDto, this.current)
+      const newActivity = await this.userService.createActivity(
+        activityDto,
+        this.current
       );
       if (!newActivity) return this.current.activities;
       runInAction(() => {
@@ -298,7 +297,7 @@ export class UserStore extends TaskStore<User> {
       });
     } catch (error) {
       runInAction(() => {
-        this.error = <Error>error;
+        this.error = error as Error;
       });
     } finally {
       runInAction(() => {
@@ -313,8 +312,9 @@ export class UserStore extends TaskStore<User> {
     activityDto: LeisureActivityDto
   ): Promise<LeisureActivity[]> {
     try {
-      const updatedActivity = <LeisureActivity>(
-        await this.activityService.updateActivity(id, activityDto)
+      const updatedActivity = await this.activityService.updateActivity(
+        id,
+        activityDto
       );
       if (!updatedActivity) return this.current.activities;
       runInAction(() => {
@@ -325,7 +325,7 @@ export class UserStore extends TaskStore<User> {
       });
     } catch (error) {
       runInAction(() => {
-        this.error = <Error>error;
+        this.error = error as Error;
       });
     }
     return this.current.activities;
@@ -335,9 +335,8 @@ export class UserStore extends TaskStore<User> {
     try {
       const activity = this.getActivityById(taskId);
       if (!activity) return this.current.activities;
-      const toggledActivity = <LeisureActivity>(
-        await this.activityService.toggleActivity(activity)
-      );
+      const toggledActivity =
+        await this.activityService.toggleActivity(activity);
       if (!toggledActivity) return this.current.activities;
       runInAction(() => {
         const index = this.current.activities.findIndex((t) => t.id === taskId);

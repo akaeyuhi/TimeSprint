@@ -1,15 +1,10 @@
 import BaseService from './base.service';
-import HttpRequest from 'src/utils/common/httpRequest';
 import { LoginDto } from 'src/services/dto/login.dto';
 import { Auth, Return } from 'src/services/types';
 import { AuthError } from 'src/services/errors/auth.error';
 import { RegisterDto } from 'src/services/dto/register.dto';
 
 export class AuthService extends BaseService {
-  constructor(httpRequest: HttpRequest) {
-    super(httpRequest);
-  }
-
   async login(auth: LoginDto): Promise<Return<Auth>> {
     try {
       return await this.httpRequest.post<Auth>('/auth/login', auth);
