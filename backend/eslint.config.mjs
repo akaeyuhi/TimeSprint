@@ -33,7 +33,7 @@ export default [{
 
         parserOptions: {
             project: "tsconfig.json",
-            tsconfigRootDir: "C:\\Users\\Chaika\\Desktop\\кпi\\TimeSprint\\backend",
+            tsconfigRootDir: "./",
         },
     },
 
