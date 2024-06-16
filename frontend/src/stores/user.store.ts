@@ -361,7 +361,7 @@ export class UserStore extends TaskStore<User> {
       });
     } catch (error) {
       runInAction(() => {
-        this.error = <Error>error;
+        this.error = error as Error;
       });
     }
     return this.current.activities;
