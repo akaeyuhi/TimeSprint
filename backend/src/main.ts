@@ -12,6 +12,7 @@ async function bootstrap() {
     .setDescription('The TimeSprinter API 1.0 basic example and description')
     .setVersion('1.0')
     .addTag('time management')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
