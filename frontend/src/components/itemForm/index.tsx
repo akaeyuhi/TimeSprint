@@ -52,7 +52,7 @@ const ItemForm = <T extends ItemDto, K extends Item>({
         {isEdited ? 'Edit' : 'Create'} Item
       </Typography>
       <FormControl error={validation.errors.name}>
-        <InputLabel htmlFor="name">Task name</InputLabel>
+        <InputLabel htmlFor="name">Item name</InputLabel>
         <OutlinedInput
           id="name"
           type="text"
@@ -69,7 +69,7 @@ const ItemForm = <T extends ItemDto, K extends Item>({
         )}
       </FormControl>
       <FormControl error={validation.errors.description}>
-        <InputLabel htmlFor="description">Task description</InputLabel>
+        <InputLabel htmlFor="description">Item description</InputLabel>
         <OutlinedInput
           id="description"
           type="text"

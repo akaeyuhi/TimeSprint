@@ -28,7 +28,7 @@ const AddAdminForm: React.FC<AddAdminFormProps> = ({ onSubmit, onClose }) => {
     (user) =>
       user.id !== currentUser && !admins.some((admin) => admin.id === user.id)
   );
-  const [noCandidates, setNoCandidates] = useState(!!adminCandidates.length);
+  const [noCandidates, setNoCandidates] = useState(!adminCandidates.length);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

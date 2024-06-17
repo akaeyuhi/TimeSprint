@@ -31,8 +31,11 @@ const ProjectPage = () => {
   );
 
   useEffect(() => {
-    if (id) {
-      projectStore.fetch(id ?? '').then(() => {
+    if (
+      id &&
+      (isObjectEmpty(projectStore.current) || id !== projectStore.current.id)
+    ) {
+      projectStore.fetch(id).then(() => {
         setIsCurrentAdmin(projectStore.isUserAdmin(authStore.auth.user.id));
       });
     }

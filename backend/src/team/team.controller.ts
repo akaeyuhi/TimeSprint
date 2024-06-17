@@ -73,7 +73,7 @@ export class TeamController {
     @Param('teamId') teamId: string,
     @Req() req: any,
   ): Promise<void> {
-    return this.teamService.leaveTeam(req.user.id, teamId);
+    return this.teamService.leaveTeam(teamId, req.user.id);
   }
 
   @Put(':teamId/add-member/:memberId')

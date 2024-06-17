@@ -54,7 +54,7 @@ const TeamPage: React.FC = () => {
   );
 
   useEffect(() => {
-    if (isObjectEmpty(teamStore.current)) {
+    if (isObjectEmpty(teamStore.current) || teamStore.current.id !== id) {
       teamStore
         .fetch(id ?? '')
         .then(() =>
@@ -113,9 +113,9 @@ const TeamPage: React.FC = () => {
     await userStore.fetch(userId);
     await userStore.leaveTeam(teamStore.current.id);
     if (!teamStore.error && !teamStore.isLoading) {
+      modalHandlers.leaveTeam.close();
       navigate('/teams');
       toast.success(`Left team ${teamStore.current}`);
-      modalHandlers.leaveTeam.close();
     }
   }, [
     authStore.auth.user.id,
