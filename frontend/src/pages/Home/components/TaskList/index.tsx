@@ -28,7 +28,7 @@ const TaskList: React.FC<Props> = ({ tasks }) => (
         <Typography variant="h5" gutterBottom mb={2}>
           No tasks planned. Maybe you should create one?
         </Typography>
-        <Link to="/tasks">
+        <Link to="/app/tasks">
           <Button variant="contained" color="primary">
             To task page
           </Button>

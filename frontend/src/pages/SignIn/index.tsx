@@ -44,7 +44,7 @@ const SignInPage = () => {
     event.preventDefault();
     if (validation.validate()) {
       await store.login(data);
-      if (!error && store.auth && store.isAuthenticated) navigate('/home');
+      if (!error && store.auth && store.isAuthenticated) navigate('/app/home');
     }
   };
 

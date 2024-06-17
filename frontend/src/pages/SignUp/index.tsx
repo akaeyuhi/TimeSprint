@@ -50,7 +50,7 @@ const SignUpPage = () => {
     event.preventDefault();
     if (validation.validate()) {
       await store.register(data);
-      if (!error && store.auth) navigate('/home');
+      if (!error && store.auth) navigate('/app/home');
     }
   };
 

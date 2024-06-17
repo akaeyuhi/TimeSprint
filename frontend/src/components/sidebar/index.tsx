@@ -17,16 +17,16 @@ import { AdminRole } from 'src/models/roles.enum';
 const Sidebar = () => {
   const { role } = useStore('authStore').auth.user;
   const menuItems = [
-    { path: '/home', title: 'Home', icon: GridView },
-    { path: '/teams', title: 'Teams', icon: Groups2Rounded },
-    { path: '/tasks', title: 'Tasks', icon: AssignmentRounded },
-    { path: '/activities', title: 'Activities', icon: DirectionsRunRounded },
-    { path: '/user', title: 'User', icon: PersonRounded },
+    { path: '/app/home', title: 'Home', icon: GridView },
+    { path: '/app/teams', title: 'Teams', icon: Groups2Rounded },
+    { path: '/app/tasks', title: 'Tasks', icon: AssignmentRounded },
+    { path: '/app/activities', title: 'Activities', icon: DirectionsRunRounded },
+    { path: '/app/user', title: 'User', icon: PersonRounded },
   ];
 
   if (role === AdminRole.ADMIN) {
     menuItems.push({
-      path: '/admin',
+      path: '/app/admin',
       title: 'Admin panel',
       icon: LockPersonRounded,
     });

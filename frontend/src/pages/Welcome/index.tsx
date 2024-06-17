@@ -23,12 +23,12 @@ const WelcomePage: React.FC = () => (
           </Typography>
         </Box>
         <Box sx={styles.buttonBox}>
-          <Link to="/auth/sign-in" style={{ textDecoration: 'none' }}>
+          <Link to="/app/auth/sign-in" style={{ textDecoration: 'none' }}>
             <Button variant="contained" color="primary" sx={styles.button}>
               Sign In
             </Button>
           </Link>
-          <Link to="/auth/sign-up" style={{ textDecoration: 'none' }}>
+          <Link to="/app/auth/sign-up" style={{ textDecoration: 'none' }}>
             <Button variant="outlined" color="primary" sx={styles.button}>
               Sign Up
             </Button>

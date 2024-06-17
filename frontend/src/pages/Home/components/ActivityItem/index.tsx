@@ -24,7 +24,7 @@ const ActivityItem: React.FC<Props> = ({ activity }) => (
       </Typography>
     </CardContent>
     <CardActions>
-      <Link to="/activities">
+      <Link to="/app/activities">
         <Button variant="contained" color="primary">
           To activity
         </Button>

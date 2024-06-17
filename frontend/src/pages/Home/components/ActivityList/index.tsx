@@ -28,7 +28,7 @@ const LeisureActivityList: React.FC<Props> = ({ leisureActivities }) => (
         <Typography variant="h5" gutterBottom mb={2}>
           No leisure activities planned. Maybe you should create one?
         </Typography>
-        <Link to="/activities">
+        <Link to="/app/activities">
           <Button variant="contained" color="primary">
             To activities page
           </Button>

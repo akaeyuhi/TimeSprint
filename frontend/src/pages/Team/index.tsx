@@ -114,7 +114,7 @@ const TeamPage: React.FC = () => {
     await userStore.leaveTeam(teamStore.current.id);
     if (!teamStore.error && !teamStore.isLoading) {
       modalHandlers.leaveTeam.close();
-      navigate('/teams');
+      navigate('/app/teams');
       toast.success(`Left team ${teamStore.current.name}`);
     }
   }, [

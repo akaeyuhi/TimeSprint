@@ -13,7 +13,7 @@ const AdminPage: React.FC = () => {
 
   useEffect(() => {
     if (role !== AdminRole.ADMIN) {
-      navigate('/home');
+      navigate('/app/home');
     }
   }, [id, navigate, role]);
 

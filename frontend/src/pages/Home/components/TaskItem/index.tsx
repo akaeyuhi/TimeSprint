@@ -39,7 +39,7 @@ const TaskItem: React.FC<Props> = ({ task }) => (
       </Typography>
     </CardContent>
     <CardActions>
-      <Link to="/tasks">
+      <Link to="/app/tasks">
         <Button variant="contained" color="primary">
           To Tasks
         </Button>

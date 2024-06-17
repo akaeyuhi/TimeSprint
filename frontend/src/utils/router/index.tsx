@@ -15,7 +15,7 @@ import AdminPage from 'src/pages/AdminPage';
 
 const Router = () => (
   <Routes>
-    <Route path="/" element={<PrivateLayout />}>
+    <Route path="/app/" element={<PrivateLayout />}>
       <Route path="home" element={<HomePage />} />
       <Route path="teams" element={<TeamsPage />} />
       <Route path="teams/:id" element={<TeamPage />} />
@@ -26,12 +26,12 @@ const Router = () => (
       <Route path="user/:id" element={<UserPage />} />
       <Route path="admin" element={<AdminPage />} />
     </Route>
-    <Route path="/welcome" element={<WelcomePage />} />
-    <Route path="/auth/" element={<PublicLayout />}>
+    <Route path="/app/welcome" element={<WelcomePage />} />
+    <Route path="/app/auth/" element={<PublicLayout />}>
       <Route path="sign-in" element={<SignInPage />} />
       <Route path="sign-up" element={<SignUpPage />} />
     </Route>
-    <Route path="*" element={<Navigate to="/home" />} />
+    <Route path="*" element={<Navigate to="/app/home" />} />
   </Routes>
 );
 
