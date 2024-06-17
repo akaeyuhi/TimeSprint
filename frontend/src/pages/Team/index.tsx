@@ -67,8 +67,8 @@ const TeamPage: React.FC = () => {
     async (projectDto: ProjectDto) => {
       await teamStore.createProject(projectDto);
       if (!teamStore.error && !teamStore.isLoading) {
-        toast.success(`Created project ${projectDto.name}!`);
         modalHandlers.createProject.close();
+        toast.success(`Created project ${projectDto.name}!`);
       }
     },
     [modalHandlers.createProject, teamStore]
@@ -78,8 +78,8 @@ const TeamPage: React.FC = () => {
     async (user: User) => {
       await teamStore.addMember(user);
       if (!teamStore.error && !teamStore.isLoading) {
-        toast.success(`Added new member! ${user.username}!`);
         modalHandlers.addUser.close();
+        toast.success(`Added new member! ${user.username}!`);
       }
     },
     [modalHandlers.addUser, teamStore]
@@ -89,8 +89,8 @@ const TeamPage: React.FC = () => {
     async (user: User) => {
       await teamStore.addAdmin(user);
       if (!teamStore.error && !teamStore.isLoading) {
-        toast.success(`Added new admin! ${user.username}!`);
         modalHandlers.addAdmin.close();
+        toast.success(`Added new admin! ${user.username}!`);
       }
     },
     [modalHandlers.addAdmin, teamStore]
@@ -100,8 +100,8 @@ const TeamPage: React.FC = () => {
     async (projectId: string) => {
       await teamStore.deleteProject(projectId);
       if (!teamStore.error && !teamStore.isLoading) {
-        toast.success(`Deleted project!`);
         modalHandlers.deleteProject.close();
+        toast.success(`Deleted project!`);
         setDeleteUser(null);
       }
     },
@@ -115,7 +115,7 @@ const TeamPage: React.FC = () => {
     if (!teamStore.error && !teamStore.isLoading) {
       modalHandlers.leaveTeam.close();
       navigate('/teams');
-      toast.success(`Left team ${teamStore.current}`);
+      toast.success(`Left team ${teamStore.current.name}`);
     }
   }, [
     authStore.auth.user.id,
@@ -129,8 +129,8 @@ const TeamPage: React.FC = () => {
     async (userId: string) => {
       await teamStore.deleteUser(userId);
       if (!teamStore.error && !teamStore.isLoading) {
-        toast.success(`Deleted user!`);
         modalHandlers.deleteUser.close();
+        toast.success(`Deleted user!`);
         setDeleteUser(null);
       }
     },
@@ -141,8 +141,8 @@ const TeamPage: React.FC = () => {
     async (userId: string) => {
       await teamStore.deleteAdmin(userId);
       if (!teamStore.error && !teamStore.isLoading) {
-        toast.success(`Deleted admin!`);
         modalHandlers.deleteAdmin.close();
+        toast.success(`Deleted admin!`);
         setDeleteUser(null);
       }
     },

@@ -34,8 +34,8 @@ const TeamsPage: React.FC = () => {
     async (teamDto: TeamDto) => {
       await userStore.createTeam(teamDto);
       if (!userStore.error && !userStore.isLoading) {
-        toast.success(`Created team: ${teamDto.name}`);
         modalHandlers.createTeam.close();
+        toast.success(`Created team: ${teamDto.name}`);
       }
     },
     [modalHandlers.createTeam, userStore]
