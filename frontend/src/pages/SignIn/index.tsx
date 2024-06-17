@@ -23,8 +23,8 @@ export const passwordRegex = new RegExp(
 );
 
 const validate = (state: LoginDto): ValidationErrors<LoginDto> => ({
-  email: !(state.password.length > 8 && passwordRegex.test(state.password)),
-  password: !state.email,
+  email: !state.email,
+  password: !(state.password.length > 8 && passwordRegex.test(state.password)),
 });
 
 const SignInPage = () => {
