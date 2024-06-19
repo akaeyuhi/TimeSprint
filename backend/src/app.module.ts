@@ -15,7 +15,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../../frontend', 'build'),
-      renderPath: '/app',
+      serveRoot: '/app',
     }),
     TypeOrmModule.forRoot(DatabaseConnectionConfiguration),
     UserModule,

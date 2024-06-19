@@ -49,6 +49,10 @@ export class TaskService {
     return await this.taskRepository.findTaskDependencies(taskId);
   }
 
+  async clearAssignedUser(task: Task) {
+    return await this.taskRepository.clearAssignedUser(task);
+  }
+
   calculateTaskPriority(task: Task): number {
     let priority = 0;
 
@@ -66,7 +70,6 @@ export class TaskService {
     if (task.endDate) {
       const timeDifference = task.endDate.getTime() - currentDate.getTime();
       const daysUntilDeadline = Math.ceil(timeDifference / (1000 * 3600 * 24));
-      console.log(daysUntilDeadline);
       // Adjust priority based on days until deadline
       if (daysUntilDeadline < 3) {
         priority += 1;

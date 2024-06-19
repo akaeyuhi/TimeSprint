@@ -266,7 +266,7 @@ export class UserController {
     description: 'User not found',
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async findTasksInProject(@Param('userId') userId: string): Promise<Task[]> {
+  async findUserTasks(@Param('userId') userId: string): Promise<Task[]> {
     return await this.userService.getUserTasks(userId);
   }
 }

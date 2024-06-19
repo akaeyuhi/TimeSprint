@@ -8,6 +8,7 @@ import { AddTasksDto } from 'src/project/dto/add-tasks.dto';
 import { CreateTaskDto } from 'src/task/dto/create-task.dto';
 import { TaskService } from 'src/task/task.service';
 import { Team } from 'src/team/entities/team.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class ProjectService {
@@ -72,6 +73,13 @@ export class ProjectService {
       throw new NotFoundException(`Project with ID ${projectId} not found`);
     }
     return await this.taskService.createTask(createTaskDto, project);
+  }
+
+  async clearAssignedUser(user: User, project: Project) {
+    for (const task of project.tasks) {
+      if (task.user.id === user.id)
+        await this.taskService.clearAssignedUser(task);
+    }
   }
 
   async removeTaskFromProject(

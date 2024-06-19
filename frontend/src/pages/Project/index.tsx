@@ -38,6 +38,11 @@ const ProjectPage = () => {
       projectStore.fetch(id).then(() => {
         setIsCurrentAdmin(projectStore.isUserAdmin(authStore.auth.user.id));
       });
+    } else if (
+      !isObjectEmpty(projectStore.current) &&
+      id === projectStore.current.id
+    ) {
+      setIsCurrentAdmin(projectStore.isUserAdmin(authStore.auth.user.id));
     }
   }, [authStore.auth.user.id, id, projectStore]);
 

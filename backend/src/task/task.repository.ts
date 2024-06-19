@@ -53,4 +53,9 @@ export class TaskRepository implements IRepository<Task> {
   async findTaskDependencies(taskId: string): Promise<Task[]> {
     return (await this.findById(taskId)).dependencies;
   }
+
+  async clearAssignedUser(task: Task) {
+    task.user = null;
+    return await this.repository.save(task);
+  }
 }

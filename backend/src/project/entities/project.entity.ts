@@ -39,6 +39,9 @@ export class Project {
   @JoinColumn()
   team: Team;
 
-  @OneToMany(() => Task, task => task.project, { cascade: true })
+  @OneToMany(() => Task, task => task.project, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   tasks: Task[];
 }

@@ -5,7 +5,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 const PublicLayout = () => {
   const { isAuthenticated } = useStore('authStore');
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || '/app';
 
   return isAuthenticated ? <Navigate to={from} replace /> : <Outlet />;
 };

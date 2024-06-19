@@ -209,6 +209,13 @@ export class TeamService {
       await this.teamRepository.deleteAdmin(team, member);
     }
     await this.teamRepository.deleteMember(team, member);
+    await this.clearDeletedMemberTasks(member, team);
+  }
+
+  async clearDeletedMemberTasks(user: User, team: Team) {
+    for (const project of team.projects) {
+      await this.projectService.clearAssignedUser(user, project);
+    }
   }
 
   private isMember(user: User, team: Team) {

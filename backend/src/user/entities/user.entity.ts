@@ -42,10 +42,14 @@ export class User {
 
   @OneToMany(() => LeisureActivity, activity => activity.user, {
     cascade: true,
+    onDelete: 'CASCADE',
   })
   activities: LeisureActivity[];
 
-  @OneToMany(() => Task, task => task.user, { cascade: true })
+  @OneToMany(() => Task, task => task.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   tasks: Task[];
 
   @ManyToMany(() => Team, team => team.members, { cascade: ['update'] })

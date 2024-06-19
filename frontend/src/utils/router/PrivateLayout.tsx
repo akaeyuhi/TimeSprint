@@ -10,7 +10,7 @@ const PrivateLayout = () => {
   return isAuthenticated ? (
     <Layout />
   ) : (
-    <Navigate to="/auth/sign-in" state={{ from: location }} replace />
+    <Navigate to="/app/auth/sign-in" state={{ from: location }} replace />
   );
 };
 
