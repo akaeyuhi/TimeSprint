@@ -16,7 +16,7 @@ export class AuthStore {
     makePersistable(this, {
       name: 'AuthStore',
       properties: ['auth'],
-      storage: window.localStorage,
+      storage: window.sessionStorage,
     });
   }
 

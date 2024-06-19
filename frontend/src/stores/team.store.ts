@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, observable, runInAction } from "mobx";
 import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
 import { ProjectDto } from 'src/services/dto/project.dto';
@@ -7,7 +7,7 @@ import TeamService from 'src/services/team.service';
 export class TeamStore {
   error: Error | null = null;
   isLoading = false;
-  current: Team = {} as Team;
+  @observable.deep current: Team = {} as Team;
 
   constructor(private readonly teamService: TeamService) {
     makeAutoObservable(this);
@@ -81,7 +81,7 @@ export class TeamStore {
         this.current.id,
         projectId
       );
-      if (!result) return this.current.projects;
+      if (result === null) return this.current.projects;
       runInAction(() => {
         this.current.projects = this.current.projects.filter(
           (project) => project.id !== projectId

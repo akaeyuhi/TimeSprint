@@ -2,6 +2,7 @@ import React from 'react';
 import { Project } from 'src/models/project.model';
 import ProjectItem from 'src/components/project/ProjectItem';
 import ItemList from 'src/components/itemList';
+import { observer } from 'mobx-react';
 
 interface ProjectListProps {
   projects: Project[];
@@ -21,4 +22,4 @@ const ProjectList: React.FC<ProjectListProps> = ({
   />
 );
 
-export default ProjectList;
+export default observer(ProjectList);

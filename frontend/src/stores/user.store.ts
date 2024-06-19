@@ -215,7 +215,7 @@ export class UserStore extends TaskStore<User> {
     this.isLoading = true;
     try {
       const result = await this.teamService.leaveTeam(teamId);
-      if (!result) return null;
+      if (result === null) return null;
       runInAction(() => {
         if (this.current) {
           this.current.teams = this.current?.teams.filter(
