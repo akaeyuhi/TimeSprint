@@ -42,6 +42,7 @@ export class Project {
   @OneToMany(() => Task, task => task.project, {
     cascade: true,
     onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
   })
   tasks: Task[];
 }

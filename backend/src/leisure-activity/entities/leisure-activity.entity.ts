@@ -27,6 +27,10 @@ export class LeisureActivity {
   @IsBoolean()
   isCompleted = false;
 
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User, {
+    eager: true,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   user: User;
 }

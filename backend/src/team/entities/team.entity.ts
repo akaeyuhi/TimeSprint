@@ -60,7 +60,6 @@ export class Team {
   @OneToMany(() => Project, project => project.team, {
     eager: true,
     cascade: true,
-    onDelete: 'CASCADE',
   })
   projects: Project[];
 }

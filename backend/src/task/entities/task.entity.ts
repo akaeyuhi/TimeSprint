@@ -45,11 +45,18 @@ export class Task {
   @IsBoolean()
   isOwnTask = true;
 
-  @ManyToOne(() => Project)
+  @ManyToOne(() => Project, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   @JoinColumn({ name: 'project_id' })
   project: Project;
 
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User, {
+    eager: true,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
