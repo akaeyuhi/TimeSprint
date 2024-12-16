@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Avatar, Box, Container, Stack, Typography } from '@mui/material';
-import TeamList from 'src/components/team/TeamList';
-import { useStores } from 'src/hooks';
-import { observer } from 'mobx-react';
-import Loader from 'src/components/loader';
-import { useParams } from 'react-router-dom';
-import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
-import { User } from 'src/models/user.model';
-import { stringAvatar } from 'src/utils/common/stringAvatar';
-import { styles } from 'src/pages/User/style';
+import React, { useEffect, useState } from "react";
+import { Avatar, Box, Container, Stack, Typography } from "@mui/material";
+import TeamList from "src/components/team/TeamList";
+import { useStores } from "src/hooks";
+import { observer } from "mobx-react";
+import Loader from "src/components/loader";
+import { useParams } from "react-router-dom";
+import { isObjectEmpty } from "src/utils/common/isObjectEmpty";
+import { User } from "src/models/user.model";
+import { stringAvatar } from "src/utils/common/stringAvatar";
+import { styles } from "src/pages/User/style";
 
 const UserPage: React.FC = () => {
   const { userStore: store, authStore, handler } = useStores();

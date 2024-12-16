@@ -1,19 +1,12 @@
-import React from 'react';
-import { ModalHandler } from 'src/hooks/use-modals';
-import { Team } from 'src/models/team.model';
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Button,
-  Stack,
-  Typography,
-} from '@mui/material';
-import { styles } from 'src/pages/Team/styles';
-import { stringAvatar } from 'src/utils/common/stringAvatar';
-import ModalInfo from 'src/components/modalInfo';
-import { MemberList } from 'src/components/team/MemberList';
-import { User } from 'src/models/user.model';
+import React from "react";
+import { ModalHandler } from "src/hooks/use-modals";
+import { Team } from "src/models/team.model";
+import { Avatar, AvatarGroup, Box, Button, Stack, Typography } from "@mui/material";
+import { styles } from "src/pages/Team/styles";
+import { stringAvatar } from "src/utils/common/stringAvatar";
+import ModalInfo from "src/components/modalInfo";
+import { MemberList } from "src/components/team/MemberList";
+import { User } from "src/models/user.model";
 
 interface MembersSectionProps {
   members: ModalHandler;
@@ -34,7 +27,7 @@ const MembersSection: React.FC<MembersSectionProps> = ({
   team,
   isAdmin = false,
   onDeleteUser,
-  onDeleteAdmin,
+  onDeleteAdmin
 }) => (
   <>
     <Stack>
@@ -50,7 +43,7 @@ const MembersSection: React.FC<MembersSectionProps> = ({
             variant="outlined"
             color="primary"
             onClick={addUser?.open}
-            sx={{ ml: '0.5rem' }}
+            sx={{ ml: "0.5rem" }}
           >
             Add new member
           </Button>
@@ -81,7 +74,7 @@ const MembersSection: React.FC<MembersSectionProps> = ({
             variant="outlined"
             color="primary"
             onClick={addAdmin?.open}
-            sx={{ ml: '0.5rem' }}
+            sx={{ ml: "0.5rem" }}
           >
             Add new admin
           </Button>

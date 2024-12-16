@@ -1,8 +1,8 @@
-import React from 'react';
-import { Box, Button, List, ListItem, Typography } from '@mui/material';
-import ActivityItem from '../ActivityItem';
-import { LeisureActivity } from 'src/models/activity.model';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Box, Button, List, ListItem, Typography } from "@mui/material";
+import ActivityItem from "../ActivityItem";
+import { LeisureActivity } from "src/models/activity.model";
+import { Link } from "react-router-dom";
 
 interface Props {
   leisureActivities: LeisureActivity[];
@@ -15,7 +15,7 @@ const LeisureActivityList: React.FC<Props> = ({ leisureActivities }) => (
         <Typography variant="h5" gutterBottom>
           Leisure Activities to do today
         </Typography>
-        <List sx={{ display: 'flex' }}>
+        <List sx={{ display: "flex" }}>
           {leisureActivities.map((activity) => (
             <ListItem key={activity.id}>
               <ActivityItem activity={activity} />

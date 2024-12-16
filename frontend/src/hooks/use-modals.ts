@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export interface ModalHandler {
   isOpen: boolean;
@@ -20,7 +20,7 @@ export const useModals = <T extends object>(
     modalHandlers[name] = {
       isOpen: fieldValue,
       open: () => set((state) => ({ ...state, [name]: true })),
-      close: () => set((state) => ({ ...state, [name]: false })),
+      close: () => set((state) => ({ ...state, [name]: false }))
     };
   });
   return modalHandlers;

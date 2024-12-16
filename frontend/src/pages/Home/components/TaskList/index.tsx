@@ -1,8 +1,8 @@
-import React from 'react';
-import { Box, Button, List, ListItem, Typography } from '@mui/material';
-import TaskItem from '../TaskItem';
-import { Task } from 'src/models/task.model';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Box, Button, List, ListItem, Typography } from "@mui/material";
+import TaskItem from "../TaskItem";
+import { Task } from "src/models/task.model";
+import { Link } from "react-router-dom";
 
 interface Props {
   tasks: Task[];
@@ -15,7 +15,7 @@ const TaskList: React.FC<Props> = ({ tasks }) => (
         <Typography variant="h5" gutterBottom>
           Urgent Tasks:
         </Typography>
-        <List sx={{ display: 'flex' }}>
+        <List sx={{ display: "flex" }}>
           {tasks.map((task) => (
             <ListItem key={task.id}>
               <TaskItem task={task} />

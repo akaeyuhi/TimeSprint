@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Button, Container, Typography } from '@mui/material';
-import { useStores } from 'src/hooks';
-import { styles } from 'src/pages/Team/styles';
-import { ProjectDto } from 'src/services/dto/project.dto';
-import { useNavigate, useParams } from 'react-router-dom';
-import { User } from 'src/models/user.model';
-import { Project } from 'src/models/project.model';
-import Modals from 'src/pages/Team/components/Modals';
-import MembersSection from 'src/pages/Team/components/MembersSection';
-import ProjectsSection from 'src/pages/Team/components/ProjectsSection';
-import { useModals } from 'src/hooks/use-modals';
-import Loader from 'src/components/loader';
-import { observer } from 'mobx-react';
-import { toast } from 'react-toastify';
-import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
+import React, { useCallback, useEffect, useState } from "react";
+import { Box, Button, Container, Typography } from "@mui/material";
+import { useStores } from "src/hooks";
+import { styles } from "src/pages/Team/styles";
+import { ProjectDto } from "src/services/dto/project.dto";
+import { useNavigate, useParams } from "react-router-dom";
+import { User } from "src/models/user.model";
+import { Project } from "src/models/project.model";
+import Modals from "src/pages/Team/components/Modals";
+import MembersSection from "src/pages/Team/components/MembersSection";
+import ProjectsSection from "src/pages/Team/components/ProjectsSection";
+import { useModals } from "src/hooks/use-modals";
+import Loader from "src/components/loader";
+import { observer } from "mobx-react";
+import { toast } from "react-toastify";
+import { isObjectEmpty } from "src/utils/common/isObjectEmpty";
 
 interface TeamModals {
   members: boolean;
@@ -39,7 +39,7 @@ const TeamPage: React.FC = () => {
     addAdmin: false,
     deleteUser: false,
     deleteAdmin: false,
-    leaveTeam: false,
+    leaveTeam: false
   });
   const { authStore, userStore, teamStore, handler } = useStores();
   const modalHandlers = useModals<TeamModals>(teamModals, setTeamModals);
@@ -56,7 +56,7 @@ const TeamPage: React.FC = () => {
   useEffect(() => {
     if (isObjectEmpty(teamStore.current) || teamStore.current.id !== id) {
       teamStore
-        .fetch(id ?? '')
+        .fetch(id ?? "")
         .then(() =>
           setIsCurrentAdmin(teamStore.isAdmin(authStore.auth.user.id))
         );
@@ -114,7 +114,7 @@ const TeamPage: React.FC = () => {
     await userStore.leaveTeam(teamStore.current.id);
     if (!teamStore.error && !teamStore.isLoading) {
       modalHandlers.leaveTeam.close();
-      navigate('/app/teams');
+      navigate("/app/teams");
       toast.success(`Left team ${teamStore.current.name}`);
     }
   }, [
@@ -122,7 +122,7 @@ const TeamPage: React.FC = () => {
     modalHandlers.leaveTeam,
     navigate,
     teamStore,
-    userStore,
+    userStore
   ]);
 
   const handleDeleteUser = useCallback(

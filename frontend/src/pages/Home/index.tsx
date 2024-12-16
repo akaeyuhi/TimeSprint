@@ -1,22 +1,22 @@
-import React, { useEffect } from 'react';
-import { Box, Container, Typography } from '@mui/material';
-import { styles } from 'src/pages/Home/styles';
-import TaskList from 'src/pages/Home/components/TaskList';
-import { useStores } from 'src/hooks';
-import Loader from 'src/components/loader';
-import LeisureActivityList from 'src/pages/Home/components/ActivityList';
-import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
-import { observer } from 'mobx-react';
+import React, { useEffect } from "react";
+import { Box, Container, Typography } from "@mui/material";
+import { styles } from "src/pages/Home/styles";
+import TaskList from "src/pages/Home/components/TaskList";
+import { useStores } from "src/hooks";
+import Loader from "src/components/loader";
+import LeisureActivityList from "src/pages/Home/components/ActivityList";
+import { isObjectEmpty } from "src/utils/common/isObjectEmpty";
+import { observer } from "mobx-react";
 
 const HomePage: React.FC = () => {
   const currentDate = new Date();
   const { authStore, userStore: store, handler } = useStores();
   const { username, id } = authStore.auth.user;
-  const formattedDate = currentDate.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  const formattedDate = currentDate.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric"
   });
 
   useEffect(() => {

@@ -1,11 +1,11 @@
-import React from 'react';
-import { ModalHandler } from 'src/hooks/use-modals';
-import { Team } from 'src/models/team.model';
-import { Box, Button, Stack, Typography } from '@mui/material';
-import { styles } from 'src/pages/Team/styles';
-import ModalInfo from 'src/components/modalInfo';
-import ProjectList from 'src/components/project/ProjectList';
-import { Project } from 'src/models/project.model';
+import React from "react";
+import { ModalHandler } from "src/hooks/use-modals";
+import { Team } from "src/models/team.model";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { styles } from "src/pages/Team/styles";
+import ModalInfo from "src/components/modalInfo";
+import ProjectList from "src/components/project/ProjectList";
+import { Project } from "src/models/project.model";
 
 interface ProjectsSectionProps {
   createProject: ModalHandler;
@@ -20,7 +20,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   projects,
   team,
   handleDeleteClick,
-  isAdmin = false,
+  isAdmin = false
 }) => (
   <>
     <Stack mt={2}>
@@ -33,7 +33,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             <Button
               variant="outlined"
               color="primary"
-              sx={{ mr: '1rem' }}
+              sx={{ mr: "1rem" }}
               onClick={createProject.open}
             >
               Create new Project
