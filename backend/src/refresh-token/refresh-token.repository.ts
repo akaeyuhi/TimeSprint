@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { IRepository } from "src/interfaces/repository.interface";
-import { RefreshToken } from "src/refresh-token/entities/refresh-token.entity";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { IRepository } from 'src/interfaces/repository.interface';
+import { RefreshToken } from 'src/refresh-token/entities/refresh-token.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class RefreshTokenRepository implements IRepository<RefreshToken> {
@@ -16,10 +16,7 @@ export class RefreshTokenRepository implements IRepository<RefreshToken> {
     return await this.repository.save(token);
   }
 
-  async update(
-    id: string,
-    data: Partial<RefreshToken>,
-  ): Promise<RefreshToken> {
+  async update(id: string, data: Partial<RefreshToken>): Promise<RefreshToken> {
     const token = await this.findById(id);
     if (!token) {
       throw new NotFoundException(`Token with ID ${id} not found`);
