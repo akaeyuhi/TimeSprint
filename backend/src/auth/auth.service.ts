@@ -70,7 +70,6 @@ export class AuthService {
   }
 
   async refreshAccessToken(user: JwtPayload) {
-    console.log(user);
     const { accessToken } = await this.getTokens(user);
     return {
       accessToken,
