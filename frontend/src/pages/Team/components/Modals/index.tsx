@@ -1,16 +1,16 @@
-import React from "react";
-import ModalForm from "src/components/modalForm";
-import DeleteProjectForm from "src/components/project/DeleteProjectModal";
-import AddUserForm from "src/components/team/AddUserForm";
-import AddAdminForm from "src/components/team/AddAdminForm";
-import LeaveTeamForm from "src/components/team/LeaveTeamForm";
-import { ModalHandler } from "src/hooks/use-modals";
-import { Project } from "src/models/project.model";
-import { Team } from "src/models/team.model";
-import { User } from "src/models/user.model";
-import { ProjectDto } from "src/services/dto/project.dto";
-import DeleteUserModal from "src/components/team/DeleteUserModal";
-import ProjectForm from "src/components/project/ProjectForm";
+import React from 'react';
+import ModalForm from 'src/components/modalForm';
+import DeleteProjectForm from 'src/components/project/DeleteProjectModal';
+import AddUserForm from 'src/components/team/AddUserForm';
+import AddAdminForm from 'src/components/team/AddAdminForm';
+import LeaveTeamForm from 'src/components/team/LeaveTeamForm';
+import { ModalHandler } from 'src/hooks/use-modals';
+import { Project } from 'src/models/project.model';
+import { Team } from 'src/models/team.model';
+import { User } from 'src/models/user.model';
+import { ProjectDto } from 'src/services/dto/project.dto';
+import DeleteUserModal from 'src/components/team/DeleteUserModal';
+import ProjectForm from 'src/components/project/ProjectForm';
 
 interface ModalsProps {
   createProject: ModalHandler;
@@ -49,7 +49,7 @@ const Modals: React.FC<ModalsProps> = ({
   handleDeleteProject,
   handleDeleteUser,
   handleDeleteAdmin,
-  handleLeaveTeam
+  handleLeaveTeam,
 }) => (
   <>
     <ModalForm open={createProject.isOpen} handleClose={createProject.close}>

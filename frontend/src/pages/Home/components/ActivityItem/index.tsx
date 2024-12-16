@@ -1,8 +1,14 @@
-import React from "react";
-import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
-import { LeisureActivity } from "src/models/activity.model";
-import { styles } from "src/pages/Home/components/TaskItem/styles";
-import { Link } from "react-router-dom";
+import React from 'react';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+} from '@mui/material';
+import { LeisureActivity } from 'src/models/activity.model';
+import { styles } from 'src/pages/Home/components/TaskItem/styles';
+import { Link } from 'react-router-dom';
 
 interface Props {
   activity: LeisureActivity;

@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { Container } from "@mui/material";
-import TaskSection from "src/components/task/TaskSection";
-import { observer } from "mobx-react";
-import { isObjectEmpty } from "src/utils/common/isObjectEmpty";
-import Loader from "src/components/loader";
-import { useStores } from "src/hooks";
+import React, { useEffect } from 'react';
+import { Container } from '@mui/material';
+import TaskSection from 'src/components/task/TaskSection';
+import { observer } from 'mobx-react';
+import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
+import Loader from 'src/components/loader';
+import { useStores } from 'src/hooks';
 
 const TaskPage = () => {
   const { userStore: store, authStore, handler } = useStores();

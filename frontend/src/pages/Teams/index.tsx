@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Box, Button, Container, Typography } from "@mui/material";
-import { useStores } from "src/hooks/use-stores";
-import ModalForm from "src/components/modalForm";
-import { TeamDto } from "src/services/dto/team.dto";
-import { styles } from "src/pages/Teams/styles";
-import TeamList from "src/components/team/TeamList";
-import { useModals } from "src/hooks/use-modals";
-import Loader from "src/components/loader";
-import { observer } from "mobx-react";
-import { isObjectEmpty } from "src/utils/common/isObjectEmpty";
-import { toast } from "react-toastify";
-import TeamForm from "src/components/team/TeamForm";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Box, Button, Container, Typography } from '@mui/material';
+import { useStores } from 'src/hooks/use-stores';
+import ModalForm from 'src/components/modalForm';
+import { TeamDto } from 'src/services/dto/team.dto';
+import { styles } from 'src/pages/Teams/styles';
+import TeamList from 'src/components/team/TeamList';
+import { useModals } from 'src/hooks/use-modals';
+import Loader from 'src/components/loader';
+import { observer } from 'mobx-react';
+import { isObjectEmpty } from 'src/utils/common/isObjectEmpty';
+import { toast } from 'react-toastify';
+import TeamForm from 'src/components/team/TeamForm';
 
 interface TeamModals {
   createTeam: boolean;
@@ -19,7 +19,7 @@ interface TeamModals {
 const TeamsPage: React.FC = () => {
   const { authStore, userStore, handler } = useStores();
   const [modal, setModal] = useState({
-    createTeam: false
+    createTeam: false,
   });
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const TeamsPage: React.FC = () => {
   return (
     <Container>
       <Box sx={styles.container}>
-        <Box sx={{ height: "2rem" }}>
+        <Box sx={{ height: '2rem' }}>
           <Typography variant="h4" gutterBottom>
             Your Teams
           </Typography>
