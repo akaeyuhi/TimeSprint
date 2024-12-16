@@ -14,7 +14,6 @@ export class SiteAdminRepository implements IRepository<SiteAdmin> {
 
   async create(user: User): Promise<SiteAdmin> {
     const admin = this.repository.create({ user });
-    console.log(admin);
     return await this.repository.save(admin);
   }
 
