@@ -11,12 +11,14 @@ import * as bcrypt from 'bcrypt';
 import { User } from '../user/entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayload } from 'src/auth/strategies/auth.strategy';
+import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private refreshTokenService: RefreshTokenService,
   ) {}
 
   async validateUser(
@@ -60,6 +62,12 @@ export class AuthService {
     };
   }
 
+  async checkRefresh(userId: string, refreshToken: string) {
+    const user = await this.userService.findById(userId);
+    const token = await this.refreshTokenService.findByToken(refreshToken);
+    return token && !token.isBanned && user && user.id === token.user.id;
+  }
+
   async register(createUserDto: CreateUserDto) {
     const check = await this.doesUserExists(createUserDto);
     if (check) {
@@ -69,12 +77,24 @@ export class AuthService {
     return this.login(createUserDto.email, createUserDto.password);
   }
 
-  async refreshAccessToken(user: JwtPayload) {
-    console.log(user);
-    const { accessToken } = await this.getTokens(user);
-    return {
-      accessToken,
-    };
+  async refreshAccessToken(user: JwtPayload, token: string) {
+    if (
+      (await this.checkRefresh(user.id, token)) &&
+      (await this.refreshTokenService.isTokenExists(token))
+    ) {
+      await this.refreshTokenService.removeByValue(token);
+      const { accessToken, refreshToken } = await this.getTokens(user);
+      return {
+        accessToken,
+        refreshToken,
+      };
+    } else {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+  }
+
+  async banRefresh(token: string) {
+    return await this.refreshTokenService.toggleBan(token);
   }
 
   private async getTokens(
@@ -84,6 +104,11 @@ export class AuthService {
       this.jwtService.signAsync(payload),
       this.jwtService.signAsync(payload, { expiresIn: '7d' }),
     ]);
+
+    await this.refreshTokenService.create({
+      userId: payload.id,
+      token: refreshToken,
+    });
 
     return {
       accessToken,

@@ -10,6 +10,7 @@ import { LeisureActivityModule } from './leisure-activity/leisure-activity.modul
 import { SiteAdminModule } from './site-admin/site-admin.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     TaskModule,
     LeisureActivityModule,
     SiteAdminModule,
+    RefreshTokenModule,
   ],
 })
 export class AppModule {}

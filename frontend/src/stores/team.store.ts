@@ -1,4 +1,4 @@
-import { makeAutoObservable, observable, runInAction } from "mobx";
+import { makeAutoObservable, observable, runInAction } from 'mobx';
 import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
 import { ProjectDto } from 'src/services/dto/project.dto';

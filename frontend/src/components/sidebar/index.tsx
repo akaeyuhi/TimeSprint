@@ -20,7 +20,11 @@ const Sidebar = () => {
     { path: '/app/home', title: 'Home', icon: GridView },
     { path: '/app/teams', title: 'Teams', icon: Groups2Rounded },
     { path: '/app/tasks', title: 'Tasks', icon: AssignmentRounded },
-    { path: '/app/activities', title: 'Activities', icon: DirectionsRunRounded },
+    {
+      path: '/app/activities',
+      title: 'Activities',
+      icon: DirectionsRunRounded,
+    },
     { path: '/app/user', title: 'User', icon: PersonRounded },
   ];
 
