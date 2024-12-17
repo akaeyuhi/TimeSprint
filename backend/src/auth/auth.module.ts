@@ -8,8 +8,8 @@ import { AuthStrategy } from 'src/auth/strategies/auth.strategy';
 import { RefreshStrategy } from 'src/auth/strategies/auth-refresh.strategy';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 import { ConfigModule } from '@nestjs/config';
-import { SiteAdminModule } from "src/site-admin/site-admin.module";
-import { RefreshTokenModule } from "src/refresh-token/refresh-token.module";
+import { SiteAdminModule } from 'src/site-admin/site-admin.module';
+import { RefreshTokenModule } from 'src/refresh-token/refresh-token.module';
 
 @Module({
   imports: [

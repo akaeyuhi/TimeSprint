@@ -11,7 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from '../user/entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayload } from 'src/auth/strategies/auth.strategy';
-import { RefreshTokenService } from "src/refresh-token/refresh-token.service";
+import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
 
 @Injectable()
 export class AuthService {
@@ -78,7 +78,10 @@ export class AuthService {
   }
 
   async refreshAccessToken(user: JwtPayload, token: string) {
-    if (await this.checkRefresh(user.id, token) && await this.refreshTokenService.isTokenExists(token)) {
+    if (
+      (await this.checkRefresh(user.id, token)) &&
+      (await this.refreshTokenService.isTokenExists(token))
+    ) {
       await this.refreshTokenService.removeByValue(token);
       const { accessToken, refreshToken } = await this.getTokens(user);
       return {
@@ -86,7 +89,7 @@ export class AuthService {
         refreshToken,
       };
     } else {
-      throw new UnauthorizedException('Invalid refresh token')
+      throw new UnauthorizedException('Invalid refresh token');
     }
   }
 

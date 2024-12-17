@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto';
 import { UpdateRefreshTokenDto } from './dto/update-refresh-token.dto';
-import { RefreshTokenRepository } from "src/refresh-token/refresh-token.repository";
+import { RefreshTokenRepository } from 'src/refresh-token/refresh-token.repository';
 
 @Injectable()
 export class RefreshTokenService {
@@ -29,11 +29,11 @@ export class RefreshTokenService {
   }
 
   async toggleBan(tokenValue: string) {
-    const token = await this.refreshTokenRepository.findByToken(tokenValue)
+    const token = await this.refreshTokenRepository.findByToken(tokenValue);
     if (!token) {
-      throw new NotFoundException('Such token doesn\'t exist');
+      throw new NotFoundException(`Such token doesn't exist`);
     }
-    return await this.update(token.id, { isBanned: !token.isBanned})
+    return await this.update(token.id, { isBanned: !token.isBanned });
   }
 
   async remove(id: string) {
@@ -46,6 +46,6 @@ export class RefreshTokenService {
   }
 
   async isTokenExists(token: string) {
-    return !!await this.findByToken(token);
+    return !!(await this.findByToken(token));
   }
 }
